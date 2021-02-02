@@ -59,7 +59,6 @@
     <Compile Include="Classes\System.String.cs" />
     <Compile Include="Classes\System.TimeZoneInfo.cs" />
     <Compile Include="Classes\Universal.cs" />
-    <Compile Include="NEW.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +69,7 @@
     <None Include="NuGet\Extensions.cs.1.1.27.nupkg" />
     <None Include="NuGet\Extensions.cs.1.1.28.nupkg" />
     <None Include="NuGet\Extensions.cs.2.0.1.nupkg" />
+    <None Include="NuGet\Extensions.cs.2.1.480.nupkg" />
     <None Include="README.md" />
     <None Include="VersionHistory.md" />
   </ItemGroup>
