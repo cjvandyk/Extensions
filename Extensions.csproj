@@ -76,6 +76,7 @@
   <ItemGroup>
     <Content Include=".gitignore" />
     <Content Include="Images\Discord.png" />
+    <Content Include="Images\Easy Date convertion GIF.gif" />
     <Content Include="Images\Extensions-64x64.png" />
     <Content Include="Images\Extensions.gif" />
     <Content Include="Images\Extensions.ico" />
