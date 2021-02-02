@@ -1,0 +1,438 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Extensions.cs</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <license type="expression">GPL-3.0-or-later</license>
+    <projectUrl>https://github.com/cjvandyk/Extensions</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/cjvandyk/Extensions/Images/Extensions-64x64.png</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>$description$</description>
+    <summary>
+      Extensions.dll contains extension methods that enhance existing C# classes thus making life easier for developers.
+      These methods are included:
+      CopyTo()
+      Elevate()
+      Get()
+      GetUrlRoot()
+      HasLower()
+      HasNumeric()
+      HasSymbol()
+      HasUpper()
+      IsAlphabetic()
+      IsNumeric()
+      IsAlphaNumeric()
+      IsChar()
+      IsStrong()
+      IsUrlRoot()
+      IsVowel()
+      Lines()
+      LoremIpsum()
+      Print()
+      ReplaceTokens()
+      Retry()
+      Set()
+      ToBinary()
+      ToEnum()
+      ToNumberBytes()
+      ToMB()
+      ToGB()
+      ToTB()...
+      Words()
+    </summary>
+    <releaseNotes>
+      CopyTo()
+      Copies a given length of bytes from a byte[] starting at a definable
+      offset.
+      For example:
+      byte[] b1 = System.Text.Encoding.UTF8.GetBytes("blog.cjvandyk.com rocks!");
+      byte[] b2 = b1.CopyTo(10);
+      byte[] b3 = b1.CopyTo(10, 5);
+      will result in the following arrays:
+      98  108 111 103 46  99  106 118 97  110 100 121 107 46  99  111 109 32  114 111 99  107 115 33
+      98  108 111 103 46  99  106 118 97  110
+      99  106 118 97  110 100 121 107 46  99
+
+      Elevate()
+      Restarts the current process with elevated permissions.
+      For example:
+      System.Diagnostics.Process.GetCurrentProcess().Elevate(args)
+      will restart the current console app in admin mode.
+
+      Get()
+      Language extension for properties.  Use to get the value of the
+      extension property in question.
+
+      GetUrlRoot()
+      Get the URL root for the given string object containing a URL.
+      For example:
+      "https://blog.cjvandyk.com".GetUrlRoot()
+      will return
+      "https://blog.cjvandyk.com"
+      whereas
+      "https://blog.cjvandyk.com/sites/Approval".GetUrlRoot()
+      will also return
+      "https://blog.cjvandyk.com".
+
+      HasLower()
+      Validates that the given string object contains a lower case character.
+      For example:
+      "abc".HasLower()
+      will return True whereas
+      "ABC".HasLower()
+      will return False and
+      "AbC".HasLower()
+      will return True.
+
+      HasNumeric()
+      Validates that the given string object contains a number character.
+      For example:
+      "abc".HasNumeric()
+      will return False whereas
+      "ABC123".HasNumeric()
+      will return True and
+      "A2C".HasNumeric()
+      will return True.
+
+      HasSymbol()
+      Validates that the given string object contains a symbol or special
+      character.
+      For example:
+      "abc".HasSymbol()
+      will return False whereas
+      "ABC$".HasSymbol()
+      will return True and
+      "A@C".HasSymbol()
+      will return True.
+
+      HasUpper()
+      Validates that the given string object contains a lower case character.
+      For example:
+      "abc".HasUpper()
+      will return False whereas
+      "ABC".HasUpper()
+      will return True and
+      "AbC".HasUpper()
+      will return True.
+
+      IsAlphabetic()
+      Validates that the given string object contains all alphabetic
+      characters (a-z and A-Z) returning True if it does and False if
+      it doesn't.
+      For example:
+      "abcXYZ".IsAlphabetic()
+      will return True whereas
+      "abc123".IsAlphabetic()
+      will return False.
+
+      IsAlphaNumeric()
+      Validates that the given string object contains all alphabetic
+      and/or numeric characters (a-z and A-Z and 0-9) returning True if it
+      does and False  if it doesn't.
+      For example:
+      "abc123".IsAlphaNumeric()
+      will return True whereas
+      "abcxyz".IsAlphaNumeric()
+      will also return True and
+      "123456".IsAlphaNumeric()
+      will also return True but
+      "abc!@#".IsAlphaNumeric()
+      will return False.
+
+      IsChar()
+      This method takes a char[] as one of its arguments against which the
+      given string object is validated.  If the given string object contains
+      only characters found in the char[] it will return True, otherwise it
+      will return False.
+      For example:
+      "aacc".IsChar(new char[] {'a', 'c'})
+      will return True whereas
+      "abc123".IsNumeric()
+      will return False.
+
+      IsEmail()
+      Validates that the given string object contains a valid email address.
+      For example:
+      "noreply@crayveon.com".IsEmail()
+      will return True whereas
+      "noreplay-at-crayveon.com".IsEmail()
+      will return False.
+
+      IsLower()
+      Validates that the given string object contains only lower case letters.
+      For example:
+      "IsLower test".IsLower()
+      will return False while
+      "islower test".IsLower()
+      will return True and
+      "islower test".IsLower(false)
+      will return False.
+
+      IsNumeric()
+      Validates that the given string object contains all numeric
+      characters (0-9) returning True if it does and False  if it
+      doesn't.
+      For example:
+      "123456".IsNumeric()
+      will return True whereas
+      "abc123".IsNumeric()
+      will return False.
+
+      IsStrong()
+      Validates that the given string object contains a strong password string.
+      For example:
+      "abc123XYZ!@#".IsStrong()
+      will return True whereas
+      "abc123XYZ".IsStrong()
+      will return False and
+      "abc123XYZ".IsStrong(3)
+      will return True and
+      "abc123XYZ".IsStrong(2)
+      will return True.
+      The number parameter for IsStrong() indicates the number of criteria
+      that has to be true before the string is considered strong.  Valid
+      values are 1 through 4 with the default value being 4.
+
+      IsUpper()
+      Validates that the given string object contains only upper case letters.
+      For example:
+      "IsUpper test".IsUpper()
+      will return False while
+      "ISUPPER TEST".IsUpper()
+      will return True and
+      "ISUPPER TEST".IsUpper(false)
+      will return False.
+
+      IsUrlRoot()
+      Check if the given string object containing a URL, is that of the
+      URL root only.  Returns True if so, False if not.  For example:
+      "https://blog.cjvandyk.com".IsUrlRootOnly()
+      will return True whereas
+      "https://blog.cjvandyk.com/sites/Approval".IsUrlRootOnly()
+      will return False.
+
+      IsVowel()
+      Checks if the given char/string is an English vowel.
+      This allows the developer the ability to check a string without
+      having to first convert to a char e.g. as a substring return.
+      For example:
+      "test".Substring(2, 1).IsVowel()
+      will return False since the "s" is checked whereas
+      "test".Substring(1, 1).IsVowel()
+      will return True since the "e" is checked.
+
+      IsZipCode()
+      Checks if the given string object is in the valid format
+      of a United States zip code i.e. nnnnn-nnnn or just nnnnn.
+      For example:
+      "12345-6789".IsZipCode()
+      will return True whereas
+      "1234-56789".IsZipCode()
+      will return False.
+      "12345".IsZipCode()
+      will return True.
+      "123456".IsZipCode()
+      will return False.
+      "1234".IsZipCode()
+      will return False.
+
+      Lines()
+      This method returns the number of lines/sentences in the given string
+      object.
+
+      Load()
+      Language extension providing a universal method to all objects
+      that allows them to be deserialized from disk.
+      Does NOT require the [Serializable] property on object.
+      For example:
+      ComplexClass myClass = new ComplexClass();
+      myClass = myClass.Load("My file path");
+      Use .Save() to save objects to disk.
+
+      LoremIpsum()
+      Poplates the given string with a given number of paragraphs of dummy
+      text in the lorem ipsum style e.g.
+      "".LoremIpsum(2)
+      would yield
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
+      aliquam arcu rhoncus erat consectetur, quis rutrum augue tincidunt.
+      Suspendisse elit ipsum, lobortis lobortis tellus eu, vulputate
+      fringilla lorem. Cras molestie nibh sed turpis dapibus sollicitudin
+      ut a nulla. Suspendisse blandit suscipit egestas. Nunc et ante mattis
+      nulla vehicula rhoncus. Vivamus commodo nunc id ultricies accumsan.
+      Mauris vitae ante ut justo venenatis tempus.
+
+      Nunc posuere, nisi eu convallis convallis, quam urna sagittis ipsum,
+      et tempor ante libero ac ex. Aenean lacus mi, blandit non eros luctus,
+      ultrices consectetur nunc. Vivamus suscipit justo odio, a porta massa
+      posuere ac. Aenean varius leo non ipsum porttitor eleifend. Phasellus
+      accumsan ultrices massa et finibus. Nunc vestibulum augue ut bibendum
+      facilisis. Donec est massa, lobortis quis molestie at, placerat a
+      neque. Donec quis bibendum leo. Pellentesque ultricies ac odio id
+      pharetra. Nulla enim massa, lacinia nec nunc nec, egestas pulvinar
+      odio. Sed pulvinar molestie justo, eu hendrerit nunc blandit eu.
+      Suspendisse et sapien quis ipsum scelerisque rutrum."
+
+      MorseCodeBeep()
+      Takes a given System.String representing Morse code and audiblize
+      it according to standards.
+      https://www.infoplease.com/encyclopedia/science/engineering/electrical/morse-code
+      Assumes the input value to be in Morse code format already.
+      Use .ToMorseCode() to pre-convert text if needed.
+
+      Print()
+      Print the byte[] to console, separated by spaces and space padded
+      on the right to allow proper alignment for debug/testing output.
+      For example:
+      byte[] bytes = System.Text.Encoding.UTF8.GetBytes("blog.cjvandyk.com rocks!");
+      bytes.Print();
+
+      RemoveExtraSpace()
+      Trims leading and trailing white space and then removes all extra
+      white space in the given string returning a single spaced result.
+      For example:
+      "  blog.cjvandyk.com    rocks   !   ".RemoveExtraSpace()
+      will return
+      "blog.cjvandyk.com rocks !"
+
+      ReplaceTokens()
+      Takes a given string object and replaces 1 to n tokens in the string
+      with replacement tokens as defined in the given Dictionary of strings.
+
+      Retry()
+      Checks if a System.Net.WebException contains a "Retry-After" header.
+      If it does, it sleeps the thread for that period (+ 60 seconds)
+      before reattempting to HTTP call that caused the exception in the
+      first place.  If no "Retry-After" header exist, the exception is
+      simply rethrown.
+      For example:
+      System.Net.HttpWebRequest request ...
+      Try
+      {
+      request.GetResponse();
+      }
+      Catch (System.Net.WebException ex)
+      {
+      ex.Retry(request);
+      }
+
+      Save()
+      Language extension providing a universal method to all objects
+      that allows them to be serialized to disk.
+      Does NOT require the [Serializable] property on object.
+      For example:
+      ComplexClass myClass = new ComplexClass(...constructor parms...);
+      myClass.Save("My file path");
+      Use .Load() to reload objects back from disk.
+
+      Set()
+      Language extension for properties.  Use to set the value of the
+      extension property in question.
+
+      ToBinary()
+      This method returns the given string represented in 1s and 0s as
+      a binary result.
+      For example:
+      "This test".ToBinary()
+      will return
+      1010100 1101000 1101001 1110011 100000 1110100 1100101 1110011 1110100
+
+      ToEnum()
+      This method matches a given string to the given enum set and returns
+      the matched enum.
+      For example:
+      enum testEnum { first, second, third };
+      var testEnumResult = "first".ToEnum[testEnum]();
+      Console.WriteLine(testEnumResult == testEnum.first);
+      will return
+      True
+
+      ToMorseCode()
+      Convert given System.String to its Morse code representation.
+      Undefined characters will return in the format:
+      [Undefined:[char=""]]
+      For example:
+      "sos@".ToMorseCode()
+      will return
+      "...---...[Undefined:[@]]"
+
+      ToQueryString()
+      Convert given Dictionary[string, string]
+      into a querystring.
+      For example:
+      Dictionary[string, string] dic1 = new Dictionary[string, string]();
+      dic1.Add("Parm1", "Val1");
+      dic1.Add("Parm2", "Val2");
+      dic1.Add("Parm3", "Val3");
+      Console.WriteLine(dic1.ToQueryString());
+
+      Binary Data Size Convertions
+      System.Double.ToNumberBytes() >>> Returns the given number expressed as Bytes.
+      System.Double.ToKB() >>> Returns the given number expressed as Kilobytes (2^10).
+      System.Double.ToMB() >>> Returns the given number expressed as Megabytes (2^20).
+      System.Double.ToGB() >>> Returns the given number expressed as Gigabytes (2^30).
+      System.Double.ToTB() >>> Returns the given number expressed as Terrabytes (2^40).
+      System.Double.ToPB() >>> Returns the given number expressed as Petabytes (2^50).
+      System.Double.ToEB() >>> Returns the given number expressed as Exabytes (2^60).
+      System.Double.ToZB() >>> Returns the given number expressed as Zettabytes (2^70).
+      System.Double.ToYB() >>> Returns the given number expressed as Yottabytes (2^80).
+      System.Double.ToBB() >>> Returns the given number expressed as Brontobytes (2^90).
+      System.Double.ToGpB() >>> Returns the given number expressed as Geopbytes (2^100).
+      System.Double.ToSB() >>> Returns the given number expressed as Saganbytes (2^110).
+      System.Double.ToPaB() >>> Returns the given number expressed as Pijabytes (2^120).
+      System.Double.ToAB() >>> Returns the given number expressed as Alphabytes (2^130).
+      System.Double.ToPlB() >>> Returns the given number expressed as Pectrolbytes (2^140).
+      System.Double.ToBrB() >>> Returns the given number expressed as Bolgerbytes (2^150).
+      System.Double.ToSoB() >>> Returns the given number expressed as Sambobytes (2^160).
+      System.Double.ToQB() >>> Returns the given number expressed as Quesabytes (2^170).
+      System.Double.ToKaB() >>> Returns the given number expressed as Kinsabytes (2^180).
+      System.Double.ToRB() >>> Returns the given number expressed as Rutherbytes (2^190).
+      System.Double.ToDB() >>> Returns the given number expressed as Dubnibytes (2^200).
+      System.Double.ToHB() >>> Returns the given number expressed as Hassiubytes (2^210).
+      System.Double.ToMrB() >>> Returns the given number expressed as Meitnerbytes (2^220).
+      System.Double.ToDdB() >>> Returns the given number expressed as Darmstadbytes (2^230).
+      System.Double.ToRtB() >>> Returns the given number expressed as Roentbytes (2^240).
+      System.Double.ToShB() >>> Returns the given number expressed as Sophobytes (2^250).
+      System.Double.ToCB() >>> Returns the given number expressed as Coperbytes (2^260).
+      System.Double.ToKkB() >>> Returns the given number expressed as Koentekbytes (2^270).
+      For example:
+      double dbl = 1;
+      Console.WriteLine(dbl.ToKB(Constants.NumberType.TB));
+      Console.WriteLine(dbl.ToKB(Constants.NumberType.GB));
+      Console.WriteLine(dbl.ToKB(Constants.NumberType.ZB));
+      will return
+      1073741824
+      1048576
+      1.15292150460685E+18
+
+      TrimLength()
+      Returns part of the given System.Text.StringBuilder object
+      tuncated to the requested length minus the length of the
+      suffix.
+      If the string is null or empty, it returns said value.
+      If the string is shorter than the requested length, it returns
+      the whole string.
+      For example:
+      "The Extensions.cs NuGet package rocks!".TrimLength(20)
+      will return "The Extensions.cs..." while
+      "The Extensions.cs NuGet package rocks!".TrimLength(20, "")
+      will return "The Extensions.cs Nu" and
+      "The Extensions.cs NuGet package rocks!".TrimLength(20, ">>")
+      will return "The Extensions.cs >>"
+
+      Words()
+      This method returns the number of words used in the given string
+      object.
+      For example:
+      "This is my test".Words()
+      will return 4 whereas
+      "ThisIsMyTest".Words()
+      will return 1.
+    </releaseNotes>
+    <copyright>Copyright 2020-2021</copyright>
+    <tags>Quix Extensions C# cjvandyk Crayveon</tags>
+  </metadata>
+</package>
