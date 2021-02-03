@@ -17,11 +17,11 @@ namespace TESTING
         public static void Test()
         {
             //Test .ToTimeZone()
-            System.DateTime now = System.DateTime.Now;
+            System.DateTime now = System.DateTime.UtcNow;
             Console.WriteLine(now);
             Console.WriteLine(
                 now.ToTimeZone(
-                    Constants.TimeZone.CentralStandardTime, 
+                    Constants.TimeZone.UTC, 
                     Constants.TimeZone.EasternStandardTime));
         }
     }

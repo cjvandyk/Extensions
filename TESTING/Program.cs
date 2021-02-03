@@ -18,7 +18,8 @@ namespace TESTING
     {
         static void Main(string[] args)
         {
-            DateTime.Test();
+            //DateTime.Test();
+            Double.Test();
         }
     }
 }

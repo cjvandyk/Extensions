@@ -468,6 +468,35 @@ namespace Extensions
         #endregion BinaryDataSizes
 
         /// <summary>
+        /// Calculate compounded interest end value given an amount, percent
+        /// interest per year and number of years.
+        /// </summary>
+        /// <param name="amount">The starting amount.</param>
+        /// <param name="percent">The annual interest rate 
+        /// i.e. 4% = 4 not 0.04</param>
+        /// <param name="years">The years of interest to calculate.</param>
+        /// <param name="frequency">The frequency with which interest is
+        /// applied.</param>
+        /// <returns>The compounded value.</returns>
+        public static double CompoundInterest(this double amount, 
+                                              double percent = 0, 
+                                              int years = 0, 
+                                              Constants.CompoundFrequency frequency = 
+                                                  Constants.CompoundFrequency.Monthly)
+        {
+            double result = amount;
+            double Percent = percent / 100 / (
+                frequency == Constants.CompoundFrequency.Yearly ? 1 : 12);
+            int Years = years * (
+                frequency == Constants.CompoundFrequency.Yearly ? 1 : 12);
+            for (int C = 0; C < Years; C++)
+            {
+                result += (result * Percent);
+            }
+            return result;
+        }
+
+        /// <summary>
         /// Shorthand extension encapsulating Convert.ToInt16() allowing
         /// syntax changes from this:
         /// ...Convert.ToInt16(doubleValue)...

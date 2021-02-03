@@ -89,5 +89,39 @@ namespace Extensions
                 return false;
             }
         }
+
+        /// <summary>
+        /// Simple printf method for console output with color control.  Both
+        /// text color and background color is returned to previous state
+        /// after the string has been written to console.
+        /// </summary>
+        /// <param name="msg">String to print to console.</param>
+        /// <param name="foreground">Overrideable text color, default to white.</param>
+        /// <param name="background">Overrideable background color, default to
+        /// black.</param>
+        public static void printf(string msg, 
+                                  ConsoleColor foreground = ConsoleColor.White, 
+                                  ConsoleColor background = ConsoleColor.Black)
+        {
+            ConsoleColor fore = Console.ForegroundColor;
+            ConsoleColor back = Console.BackgroundColor;
+            if (foreground != fore)
+            {
+                Console.ForegroundColor = foreground;
+            }
+            if (background != back)
+            {
+                Console.BackgroundColor = background;
+            }
+            Console.WriteLine(msg);
+            if (foreground != fore)
+            {
+                Console.ForegroundColor = fore;
+            }
+            if (background != back)
+            {
+                Console.BackgroundColor = back;
+            }
+        }
     }
 }

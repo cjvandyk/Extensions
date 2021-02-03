@@ -100,10 +100,16 @@
 	- Add ignore white space option to `System.String.IsNumeric()`<br>
 	- Add ignore white space option to `System.Text.StringBuilder.IsNumeric()`<br>
 
-### **2.1.x (2021-01-29)**<br>
+### **2.1.480 (2021-02-02)**<br>
 	- Add `System.Array<byte>.CopyTo(this, length, start)`<br>
 	- Add `System.Array<byte>.Print()`<br>
 	- Add `System.Collections.Generic.Dictionary.ToQueryString()`<br>
 	- Add `enum Constants.TimeZone`<br>
 	- Add `Dictionary<Constants.TimeZone, string> Constants.TimeZones`<br>
 	- Add `System.TimeZoneInfo.GetTimeZoneString()`<br>
+	- Add `System.DateTime.ToTimeZone()`<br>
+
+### **2.2.480 (2021-02-12)**<br>
+	- Add `enum Constants.CompoundFrequency`<br>
+	- Add `CompoundInterest()`<br>
+	- Add `printf()`<br>

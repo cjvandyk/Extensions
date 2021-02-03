@@ -598,5 +598,10 @@ namespace Extensions
         /// Enum of possible enumerable types.
         /// </summary>
         public enum EnumerableType { Dictionary, NameValueCollection };
+
+        /// <summary>
+        /// Enum of possible frequency in which interest compounding is done.
+        /// </summary>
+        public enum CompoundFrequency { Monthly, Yearly };
     }
 }

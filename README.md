@@ -7,14 +7,26 @@ The following classes have been extended:
 
     - System.Array
     - System.Collections.Generic.Dictionary
+    - System.DateTime
     - System.Diagnostics.Process
     - System.Double
     - System.Net.WebException
     - System.Object
     - System.String
     - System.Text.StringBuilder
+    - System.TimeZoneInfo
 
 with these methods:
+
+- ### **CompoundInterest()**
+    > _Calculate compounded interest end value given an amount, percent<br>
+        interest per year and number of years.<br>
+        For example:<br>
+            `double val = 100.00;`<br>
+            `val.CompoundInterest(5,`<br>
+                                  `10,`<br>
+                                  `Constants.CompoundFrequency.Yearly);`<br>
+        will return 162.889462677744_
 
 - ### **CopyTo()**
     > _Copies a given length of bytes from a byte[] starting at a definable<br>
@@ -61,6 +73,10 @@ with these methods:
     > _Get the registry ID string that can be used with<br>
         TimeZoneInfo.FindSystemTimeZoneById() for time zone convertions.<br>
         For example:<br>
+            `System.TimeZoneInfo.FindSystemTimeZoneById(`<br>
+                `Extensions.TimeZoneInfo.GetTimeZoneString(`<br>
+                    `Constants.TimeZone myZone))`<br>
+        will return the proper string to use in the call._
 
 - ### **GetUrlRoot()**
     > _Get the URL root for the given string object containing a URL.<br>
@@ -285,6 +301,14 @@ with these methods:
             `byte[] bytes = System.Text.Encoding.UTF8.GetBytes("blog.cjvandyk.com rocks!");`<br>
             `bytes.Print();`_
 
+- ### **printf()**
+    > _Simple printf method for console output with color control.  Both<br>
+        text color and background color is returned to previous state<br>
+        after the string has been written to console.<br>
+        For example:<br>
+            `printf("Hello World!", ConsoleColor.Red, ConsoleColor.White);`<br>
+        will output the string to console in red text on a white background._
+
 - ### **RemoveExtraSpace()**
     > _Trims leading and trailing white space and then removes all extra<br>
         white space in the given string returning a single spaced result.<br>
@@ -422,6 +446,15 @@ with these methods:
             `1073741824`<br>
             `1048576`<br>
             `1.15292150460685E+18`_
+
+- ### **ToTimeZone()**
+    > _Convert given DateTime between different time zones with ease.<br>
+        For example:<br>
+            `System.DateTime now = System.DateTime.UtcNow;`<br>
+            `now.ToTimeZone(`<br>
+                `Constants.TimeZone.UTC,`<br>
+                `Constants.TimeZone.EasternStandardTime));`<br>
+        will return the current UTC time as Eastern time._
 
 - ### **TrimLength()**
     > _Returns part of the given System.Text.StringBuilder object<br>

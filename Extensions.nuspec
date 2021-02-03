@@ -14,9 +14,11 @@
     <summary>
       Extensions.dll contains extension methods that enhance existing C# classes thus making life easier for developers.
       These methods are included:
+      CompoundInterest()
       CopyTo()
       Elevate()
       Get()
+      GetTimeZoneString()
       GetUrlRoot()
       HasLower()
       HasNumeric()
@@ -41,9 +43,20 @@
       ToMB()
       ToGB()
       ToTB()...
+      ToTimeZone()
       Words()
     </summary>
     <releaseNotes>
+      CompoundInterest()
+      Calculate compounded interest end value given an amount, percent
+      interest per year and number of years.
+      For example:
+      double val = 100.00;
+      val.CompoundInterest(5,
+      10,
+      Constants.CompoundFrequency.Yearly);
+      will return 162.889462677744
+
       CopyTo()
       Copies a given length of bytes from a byte[] starting at a definable
       offset.
@@ -65,6 +78,15 @@
       Get()
       Language extension for properties.  Use to get the value of the
       extension property in question.
+
+      GetTimeZoneString()
+      Get the registry ID string that can be used with
+      TimeZoneInfo.FindSystemTimeZoneById() for time zone convertions.
+      For example:
+      System.TimeZoneInfo.FindSystemTimeZoneById(
+      Extensions.TimeZoneInfo.GetTimeZoneString(
+      Constants.TimeZone myZone))
+      will return the proper string to use in the call.
 
       GetUrlRoot()
       Get the URL root for the given string object containing a URL.
@@ -290,6 +312,14 @@
       byte[] bytes = System.Text.Encoding.UTF8.GetBytes("blog.cjvandyk.com rocks!");
       bytes.Print();
 
+      printf()
+      Simple printf method for console output with color control.  Both
+      text color and background color is returned to previous state
+      after the string has been written to console.
+      For example:
+      printf("Hello World!", ConsoleColor.Red, ConsoleColor.White);
+      will output the string to console in red text on a white background.
+
       RemoveExtraSpace()
       Trims leading and trailing white space and then removes all extra
       white space in the given string returning a single spaced result.
@@ -407,6 +437,15 @@
       1073741824
       1048576
       1.15292150460685E+18
+
+      ToTimeZone()
+      Convert given DateTime between different time zones with ease.
+      For example:
+      System.DateTime now = System.DateTime.UtcNow;
+      now.ToTimeZone(
+      Constants.TimeZone.UTC,
+      Constants.TimeZone.EasternStandardTime));
+      will return the current UTC time as Eastern time.
 
       TrimLength()
       Returns part of the given System.Text.StringBuilder object
