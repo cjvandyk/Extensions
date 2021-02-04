@@ -1,4 +1,5 @@
 ﻿# Extensions.dll contains extension methods that enhance existing C# classes thus making life easier for developers.
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
 [![icon](https://github.com/cjvandyk/Quix/blob/master/Extensions/Images/Extensions-64x64.png?raw=true)](https://github.com/cjvandyk/quix/Extensions)<br>
 ![GIF](https://github.com/cjvandyk/Quix/blob/master/Extensions/Images/Extensions.gif)<br><br>
 ![GIF](https://github.com/cjvandyk/Extensions/blob/main/Images/Easy%20Date%20convertion%20GIF.gif)<br>
