@@ -472,6 +472,6 @@
       will return 1.
     </releaseNotes>
     <copyright>Copyright 2020-2021</copyright>
-    <tags>Quix Extensions C# cjvandyk Crayveon</tags>
+    <tags>Extensions C# cjvandyk Crayveon TimeZone CountWords Trim QueryString MorseCode Binary LoremIpsum ZipCode Vowel UrlRoot Elevate CompoundInterest StrongPassword</tags>
   </metadata>
 </package>

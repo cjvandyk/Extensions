@@ -18,6 +18,7 @@ namespace Extensions
         /// </summary>
         private static object lockManager = new object();
 
+        #region T Load<T>()
         /// <summary>
         /// Universal object method used to serialize ANY object from disk.
         /// </summary>
@@ -53,7 +54,9 @@ namespace Extensions
                 return default(T);
             }
         }
+        #endregion T Load<T>()
 
+        #region T Save<T>()
         /// <summary>
         /// Universal object method used to serialize ANY object to disk.
         /// </summary>
@@ -89,7 +92,9 @@ namespace Extensions
                 return false;
             }
         }
+        #endregion T Save<T>()
 
+        #region printf()
         /// <summary>
         /// Simple printf method for console output with color control.  Both
         /// text color and background color is returned to previous state
@@ -99,7 +104,7 @@ namespace Extensions
         /// <param name="foreground">Overrideable text color, default to white.</param>
         /// <param name="background">Overrideable background color, default to
         /// black.</param>
-        public static void printf(string msg, 
+        public static void printf(object msg, 
                                   ConsoleColor foreground = ConsoleColor.White, 
                                   ConsoleColor background = ConsoleColor.Black)
         {
@@ -113,7 +118,7 @@ namespace Extensions
             {
                 Console.BackgroundColor = background;
             }
-            Console.WriteLine(msg);
+            Console.WriteLine(Convert.ToString(msg));
             if (foreground != fore)
             {
                 Console.ForegroundColor = fore;
@@ -123,5 +128,34 @@ namespace Extensions
                 Console.BackgroundColor = back;
             }
         }
+        #endregion printf()
+
+        #region ValidateNoNulls()
+        /// <summary>
+        /// Validate that the given set of parameters doesn't contain any
+        /// nulls.  If it does, a ArgumentNullException error is thrown.
+        /// </summary>
+        /// <param name="parms">The given set of parameters.</param>
+        public static void ValidateNoNulls(System.Reflection.ParameterInfo[] parms)
+        {
+            for (int C = 0; C < parms.Length; C++)
+            {
+                if (parms[C] == null) throw new ArgumentNullException(parms[C].Name);
+            }
+        }
+        /////////////////////////// Better way above ///////////////////////////
+        //public static void ValidateNoNulls(System.Reflection.ParameterInfo[] parms)
+        //{
+        //    Type t = null;
+        //    for (int C = 0; C > parms.Length; C++)
+        //    {
+        //        t = parms[C].GetType();
+        //        if (t == typeof(double?))
+        //        {
+        //            ((double?)(parms[C].GetType().GetProperties()[0].GetValue(parms[C]))).NoNull();
+        //        }
+        //    }
+        //}
+        #endregion ValidateNoNulls()
     }
 }

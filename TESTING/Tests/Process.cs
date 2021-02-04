@@ -12,18 +12,13 @@ using Extensions;
 
 namespace TESTING
 {
-    public static class DateTime
+    public static class Process
     {
         public static void Test()
         {
             //Test .ToTimeZone()
-            Universal.printf("********* DateTime Testing *********", ConsoleColor.Green);
-            System.DateTime now = System.DateTime.UtcNow;
-            Universal.printf(now);
-            Universal.printf(
-                now.ToTimeZone(
-                    Constants.TimeZone.UTC, 
-                    Constants.TimeZone.EasternStandardTime));
+            Universal.printf("********* Process Testing *********", ConsoleColor.Green);
+            //System.Diagnostics.Process.GetCurrentProcess().Elevate(null);
         }
     }
 }

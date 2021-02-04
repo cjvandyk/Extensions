@@ -14,6 +14,9 @@ using System.ComponentModel;
 
 namespace Extensions
 {
+    /// <summary>
+    /// Constants used in the Extensions methods.
+    /// </summary>
     public static class Constants
     {
         /// <summary>

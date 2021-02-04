@@ -12,18 +12,18 @@ using Extensions;
 
 namespace TESTING
 {
-    public static class DateTime
+    public static class Dictionary
     {
         public static void Test()
         {
-            //Test .ToTimeZone()
-            Universal.printf("********* DateTime Testing *********", ConsoleColor.Green);
-            System.DateTime now = System.DateTime.UtcNow;
-            Universal.printf(now);
-            Universal.printf(
-                now.ToTimeZone(
-                    Constants.TimeZone.UTC, 
-                    Constants.TimeZone.EasternStandardTime));
+            //Test System.Collections.Generic.Dictionary.ToQueryString()
+            Universal.printf("********* Dictionary Testing *********", ConsoleColor.Green);
+            System.Collections.Generic.Dictionary<string, string> dic1 = 
+                new System.Collections.Generic.Dictionary<string, string>();
+            dic1.Add("Parm1", "Val1");
+            dic1.Add("Parm2", "Val2");
+            dic1.Add("Parm3", "Val3");
+            Universal.printf(dic1.ToQueryString());
         }
     }
 }

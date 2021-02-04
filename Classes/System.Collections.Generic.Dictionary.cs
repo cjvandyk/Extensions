@@ -8,11 +8,16 @@
 /// </summary>
 
 using System;
+using System.Collections.Generic;
 
 namespace Extensions
 {
-    public static class Dictionary
+    /// <summary>
+    /// Extension methods for the System.Collections.Generic.Dictionary class.
+    /// </summary>
+    public static class DictionaryExtensions
     {
+        #region ToQueryString()
         /// <summary>
         /// Convert given Dictionary<string, string> into a querystring.
         /// </summary>
@@ -24,10 +29,11 @@ namespace Extensions
         /// Defaults to '='.</param>
         /// <returns>The constructed querystring ready for use.</returns>
         public static string ToQueryString(
-            this System.Collections.Generic.Dictionary<string, string> dic,
+            this Dictionary<string, string> dic,
             char separator = '&',
             char assigner = '=')
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             string result = "?";
             foreach (string key in dic.Keys)
             {
@@ -35,5 +41,6 @@ namespace Extensions
             }
             return result.TrimEnd(separator);
         }
+        #endregion ToQueryString()
     }
 }

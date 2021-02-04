@@ -12,18 +12,20 @@ using Extensions;
 
 namespace TESTING
 {
-    public static class DateTime
+    public static class WebException
     {
         public static void Test()
         {
             //Test .ToTimeZone()
-            Universal.printf("********* DateTime Testing *********", ConsoleColor.Green);
-            System.DateTime now = System.DateTime.UtcNow;
-            Universal.printf(now);
-            Universal.printf(
-                now.ToTimeZone(
-                    Constants.TimeZone.UTC, 
-                    Constants.TimeZone.EasternStandardTime));
+            Universal.printf("********* WebException Testing *********", ConsoleColor.Green);
+            try
+            {
+                throw new System.Net.WebException();
+            }
+            catch (System.Net.WebException ex)
+            {
+                ex.Retry(null);
+            }
         }
     }
 }

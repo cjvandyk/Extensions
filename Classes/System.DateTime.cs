@@ -14,22 +14,25 @@ namespace Extensions
     /// <summary>
     /// Extensions for the System.DateTime class.
     /// </summary>
-    public static class DateTime
+    public static class DateTimeExtensions
     {
+        #region ToTimeZone()
         public static System.DateTime ToTimeZone(this System.DateTime dateTime,
                                           Constants.TimeZone fromZone = 
                                               Constants.TimeZone.CentralStandardTime,
                                           Constants.TimeZone toZone = 
                                               Constants.TimeZone.EasternStandardTime)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             System.DateTime now = System.TimeZoneInfo.ConvertTimeToUtc(
                 new System.DateTime(dateTime.Ticks, DateTimeKind.Unspecified),
                 System.TimeZoneInfo.FindSystemTimeZoneById(
-                    Extensions.TimeZoneInfo.GetTimeZoneString(fromZone)));
+                    Extensions.TimeZoneInfoExtensions.GetTimeZoneString(fromZone)));
             return System.TimeZoneInfo.ConvertTimeFromUtc(
                 now,
                 System.TimeZoneInfo.FindSystemTimeZoneById(
-                    Extensions.TimeZoneInfo.GetTimeZoneString(toZone)));
+                    Extensions.TimeZoneInfoExtensions.GetTimeZoneString(toZone)));
         }
+        #endregion ToTimeZone()
     }
 }

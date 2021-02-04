@@ -18,8 +18,12 @@ namespace TESTING
     {
         static void Main(string[] args)
         {
-            //DateTime.Test();
+            Array.Test();
+            DateTime.Test();
+            Dictionary.Test();
             Double.Test();
+            Process.Test();
+            WebException.Test();
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Extensions
     /// <summary>
     /// Extension class to add Extension Properties to any class.
     /// </summary>
-    public static class Object
+    public static class ObjectExtensions
     {
         /// <summary>
         /// The private dictionary object where extension properties are stored.
@@ -23,6 +23,7 @@ namespace Extensions
         private static Dictionary<string, object> extensionProperties = 
             new Dictionary<string, object>();
 
+        #region Get()
         /// <summary>
         /// Get the value of an extension property in the dictionary.
         /// </summary>
@@ -36,9 +37,12 @@ namespace Extensions
         public static object Get(this object obj, 
                                  string key)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return extensionProperties[key];
         }
+        #endregion Get()
 
+        #region Set()
         /// <summary>
         /// Set the value of an extension property in the dictionary.
         /// </summary>
@@ -47,9 +51,13 @@ namespace Extensions
         /// the name of the extension property being stored.</param>
         /// <param name="val">The value to which to set the extension
         /// property.</param>
-        public static void Set(this object obj, string key, object val)
+        public static void Set(this object obj, 
+                               string key, 
+                               object val)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             extensionProperties[key] = val;
         }
+        #endregion Set()
     }
 }

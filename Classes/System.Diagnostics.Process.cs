@@ -15,8 +15,9 @@ namespace Extensions
     /// <summary>
     /// Extensions for the System.Diagnostics.Process class.
     /// </summary>
-    public static class Process
+    public static class ProcessExtensions
     {
+        #region Elevate()
         /// <summary>
         /// Elevate the current app to admin level.
         /// The call to Process.Elevate() is made at the beginning of the
@@ -25,8 +26,10 @@ namespace Extensions
         /// <param name="proc">The current app process.</param>
         /// <param name="args">Array of arguments used to start the app.</param>
         /// <returns>Restarts current app in admin mode.</returns>
-        public static bool Elevate(this System.Diagnostics.Process proc, string[] args)
+        public static bool Elevate(this System.Diagnostics.Process proc, 
+                                   string[] args)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             if ((args.Count() != 2) ||
                 (args[1] != "ELEVATED"))
             {
@@ -41,5 +44,6 @@ namespace Extensions
             }
             return true;
         }
+        #endregion Elevate()
     }
 }

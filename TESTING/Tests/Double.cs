@@ -17,32 +17,42 @@ namespace TESTING
     {
         public static void Test()
         {
+            Universal.printf("********* Double Testing *********", ConsoleColor.Green);
             double val = 123.456;
             Universal.printf($"{val} compounded monthly over 10 years at 4.5% per annum:");
-            Universal.printf(Convert.ToString(
-                val.CompoundInterest(4.5, 
-                                     10, 
-                                     Constants.CompoundFrequency.Monthly)));
+            Universal.printf(
+                val.CompoundInterest(
+                    4.5,
+                    10,
+                    Constants.CompoundFrequency.Monthly));
             val = 100.00;
             Universal.printf($"{val} compounded annually over 10 years at 5% per annum:");
-            Universal.printf(Convert.ToString(
-                val.CompoundInterest(5,
-                                     10,
-                                     Constants.CompoundFrequency.Yearly)));
+            Universal.printf(
+                val.CompoundInterest(
+                    5,
+                    10,
+                    Constants.CompoundFrequency.Yearly));
             Universal.printf($"{val} compounded monthly over 10 years at 5% per annum:");
-            Universal.printf(Convert.ToString(
-                val.CompoundInterest(5,
-                                     10,
-                                     Constants.CompoundFrequency.Monthly)));
+            Universal.printf(
+                val.CompoundInterest(
+                    5,
+                    10,
+                    Constants.CompoundFrequency.Monthly));
             val = 100000.00;
-            Universal.printf(Convert.ToString(
-                val.CompoundInterest(0.018,
-                                     30,
-                                     Constants.CompoundFrequency.Monthly)));
-            Universal.printf(Convert.ToString(
-                val.CompoundInterest(0.041,
-                                     30,
-                                     Constants.CompoundFrequency.Monthly)));
+            Universal.printf(
+                val.CompoundInterest(
+                    0.018,
+                    30,
+                    Constants.CompoundFrequency.Monthly));
+            Universal.printf(
+                val.CompoundInterest(
+                    0.041,
+                    30,
+                    Constants.CompoundFrequency.Monthly));
+            double dbl = 1;
+            Universal.printf(dbl.ToKB(Constants.NumberType.TB));
+            Universal.printf(dbl.ToKB(Constants.NumberType.GB));
+            Universal.printf(dbl.ToKB(Constants.NumberType.ZB));
         }
     }
 }

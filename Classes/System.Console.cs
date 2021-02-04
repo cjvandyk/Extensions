@@ -14,7 +14,7 @@ namespace Extensions
     /// <summary>
     /// Helper methods for console messages.
     /// </summary>
-    public static class ConsoleEx
+    public static class ConsoleExtensions
     {
         /// <summary>
         /// Write an array of strings to the console in yellow, resetting
@@ -24,6 +24,7 @@ namespace Extensions
         /// message.</param>
         public static void WriteHelp(string[] lines)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             WriteHelp(lines, ConsoleColor.Yellow);
         }
 
@@ -35,15 +36,14 @@ namespace Extensions
         /// message.</param>
         /// <param name="textColor">The ConsoleColor to use for the text
         /// color.</param>
-        public static void WriteHelp(string[] lines, ConsoleColor textColor)
+        public static void WriteHelp(string[] lines, 
+                                     ConsoleColor textColor)
         {
-            ConsoleColor color = Console.ForegroundColor;
-            Console.ForegroundColor = textColor;
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             foreach (string str in lines)
             {
-                Console.WriteLine(str);
+                Universal.printf(str, textColor);
             }
-            Console.ForegroundColor = color;
         }
     }
 }

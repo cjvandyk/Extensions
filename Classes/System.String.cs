@@ -14,9 +14,10 @@ using System.Linq;
 namespace Extensions
 {
     /// <summary>
-    /// Extensions for the System.String class.
+    /// Extension methods for the System.String and System.Text.StringBuilder
+    /// classes.
     /// </summary>
-    public static class String
+    public static class StringExtensions
     {
         #region Encrypt
 
@@ -116,6 +117,7 @@ namespace Extensions
         /// <returns>The root of the URL given the URL string.</returns>
         public static string GetUrlRoot(this System.String url)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             string root = url.ToLower().Replace("https://", "");
             return ("https://" + root.Substring(0, root.IndexOf('/')));
         }
@@ -133,6 +135,7 @@ namespace Extensions
         /// <returns>The root of the URL given the URL string.</returns>
         public static System.Text.StringBuilder GetUrlRoot(this System.Text.StringBuilder url)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             url.Clear();
             url.Append(GetUrlRoot(url.ToString()));
             return url;
@@ -149,6 +152,7 @@ namespace Extensions
         public static bool HasLower(this System.String str,
                                    bool ignoreSpaces = true)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return (ignoreSpaces ? str.Replace(" ", "") : str)
                     .ToCharArray()
                     .Select(C => (int)C)
@@ -162,6 +166,7 @@ namespace Extensions
         /// <returns>True if the string contains any lower case, else False.</returns>
         public static bool HasLower(this System.Text.StringBuilder str)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return HasLower(str.ToString());
         }
         #endregion HasLower()
@@ -177,6 +182,7 @@ namespace Extensions
         public static bool HasNumeric(this System.String str,
                                       bool ignoreSpaces = true)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return (ignoreSpaces ? str.Replace(" ", "") : str)
                     .ToCharArray()
                     .Any(Char.IsDigit);
@@ -192,6 +198,7 @@ namespace Extensions
         public static bool HasNumeric(this System.Text.StringBuilder str,
                                      bool ignoreSpaces = true)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return HasNumeric(str.ToString(),
                              ignoreSpaces);
         }
@@ -209,6 +216,7 @@ namespace Extensions
         public static bool HasSymbol(this System.String str,
                                           bool ignoreSpaces = true)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return (!(ignoreSpaces ? str.Replace(" ", "") : str)
                     .ToCharArray()
                     .All(Char.IsLetterOrDigit));
@@ -227,6 +235,7 @@ namespace Extensions
                                           bool Classic = false,
                                           bool ignoreSpaces = true)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return HasSymbol(str.ToString(),
                                   ignoreSpaces);
         }
@@ -242,6 +251,7 @@ namespace Extensions
         public static bool HasUpper(this System.String str,
                                     bool ignoreSpaces = true)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return (ignoreSpaces ? str.Replace(" ", "") : str)
                     .ToCharArray()
                     .Select(C => (int)C)
@@ -255,6 +265,7 @@ namespace Extensions
         /// <returns>True if the string contains any upper case, else False.</returns>
         public static bool HasUpper(this System.Text.StringBuilder str)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return HasUpper(str.ToString());
         }
         #endregion HasUpper()
@@ -273,6 +284,7 @@ namespace Extensions
                                         bool Classic = false,
                                         bool ignoreSpaces = true)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             if (Classic)  //No LINQ available e.g. .NET 2.0
             {
                 return System.Text.RegularExpressions.Regex.IsMatch(
@@ -300,6 +312,7 @@ namespace Extensions
                                         bool Classic = false,
                                         bool ignoreSpaces = true)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return IsAlphabetic(str.ToString(), 
                                 Classic, 
                                 ignoreSpaces);
@@ -321,6 +334,7 @@ namespace Extensions
                                           bool Classic = false,
                                           bool ignoreSpaces = true)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             if (Classic)  //No LINQ available e.g. .NET 2.0
             {
                 return System.Text.RegularExpressions.Regex.IsMatch(
@@ -349,6 +363,7 @@ namespace Extensions
                                           bool Classic = false,
                                           bool ignoreSpaces = true)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return IsAlphaNumeric(str.ToString(), 
                                   Classic, 
                                   ignoreSpaces);
@@ -371,6 +386,7 @@ namespace Extensions
                                   char[] Chars,
                                   bool Classic = false)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             if (Classic)  //No LINQ available e.g. .NET 2.0
             {
                 string comparor = @"^[";
@@ -410,6 +426,7 @@ namespace Extensions
                                   char[] Chars,
                                   bool Classic = false)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return IsChar(str.ToString(), Chars, Classic);
         }
         #endregion IsChar()
@@ -422,6 +439,7 @@ namespace Extensions
         /// <returns>True if email, false if not.</returns>
         public static bool IsEmail(this System.String str)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             try
             {
                 var email = new System.Net.Mail.MailAddress(str);
@@ -442,6 +460,7 @@ namespace Extensions
         /// <returns>True if email, false if not.</returns>
         public static bool IsEmail(this System.Text.StringBuilder str)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return IsEmail(str.ToString());
         }
         #endregion IsEmail()
@@ -456,6 +475,7 @@ namespace Extensions
         public static bool IsLower(this System.String str, 
                                    bool ignoreSpaces = true)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return (ignoreSpaces ? str.Replace(" ", "") : str)
                     .ToCharArray()
                     .Select(C => (int)C)
@@ -469,6 +489,7 @@ namespace Extensions
         /// <returns>True if the entire string is lower case, else False.</returns>
         public static bool IsLower(this System.Text.StringBuilder str)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return IsLower(str.ToString());
         }
         #endregion IsLower()
@@ -487,6 +508,7 @@ namespace Extensions
                                      bool Classic = false,
                                      bool ignoreSpaces = true)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             if (Classic)  //No LINQ available e.g. .NET 2.0
             {
                 return System.Text.RegularExpressions.Regex.IsMatch(
@@ -514,6 +536,7 @@ namespace Extensions
                                      bool Classic = false,
                                      bool ignoreSpaces = true)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return IsNumeric(str.ToString(), 
                              Classic, 
                              ignoreSpaces);
@@ -545,6 +568,7 @@ namespace Extensions
                                     bool requireNumeric = true,
                                     bool requireSymbol = true)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             if ((numberCriteriaRequired < 1) ||
                 (numberCriteriaRequired > 4))
             {
@@ -642,6 +666,7 @@ namespace Extensions
                                     bool requireNumeric = true,
                                     bool requireSymbol = true)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return IsStrong(str,
                             numberCriteriaRequired,
                             requireUpper,
@@ -661,6 +686,7 @@ namespace Extensions
         public static bool IsUpper(this System.String str, 
                                    bool ignoreSpaces = true)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return (ignoreSpaces ? str.Replace(" ", "") : str)
                     .ToCharArray()
                     .Select(C => (int)C)
@@ -674,6 +700,7 @@ namespace Extensions
         /// <returns>True if the entire string is upper case, else False.</returns>
         public static bool IsUpper(this System.Text.StringBuilder str)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return IsUpper(str.ToString());
         }
         #endregion IsUpper()
@@ -692,6 +719,7 @@ namespace Extensions
         /// <returns>True if the URL is a root, False if not.</returns>
         public static bool IsUrlRoot(this System.String url)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             if (url.ToLower().Replace("https://", "").IndexOf('/') == -1)
             {
                 return true;
@@ -713,6 +741,7 @@ namespace Extensions
         /// <returns>True if the URL is a root, False if not.</returns>
         public static bool IsUrlRoot(this System.Text.StringBuilder url)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return IsUrlRoot(url.ToString());
         }
         #endregion IsUrlRoot()
@@ -725,6 +754,7 @@ namespace Extensions
         /// <returns>True if it's a vowel, else False.</returns>
         public static bool IsVowel(this System.Char C)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             switch (C)
             {
                 case 'a':
@@ -748,6 +778,7 @@ namespace Extensions
         /// <returns>True if it's a vowel, else False.</returns>
         public static bool IsVowel(this System.String str)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return IsVowel(Convert.ToChar(str));
         }
 
@@ -760,6 +791,7 @@ namespace Extensions
         /// <returns>True if it's a vowel, else False.</returns>
         public static bool IsVowel(this System.Text.StringBuilder str)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return IsVowel(Convert.ToChar(str.ToString()));
         }
         #endregion IsVowel()
@@ -773,6 +805,7 @@ namespace Extensions
         /// <returns>True if in valid format, else False.</returns>
         public static bool IsZipCode(this System.String str)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             string[] parts = str.Split('-');
             if (parts.Length == 1)
             {
@@ -800,6 +833,7 @@ namespace Extensions
         /// <returns>True if in valid format, else False.</returns>
         public static bool IsZipCode(this System.Text.StringBuilder str)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return IsZipCode(str.ToString());
         }
 
@@ -810,6 +844,7 @@ namespace Extensions
         /// <returns>True if a 5 digit numeric, else False.</returns>
         private static bool IsZipCode5Digits(this System.String str)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return (str.Length == 5 && 
                     int.TryParse(str, out _));
         }
@@ -823,6 +858,7 @@ namespace Extensions
         /// <returns>The number of sentences in the given object.</returns>
         public static int Lines(this System.String str)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return str.Split(new char[] { '\n' },
                              StringSplitOptions.RemoveEmptyEntries)
                       .Length;
@@ -835,6 +871,7 @@ namespace Extensions
         /// <returns>The number of sentences in the given object.</returns>
         public static int Lines(this System.Text.StringBuilder str)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return Lines(str.ToString());
         }
         #endregion Lines()
@@ -852,6 +889,7 @@ namespace Extensions
         public static string LoremIpsum(this System.String str, 
                                         int Paragraphs)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             str = null;
             for (int i = 0; i < Paragraphs; i++)
             {
@@ -872,6 +910,7 @@ namespace Extensions
         public static System.Text.StringBuilder LoremIpsum(this System.Text.StringBuilder str, 
                                                            int Paragraphs)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             str.Clear();
             str.Append(LoremIpsum(str.ToString(), Paragraphs));
             return str;
@@ -893,6 +932,7 @@ namespace Extensions
                                          int frequency = 999, 
                                          int duration = 200)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             foreach (char c in str)
             {
                 switch (c)
@@ -928,6 +968,7 @@ namespace Extensions
                                          int frequency = 999, 
                                          int duration = 200)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             MorseCodeBeep(str.ToString(), frequency, duration);
         }
         #endregion MorseCodeBeep()
@@ -946,6 +987,7 @@ namespace Extensions
         public static string ReplaceTokens(this System.String str, 
                                            Dictionary<string, string> tokens)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             string returnValue = str;
             foreach (string key in tokens.Keys)
             {
@@ -967,6 +1009,7 @@ namespace Extensions
         public static System.Text.StringBuilder ReplaceTokens(this System.Text.StringBuilder str, 
                                                               Dictionary<string, string> tokens)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             str.Clear();
             str.Append(ReplaceTokens(str.ToString(), tokens));
             return str;
@@ -985,6 +1028,7 @@ namespace Extensions
         /// space removed and all other spaces reduced to single space.</returns>
         public static string RemoveExtraSpace(this System.String str)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return System.Text.RegularExpressions.Regex.Replace(str.Trim(), 
                                                                 "\\s+", 
                                                                 " ");
@@ -1001,6 +1045,7 @@ namespace Extensions
         /// space removed and all other spaces reduced to single space.</returns>
         public static string RemoveExtraSpace(this System.Text.StringBuilder str)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return RemoveExtraSpace(str.ToString());
         }
         #endregion RemoveExtraSpace()
@@ -1013,6 +1058,7 @@ namespace Extensions
         /// <returns></returns>
         public static string ToBinary(this System.String str)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             foreach (byte b in System.Text.ASCIIEncoding.UTF8.GetBytes(
                 str.ToCharArray()))
@@ -1030,6 +1076,7 @@ namespace Extensions
         /// <returns></returns>
         public static string ToBinary(this System.Text.StringBuilder str)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return ToBinary(str.ToString());
         }
         #endregion ToBinary()
@@ -1043,6 +1090,7 @@ namespace Extensions
         /// <returns>The enum value.</returns>
         public static T ToEnum<T>(this System.String str)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return (T)Enum.Parse(typeof(T), str);
         }
 
@@ -1054,6 +1102,7 @@ namespace Extensions
         /// <returns>The enum value.</returns>
         public static T ToEnum<T>(this System.Text.StringBuilder str)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return (str.ToString().ToEnum<T>());
         }
         #endregion ToEnum()
@@ -1072,6 +1121,7 @@ namespace Extensions
             char separator = '&',
             char assigner = '=')
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             Dictionary<string, string> result = new Dictionary<string, string>();
             string query = str.Substring(str.IndexOf('?') + 1);
             string[] parts = query.Split(separator);
@@ -1096,6 +1146,7 @@ namespace Extensions
             char separator = '&',
             char assigner = '=')
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             System.Collections.Specialized.NameValueCollection nvc = 
                 new System.Collections.Specialized.NameValueCollection();
             foreach (KeyValuePair<string, string> kvp in QueryStringToDictionary(str))
@@ -1123,6 +1174,7 @@ namespace Extensions
         public static string ToMorseCode(this System.String str, 
                                          bool includeSpaces = true)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             System.Text.StringBuilder returnValue = 
                 new System.Text.StringBuilder();
             string tempStr = "";
@@ -1157,6 +1209,7 @@ namespace Extensions
         public static string ToMorseCode(this System.Text.StringBuilder str, 
                                          bool includeSpaces = true)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return (str.ToString());
         }
         #endregion ToMorseCode()
@@ -1179,6 +1232,7 @@ namespace Extensions
                                         int length, 
                                         string suffix = "...")
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return (string.IsNullOrEmpty(str) || str.Length < length ? str :
                 (str.Substring(0, length - suffix.Length) + suffix));
         }
@@ -1201,6 +1255,7 @@ namespace Extensions
                                         int length,
                                         string suffix = "...")
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return TrimLength(str.ToString(), length, suffix);
         }
         #endregion TrimLength()
@@ -1214,6 +1269,7 @@ namespace Extensions
         /// <returns>The number of words in the given object.</returns>
         public static int Words(this System.String str)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return str.Split(new char[] { ' ',
                                           '.',
                                           '?',
@@ -1231,6 +1287,7 @@ namespace Extensions
         /// <returns>The number of words in the given object.</returns>
         public static int Words(this System.Text.StringBuilder str)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return Words(str.ToString());
         }
         #endregion Words()

@@ -11,8 +11,12 @@ using System;
 
 namespace Extensions
 {
-    public static class TimeZoneInfo
+    /// <summary>
+    /// Extension methods for the System.DateTime.TimeZoneInfo class.
+    /// </summary>
+    public static class TimeZoneInfoExtensions
     {
+        #region GetTimeZoneString()
         /// <summary>
         /// Get the registry ID string for the given time zone.
         /// </summary>
@@ -21,7 +25,9 @@ namespace Extensions
         /// TimeZoneInfo.FindSystemTimeZoneById() for time zone convertions.</returns>
         public static string GetTimeZoneString(Constants.TimeZone timeZone)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             return Constants.TimeZones[timeZone];
         }
+        #endregion GetTimeZoneString()
     }
 }

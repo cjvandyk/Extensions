@@ -325,7 +325,7 @@ with these methods:
 - ### **Retry()**
     > _Checks if a System.Net.WebException contains a "Retry-After" header.<br>
         If it does, it sleeps the thread for that period (+ 60 seconds)<br>
-        before reattempting to HTTP call that caused the exception in the<br>
+        before reattempting the HTTP call that caused the exception in the<br>
         first place.  If no "Retry-After" header exist, the exception is<br>
         simply rethrown.<br>
         For example:<br>

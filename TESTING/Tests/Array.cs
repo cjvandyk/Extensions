@@ -6,24 +6,26 @@
 /// author and contributors.  Please see:
 /// https://github.com/cjvandyk/Quix/blob/master/LICENSE
 /// </summary>
+
 using System;
 
 using Extensions;
 
 namespace TESTING
 {
-    public static class DateTime
+    public static class Array
     {
         public static void Test()
         {
-            //Test .ToTimeZone()
-            Universal.printf("********* DateTime Testing *********", ConsoleColor.Green);
-            System.DateTime now = System.DateTime.UtcNow;
-            Universal.printf(now);
-            Universal.printf(
-                now.ToTimeZone(
-                    Constants.TimeZone.UTC, 
-                    Constants.TimeZone.EasternStandardTime));
+            //Test System.Array<byte>.CopyTo(),
+            //     System.Array<byte>.Print().
+            Universal.printf("********* Array Testing *********", ConsoleColor.Green);
+            byte[] b1 = System.Text.Encoding.UTF8.GetBytes("blog.cjvandyk.com rocks!");
+            b1.Print();
+            byte[] b2 = b1.CopyTo(10);
+            b2.Print();
+            byte[] b3 = b1.CopyTo(10, 5);
+            b3.Print();
         }
     }
 }

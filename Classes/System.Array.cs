@@ -11,7 +11,10 @@ using System;
 
 namespace Extensions
 {
-    public static class Array
+    /// <summary>
+    /// Extension methods for the System.Array class.
+    /// </summary>
+    public static class ArrayExtensions
     {
         #region byte[]
 
@@ -23,8 +26,11 @@ namespace Extensions
         /// <param name="length">The number of bytes to copy.</param>
         /// <param name="start">The offset starting point to start the copy.</param>
         /// <returns>The copied bytes in a byte[].</returns>
-        public static byte[] CopyTo(this byte[] bytes, int length, int start = 0)
+        public static byte[] CopyTo(this byte[] bytes, 
+                                    int length, 
+                                    int start = 0)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             byte[] result = new byte[length];
             for (int C = start; C < length + start; C++)
             {
@@ -40,6 +46,7 @@ namespace Extensions
         /// <param name="bytes">The byte array to print to console.</param>
         public static void Print(this byte[] bytes)
         {
+            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
             string str = "";
             foreach (byte b in bytes)
             {
@@ -47,7 +54,7 @@ namespace Extensions
                        (b < 10 ? "   " : 
                        (b < 100 ? "  " : " ")));
             }
-            Console.WriteLine(str);
+            Universal.printf(str);
         }
 
         #endregion byte[]
