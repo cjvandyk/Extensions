@@ -9,6 +9,7 @@
 using System;
 
 using Extensions;
+using static Extensions.Universal;
 
 namespace TESTING
 {
@@ -17,10 +18,10 @@ namespace TESTING
         public static void Test()
         {
             //Test .ToTimeZone()
-            Universal.printf("********* DateTime Testing *********", ConsoleColor.Green);
+            printf("********* DateTime Testing *********", ConsoleColor.Green);
             System.DateTime now = System.DateTime.UtcNow;
-            Universal.printf(now);
-            Universal.printf(
+            printf(now);
+            printf(
                 now.ToTimeZone(
                     Constants.TimeZone.UTC, 
                     Constants.TimeZone.EasternStandardTime));

@@ -17,7 +17,6 @@ namespace Extensions
     public static class DoubleExtensions
     {
         #region BinaryDataSizes
-
         /// <summary>
         /// Returns the given number expressed as Bytes.
         /// </summary>
@@ -28,7 +27,7 @@ namespace Extensions
                                            Constants.NumberType fromType = 
                                                Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(number, fromType);
             switch (fromType)
             {
                 case Constants.NumberType.Bytes:
@@ -128,7 +127,7 @@ namespace Extensions
                                   Constants.NumberType fromType =
                                       Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.KB;
         }
 
@@ -142,7 +141,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.MB;
         }
 
@@ -156,7 +155,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.GB;
         }
 
@@ -170,7 +169,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.TB;
         }
 
@@ -184,7 +183,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.PB;
         }
 
@@ -198,7 +197,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.EB;
         }
 
@@ -212,7 +211,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.ZB;
         }
 
@@ -226,7 +225,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.YB;
         }
 
@@ -240,7 +239,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.BB;
         }
 
@@ -254,7 +253,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.GpB;
         }
 
@@ -268,7 +267,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.SB;
         }
 
@@ -282,7 +281,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.PaB;
         }
 
@@ -296,7 +295,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.AB;
         }
 
@@ -310,7 +309,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.PlB;
         }
 
@@ -324,7 +323,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.BrB;
         }
 
@@ -338,7 +337,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.SoB;
         }
 
@@ -352,7 +351,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.QB;
         }
 
@@ -366,7 +365,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.KaB;
         }
 
@@ -380,7 +379,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.RB;
         }
 
@@ -394,7 +393,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.DB;
         }
 
@@ -408,7 +407,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.HB;
         }
 
@@ -422,7 +421,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.MrB;
         }
 
@@ -436,7 +435,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.DdB;
         }
 
@@ -450,7 +449,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.RtB;
         }
 
@@ -464,7 +463,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.ShB;
         }
 
@@ -478,7 +477,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.CB;
         }
 
@@ -492,10 +491,9 @@ namespace Extensions
                                    Constants.NumberType fromType =
                                        Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.KkB;
         }
-
         #endregion BinaryDataSizes
 
         #region CompoundInterest()
@@ -516,7 +514,7 @@ namespace Extensions
                                               Constants.CompoundFrequency frequency = 
                                                   Constants.CompoundFrequency.Monthly)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(amount, percent, years, frequency);
             double result = amount;
             double Percent = percent / 100 / (
                 frequency == Constants.CompoundFrequency.Yearly ? 1 : 12);
@@ -542,7 +540,7 @@ namespace Extensions
         /// <returns>The value as Int16 format.</returns>
         public static Int16 ToInt16(this double number)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(number);
             return Convert.ToInt16(number);
         }
         #endregion Convert.To Overloaded Methods

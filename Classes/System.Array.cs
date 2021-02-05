@@ -17,7 +17,6 @@ namespace Extensions
     public static class ArrayExtensions
     {
         #region byte[]
-
         /// <summary>
         /// Copies a given length of bytes from a byte[] starting at a 
         /// definable offset.
@@ -30,7 +29,7 @@ namespace Extensions
                                     int length, 
                                     int start = 0)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(bytes, length, start);
             byte[] result = new byte[length];
             for (int C = start; C < length + start; C++)
             {
@@ -46,7 +45,7 @@ namespace Extensions
         /// <param name="bytes">The byte array to print to console.</param>
         public static void Print(this byte[] bytes)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(bytes);
             string str = "";
             foreach (byte b in bytes)
             {
@@ -56,7 +55,6 @@ namespace Extensions
             }
             Universal.printf(str);
         }
-
         #endregion byte[]
     }
 }

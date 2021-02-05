@@ -12,7 +12,7 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
-    <AssemblyVersion>1.0.20</AssemblyVersion>
+    <AssemblyVersion>1.0.83</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -50,7 +50,10 @@
     <Compile Include="Tests\DateTime.cs" />
     <Compile Include="Tests\Dictionary.cs" />
     <Compile Include="Tests\Double.cs" />
+    <Compile Include="Tests\Object.cs" />
     <Compile Include="Tests\Process.cs" />
+    <Compile Include="Tests\String.cs" />
+    <Compile Include="Tests\TimeZoneInfo.cs" />
     <Compile Include="Tests\WebException.cs" />
   </ItemGroup>
   <ItemGroup>

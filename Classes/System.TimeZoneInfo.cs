@@ -25,7 +25,7 @@ namespace Extensions
         /// TimeZoneInfo.FindSystemTimeZoneById() for time zone convertions.</returns>
         public static string GetTimeZoneString(Constants.TimeZone timeZone)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(timeZone);
             return Constants.TimeZones[timeZone];
         }
         #endregion GetTimeZoneString()

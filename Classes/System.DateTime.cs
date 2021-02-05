@@ -23,7 +23,7 @@ namespace Extensions
                                           Constants.TimeZone toZone = 
                                               Constants.TimeZone.EasternStandardTime)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(dateTime, fromZone, toZone);
             System.DateTime now = System.TimeZoneInfo.ConvertTimeToUtc(
                 new System.DateTime(dateTime.Ticks, DateTimeKind.Unspecified),
                 System.TimeZoneInfo.FindSystemTimeZoneById(

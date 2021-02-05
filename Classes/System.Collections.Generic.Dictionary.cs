@@ -33,7 +33,7 @@ namespace Extensions
             char separator = '&',
             char assigner = '=')
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(dic, separator, assigner);
             string result = "?";
             foreach (string key in dic.Keys)
             {

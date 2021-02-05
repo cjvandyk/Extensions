@@ -9,6 +9,7 @@
 using System;
 
 using Extensions;
+using static Extensions.Universal;
 
 namespace TESTING
 {
@@ -17,7 +18,7 @@ namespace TESTING
         public static void Test()
         {
             //Test .ToTimeZone()
-            Universal.printf("********* Process Testing *********", ConsoleColor.Green);
+            printf("********* Process Testing *********", ConsoleColor.Green);
             //System.Diagnostics.Process.GetCurrentProcess().Elevate(null);
         }
     }

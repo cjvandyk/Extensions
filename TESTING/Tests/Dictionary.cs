@@ -9,6 +9,7 @@
 using System;
 
 using Extensions;
+using static Extensions.Universal;
 
 namespace TESTING
 {
@@ -17,13 +18,13 @@ namespace TESTING
         public static void Test()
         {
             //Test System.Collections.Generic.Dictionary.ToQueryString()
-            Universal.printf("********* Dictionary Testing *********", ConsoleColor.Green);
+            printf("********* Dictionary Testing *********", ConsoleColor.Green);
             System.Collections.Generic.Dictionary<string, string> dic1 = 
                 new System.Collections.Generic.Dictionary<string, string>();
             dic1.Add("Parm1", "Val1");
             dic1.Add("Parm2", "Val2");
             dic1.Add("Parm3", "Val3");
-            Universal.printf(dic1.ToQueryString());
+            printf(dic1.ToQueryString());
         }
     }
 }

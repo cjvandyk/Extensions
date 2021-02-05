@@ -29,7 +29,7 @@ namespace Extensions
         public static bool Elevate(this System.Diagnostics.Process proc, 
                                    string[] args)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(proc, args);
             if ((args.Count() != 2) ||
                 (args[1] != "ELEVATED"))
             {

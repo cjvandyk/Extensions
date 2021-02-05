@@ -24,7 +24,7 @@ namespace Extensions
         /// message.</param>
         public static void WriteHelp(string[] lines)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(lines);
             WriteHelp(lines, ConsoleColor.Yellow);
         }
 
@@ -39,7 +39,7 @@ namespace Extensions
         public static void WriteHelp(string[] lines, 
                                      ConsoleColor textColor)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(lines, textColor);
             foreach (string str in lines)
             {
                 Universal.printf(str, textColor);

@@ -132,15 +132,30 @@ namespace Extensions
 
         #region ValidateNoNulls()
         /// <summary>
-        /// Validate that the given set of parameters doesn't contain any
-        /// nulls.  If it does, a ArgumentNullException error is thrown.
+        /// Makes quick work of null validating all parameters you pass to it.
+        /// This method takes a variable number of parameters and validates that
+        /// all parameters are not null.  If a parameter is found to be null, a
+        /// ArgumentNullException is thrown.
+        /// For example:
+        ///     void MyMethod(string str, double dbl, MyClass cls)
+        ///     {
+        ///         Universal.ValidateNoNulls(str, dbl, cls);
+        ///         ...Your code here...
+        ///     }
+        /// You do not have to pass all parameters, but can instead do this:
+        ///     void MyMethod(string str, double dbl, MyClass cls)
+        ///     {
+        ///         Universal.ValidateNoNulls(str, cls);
+        ///         ...Your code here...
+        ///     }
+        /// where we chose NOT to validate the double dbl in this case.
         /// </summary>
-        /// <param name="parms">The given set of parameters.</param>
-        public static void ValidateNoNulls(System.Reflection.ParameterInfo[] parms)
+        /// <param name="parms">The variable set of parameters.</param>
+        public static void ValidateNoNulls(params object[] parms)
         {
             for (int C = 0; C < parms.Length; C++)
             {
-                if (parms[C] == null) throw new ArgumentNullException(parms[C].Name);
+                if (parms[C] == null) throw new ArgumentNullException();
             }
         }
         /////////////////////////// Better way above ///////////////////////////

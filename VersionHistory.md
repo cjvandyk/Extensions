@@ -109,7 +109,13 @@
 	- Add `System.TimeZoneInfo.GetTimeZoneString()`<br>
 	- Add `System.DateTime.ToTimeZone()`<br>
 
-### **2.2.480 (2021-02-12)**<br>
+### **2.2.480 (2021-02-05)**<br>
 	- Add `enum Constants.CompoundFrequency`<br>
 	- Add `CompoundInterest()`<br>
 	- Add `printf()`<br>
+	- Add `ValidateNoNulls()`<br>
+	- Added .ValidateNoNulls() validation to all methods for error handling.
+	- Fixed a logic bug in .IsStrong().
+	- Refactored all classed by adding "Extensions" to the class name 
+	      e.g. String class became StringExtensions.  This helps eliminate
+		  compiler ambiguity that required fully qualified object names before.

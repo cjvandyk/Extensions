@@ -472,6 +472,25 @@ with these methods:
             `"The Extensions.cs NuGet package rocks!".TrimLength(20, ">>")`<br>
         will return "The Extensions.cs >>"<br>_
 
+- ### **ValidateNoNulls()**
+    > _Makes quick work of null validating all parameters you pass to it.<br>
+        This method takes a variable number of parameters and validates that<br>
+        all parameters are not null.  If a parameter is found to be null, a<br>
+        ArgumentNullException is thrown.<br>
+        For example:<br>
+            `void MyMethod(string str, double dbl, MyClass cls)`<br>
+            `{`<br>
+            `    Universal.ValidateNoNulls(str, dbl, cls);<br>
+            `    ...Your code here...`<br>
+            `}`<br>
+        You do not have to pass all parameters, but can instead do this:<br>
+            `void MyMethod(string str, double dbl, MyClass cls)`<br>
+            `{`<br>
+            `    Universal.ValidateNoNulls(str, cls);<br>
+            `    ...Your code here...`<br>
+            `}`<br>
+        where we chose NOT to validate the `double dbl` in this case._
+
 - ### **Words()**
     > _This method returns the number of words used in the given string<br>
         object.

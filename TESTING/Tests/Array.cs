@@ -10,6 +10,7 @@
 using System;
 
 using Extensions;
+using static Extensions.Universal;
 
 namespace TESTING
 {
@@ -19,7 +20,7 @@ namespace TESTING
         {
             //Test System.Array<byte>.CopyTo(),
             //     System.Array<byte>.Print().
-            Universal.printf("********* Array Testing *********", ConsoleColor.Green);
+            printf("********* Array Testing *********", ConsoleColor.Green);
             byte[] b1 = System.Text.Encoding.UTF8.GetBytes("blog.cjvandyk.com rocks!");
             b1.Print();
             byte[] b2 = b1.CopyTo(10);

@@ -22,8 +22,11 @@ namespace TESTING
             DateTime.Test();
             Dictionary.Test();
             Double.Test();
+            Object.Test();
             Process.Test();
-            WebException.Test();
+            String.Test();
+            TimeZoneInfo.Test();
+            //WebException.Test();
         }
     }
 }

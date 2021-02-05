@@ -37,7 +37,7 @@ namespace Extensions
         public static object Get(this object obj, 
                                  string key)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(obj, key);
             return extensionProperties[key];
         }
         #endregion Get()
@@ -55,7 +55,7 @@ namespace Extensions
                                string key, 
                                object val)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(obj, key, val);
             extensionProperties[key] = val;
         }
         #endregion Set()

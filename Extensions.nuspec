@@ -462,6 +462,25 @@
       "The Extensions.cs NuGet package rocks!".TrimLength(20, ">>")
       will return "The Extensions.cs >>"
 
+      ValidateNoNulls()
+      Makes quick work of null validating all parameters you pass to it.
+      This method takes a variable number of parameters and validates that
+      all parameters are not null.  If a parameter is found to be null, a
+      ArgumentNullException is thrown.
+      For example:
+      void MyMethod(string str, double dbl, MyClass cls)
+      {
+      Universal.ValidateNoNulls(str, dbl, cls);
+      ...Your code here...
+      }
+      You do not have to pass all parameters, but can instead do this:
+      void MyMethod(string str, double dbl, MyClass cls)
+      {
+      Universal.ValidateNoNulls(str, cls);
+      ...Your code here...
+      }
+      where we chose NOT to validate the double dbl in this case.
+
       Words()
       This method returns the number of words used in the given string
       object.
@@ -472,6 +491,6 @@
       will return 1.
     </releaseNotes>
     <copyright>Copyright 2020-2021</copyright>
-    <tags>Extensions C# cjvandyk Crayveon TimeZone CountWords Trim QueryString MorseCode Binary LoremIpsum ZipCode Vowel UrlRoot Elevate CompoundInterest StrongPassword</tags>
+    <tags>Extensions C# cjvandyk Crayveon 429 Retry-After ThrottlingHandler TimeZone CountWords Trim QueryString MorseCode Binary LoremIpsum ZipCode Vowel UrlRoot Elevate CompoundInterest StrongPassword</tags>
   </metadata>
 </package>

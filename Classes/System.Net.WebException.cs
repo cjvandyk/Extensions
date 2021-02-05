@@ -39,7 +39,7 @@ namespace Extensions
             this System.Net.WebException ex,
             System.Net.HttpWebRequest request)
         {
-            Universal.ValidateNoNulls(System.Reflection.MethodInfo.GetCurrentMethod().GetParameters());
+            Universal.ValidateNoNulls(ex, request);
             //Check if the response header contains a Retry-After value.
             if (!string.IsNullOrEmpty(ex.Response.Headers["Retry-After"]))
             {
