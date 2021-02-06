@@ -4,7 +4,7 @@
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
-/// https://github.com/cjvandyk/Quix/blob/master/LICENSE
+/// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
 /// </summary>
 
 using System;
@@ -1222,10 +1222,9 @@ namespace Extensions
             Universal.ValidateNoNulls(str, includeSpaces);
             System.Text.StringBuilder returnValue = 
                 new System.Text.StringBuilder();
-            string tempStr = "";
             foreach (char c in str.ToLower())
             {
-                if (Constants.MorseCode.TryGetValue(c, out tempStr))
+                if (Constants.MorseCode.TryGetValue(c, out string tempStr))
                 {
                     returnValue.Append(c != ' ' ? tempStr : 
                         (includeSpaces ? tempStr : ""));

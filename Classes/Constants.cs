@@ -1,16 +1,17 @@
-﻿#pragma warning disable IDE1006, IDE0017, CS0162, IDE0060, IDE0079 // Naming Styles, Simplify declaration (FQCN used), break after return, Remove unused (string[] args, Remove unnecessary suppression)
+﻿#pragma warning disable IDE1006 // Naming Styles
+#pragma warning disable IDE0017 // Simplify declaration (FQCN used)
+#pragma warning disable CS0162  // break after return
+#pragma warning disable IDE0060 // Remove unused (string[] args)
+#pragma warning disable IDE0079 // Remove unnecessary suppression
 
 /// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
-/// https://github.com/cjvandyk/Quix/blob/master/LICENSE
+/// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
 /// </summary>
 
-using System;
 using System.Collections.Generic;
-
-using System.ComponentModel;
 
 namespace Extensions
 {
