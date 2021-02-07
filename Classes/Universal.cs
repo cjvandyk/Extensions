@@ -1,6 +1,4 @@
-﻿#pragma warning disable IDE1006, IDE0017, CS0162, IDE0060, IDE0079 // Naming Styles, Simplify declaration (FQCN used), break after return, Remove unused (string[] args, Remove unnecessary suppression)
-
-/// <summary>
+﻿/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
@@ -16,7 +14,7 @@ namespace Extensions
         /// <summary>
         /// The private object used to manage locks on file I/O.
         /// </summary>
-        private static object lockManager = new object();
+        private static readonly object lockManager = new object();
 
         #region T Load<T>()
         /// <summary>
@@ -51,7 +49,7 @@ namespace Extensions
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(ex.ToString());
                 Console.ForegroundColor = currentColor;
-                return default(T);
+                return default;
             }
         }
         #endregion T Load<T>()

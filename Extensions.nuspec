@@ -8,7 +8,7 @@
     <owners>$author$</owners>
     <license type="expression">GPL-3.0-or-later</license>
     <projectUrl>https://github.com/cjvandyk/Extensions</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/cjvandyk/Extensions/Images/Extensions-64x64.png</iconUrl>
+    <iconUrl>https://raw.githubusercontent.com/cjvandyk/Extensions/master/Images/Extensions-64x64.png</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>$description$</description>
     <summary>

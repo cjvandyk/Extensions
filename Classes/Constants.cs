@@ -1,10 +1,4 @@
-﻿#pragma warning disable IDE1006 // Naming Styles
-#pragma warning disable IDE0017 // Simplify declaration (FQCN used)
-#pragma warning disable CS0162  // break after return
-#pragma warning disable IDE0060 // Remove unused (string[] args)
-#pragma warning disable IDE0079 // Remove unnecessary suppression
-
-/// <summary>
+﻿/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
