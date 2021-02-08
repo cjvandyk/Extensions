@@ -41,6 +41,15 @@ with these methods:
             `98  108 111 103 46  99  106 118 97  110`<br>
             `                    99  106 118 97  110 100 121 107 46  99`_
 
+- ### **DoubleQuote()**
+    > _Return the given string encased in double quotes.<br>
+        For example:<br>
+            `printf("https://blog.cjvandyk.com/sites/Rocks");`<br>
+            `printf("https://blog.cjvandyk.com/sites/Rocks".DoubleQuote());`<br>
+        will return<br>
+            `https://blog.cjvandyk.com/sites/Rocks`<br>
+            `"https://blog.cjvandyk.com/sites/Rocks"`_
+
 - ### **Elevate()**
     > _Restarts the current process with elevated permissions.<br>
         For example:<br>
@@ -127,6 +136,21 @@ with these methods:
         will return True and<br>
             `"AbC".HasUpper()`<br>
         will return True._
+
+- ### **HtmlDecode()**
+    > _Decode the HTML escaped components in a given string returning the<br>
+        given source string without HTML escaped components.<br>
+        For example:<br>
+            `"https://blog.cjvandyk.com/sites/Rocks &lt;&amp;&gt; Rolls!".HtmlDecode()`<br>
+        will return<br>
+            `https://blog.cjvandyk.com/sites/Rocks <&> Rolls!`_
+
+- ### **HtmlEncode()**
+    > _Encode the given string to be HTML safe.<br>
+        For example:<br>
+            `"https://blog.cjvandyk.com/sites/Rocks <&> Rolls!".HtmlEncode()`<br>
+        will return<br>
+            `https://blog.cjvandyk.com/sites/Rocks &lt;&amp;&gt; Rolls!`_
 
 - ### **IsAlphabetic()**
     > _Validates that the given string object contains all alphabetic<br>
@@ -310,6 +334,22 @@ with these methods:
             `printf("Hello World!", ConsoleColor.Red, ConsoleColor.White);`<br>
         will output the string to console in red text on a white background._
 
+- ### **Quote()**
+    > _Return the given string encased in requested quotes.<br>
+        Default is Constants.QuoteType.Double.<br>
+        For example:<br>
+            `printf("https://blog.cjvandyk.com/sites/Rocks");`<br>
+            `printf("https://blog.cjvandyk.com/sites/Rocks").Quote();`<br>
+            `printf("https://blog.cjvandyk.com/sites/Rocks".Quote(`<br>
+                `Constants.QuoteType.Single));`<br>
+            `printf("https://blog.cjvandyk.com/sites/Rocks".Quote(`<br>
+                `Constants.QuoteType.Double));`<br>
+        will return<br>
+            `https://blog.cjvandyk.com/sites/Rocks`<br>
+            `"https://blog.cjvandyk.com/sites/Rocks"`<br>
+            `'https://blog.cjvandyk.com/sites/Rocks'`<br>
+            `"https://blog.cjvandyk.com/sites/Rocks"`_
+
 - ### **RemoveExtraSpace()**
     > _Trims leading and trailing white space and then removes all extra<br>
         white space in the given string returning a single spaced result.<br>
@@ -370,6 +410,15 @@ with these methods:
         you know the type to which the returned value needs to be cast.<br>
         A derived override method for Get() and Set() can be defined<br>
         using specific class objects if finer controls is needed.<br>
+
+- ### **SingleQuote()**
+    > _Return the given string encased in single quotes.<br>
+        For example:<br>
+            `printf("https://blog.cjvandyk.com/sites/Rocks");`<br>
+            `printf("https://blog.cjvandyk.com/sites/Rocks".SingleQuote());`<br>
+        will return<br>
+            `https://blog.cjvandyk.com/sites/Rocks`<br>
+            `'https://blog.cjvandyk.com/sites/Rocks'`_
 
 - ### **ToBinary()**
     > _This method returns the given string represented in 1s and 0s as<br>

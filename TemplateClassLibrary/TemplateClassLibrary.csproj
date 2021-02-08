@@ -4,18 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{653D447D-2324-4A7E-8E13-BAA50606C0C8}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>TESTING</RootNamespace>
-    <AssemblyName>TESTING</AssemblyName>
+    <ProjectGuid>{AAEB2BFC-A1F1-4B65-8C41-1EA2B9143CB5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TemplateClassLibrary</RootNamespace>
+    <AssemblyName>TemplateClassLibrary</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
-    <AssemblyVersion>1.0.107</AssemblyVersion>
+    <AssemblyVersion>1.0.1</AssemblyVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -25,7 +24,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -33,7 +31,13 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Images\favicon-Crayveon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Extensions, Version=2.2.480.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\nuget\Extensions.cs.2.2.480\lib\net48\Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,27 +48,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Class1.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests\Array.cs" />
-    <Compile Include="Tests\DateTime.cs" />
-    <Compile Include="Tests\Dictionary.cs" />
-    <Compile Include="Tests\Double.cs" />
-    <Compile Include="Tests\Object.cs" />
-    <Compile Include="Tests\Process.cs" />
-    <Compile Include="Tests\String.cs" />
-    <Compile Include="Tests\TimeZoneInfo.cs" />
-    <Compile Include="Tests\WebException.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\Extensions.csproj">
-      <Project>{331a7c3b-45dc-4e04-85bf-de1934c6b3fa}</Project>
-      <Name>Extensions</Name>
-    </ProjectReference>
+    <Content Include="Images\favicon-Crayveon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -592,6 +592,13 @@ namespace Extensions
 
         #endregion Cryptography
 
+        #region Quote
+        /// <summary>
+        /// Enum of possible quote types.
+        /// </summary>
+        public enum QuoteType { Single, Double };
+        #endregion Quote
+
         /// <summary>
         /// Enum of possible enumerable types.
         /// </summary>

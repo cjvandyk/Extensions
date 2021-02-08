@@ -17,6 +17,28 @@ namespace Extensions
     /// </summary>
     public static class StringExtensions
     {
+        #region DoubleQuote()
+        /// <summary>
+        /// Return the given string encased in double quotes.
+        /// </summary>
+        /// <param name="str">The given string to be quoted.</param>
+        /// <returns>The given string encased in double quotes.</returns>
+        public static string DoubleQuote(this System.String str)
+        {
+            return ('"' + str + '"');
+        }
+
+        /// <summary>
+        /// Return the given string encased in double quotes.
+        /// </summary>
+        /// <param name="str">The given string to be quoted.</param>
+        /// <returns>The given string encased in double quotes.</returns>
+        public static string DoubleQuote(this System.Text.StringBuilder str)
+        {
+            return DoubleQuote(str.ToString());
+        }
+        #endregion DoubleQuote()
+
         #region Encrypt
 
         //public static string Encrypt(this System.String str, 
@@ -267,6 +289,50 @@ namespace Extensions
             return HasUpper(str.ToString());
         }
         #endregion HasUpper()
+
+        #region HtmlDecode()
+        /// <summary>
+        /// Decode the HTML escaped components in a given string.
+        /// </summary>
+        /// <param name="str">The given source string to decode.</param>
+        /// <returns>The given source string without HTML escaped components.</returns>
+        public static string HtmlDecode(this System.String str)
+        {
+            return System.Web.HttpUtility.HtmlDecode(str);
+        }
+
+        /// <summary>
+        /// Decode the HTML escaped components in a given string.
+        /// </summary>
+        /// <param name="str">The given source string to decode.</param>
+        /// <returns>The given source string without HTML escaped components.</returns>
+        public static string HtmlDecode(this System.Text.StringBuilder str)
+        {
+            return HtmlDecode(str.ToString());
+        }
+        #endregion HtmlDecode()
+
+        #region HtmlEncode()
+        /// <summary>
+        /// Encode the given string to be HTML safe.
+        /// </summary>
+        /// <param name="str">The given source string to encode.</param>
+        /// <returns>The given source string in HTML safe format.</returns>
+        public static string HtmlEncode(this System.String str)
+        {
+            return System.Web.HttpUtility.HtmlEncode(str);
+        }
+
+        /// <summary>
+        /// Encode the given string to be HTML safe.
+        /// </summary>
+        /// <param name="str">The given source string to encode.</param>
+        /// <returns>The given source string in HTML safe format.</returns>
+        public static string HtmlEncode(this System.Text.StringBuilder str)
+        {
+            return HtmlEncode(str.ToString());
+        }
+        #endregion HtmlEncode()
 
         #region IsAlphabetic()
         /// <summary>
@@ -1017,6 +1083,38 @@ namespace Extensions
         }
         #endregion MorseCodeBeep()
 
+        #region Quote()
+        /// <summary>
+        /// Return the given string encased in requested quotes.
+        /// Default is Constants.QuoteType.Double.
+        /// </summary>
+        /// <param name="str">The given string to be quoted.</param>
+        /// <returns>The given string encased in requested quotes.</returns>
+        public static string Quote(this System.String str, 
+                                   Constants.QuoteType type = 
+                                       Constants.QuoteType.Double)
+        {
+            if (type == Constants.QuoteType.Double)
+            {
+                return DoubleQuote(str);
+            }
+            return SingleQuote(str);
+        }
+
+        /// <summary>
+        /// Return the given string encased in requested quotes.
+        /// Default is Constants.QuoteType.Double.
+        /// </summary>
+        /// <param name="str">The given string to be quoted.</param>
+        /// <returns>The given string encased in requested quotes.</returns>
+        public static string Quote(this System.Text.StringBuilder str,
+                           Constants.QuoteType type =
+                               Constants.QuoteType.Double)
+        {
+            return Quote(str, type);
+        }
+        #endregion Quote()
+
         #region ReplaceTokens()
         /// <summary>
         /// Takes a given string and replaces 1 to n tokens in the string
@@ -1094,6 +1192,28 @@ namespace Extensions
             return RemoveExtraSpace(str.ToString());
         }
         #endregion RemoveExtraSpace()
+
+        #region SingleQuote()
+        /// <summary>
+        /// Return the given string encased in single quotes.
+        /// </summary>
+        /// <param name="str">The given string to be quoted.</param>
+        /// <returns>The given string encased in single quotes.</returns>
+        public static string SingleQuote(this System.String str)
+        {
+            return ("'" + str + "'");
+        }
+
+        /// <summary>
+        /// Return the given string encased in single quotes.
+        /// </summary>
+        /// <param name="str">The given string to be quoted.</param>
+        /// <returns>The given string encased in single quotes.</returns>
+        public static string SingleQuote(this System.Text.StringBuilder str)
+        {
+            return SingleQuote(str.ToString());
+        }
+        #endregion SingleQuote()
 
         #region ToBinary()
         /// <summary>

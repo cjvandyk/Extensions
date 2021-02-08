@@ -18,10 +18,22 @@ namespace TESTING
 
         public static void Test()
         {
-            //Test System.String.GetUrlRoot()
             printf("********* String Testing *********", ConsoleColor.Green);
-            printf(".GetUrlRoot()", ConsoleColor.Yellow);
+            //Test System.String.DoubleQuote()
+            //     System.String.SingleQuote()
+            //     System.String.Quote()
+            printf(".DoubleQuote()", ConsoleColor.Yellow);
             string s = "https://blog.cjvandyk.com/sites/Rocks";
+            printf(s);
+            printf(s.DoubleQuote());
+            printf(".SingleQuote()", ConsoleColor.Yellow);
+            printf(s.SingleQuote());
+            printf(".Quote()", ConsoleColor.Yellow);
+            printf(s.Quote());
+
+            //Test System.String.GetUrlRoot()
+            printf(".GetUrlRoot()", ConsoleColor.Yellow);
+            s = "https://blog.cjvandyk.com/sites/Rocks";
             printf(s);
             printf(s.GetUrlRoot());
 
@@ -60,6 +72,16 @@ namespace TESTING
             s = "ABC@#";
             printf(s);
             printf(s.HasSymbol());
+
+            //Test System.String.HtmlDecode()
+            //     System.String.HtmlEncode()
+            printf(".HtmlEncode()", ConsoleColor.Yellow);
+            s = "https://blog.cjvandyk.com/sites/Rocks <&> Rolls!";
+            printf(s);
+            s = s.HtmlEncode();
+            printf(s);
+            printf(".HtmlDecode()", ConsoleColor.Yellow);
+            printf(s.HtmlDecode());
 
             //Test System.String.IsAlphabetic()
             printf(".IsAlphabetic()", ConsoleColor.Yellow);

@@ -11,11 +11,21 @@
     <iconUrl>https://raw.githubusercontent.com/cjvandyk/Extensions/master/Images/Extensions-64x64.png</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>$description$</description>
+    <packageTypes>
+      <packageType name="Dependency" />
+      <packageType name="Extensions" />
+    </packageTypes>
+    <dependencies>
+      <group targetFramework=".NETFramework4.8.0">
+        <!--<dependency id="jQuery" version="1.6.2" />-->
+      </group>
+    </dependencies>
     <summary>
       Extensions.dll contains extension methods that enhance existing C# classes thus making life easier for developers.
       These methods are included:
       CompoundInterest()
       CopyTo()
+      DoubleQuote()
       Elevate()
       Get()
       GetTimeZoneString()
@@ -34,9 +44,12 @@
       Lines()
       LoremIpsum()
       Print()
+      printf()
+      Quote()
       ReplaceTokens()
       Retry()
       Set()
+      SingleQuote()
       ToBinary()
       ToEnum()
       ToNumberBytes()
@@ -68,6 +81,15 @@
       98  108 111 103 46  99  106 118 97  110 100 121 107 46  99  111 109 32  114 111 99  107 115 33
       98  108 111 103 46  99  106 118 97  110
       99  106 118 97  110 100 121 107 46  99
+
+      DoubleQuote()
+      Return the given string encased in double quotes.
+      For example:
+      printf("https://blog.cjvandyk.com/sites/Rocks");
+      printf("https://blog.cjvandyk.com/sites/Rocks".DoubleQuote());
+      will return
+      https://blog.cjvandyk.com/sites/Rocks
+      "https://blog.cjvandyk.com/sites/Rocks"
 
       Elevate()
       Restarts the current process with elevated permissions.
@@ -139,6 +161,21 @@
       will return True and
       "AbC".HasUpper()
       will return True.
+
+      HtmlDecode()
+      Decode the HTML escaped components in a given string returning the
+      given source string without HTML escaped components.
+      For example:
+      "https://blog.cjvandyk.com/sites/Rocks &lt;&gt; Rolls!".HtmlDecode()
+      will return
+      https://blog.cjvandyk.com/sites/Rocks Rolls!
+
+      HtmlEncode()
+      Encode the given string to be HTML safe.
+      For example:
+      "https://blog.cjvandyk.com/sites/Rocks Rolls!".HtmlEncode()
+      will return
+      https://blog.cjvandyk.com/sites/Rocks &lt;&gt; Rolls!
 
       IsAlphabetic()
       Validates that the given string object contains all alphabetic
@@ -320,6 +357,22 @@
       printf("Hello World!", ConsoleColor.Red, ConsoleColor.White);
       will output the string to console in red text on a white background.
 
+      Quote()
+      Return the given string encased in requested quotes.
+      Default is Constants.QuoteType.Double.
+      For example:
+      printf("https://blog.cjvandyk.com/sites/Rocks");
+      printf("https://blog.cjvandyk.com/sites/Rocks").Quote();
+      printf("https://blog.cjvandyk.com/sites/Rocks".Quote(
+      Constants.QuoteType.Single));
+      printf("https://blog.cjvandyk.com/sites/Rocks".Quote(
+      Constants.QuoteType.Double));
+      will return
+      https://blog.cjvandyk.com/sites/Rocks
+      "https://blog.cjvandyk.com/sites/Rocks"
+      'https://blog.cjvandyk.com/sites/Rocks'
+      "https://blog.cjvandyk.com/sites/Rocks"
+
       RemoveExtraSpace()
       Trims leading and trailing white space and then removes all extra
       white space in the given string returning a single spaced result.
@@ -361,6 +414,15 @@
       Set()
       Language extension for properties.  Use to set the value of the
       extension property in question.
+
+      SingleQuote()
+      Return the given string encased in single quotes.
+      For example:
+      printf("https://blog.cjvandyk.com/sites/Rocks");
+      printf("https://blog.cjvandyk.com/sites/Rocks".SingleQuote());
+      will return
+      https://blog.cjvandyk.com/sites/Rocks
+      'https://blog.cjvandyk.com/sites/Rocks'
 
       ToBinary()
       This method returns the given string represented in 1s and 0s as
@@ -490,7 +552,10 @@
       "ThisIsMyTest".Words()
       will return 1.
     </releaseNotes>
-    <copyright>Copyright 2020-2021</copyright>
+    <copyright>$copyright$</copyright>
     <tags>Extensions C# cjvandyk Crayveon 429 Retry-After ThrottlingHandler TimeZone CountWords Trim QueryString MorseCode Binary LoremIpsum ZipCode Vowel UrlRoot Elevate CompoundInterest StrongPassword</tags>
   </metadata>
+  <files>
+    <file src="bin\$configuration$\$id$.pdb" target="lib\net48" />
+  </files>
 </package>

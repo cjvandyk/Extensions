@@ -74,19 +74,19 @@
 	- Add `System.Text.StringBuilder.IsEmail()`<br>
 	- Add `System.String.IsLower()`<br>
 	- Add `System.Text.StringBuilder.IsLower()`<br>
-	- Add `System.String.IsUpper()`<br>
-	- Add `System.Text.StringBuilder.IsUpper()`<br>
-	- Add `System.String.MorseCodeBeep()`<br>
-	- Add `System.Text.StringBuilder.MorseCodeBeep()`<br>
-	- Add `System.String.RemoveExtraSpace()`<br>
-	- Add `System.Text.StringBuilder.RemoveExtraSpace()`<br>
 	- Add `System.String.IsStrong()`<br>
 	- Add `System.Text.StringBuilder.IsStrong()`<br>
+	- Add `System.String.IsUpper()`<br>
+	- Add `System.Text.StringBuilder.IsUpper()`<br>
 	- Add `System.Char.IsVowel()`<br>
 	- Add `System.String.IsVowel()`<br>
 	- Add `System.Text.StringBuilder.IsVowel()`<br>
 	- Add `System.String.IsZipCode()`<br>
 	- Add `System.Text.StringBuilder.IsZipCode()`<br>
+	- Add `System.String.MorseCodeBeep()`<br>
+	- Add `System.Text.StringBuilder.MorseCodeBeep()`<br>
+	- Add `System.String.RemoveExtraSpace()`<br>
+	- Add `System.Text.StringBuilder.RemoveExtraSpace()`<br>
 	- Add `System.String.ToEnum<T>()`<br>
 	- Add `System.Text.StringBuilder.ToEnum<T>()`<br>
 	- Add `System.String.ToMorseCode()`<br>
@@ -105,17 +105,33 @@
 	- Add `System.Array<byte>.Print()`<br>
 	- Add `System.Collections.Generic.Dictionary.ToQueryString()`<br>
 	- Add `enum Constants.TimeZone`<br>
+	- Add `System.DateTime.ToTimeZone()`<br>
 	- Add `Dictionary<Constants.TimeZone, string> Constants.TimeZones`<br>
 	- Add `System.TimeZoneInfo.GetTimeZoneString()`<br>
-	- Add `System.DateTime.ToTimeZone()`<br>
 
 ### **2.2.480 (2021-02-05)**<br>
 	- Add `enum Constants.CompoundFrequency`<br>
 	- Add `CompoundInterest()`<br>
 	- Add `printf()`<br>
 	- Add `ValidateNoNulls()`<br>
-	- Added .ValidateNoNulls() validation to all methods for error handling.
-	- Fixed a logic bug in .IsStrong().
-	- Refactored all classed by adding "Extensions" to the class name 
-	      e.g. String class became StringExtensions.  This helps eliminate
-		  compiler ambiguity that required fully qualified object names before.
+	- Added .ValidateNoNulls() validation to all methods for error handling.<br>
+	- Fixed a logic bug in .IsStrong().<br>
+	- Refactored all classed by adding "Extensions" to the class name<br>
+	      e.g. String class became StringExtensions.  This helps eliminate<br>
+		  compiler ambiguity that required fully qualified object names before.<br>
+
+### **2.3.480 (2021-02-12)**<br>
+	- Add .pdb to NuGet package to allow interactive debugging by other developers.<br>
+	- Cleaned up compiler messages.<br>
+	- Fixed the lion logo icon reference for the NuGet package.<br>
+	- Add `System.String.DoubleQuote()`<br>
+	- Add `System.Text.StringBuilder.DoubleQuote()`<br>
+	- Add `System.String.HtmlDecode()`<br>
+	- Add `System.Text.StringBuilder.HtmlDecode()`<br>
+	- Add `System.String.HtmlEncode()`<br>
+	- Add `System.Text.StringBuilder.HtmlEncode()`<br>
+	- Add `enum Constants.QuoteType`<br>
+	- Add `System.String.Quote()`<br>
+	- Add `System.Text.StringBuilder.Quote()`<br>
+	- Add `System.String.SingleQuote()`<br>
+	- Add `System.Text.StringBuilder.SingleQuote()`<br>
