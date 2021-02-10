@@ -19,17 +19,59 @@ namespace TESTING
         public static void Test()
         {
             printf("********* String Testing *********", ConsoleColor.Green);
+            string s;
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            //Test System.String.Substring()
+            printf("System.String.Substring()", ConsoleColor.Yellow);
+            s = "abc1abc2abc3abc4";
+            printf(s.Substring(3, Constants.SubstringType.FromHead));
+            printf(s.Substring(5, Constants.SubstringType.FromHead));
+            printf(s.Substring(8, Constants.SubstringType.FromHead));
+            printf(s.Substring(3, Constants.SubstringType.FromTail));
+            printf(s.Substring(5, Constants.SubstringType.FromTail));
+            printf(s.Substring(8, Constants.SubstringType.FromTail));
+            printf(s.Substring(5, "abc", Constants.SubstringType.LeftOfIndex, 0));
+            printf(s.Substring(5, "abc", Constants.SubstringType.LeftOfIndex, 1));
+            printf(s.Substring(5, "abc", Constants.SubstringType.LeftOfIndex, 2));
+            printf(s.Substring(5, "abc", Constants.SubstringType.LeftOfIndex, 3));
+            printf(s.Substring(5, "abc", Constants.SubstringType.LeftOfIndex, 4));
+            printf(s.Substring(5, "abc", Constants.SubstringType.RigthOfIndex, 0));
+            printf(s.Substring(5, "abc", Constants.SubstringType.RigthOfIndex, 1));
+            printf(s.Substring(5, "abc", Constants.SubstringType.RigthOfIndex, 2));
+            printf(s.Substring(5, "abc", Constants.SubstringType.RigthOfIndex, 3));
+            printf(s.Substring(5, "abc", Constants.SubstringType.RigthOfIndex, 4));
+            printf("System.Text.StringBuilder.Substring()", ConsoleColor.Yellow);
+            sb.Append(s);
+            printf(sb.Substring(5));
+            printf(sb.Substring(5, 3));
+            printf(sb.Substring(3, Constants.SubstringType.FromHead));
+            printf(sb.Substring(5, Constants.SubstringType.FromHead));
+            printf(sb.Substring(8, Constants.SubstringType.FromHead));
+            printf(sb.Substring(3, Constants.SubstringType.FromTail));
+            printf(sb.Substring(5, Constants.SubstringType.FromTail));
+            printf(sb.Substring(8, Constants.SubstringType.FromTail));
+            printf(sb.Substring(5, "abc", Constants.SubstringType.LeftOfIndex, 0));
+            printf(sb.Substring(5, "abc", Constants.SubstringType.LeftOfIndex, 1));
+            printf(sb.Substring(5, "abc", Constants.SubstringType.LeftOfIndex, 2));
+            printf(sb.Substring(5, "abc", Constants.SubstringType.LeftOfIndex, 3));
+            printf(sb.Substring(5, "abc", Constants.SubstringType.LeftOfIndex, 4));
+            printf(sb.Substring(5, "abc", Constants.SubstringType.RigthOfIndex, 0));
+            printf(sb.Substring(5, "abc", Constants.SubstringType.RigthOfIndex, 1));
+            printf(sb.Substring(5, "abc", Constants.SubstringType.RigthOfIndex, 2));
+            printf(sb.Substring(5, "abc", Constants.SubstringType.RigthOfIndex, 3));
+            printf(sb.Substring(5, "abc", Constants.SubstringType.RigthOfIndex, 4));
+
             //Test System.String.DoubleQuote()
             //     System.String.SingleQuote()
             //     System.String.Quote()
             printf(".DoubleQuote()", ConsoleColor.Yellow);
-            string s = "https://blog.cjvandyk.com/sites/Rocks";
+            s = "https://blog.cjvandyk.com/sites/Rocks";
             printf(s);
-            printf(s.DoubleQuote());
+            //printf(s.DoubleQuote());
             printf(".SingleQuote()", ConsoleColor.Yellow);
-            printf(s.SingleQuote());
+            //printf(s.SingleQuote());
             printf(".Quote()", ConsoleColor.Yellow);
-            printf(s.Quote());
+            //printf(s.Quote());
 
             //Test System.String.GetUrlRoot()
             printf(".GetUrlRoot()", ConsoleColor.Yellow);
@@ -78,10 +120,10 @@ namespace TESTING
             printf(".HtmlEncode()", ConsoleColor.Yellow);
             s = "https://blog.cjvandyk.com/sites/Rocks <&> Rolls!";
             printf(s);
-            s = s.HtmlEncode();
+            //s = s.HtmlEncode();
             printf(s);
             printf(".HtmlDecode()", ConsoleColor.Yellow);
-            printf(s.HtmlDecode());
+            //printf(s.HtmlDecode());
 
             //Test System.String.IsAlphabetic()
             printf(".IsAlphabetic()", ConsoleColor.Yellow);

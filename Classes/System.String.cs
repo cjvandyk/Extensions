@@ -1,4 +1,6 @@
-﻿/// <summary>
+﻿#pragma warning disable CS1587, CS0162
+
+/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
@@ -8,6 +10,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
+using static Extensions.Universal;
 
 namespace Extensions
 {
@@ -25,6 +29,7 @@ namespace Extensions
         /// <returns>The given string encased in double quotes.</returns>
         public static string DoubleQuote(this System.String str)
         {
+            ValidateNoNulls(str);
             return ('"' + str + '"');
         }
 
@@ -35,6 +40,7 @@ namespace Extensions
         /// <returns>The given string encased in double quotes.</returns>
         public static string DoubleQuote(this System.Text.StringBuilder str)
         {
+            ValidateNoNulls(str);
             return DoubleQuote(str.ToString());
         }
         #endregion DoubleQuote()
@@ -137,7 +143,7 @@ namespace Extensions
         /// <returns>The root of the URL given the URL string.</returns>
         public static string GetUrlRoot(this System.String url)
         {
-            Universal.ValidateNoNulls(url);
+            ValidateNoNulls(url);
             string root = url.ToLower().Replace("https://", "");
             return ("https://" + root.Substring(0, root.IndexOf('/')));
         }
@@ -153,12 +159,10 @@ namespace Extensions
         /// <param name="url">The System.Text.StringBuilder object containing
         /// the URL from which the root is to be extracted.</param>
         /// <returns>The root of the URL given the URL string.</returns>
-        public static System.Text.StringBuilder GetUrlRoot(this System.Text.StringBuilder url)
+        public static string GetUrlRoot(this System.Text.StringBuilder url)
         {
-            Universal.ValidateNoNulls(url);
-            url.Clear();
-            url.Append(GetUrlRoot(url.ToString()));
-            return url;
+            ValidateNoNulls(url);
+            return GetUrlRoot(url.ToString());
         }
         #endregion GetUrlRoot()
 
@@ -172,7 +176,7 @@ namespace Extensions
         public static bool HasLower(this System.String str,
                                    bool ignoreSpaces = true)
         {
-            Universal.ValidateNoNulls(str, ignoreSpaces);
+            ValidateNoNulls(str, ignoreSpaces);
             return (ignoreSpaces ? str.Replace(" ", "") : str)
                     .ToCharArray()
                     .Select(C => (int)C)
@@ -186,7 +190,7 @@ namespace Extensions
         /// <returns>True if the string contains any lower case, else False.</returns>
         public static bool HasLower(this System.Text.StringBuilder str)
         {
-            Universal.ValidateNoNulls(str);
+            ValidateNoNulls(str);
             return HasLower(str.ToString());
         }
         #endregion HasLower()
@@ -202,7 +206,7 @@ namespace Extensions
         public static bool HasNumeric(this System.String str,
                                       bool ignoreSpaces = true)
         {
-            Universal.ValidateNoNulls(str, ignoreSpaces);
+            ValidateNoNulls(str, ignoreSpaces);
             return (ignoreSpaces ? str.Replace(" ", "") : str)
                     .ToCharArray()
                     .Any(Char.IsDigit);
@@ -218,7 +222,7 @@ namespace Extensions
         public static bool HasNumeric(this System.Text.StringBuilder str,
                                      bool ignoreSpaces = true)
         {
-            Universal.ValidateNoNulls(str, ignoreSpaces);
+            ValidateNoNulls(str, ignoreSpaces);
             return HasNumeric(str.ToString(),
                              ignoreSpaces);
         }
@@ -236,7 +240,7 @@ namespace Extensions
         public static bool HasSymbol(this System.String str,
                                           bool ignoreSpaces = true)
         {
-            Universal.ValidateNoNulls(str, ignoreSpaces);
+            ValidateNoNulls(str, ignoreSpaces);
             return (!(ignoreSpaces ? str.Replace(" ", "") : str)
                     .ToCharArray()
                     .All(Char.IsLetterOrDigit));
@@ -247,7 +251,7 @@ namespace Extensions
         /// symbols or special characters.
         /// </summary>
         /// <param name="str">The given string object to check.</param>
-        /// Linq.</param>
+        /// <param name="Classic">Use non-RegEx method.</param>
         /// <param name="ignoreSpaces">Remove spaces before compare?</param>
         /// <returns>True if all characters in the given string contains
         /// any symbols or special characters, else False.</returns>
@@ -255,7 +259,7 @@ namespace Extensions
                                           bool Classic = false,
                                           bool ignoreSpaces = true)
         {
-            Universal.ValidateNoNulls(str, Classic, ignoreSpaces);
+            ValidateNoNulls(str, Classic, ignoreSpaces);
             return HasSymbol(str.ToString(),
                                   ignoreSpaces);
         }
@@ -271,7 +275,7 @@ namespace Extensions
         public static bool HasUpper(this System.String str,
                                     bool ignoreSpaces = true)
         {
-            Universal.ValidateNoNulls(str, ignoreSpaces);
+            ValidateNoNulls(str, ignoreSpaces);
             return (ignoreSpaces ? str.Replace(" ", "") : str)
                     .ToCharArray()
                     .Select(C => (int)C)
@@ -285,7 +289,7 @@ namespace Extensions
         /// <returns>True if the string contains any upper case, else False.</returns>
         public static bool HasUpper(this System.Text.StringBuilder str)
         {
-            Universal.ValidateNoNulls(str);
+            ValidateNoNulls(str);
             return HasUpper(str.ToString());
         }
         #endregion HasUpper()
@@ -298,6 +302,7 @@ namespace Extensions
         /// <returns>The given source string without HTML escaped components.</returns>
         public static string HtmlDecode(this System.String str)
         {
+            ValidateNoNulls(str);
             return System.Web.HttpUtility.HtmlDecode(str);
         }
 
@@ -308,6 +313,7 @@ namespace Extensions
         /// <returns>The given source string without HTML escaped components.</returns>
         public static string HtmlDecode(this System.Text.StringBuilder str)
         {
+            ValidateNoNulls(str);
             return HtmlDecode(str.ToString());
         }
         #endregion HtmlDecode()
@@ -320,6 +326,7 @@ namespace Extensions
         /// <returns>The given source string in HTML safe format.</returns>
         public static string HtmlEncode(this System.String str)
         {
+            ValidateNoNulls(str);
             return System.Web.HttpUtility.HtmlEncode(str);
         }
 
@@ -330,6 +337,7 @@ namespace Extensions
         /// <returns>The given source string in HTML safe format.</returns>
         public static string HtmlEncode(this System.Text.StringBuilder str)
         {
+            ValidateNoNulls(str);
             return HtmlEncode(str.ToString());
         }
         #endregion HtmlEncode()
@@ -348,7 +356,7 @@ namespace Extensions
                                         bool Classic = false,
                                         bool ignoreSpaces = true)
         {
-            Universal.ValidateNoNulls(str, Classic, ignoreSpaces);
+            ValidateNoNulls(str, Classic, ignoreSpaces);
             if (Classic)  //No LINQ available e.g. .NET 2.0
             {
                 return System.Text.RegularExpressions.Regex.IsMatch(
@@ -376,7 +384,7 @@ namespace Extensions
                                         bool Classic = false,
                                         bool ignoreSpaces = true)
         {
-            Universal.ValidateNoNulls(str, Classic, ignoreSpaces);
+            ValidateNoNulls(str, Classic, ignoreSpaces);
             return IsAlphabetic(str.ToString(), 
                                 Classic, 
                                 ignoreSpaces);
@@ -398,7 +406,7 @@ namespace Extensions
                                           bool Classic = false,
                                           bool ignoreSpaces = true)
         {
-            Universal.ValidateNoNulls(str, Classic, ignoreSpaces);
+            ValidateNoNulls(str, Classic, ignoreSpaces);
             if (Classic)  //No LINQ available e.g. .NET 2.0
             {
                 return System.Text.RegularExpressions.Regex.IsMatch(
@@ -427,7 +435,7 @@ namespace Extensions
                                           bool Classic = false,
                                           bool ignoreSpaces = true)
         {
-            Universal.ValidateNoNulls(str, Classic, ignoreSpaces);
+            ValidateNoNulls(str, Classic, ignoreSpaces);
             return IsAlphaNumeric(str.ToString(), 
                                   Classic, 
                                   ignoreSpaces);
@@ -450,7 +458,7 @@ namespace Extensions
                                   char[] Chars,
                                   bool Classic = false)
         {
-            Universal.ValidateNoNulls(str, Chars, Classic);
+            ValidateNoNulls(str, Chars, Classic);
             if (Classic)  //No LINQ available e.g. .NET 2.0
             {
                 string comparor = @"^[";
@@ -490,7 +498,7 @@ namespace Extensions
                                   char[] Chars,
                                   bool Classic = false)
         {
-            Universal.ValidateNoNulls(str, Chars, Classic);
+            ValidateNoNulls(str, Chars, Classic);
             return IsChar(str.ToString(), Chars, Classic);
         }
         #endregion IsChar()
@@ -503,7 +511,7 @@ namespace Extensions
         /// <returns>True if email, false if not.</returns>
         public static bool IsEmail(this System.String str)
         {
-            Universal.ValidateNoNulls(str);
+            ValidateNoNulls(str);
             try
             {
                 var email = new System.Net.Mail.MailAddress(str);
@@ -524,7 +532,7 @@ namespace Extensions
         /// <returns>True if email, false if not.</returns>
         public static bool IsEmail(this System.Text.StringBuilder str)
         {
-            Universal.ValidateNoNulls(str);
+            ValidateNoNulls(str);
             return IsEmail(str.ToString());
         }
         #endregion IsEmail()
@@ -539,7 +547,7 @@ namespace Extensions
         public static bool IsLower(this System.String str, 
                                    bool ignoreSpaces = true)
         {
-            Universal.ValidateNoNulls(str, ignoreSpaces);
+            ValidateNoNulls(str, ignoreSpaces);
             return (ignoreSpaces ? str.Replace(" ", "") : str)
                     .ToCharArray()
                     .Select(C => (int)C)
@@ -553,7 +561,7 @@ namespace Extensions
         /// <returns>True if the entire string is lower case, else False.</returns>
         public static bool IsLower(this System.Text.StringBuilder str)
         {
-            Universal.ValidateNoNulls(str);
+            ValidateNoNulls(str);
             return IsLower(str.ToString());
         }
         #endregion IsLower()
@@ -572,7 +580,7 @@ namespace Extensions
                                      bool Classic = false,
                                      bool ignoreSpaces = true)
         {
-            Universal.ValidateNoNulls(str, Classic, ignoreSpaces);
+            ValidateNoNulls(str, Classic, ignoreSpaces);
             if (Classic)  //No LINQ available e.g. .NET 2.0
             {
                 return System.Text.RegularExpressions.Regex.IsMatch(
@@ -600,7 +608,7 @@ namespace Extensions
                                      bool Classic = false,
                                      bool ignoreSpaces = true)
         {
-            Universal.ValidateNoNulls(str, Classic, ignoreSpaces);
+            ValidateNoNulls(str, Classic, ignoreSpaces);
             return IsNumeric(str.ToString(), 
                              Classic, 
                              ignoreSpaces);
@@ -632,7 +640,7 @@ namespace Extensions
                                     bool requireNumeric = true,
                                     bool requireSymbol = true)
         {
-            Universal.ValidateNoNulls(str, numberCriteriaRequired, 
+            ValidateNoNulls(str, numberCriteriaRequired, 
                                       requireUpper, requireLower, 
                                       requireNumeric, requireSymbol);
             if ((numberCriteriaRequired < 1) ||
@@ -769,7 +777,7 @@ namespace Extensions
                                     bool requireNumeric = true,
                                     bool requireSymbol = true)
         {
-            Universal.ValidateNoNulls(str, numberCriteriaRequired, 
+            ValidateNoNulls(str, numberCriteriaRequired, 
                                       requireUpper, requireLower, 
                                       requireNumeric, requireSymbol);
             return IsStrong(str,
@@ -791,7 +799,7 @@ namespace Extensions
         public static bool IsUpper(this System.String str, 
                                    bool ignoreSpaces = true)
         {
-            Universal.ValidateNoNulls(str, ignoreSpaces);
+            ValidateNoNulls(str, ignoreSpaces);
             return (ignoreSpaces ? str.Replace(" ", "") : str)
                     .ToCharArray()
                     .Select(C => (int)C)
@@ -805,7 +813,7 @@ namespace Extensions
         /// <returns>True if the entire string is upper case, else False.</returns>
         public static bool IsUpper(this System.Text.StringBuilder str)
         {
-            Universal.ValidateNoNulls(str);
+            ValidateNoNulls(str);
             return IsUpper(str.ToString());
         }
         #endregion IsUpper()
@@ -824,7 +832,7 @@ namespace Extensions
         /// <returns>True if the URL is a root, False if not.</returns>
         public static bool IsUrlRoot(this System.String url)
         {
-            Universal.ValidateNoNulls(url);
+            ValidateNoNulls(url);
             if (url.ToLower()
                    .TrimEnd('/')
                    .Replace("https://", "")
@@ -850,7 +858,7 @@ namespace Extensions
         /// <returns>True if the URL is a root, False if not.</returns>
         public static bool IsUrlRoot(this System.Text.StringBuilder url)
         {
-            Universal.ValidateNoNulls(url);
+            ValidateNoNulls(url);
             return IsUrlRoot(url.ToString());
         }
         #endregion IsUrlRoot()
@@ -863,7 +871,7 @@ namespace Extensions
         /// <returns>True if it's a vowel, else False.</returns>
         public static bool IsVowel(this System.Char C)
         {
-            Universal.ValidateNoNulls(C);
+            ValidateNoNulls(C);
             switch (C)
             {
                 case 'a':
@@ -883,11 +891,11 @@ namespace Extensions
         /// This allows the developer the ability to check a string without
         /// having to first convert to a char e.g. as a substring return.
         /// </summary>
-        /// <param name="C">The string to check.</param>
+        /// <param name="str">The string to check.</param>
         /// <returns>True if it's a vowel, else False.</returns>
         public static bool IsVowel(this System.String str)
         {
-            Universal.ValidateNoNulls(str);
+            ValidateNoNulls(str);
             return IsVowel(Convert.ToChar(str));
         }
 
@@ -896,11 +904,11 @@ namespace Extensions
         /// This allows the developer the ability to check a string without
         /// having to first convert to a char e.g. as a substring return.
         /// </summary>
-        /// <param name="C">The string to check.</param>
+        /// <param name="str">The string to check.</param>
         /// <returns>True if it's a vowel, else False.</returns>
         public static bool IsVowel(this System.Text.StringBuilder str)
         {
-            Universal.ValidateNoNulls(str);
+            ValidateNoNulls(str);
             return IsVowel(Convert.ToChar(str.ToString()));
         }
         #endregion IsVowel()
@@ -914,7 +922,7 @@ namespace Extensions
         /// <returns>True if in valid format, else False.</returns>
         public static bool IsZipCode(this System.String str)
         {
-            Universal.ValidateNoNulls(str);
+            ValidateNoNulls(str);
             string[] parts = str.Split('-');
             if (parts.Length == 1)
             {
@@ -942,7 +950,7 @@ namespace Extensions
         /// <returns>True if in valid format, else False.</returns>
         public static bool IsZipCode(this System.Text.StringBuilder str)
         {
-            Universal.ValidateNoNulls(str);
+            ValidateNoNulls(str);
             return IsZipCode(str.ToString());
         }
 
@@ -953,7 +961,7 @@ namespace Extensions
         /// <returns>True if a 5 digit numeric, else False.</returns>
         private static bool IsZipCode5Digits(this System.String str)
         {
-            Universal.ValidateNoNulls(str);
+            ValidateNoNulls(str);
             return (str.Length == 5 && 
                     int.TryParse(str, out _));
         }
@@ -967,7 +975,7 @@ namespace Extensions
         /// <returns>The number of sentences in the given object.</returns>
         public static int Lines(this System.String str)
         {
-            Universal.ValidateNoNulls(str);
+            ValidateNoNulls(str);
             return str.Split(new char[] { '\n' },
                              StringSplitOptions.RemoveEmptyEntries)
                       .Length;
@@ -980,7 +988,7 @@ namespace Extensions
         /// <returns>The number of sentences in the given object.</returns>
         public static int Lines(this System.Text.StringBuilder str)
         {
-            Universal.ValidateNoNulls(str);
+            ValidateNoNulls(str);
             return Lines(str.ToString());
         }
         #endregion Lines()
@@ -998,7 +1006,7 @@ namespace Extensions
         public static string LoremIpsum(this System.String str, 
                                         int Paragraphs)
         {
-            Universal.ValidateNoNulls(str, Paragraphs);
+            ValidateNoNulls(str, Paragraphs);
             str = null;
             for (int i = 0; i < Paragraphs; i++)
             {
@@ -1016,14 +1024,11 @@ namespace Extensions
         /// <param name="Paragraphs">An integer with the number of paragraphs
         /// to be returned.  Presently supports 1-10</param>
         /// <returns>The string containing the generated dummy text.</returns>
-        public static System.Text.StringBuilder LoremIpsum(
-            this System.Text.StringBuilder str, 
-            int Paragraphs)
+        public static string LoremIpsum(this System.Text.StringBuilder str,
+                                        int Paragraphs)
         {
-            Universal.ValidateNoNulls(str, Paragraphs);
-            str.Clear();
-            str.Append(LoremIpsum(str.ToString(), Paragraphs));
-            return str;
+            ValidateNoNulls(str, Paragraphs);
+            return LoremIpsum(str.ToString(), Paragraphs);
         }
         #endregion LoremIpsum()
 
@@ -1042,7 +1047,7 @@ namespace Extensions
                                          int frequency = 999, 
                                          int duration = 100)
         {
-            Universal.ValidateNoNulls(str, frequency, duration);
+            ValidateNoNulls(str, frequency, duration);
             foreach (char c in str)
             {
                 switch (c)
@@ -1078,7 +1083,7 @@ namespace Extensions
                                          int frequency = 999, 
                                          int duration = 100)
         {
-            Universal.ValidateNoNulls(str, frequency, duration);
+            ValidateNoNulls(str, frequency, duration);
             MorseCodeBeep(str.ToString(), frequency, duration);
         }
         #endregion MorseCodeBeep()
@@ -1089,11 +1094,13 @@ namespace Extensions
         /// Default is Constants.QuoteType.Double.
         /// </summary>
         /// <param name="str">The given string to be quoted.</param>
+        /// <param name="type">The type of quote to use.  Defaults to double.</param>
         /// <returns>The given string encased in requested quotes.</returns>
         public static string Quote(this System.String str, 
                                    Constants.QuoteType type = 
                                        Constants.QuoteType.Double)
         {
+            ValidateNoNulls(str, type);
             if (type == Constants.QuoteType.Double)
             {
                 return DoubleQuote(str);
@@ -1106,11 +1113,13 @@ namespace Extensions
         /// Default is Constants.QuoteType.Double.
         /// </summary>
         /// <param name="str">The given string to be quoted.</param>
+        /// <param name="type">The type of quote to use.  Defaults to double.</param>
         /// <returns>The given string encased in requested quotes.</returns>
         public static string Quote(this System.Text.StringBuilder str,
                            Constants.QuoteType type =
                                Constants.QuoteType.Double)
         {
+            ValidateNoNulls(str, type);
             return Quote(str, type);
         }
         #endregion Quote()
@@ -1129,7 +1138,7 @@ namespace Extensions
         public static string ReplaceTokens(this System.String str, 
                                            Dictionary<string, string> tokens)
         {
-            Universal.ValidateNoNulls(str, tokens);
+            ValidateNoNulls(str, tokens);
             string returnValue = str;
             foreach (string key in tokens.Keys)
             {
@@ -1148,14 +1157,11 @@ namespace Extensions
         /// <param name="tokens">A Dictionary of tokens and replacement
         /// strings to be used for replacement.</param>
         /// <returns>A System.Text.StringBuilder value with tokens replaced.</returns>
-        public static System.Text.StringBuilder ReplaceTokens(
-            this System.Text.StringBuilder str, 
-            Dictionary<string, string> tokens)
+        public static string ReplaceTokens(this System.Text.StringBuilder str,
+                                           Dictionary<string, string> tokens)
         {
-            Universal.ValidateNoNulls(str, tokens);
-            str.Clear();
-            str.Append(ReplaceTokens(str.ToString(), tokens));
-            return str;
+            ValidateNoNulls(str, tokens);
+            return ReplaceTokens(str.ToString(), tokens);
         }
         #endregion ReplaceTokens()
 
@@ -1171,7 +1177,7 @@ namespace Extensions
         /// space removed and all other spaces reduced to single space.</returns>
         public static string RemoveExtraSpace(this System.String str)
         {
-            Universal.ValidateNoNulls(str);
+            ValidateNoNulls(str);
             return System.Text.RegularExpressions.Regex.Replace(str.Trim(), 
                                                                 "\\s+", 
                                                                 " ");
@@ -1188,7 +1194,7 @@ namespace Extensions
         /// space removed and all other spaces reduced to single space.</returns>
         public static string RemoveExtraSpace(this System.Text.StringBuilder str)
         {
-            Universal.ValidateNoNulls(str);
+            ValidateNoNulls(str);
             return RemoveExtraSpace(str.ToString());
         }
         #endregion RemoveExtraSpace()
@@ -1201,6 +1207,7 @@ namespace Extensions
         /// <returns>The given string encased in single quotes.</returns>
         public static string SingleQuote(this System.String str)
         {
+            ValidateNoNulls(str);
             return ("'" + str + "'");
         }
 
@@ -1211,9 +1218,229 @@ namespace Extensions
         /// <returns>The given string encased in single quotes.</returns>
         public static string SingleQuote(this System.Text.StringBuilder str)
         {
+            ValidateNoNulls(str);
             return SingleQuote(str.ToString());
         }
         #endregion SingleQuote()
+
+        #region Substring()
+        /// <summary>
+        /// Extension method to handle FromHead and FromTail types
+        /// which allows the caller to return the requested length
+        /// of characters from the head of the given string.
+        /// </summary>
+        /// <param name="str">The given string that is being searched.</param>
+        /// <param name="length">The requested length of characters to return.</param>
+        /// <param name="type">The type of return string requested.</param>
+        /// <returns>FromHead returns the "length" of characters from the head
+        /// of the given string.
+        /// FromTail returns the "length" of characters from the tail of the
+        /// given string.</returns>
+        public static string Substring(this System.String str, 
+                                       int length,
+                                       Constants.SubstringType type = 
+                                           Constants.SubstringType.FromHead)
+        {
+            ValidateNoNulls(str, length, type);
+            switch (type)
+            {
+                case Constants.SubstringType.FromHead:
+                    if (str.Length < length)
+                    {
+                        return str;
+                    }
+                    else
+                    {
+                        return str.Substring(0, length);
+                    }
+                    break;
+                case Constants.SubstringType.FromTail:
+                    if (str.Length < length)
+                    {
+                        return str;
+                    }
+                    else
+                    {
+                        return str.Substring(str.Length - length, length);
+                    }
+                    break;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Extension method to handle LeftOfIndex and RightOfIndex types
+        /// which allows the caller to locate a given number of occurrences
+        /// of a given search string and then return the requested length
+        /// of characters to either the left or the rigth of the located
+        /// search index.
+        /// </summary>
+        /// <param name="str">The given string that is being searched.</param>
+        /// <param name="length">The requested length of characters to return.</param>
+        /// <param name="index">The string to search for.</param>
+        /// <param name="type">The type of return string requested.</param>
+        /// <param name="occurrence">The number of occurrences to match.</param>
+        /// <returns>LeftOfIndex returns the "length" of characters to the LEFT
+        /// of the located index representing the "occurence"th match of the
+        /// "index" string.
+        /// RightOfIndex returns the "length" of characters to the RIGHT
+        /// of the located index representing the "occurence"th match of the
+        /// "index" string.</returns>
+        public static string Substring(this System.String str,
+                                       int length,
+                                       string index,
+                                       Constants.SubstringType type =
+                                           Constants.SubstringType.LeftOfIndex,
+                                       int occurrence = 1)
+        {
+            ValidateNoNulls(str, length, index, type, occurrence);
+            int offset;
+            string temp = str;
+            switch (type)
+            {
+                case Constants.SubstringType.LeftOfIndex:
+                    if (occurrence <= 0)
+                    {
+                        return null;
+                    }
+                    if (str.IndexOf(index) == -1)
+                    {
+                        return null;
+                    }
+                    for (int C = 0; C < occurrence; C++)
+                    {
+                        temp = temp.Substring(temp.IndexOf(index) + index.Length);
+                    }
+                    offset = str.IndexOf(temp);
+                    temp = str.Substring(0, offset - index.Length);
+                    if (temp.Length <= length)
+                    {
+                        return str.Substring(0, offset - index.Length);
+                    }
+                    else
+                    {
+                        return temp.Substring(temp.Length - length);
+                    }
+                case Constants.SubstringType.RigthOfIndex:
+                    if (occurrence <= 0)
+                    {
+                        return null;
+                    }
+                    if (str.IndexOf(index) == -1)
+                    {
+                        return null;
+                    }
+                    for (int C = 0; C < occurrence; C++)
+                    {
+                        temp = temp.Substring(temp.IndexOf(index) + index.Length);
+                    }
+                    if (temp.Length <= length)
+                    {
+                        return temp;
+                    }
+                    else
+                    {
+                        return temp.Substring(0, length);
+                    }
+                    break;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Extension method to handle FromHead and FromTail types
+        /// which allows the caller to return the requested length
+        /// of characters from the head of the given string.
+        /// </summary>
+        /// <param name="str">The given string that is being searched.</param>
+        /// <param name="length">The requested length of characters to return.</param>
+        /// <param name="type">The type of return string requested.</param>
+        /// <returns>FromHead returns the "length" of characters from the head
+        /// of the given string.
+        /// FromTail returns the "length" of characters from the tail of the
+        /// given string.</returns>
+        public static string Substring(this System.Text.StringBuilder str,
+                                       int length,
+                                       Constants.SubstringType type =
+                                           Constants.SubstringType.FromHead)
+        {
+            ValidateNoNulls(str, length, type);
+            return Substring(str.ToString(),
+                             length,
+                             type);
+        }
+
+        /// <summary>
+        /// Extension method to handle LeftOfIndex and RightOfIndex types
+        /// which allows the caller to locate a given number of occurrences
+        /// of a given search string and then return the requested length
+        /// of characters to either the left or the rigth of the located
+        /// search index.
+        /// </summary>
+        /// <param name="str">The given string that is being searched.</param>
+        /// <param name="length">The requested length of characters to return.</param>
+        /// <param name="index">The string to search for.</param>
+        /// <param name="type">The type of return string requested.</param>
+        /// <param name="occurrence">The number of occurrences to match.</param>
+        /// <returns>LeftOfIndex returns the "length" of characters to the LEFT
+        /// of the located index representing the "occurence"th match of the
+        /// "index" string.
+        /// RightOfIndex returns the "length" of characters to the RIGHT
+        /// of the located index representing the "occurence"th match of the
+        /// "index" string.</returns>
+        public static string Substring(this System.Text.StringBuilder str,
+                                       int length,
+                                       string index,
+                                       Constants.SubstringType type =
+                                           Constants.SubstringType.LeftOfIndex,
+                                       int occurrence = 1)
+        {
+            ValidateNoNulls(str, length, index, type, occurrence);
+            return Substring(str.ToString(), 
+                             length,
+                             index,
+                             type,
+                             occurrence);
+        }
+
+        /// <summary>
+        /// Retrieves a substring from this instance. The substring starts 
+        /// at a specified character position and continues to the end of the
+        /// string.
+        /// </summary>
+        /// <param name="str">The StringBuilder source instance.</param>
+        /// <param name="startIndex">The starting position of the substring
+        /// selection.</param>
+        /// <returns>A string that is equivalent to the substring that begins
+        /// at startIndex in this instance, or System.String.Empty if
+        /// startIndex is equal to the length of this instance.</returns>
+        public static string Substring(this System.Text.StringBuilder str,
+                                       int startIndex)
+        {
+            ValidateNoNulls(str, startIndex);
+            return str.ToString().Substring(startIndex);
+        }
+
+        /// <summary>
+        /// Retrieves a substring from this instance. The substring starts at
+        /// a specified character position and has a specified length.
+        /// </summary>
+        /// <param name="str">The StringBuilder source instance.</param>
+        /// <param name="startIndex">The starting position of the substring
+        /// selection.</param>
+        /// <param name="length">The length of the substring to be selected.</param>
+        /// <returns>A string that is equivalent to the substring of length
+        /// length that begins at startIndex in this instance, or 
+        /// System.String.Empty if startIndex is equal to the length of this
+        /// instance and length is zero.</returns>
+        public static string Substring(this System.Text.StringBuilder str,
+                                       int startIndex,
+                                       int length)
+        {
+            ValidateNoNulls(str, startIndex, length);
+            return str.ToString().Substring(startIndex, length);
+        }
+        #endregion Substring()
 
         #region ToBinary()
         /// <summary>
@@ -1223,7 +1450,7 @@ namespace Extensions
         /// <returns></returns>
         public static string ToBinary(this System.String str)
         {
-            Universal.ValidateNoNulls(str);
+            ValidateNoNulls(str);
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             foreach (byte b in System.Text.ASCIIEncoding.UTF8.GetBytes(
                 str.ToCharArray()))
@@ -1241,7 +1468,7 @@ namespace Extensions
         /// <returns></returns>
         public static string ToBinary(this System.Text.StringBuilder str)
         {
-            Universal.ValidateNoNulls(str);
+            ValidateNoNulls(str);
             return ToBinary(str.ToString());
         }
         #endregion ToBinary()
@@ -1255,7 +1482,7 @@ namespace Extensions
         /// <returns>The enum value.</returns>
         public static T ToEnum<T>(this System.String str)
         {
-            Universal.ValidateNoNulls(str);
+            ValidateNoNulls(str);
             return (T)Enum.Parse(typeof(T), str);
         }
 
@@ -1267,17 +1494,17 @@ namespace Extensions
         /// <returns>The enum value.</returns>
         public static T ToEnum<T>(this System.Text.StringBuilder str)
         {
-            Universal.ValidateNoNulls(str);
+            ValidateNoNulls(str);
             return (str.ToString().ToEnum<T>());
         }
         #endregion ToEnum()
 
         #region ToEnumerable
         /// <summary>
-        /// Converts the given querystring to a Dictionary<string, string>.
+        /// Converts the given querystring to a Dictionary.
         /// </summary>
         /// <param name="str">The given querystring to convert.</param>
-        /// <param name="separator">Defaults to & per W3C standards.</param>
+        /// <param name="separator">Defaults to ampersand per W3C standards.</param>
         /// <param name="assigner">Defaults to = per W3C standards.</param>
         /// <returns>The parsed dictionary containing querystring values.</returns>
         public static Dictionary<string, string> QueryStringToDictionary(
@@ -1285,7 +1512,7 @@ namespace Extensions
             char separator = '&',
             char assigner = '=')
         {
-            Universal.ValidateNoNulls(str, separator, assigner);
+            ValidateNoNulls(str, separator, assigner);
             Dictionary<string, string> result = new Dictionary<string, string>();
             string query = str.Substring(str.IndexOf('?') + 1);
             string[] parts = query.Split(separator);
@@ -1301,7 +1528,7 @@ namespace Extensions
         /// Converts the given querystring to a NameValueCollection.
         /// </summary>
         /// <param name="str">The given querystring to convert.</param>
-        /// <param name="separator">Defaults to & per W3C standards.</param>
+        /// <param name="separator">Defaults to ampersand per W3C standards.</param>
         /// <param name="assigner">Defaults to = per W3C standards.</param>
         /// <returns>The parsed NameValueCollection containing querystring
         /// values.</returns>
@@ -1310,7 +1537,7 @@ namespace Extensions
             char separator = '&',
             char assigner = '=')
         {
-            Universal.ValidateNoNulls(str, separator, assigner);
+            ValidateNoNulls(str, separator, assigner);
             System.Collections.Specialized.NameValueCollection nvc = 
                 new System.Collections.Specialized.NameValueCollection();
             foreach (KeyValuePair<string, string> kvp in QueryStringToDictionary(str))
@@ -1325,11 +1552,11 @@ namespace Extensions
         /// <summary>
         /// Convert given System.String to its Morse code representation.
         /// Undefined characters will return in the format:
-        /// <Undefined:[char]>
+        /// Undefined:char
         /// For example:
         /// "sos@".ToMorseCode()
         /// will return
-        /// "...---...<Undefined:[@]>"
+        /// "...---...Undefined:@"
         /// </summary>
         /// <param name="str">The given string to convert to Morse code.</param>
         /// <param name="includeSpaces">Are spaces included in translation.</param>
@@ -1337,7 +1564,7 @@ namespace Extensions
         public static string ToMorseCode(this System.String str, 
                                          bool includeSpaces = true)
         {
-            Universal.ValidateNoNulls(str, includeSpaces);
+            ValidateNoNulls(str, includeSpaces);
             System.Text.StringBuilder returnValue = 
                 new System.Text.StringBuilder();
             foreach (char c in str.ToLower())
@@ -1359,11 +1586,11 @@ namespace Extensions
         /// Convert given System.Text.Stringbuilder object to its Morse code
         /// representation.
         /// Undefined characters will return in the format:
-        /// <Undefined:[char]>
+        /// Undefined:char>
         /// For example:
         /// "sos@".ToMorseCode()
         /// will return
-        /// "...---...<Undefined:[@]>"
+        /// "...---...Undefined:@"
         /// </summary>
         /// <param name="str">The given string to convert to Morse code.</param>
         /// <param name="includeSpaces">Are spaces included in translation.</param>
@@ -1371,7 +1598,7 @@ namespace Extensions
         public static string ToMorseCode(this System.Text.StringBuilder str, 
                                          bool includeSpaces = true)
         {
-            Universal.ValidateNoNulls(str, includeSpaces);
+            ValidateNoNulls(str, includeSpaces);
             return (str.ToString());
         }
         #endregion ToMorseCode()
@@ -1394,7 +1621,7 @@ namespace Extensions
                                         int length, 
                                         string suffix = "...")
         {
-            Universal.ValidateNoNulls(str, length, suffix);
+            ValidateNoNulls(str, length, suffix);
             return (string.IsNullOrEmpty(str) || str.Length < length ? str :
                 (str.Substring(0, length - suffix.Length) + suffix));
         }
@@ -1417,7 +1644,7 @@ namespace Extensions
                                         int length,
                                         string suffix = "...")
         {
-            Universal.ValidateNoNulls(str, length, suffix);
+            ValidateNoNulls(str, length, suffix);
             return TrimLength(str.ToString(), length, suffix);
         }
         #endregion TrimLength()
@@ -1431,7 +1658,7 @@ namespace Extensions
         /// <returns>The number of words in the given object.</returns>
         public static int Words(this System.String str)
         {
-            Universal.ValidateNoNulls(str);
+            ValidateNoNulls(str);
             return str.Split(new char[] { ' ',
                                           '.',
                                           '?',
@@ -1449,7 +1676,7 @@ namespace Extensions
         /// <returns>The number of words in the given object.</returns>
         public static int Words(this System.Text.StringBuilder str)
         {
-            Universal.ValidateNoNulls(str);
+            ValidateNoNulls(str);
             return Words(str.ToString());
         }
         #endregion Words()
@@ -1486,3 +1713,4 @@ namespace Extensions
         //}
     }
 }
+#pragma warning restore CS1587, CS0162

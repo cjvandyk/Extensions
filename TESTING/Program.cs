@@ -18,6 +18,13 @@ namespace TESTING
     {
         static void Main(string[] args)
         {
+            long l = 3;
+            Console.WriteLine($"{l} {l.IsEven()}");
+            Console.WriteLine($"{l} {l.IsOdd()}");
+            l = 6;
+            Console.WriteLine($"{l} {l.IsEven()}");
+            Console.WriteLine($"{l} {l.IsOdd()}");
+            Console.WriteLine(l.GetNthPrime(1000000));
             Array.Test();
             DateTime.Test();
             Dictionary.Test();

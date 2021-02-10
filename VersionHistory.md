@@ -121,7 +121,9 @@
 		  compiler ambiguity that required fully qualified object names before.<br>
 
 ### **2.3.480 (2021-02-12)**<br>
+	- Made NuGet package backward compatible to .NET 3.5<br>
 	- Add .pdb to NuGet package to allow interactive debugging by other developers.<br>
+	- Add .xml documentation to NuGet package.<br>
 	- Cleaned up compiler messages.<br>
 	- Fixed the lion logo icon reference for the NuGet package.<br>
 	- Add `System.String.DoubleQuote()`<br>
@@ -135,3 +137,6 @@
 	- Add `System.Text.StringBuilder.Quote()`<br>
 	- Add `System.String.SingleQuote()`<br>
 	- Add `System.Text.StringBuilder.SingleQuote()`<br>
+	- Add `enum Constants.SubstringType`<br>
+	- Add `System.String.Substring()`<br>
+	- Add `System.Text.StringBuilder.Substring()`<br>

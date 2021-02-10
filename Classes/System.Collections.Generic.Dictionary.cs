@@ -1,4 +1,6 @@
-﻿/// <summary>
+﻿#pragma warning disable CS1587
+
+/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
@@ -7,6 +9,8 @@
 
 using System;
 using System.Collections.Generic;
+
+using static Extensions.Universal;
 
 namespace Extensions
 {
@@ -17,12 +21,12 @@ namespace Extensions
     {
         #region ToQueryString()
         /// <summary>
-        /// Convert given Dictionary<string, string> into a querystring.
+        /// Convert given Dictionary into a querystring.
         /// </summary>
         /// <param name="dic">The Dictionary containing the source keys and
         /// values</param>
         /// <param name="separator">The separator character to use.  
-        /// Defaults to '&'.</param>
+        /// Defaults to ampersand.</param>
         /// <param name="assigner">The assigner characters to use.
         /// Defaults to '='.</param>
         /// <returns>The constructed querystring ready for use.</returns>
@@ -31,7 +35,7 @@ namespace Extensions
             char separator = '&',
             char assigner = '=')
         {
-            Universal.ValidateNoNulls(dic, separator, assigner);
+            ValidateNoNulls(dic, separator, assigner);
             string result = "?";
             foreach (string key in dic.Keys)
             {
@@ -42,3 +46,4 @@ namespace Extensions
         #endregion ToQueryString()
     }
 }
+#pragma warning restore CS1587

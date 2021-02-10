@@ -1,4 +1,6 @@
-﻿/// <summary>
+﻿#pragma warning disable CS1587
+
+/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
@@ -7,6 +9,8 @@
 
 using System;
 using System.Linq;
+
+using static Extensions.Universal;
 
 namespace Extensions
 {
@@ -27,7 +31,7 @@ namespace Extensions
         public static bool Elevate(this System.Diagnostics.Process proc, 
                                    string[] args)
         {
-            Universal.ValidateNoNulls(proc, args);
+            ValidateNoNulls(proc, args);
             if ((args.Count() != 2) ||
                 (args[1] != "ELEVATED"))
             {
@@ -45,3 +49,4 @@ namespace Extensions
         #endregion Elevate()
     }
 }
+#pragma warning restore CS1587

@@ -1,4 +1,6 @@
-﻿/// <summary>
+﻿#pragma warning disable CS1587, CS1591
+
+/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
@@ -6,6 +8,8 @@
 /// </summary>
 
 using System;
+
+using static Extensions.Universal;
 
 namespace Extensions
 {
@@ -21,7 +25,7 @@ namespace Extensions
                                           Constants.TimeZone toZone = 
                                               Constants.TimeZone.EasternStandardTime)
         {
-            Universal.ValidateNoNulls(dateTime, fromZone, toZone);
+            ValidateNoNulls(dateTime, fromZone, toZone);
             System.DateTime now = System.TimeZoneInfo.ConvertTimeToUtc(
                 new System.DateTime(dateTime.Ticks, DateTimeKind.Unspecified),
                 System.TimeZoneInfo.FindSystemTimeZoneById(
@@ -34,3 +38,4 @@ namespace Extensions
         #endregion ToTimeZone()
     }
 }
+#pragma warning restore CS1587, CS1591

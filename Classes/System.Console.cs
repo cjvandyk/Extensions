@@ -1,4 +1,6 @@
-﻿/// <summary>
+﻿#pragma warning disable CS1587
+
+/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
@@ -6,6 +8,8 @@
 /// </summary>
 
 using System;
+
+using static Extensions.Universal;
 
 namespace Extensions
 {
@@ -22,7 +26,7 @@ namespace Extensions
         /// message.</param>
         public static void WriteHelp(string[] lines)
         {
-            Universal.ValidateNoNulls(lines);
+            ValidateNoNulls(lines);
             WriteHelp(lines, ConsoleColor.Yellow);
         }
 
@@ -37,7 +41,7 @@ namespace Extensions
         public static void WriteHelp(string[] lines, 
                                      ConsoleColor textColor)
         {
-            Universal.ValidateNoNulls(lines, textColor);
+            ValidateNoNulls(lines, textColor);
             foreach (string str in lines)
             {
                 Universal.printf(str, textColor);
@@ -45,3 +49,4 @@ namespace Extensions
         }
     }
 }
+#pragma warning restore CS1587

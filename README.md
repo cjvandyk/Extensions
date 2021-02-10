@@ -420,6 +420,69 @@ with these methods:
             `https://blog.cjvandyk.com/sites/Rocks`<br>
             `'https://blog.cjvandyk.com/sites/Rocks'`_
 
+- ### **Substring()**
+    > _Extends the `.Substring(startIndex)` and `.Substring(startIndex, length)`<br>
+        methods to the `System.Text.StringBuilder` class.<br>
+        For example:<br>
+            `System.Text.StringBuilder sb = new System.Text.StringBuilder();`<br>
+            `sb.Append("abc1abc2abc3abc4");`<br>
+            `sb.Substring(5);`<br>
+        will return `bc2abc3abc4`<br>
+            `sb.Substring(5, 3);`<br>
+        will return `bc2`<br>
+        Adds the FromHead/FromTail overloaded methods.<br>
+        FromHead returns the "length" of characters from the head of the given<br>
+        string.<br>
+        For example:<br>
+            `sb.Substring(3, Constants.SubstringType.FromHead);`<br>
+            `sb.Substring(5, Constants.SubstringType.FromHead);`<br>
+            `sb.Substring(8, Constants.SubstringType.FromHead);`<br>
+        will return<br>
+            `abc`<br>
+            `abc1a`<br>
+            `abc1abc2`<br>
+        FromTail returns the "length" of characters from the tail of the given<br>
+        string.<br>
+        For example:<br>
+            `sb.Substring(3, Constants.SubstringType.FromTail);`<br>
+            `sb.Substring(5, Constants.SubstringType.FromTail);`<br>
+            `sb.Substring(8, Constants.SubstringType.FromTail);`<br>
+        will return<br>
+            `bc4`<br>
+            `3abc4`<br>
+            `abc3abc4`<br>
+        Adds the LeftOfIndex/RightOfIndex overloaded methods.<br>
+        LeftOfIndex returns the "length" of characters to the LEFT of the<br>
+        located index representing the "occurence"th match of the "index"<br>
+        string.<br>
+        For example:<br>
+            `sb.Substring(5, "abc", Constants.SubstringType.LeftOfIndex, 0);`<br>
+            `sb.Substring(5, "abc", Constants.SubstringType.LeftOfIndex, 1);`<br>
+            `sb.Substring(5, "abc", Constants.SubstringType.LeftOfIndex, 2);`<br>
+            `sb.Substring(5, "abc", Constants.SubstringType.LeftOfIndex, 3);`<br>
+            `sb.Substring(5, "abc", Constants.SubstringType.LeftOfIndex, 4);`<br>
+        will return<br>
+            ``<br>
+            ``<br>
+            `abc1`<br>
+            `1abc2`<br>
+            `2abc3`<br>
+        RightOfIndex returns the "length" of characters to the RIGHT of the<br>
+        located index representing the "occurence"th match of the "index"<br>
+        string.<br>
+        For example:<br>
+            `sb.Substring(5, "abc", Constants.SubstringType.RigthOfIndex, 0);`<br>
+            `sb.Substring(5, "abc", Constants.SubstringType.RigthOfIndex, 1);`<br>
+            `sb.Substring(5, "abc", Constants.SubstringType.RigthOfIndex, 2);`<br>
+            `sb.Substring(5, "abc", Constants.SubstringType.RigthOfIndex, 3);`<br>
+            `sb.Substring(5, "abc", Constants.SubstringType.RigthOfIndex, 4);`<br>
+        will return<br>
+            ``<br>
+            `1abc2`<br>
+            `2abc3`<br>
+            `3abc4`<br>
+            `4`_
+
 - ### **ToBinary()**
     > _This method returns the given string represented in 1s and 0s as<br>
         a binary result.<br>

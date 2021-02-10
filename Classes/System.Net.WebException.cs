@@ -1,4 +1,5 @@
-﻿/// <summary>
+﻿#pragma warning disable CS1587
+/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
@@ -6,6 +7,8 @@
 /// </summary>
 
 using System;
+
+using static Extensions.Universal;
 
 namespace Extensions
 {
@@ -37,7 +40,7 @@ namespace Extensions
             this System.Net.WebException ex,
             System.Net.HttpWebRequest request)
         {
-            Universal.ValidateNoNulls(ex, request);
+            ValidateNoNulls(ex, request);
             //Check if the response header contains a Retry-After value.
             if (!string.IsNullOrEmpty(ex.Response.Headers["Retry-After"]))
             {
@@ -74,3 +77,4 @@ namespace Extensions
         #endregion Retry()
     }
 }
+#pragma warning restore CS1587

@@ -1,4 +1,6 @@
-﻿/// <summary>
+﻿#pragma warning disable CS1587
+
+/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
@@ -6,6 +8,8 @@
 /// </summary>
 
 using System;
+
+using static Extensions.Universal;
 
 namespace Extensions
 {
@@ -25,7 +29,7 @@ namespace Extensions
                                            Constants.NumberType fromType = 
                                                Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(number, fromType);
+            ValidateNoNulls(number, fromType);
             switch (fromType)
             {
                 case Constants.NumberType.Bytes:
@@ -125,7 +129,7 @@ namespace Extensions
                                   Constants.NumberType fromType =
                                       Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(number, fromType);
+            ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.KB;
         }
 
@@ -139,7 +143,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(number, fromType);
+            ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.MB;
         }
 
@@ -153,7 +157,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(number, fromType);
+            ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.GB;
         }
 
@@ -167,7 +171,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(number, fromType);
+            ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.TB;
         }
 
@@ -181,7 +185,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(number, fromType);
+            ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.PB;
         }
 
@@ -195,7 +199,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(number, fromType);
+            ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.EB;
         }
 
@@ -209,7 +213,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(number, fromType);
+            ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.ZB;
         }
 
@@ -223,7 +227,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(number, fromType);
+            ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.YB;
         }
 
@@ -237,7 +241,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(number, fromType);
+            ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.BB;
         }
 
@@ -251,7 +255,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(number, fromType);
+            ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.GpB;
         }
 
@@ -265,7 +269,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(number, fromType);
+            ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.SB;
         }
 
@@ -279,7 +283,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(number, fromType);
+            ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.PaB;
         }
 
@@ -293,7 +297,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(number, fromType);
+            ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.AB;
         }
 
@@ -307,7 +311,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(number, fromType);
+            ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.PlB;
         }
 
@@ -321,7 +325,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(number, fromType);
+            ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.BrB;
         }
 
@@ -335,7 +339,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(number, fromType);
+            ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.SoB;
         }
 
@@ -349,7 +353,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(number, fromType);
+            ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.QB;
         }
 
@@ -363,7 +367,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(number, fromType);
+            ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.KaB;
         }
 
@@ -377,7 +381,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(number, fromType);
+            ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.RB;
         }
 
@@ -391,7 +395,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(number, fromType);
+            ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.DB;
         }
 
@@ -405,7 +409,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(number, fromType);
+            ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.HB;
         }
 
@@ -419,7 +423,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(number, fromType);
+            ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.MrB;
         }
 
@@ -433,7 +437,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(number, fromType);
+            ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.DdB;
         }
 
@@ -447,7 +451,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(number, fromType);
+            ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.RtB;
         }
 
@@ -461,7 +465,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(number, fromType);
+            ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.ShB;
         }
 
@@ -475,7 +479,7 @@ namespace Extensions
                           Constants.NumberType fromType =
                               Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(number, fromType);
+            ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.CB;
         }
 
@@ -489,7 +493,7 @@ namespace Extensions
                                    Constants.NumberType fromType =
                                        Constants.NumberType.Bytes)
         {
-            Universal.ValidateNoNulls(number, fromType);
+            ValidateNoNulls(number, fromType);
             return ToNumberBytes(number, fromType) / Constants.KkB;
         }
         #endregion BinaryDataSizes
@@ -512,7 +516,7 @@ namespace Extensions
                                               Constants.CompoundFrequency frequency = 
                                                   Constants.CompoundFrequency.Monthly)
         {
-            Universal.ValidateNoNulls(amount, percent, years, frequency);
+            ValidateNoNulls(amount, percent, years, frequency);
             double result = amount;
             double Percent = percent / 100 / (
                 frequency == Constants.CompoundFrequency.Yearly ? 1 : 12);
@@ -534,13 +538,14 @@ namespace Extensions
         /// to:
         /// ...doubleValue.ToInt16()...
         /// </summary>
-        /// <param name="dbl">The double value to convert.</param>
+        /// <param name="number">The double value to convert.</param>
         /// <returns>The value as Int16 format.</returns>
         public static Int16 ToInt16(this double number)
         {
-            Universal.ValidateNoNulls(number);
+            ValidateNoNulls(number);
             return Convert.ToInt16(number);
         }
         #endregion Convert.To Overloaded Methods
     }
 }
+#pragma warning restore CS1587

@@ -1,4 +1,6 @@
-﻿/// <summary>
+﻿#pragma warning disable CS1587
+
+/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
@@ -7,6 +9,8 @@
 
 using System;
 using System.Collections.Generic;
+
+using static Extensions.Universal;
 
 namespace Extensions
 {
@@ -35,7 +39,7 @@ namespace Extensions
         public static object Get(this object obj, 
                                  string key)
         {
-            Universal.ValidateNoNulls(obj, key);
+            ValidateNoNulls(obj, key);
             return extensionProperties[key];
         }
         #endregion Get()
@@ -53,9 +57,10 @@ namespace Extensions
                                string key, 
                                object val)
         {
-            Universal.ValidateNoNulls(obj, key, val);
+            ValidateNoNulls(obj, key, val);
             extensionProperties[key] = val;
         }
         #endregion Set()
     }
 }
+#pragma warning restore CS1587

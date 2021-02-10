@@ -4,22 +4,22 @@
     <id>Extensions.cs</id>
     <version>$version$</version>
     <title>$title$</title>
-    <authors>$author$</authors>
+    <authors>Cornelius J. van Dyk</authors>
     <owners>$author$</owners>
     <license type="expression">GPL-3.0-or-later</license>
     <projectUrl>https://github.com/cjvandyk/Extensions</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/cjvandyk/Extensions/master/Images/Extensions-64x64.png</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <description>$description$</description>
+    <description>Extensions.dll contains extension methods that enhance existing C# classes thus making life easier for developers.</description>
     <packageTypes>
       <packageType name="Dependency" />
       <packageType name="Extensions" />
     </packageTypes>
-    <dependencies>
-      <group targetFramework=".NETFramework4.8.0">
+    <!--<dependencies>-->
+      <!--<group targetFramework=".NETFramework4.8.0">-->
         <!--<dependency id="jQuery" version="1.6.2" />-->
-      </group>
-    </dependencies>
+      <!--</group>-->
+    <!--</dependencies>-->
     <summary>
       Extensions.dll contains extension methods that enhance existing C# classes thus making life easier for developers.
       These methods are included:
@@ -50,6 +50,7 @@
       Retry()
       Set()
       SingleQuote()
+      Substring()
       ToBinary()
       ToEnum()
       ToNumberBytes()
@@ -424,6 +425,71 @@
       https://blog.cjvandyk.com/sites/Rocks
       'https://blog.cjvandyk.com/sites/Rocks'
 
+      Substring()
+      Extends the ".Substring(startIndex)" and ".Substring(startIndex, length)"
+      methods to the "System.Text.StringBuilder" class.
+      For example:
+      System.Text.StringBuilder sb = new System.Text.StringBuilder();
+      sb.Append("abc1abc2abc3abc4");
+      sb.Substring(5);
+      will return
+      bc2abc3abc4
+      sb.Substring(5, 3);
+      will return
+      bc2
+      Adds the FromHead/FromTail overloaded methods.
+      FromHead returns the "length" of characters from the head of the given
+      string.
+      For example:
+      sb.Substring(3, Constants.SubstringType.FromHead);
+      sb.Substring(5, Constants.SubstringType.FromHead);
+      sb.Substring(8, Constants.SubstringType.FromHead);
+      will return
+      abc
+      abc1a
+      abc1abc2
+      FromTail returns the "length" of characters from the tail of the given
+      string.
+      For example:
+      sb.Substring(3, Constants.SubstringType.FromTail);
+      sb.Substring(5, Constants.SubstringType.FromTail);
+      sb.Substring(8, Constants.SubstringType.FromTail);
+      will return
+      bc4
+      3abc4
+      abc3abc4
+      Adds the LeftOfIndex/RightOfIndex overloaded methods.
+      LeftOfIndex returns the "length" of characters to the LEFT of the
+      located index representing the "occurence"th match of the "index"
+      string.
+      For example:
+      sb.Substring(5, "abc", Constants.SubstringType.LeftOfIndex, 0);
+      sb.Substring(5, "abc", Constants.SubstringType.LeftOfIndex, 1);
+      sb.Substring(5, "abc", Constants.SubstringType.LeftOfIndex, 2);
+      sb.Substring(5, "abc", Constants.SubstringType.LeftOfIndex, 3);
+      sb.Substring(5, "abc", Constants.SubstringType.LeftOfIndex, 4);
+      will return
+
+
+      abc1
+      1abc2
+      2abc3
+      RightOfIndex returns the "length" of characters to the RIGHT of the
+      located index representing the "occurence"th match of the "index"
+      string.
+      For example:
+      sb.Substring(5, "abc", Constants.SubstringType.RigthOfIndex, 0);
+      sb.Substring(5, "abc", Constants.SubstringType.RigthOfIndex, 1);
+      sb.Substring(5, "abc", Constants.SubstringType.RigthOfIndex, 2);
+      sb.Substring(5, "abc", Constants.SubstringType.RigthOfIndex, 3);
+      sb.Substring(5, "abc", Constants.SubstringType.RigthOfIndex, 4);
+      will return
+
+      1abc2
+      2abc3
+      3abc4
+      4
+
       ToBinary()
       This method returns the given string represented in 1s and 0s as
       a binary result.
@@ -556,6 +622,47 @@
     <tags>Extensions C# cjvandyk Crayveon 429 Retry-After ThrottlingHandler TimeZone CountWords Trim QueryString MorseCode Binary LoremIpsum ZipCode Vowel UrlRoot Elevate CompoundInterest StrongPassword</tags>
   </metadata>
   <files>
+    <file src="bin\$configuration$\$id$.dll" target="lib" />
+    <file src="bin\$configuration$\$id$.pdb" target="lib" />
+    <file src="bin\$configuration$\$id$.xml" target="lib" />
+    <file src="bin\$configuration$\$id$.dll" target="lib\net48" />
     <file src="bin\$configuration$\$id$.pdb" target="lib\net48" />
+    <file src="bin\$configuration$\$id$.xml" target="lib\net48" />
+    <file src="bin\$configuration$\$id$.dll" target="lib\net472" />
+    <file src="bin\$configuration$\$id$.pdb" target="lib\net472" />
+    <file src="bin\$configuration$\$id$.xml" target="lib\net472" />
+    <file src="bin\$configuration$\$id$.dll" target="lib\net471" />
+    <file src="bin\$configuration$\$id$.pdb" target="lib\net471" />
+    <file src="bin\$configuration$\$id$.xml" target="lib\net471" />
+    <file src="bin\$configuration$\$id$.dll" target="lib\net47" />
+    <file src="bin\$configuration$\$id$.pdb" target="lib\net47" />
+    <file src="bin\$configuration$\$id$.xml" target="lib\net47" />
+    <file src="bin\$configuration$\$id$.dll" target="lib\net462" />
+    <file src="bin\$configuration$\$id$.pdb" target="lib\net462" />
+    <file src="bin\$configuration$\$id$.xml" target="lib\net462" />
+    <file src="bin\$configuration$\$id$.dll" target="lib\net461" />
+    <file src="bin\$configuration$\$id$.pdb" target="lib\net461" />
+    <file src="bin\$configuration$\$id$.xml" target="lib\net461" />
+    <file src="bin\$configuration$\$id$.dll" target="lib\net46" />
+    <file src="bin\$configuration$\$id$.pdb" target="lib\net46" />
+    <file src="bin\$configuration$\$id$.xml" target="lib\net46" />
+    <file src="bin\$configuration$\$id$.dll" target="lib\net452" />
+    <file src="bin\$configuration$\$id$.pdb" target="lib\net452" />
+    <file src="bin\$configuration$\$id$.xml" target="lib\net452" />
+    <file src="bin\$configuration$\$id$.dll" target="lib\net451" />
+    <file src="bin\$configuration$\$id$.pdb" target="lib\net451" />
+    <file src="bin\$configuration$\$id$.xml" target="lib\net451" />
+    <file src="bin\$configuration$\$id$.dll" target="lib\net45" />
+    <file src="bin\$configuration$\$id$.pdb" target="lib\net45" />
+    <file src="bin\$configuration$\$id$.xml" target="lib\net45" />
+    <file src="bin\$configuration$\$id$.dll" target="lib\net403" />
+    <file src="bin\$configuration$\$id$.pdb" target="lib\net403" />
+    <file src="bin\$configuration$\$id$.xml" target="lib\net403" />
+    <file src="bin\$configuration$\$id$.dll" target="lib\net40" />
+    <file src="bin\$configuration$\$id$.pdb" target="lib\net40" />
+    <file src="bin\$configuration$\$id$.xml" target="lib\net40" />
+    <file src="bin\$configuration$\$id$.dll" target="lib\net35" />
+    <file src="bin\$configuration$\$id$.pdb" target="lib\net35" />
+    <file src="bin\$configuration$\$id$.xml" target="lib\net35" />
   </files>
 </package>

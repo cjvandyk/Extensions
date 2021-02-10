@@ -12,14 +12,16 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Extensions;
+using static Extensions.Universal;
 
 namespace TemplateClassLibrary
 {
     public static class Class1
     {
         #region Method1
-        public static void Method1()
+        public static void Method1(string arg1, double arg2)
         {
+            ValidateNoNulls(arg1, arg2);
         }
         #endregion Method1
     }

@@ -1,4 +1,6 @@
-﻿/// <summary>
+﻿#pragma warning disable CS1587, CS1591
+
+/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
@@ -14,6 +16,240 @@ namespace Extensions
     /// </summary>
     public static class Constants
     {
+        #region Binary Constrants
+
+        /// <summary>
+        /// Enum of the binary number types.
+        /// </summary>
+        public enum NumberType
+        {
+
+            Bytes,
+            KB,
+            MB,
+            GB,
+            TB,
+            PB,
+            EB,
+            ZB,
+            YB,
+            BB,
+            GpB,
+            SB,
+            PaB,
+            AB,
+            PlB,
+            BrB,
+            SoB,
+            QB,
+            KaB,
+            RB,
+            DB,
+            HB,
+            MrB,
+            DdB,
+            RtB,
+            ShB,
+            CB,
+            KkB
+        }
+
+        /// <summary>
+        /// Number of bits per byte.
+        /// </summary>
+        public const double BitsPerByte = 8;
+
+        /// <summary>
+        /// Number of bytes in a Kilobyte.
+        /// </summary>
+        public const double KB = 1024;
+
+        /// <summary>
+        /// Number of bytes in a Megabyte.
+        /// </summary>
+        public const double MB = KB * 1024;
+
+        /// <summary>
+        /// Number of bytes in a Gigabyte.
+        /// </summary>
+        public const double GB = MB * 1024;
+
+        /// <summary>
+        /// Number of bytes in a Terabyte.
+        /// </summary>
+        public const double TB = GB * 1024;
+
+        /// <summary>
+        /// Number of bytes in a Petabyte.
+        /// </summary>
+        public const double PB = TB * 1024;
+
+        /// <summary>
+        /// Number of bytes in a Exabyte.
+        /// </summary>
+        public const double EB = PB * 1024;
+
+        /// <summary>
+        /// Number of bytes in a Zettabyte.
+        /// </summary>
+        public const double ZB = EB * 1024;
+
+        /// <summary>
+        /// Number of bytes in a Yottabyte.
+        /// </summary>
+        public const double YB = ZB * 1024;
+
+        /// <summary>
+        /// Number of bytes in a Brontobyte.
+        /// </summary>
+        public const double BB = YB * 1024;
+
+        /// <summary>
+        /// Number of bytes in a Geopbyte.
+        /// </summary>
+        public const double GpB = BB * 1024;
+
+        /// <summary>
+        /// Number of bytes in a Saganbyte.
+        /// </summary>
+        public const double SB = GpB * 1024;
+
+        /// <summary>
+        /// Number of bytes in a Pijabyte.
+        /// </summary>
+        public const double PaB = SB * 1024;
+
+        /// <summary>
+        /// Number of bytes in a Alphabyte.
+        /// </summary>
+        public const double AB = PaB * 1024;
+
+        /// <summary>
+        /// Number of bytes in a Pectrolbyte.
+        /// </summary>
+        public const double PlB = AB * 1024;
+
+        /// <summary>
+        /// Number of bytes in a Bolgerbyte.
+        /// </summary>
+        public const double BrB = PlB * 1024;
+
+        /// <summary>
+        /// Number of bytes in a Sambobyte.
+        /// </summary>
+        public const double SoB = BrB * 1024;
+
+        /// <summary>
+        /// Number of bytes in a Quesabyte.
+        /// </summary>
+        public const double QB = SoB * 1024;
+
+        /// <summary>
+        /// Number of bytes in a Kinsabyte.
+        /// </summary>
+        public const double KaB = QB * 1024;
+
+        /// <summary>
+        /// Number of bytes in a Rutherbyte.
+        /// </summary>
+        public const double RB = KaB * 1024;
+
+        /// <summary>
+        /// Number of bytes in a Dubnibyte.
+        /// </summary>
+        public const double DB = RB * 1024;
+
+        /// <summary>
+        /// Number of bytes in a Hassiubyte.
+        /// </summary>
+        public const double HB = DB * 1024;
+
+        /// <summary>
+        /// Number of bytes in a Meitnerbyte.
+        /// </summary>
+        public const double MrB = HB * 1024;
+
+        /// <summary>
+        /// Number of bytes in a Darmstadbyte.
+        /// </summary>
+        public const double DdB = MrB * 1024;
+
+        /// <summary>
+        /// Number of bytes in a Roentbyte.
+        /// </summary>
+        public const double RtB = DdB * 1024;
+
+        /// <summary>
+        /// Number of bytes in a Sophobyte.
+        /// </summary>
+        public const double ShB = RtB * 1024;
+
+        /// <summary>
+        /// Number of bytes in a Coperbyte.
+        /// </summary>
+        public const double CB = ShB * 1024;
+
+        /// <summary>
+        /// Number of bytes in a Koentekbyte.
+        /// </summary>
+        public const double KkB = CB * 1024;
+
+        #endregion Binary Constrants
+
+        #region CompoundFrequency
+        /// <summary>
+        /// Enum of possible frequency in which interest compounding is done.
+        /// </summary>
+        public enum CompoundFrequency { Monthly, Yearly };
+        #endregion CompoundFrequency
+
+        #region Cryptography
+
+        /// <summary>
+        /// List of encryption providers to use.
+        /// </summary>
+        public enum EncryptionProvider
+        {
+            AES,
+            DES,
+            DSA,
+            MD5,
+            RNG,
+            RSA,
+            SHA1,
+            SHA256,
+            SHA384,
+            SHA512,
+            TrippleDES
+        }
+
+        #endregion Cryptography
+
+        #region EnumerationType
+        /// <summary>
+        /// Enum of possible enumerable types.
+        /// </summary>
+        public enum EnumerableType { Dictionary, NameValueCollection };
+        #endregion EnumerationType
+
+        #region Help
+        /// <summary>
+        /// String array of args that will trigger help text.
+        /// </summary>
+        public readonly static string[] HelpStrings =
+        {
+            "/?",
+            "?",
+            "/help",
+            "help",
+            "-help",
+            "/huh",
+            "huh",
+            "-huh"
+        };
+        #endregion Help
+
+        #region LoremIpsum
         /// <summary>
         /// String array of lorem ipsum text.
         /// </summary>
@@ -30,22 +266,9 @@ namespace Extensions
             "In hac habitasse platea dictumst. Vivamus sit amet ornare magna. Curabitur sollicitudin viverra nibh, sit amet tempor nisl dictum nec. Integer in auctor sem. Phasellus accumsan ante mollis dui feugiat, non semper augue posuere. Cras ac faucibus nulla, id elementum ante. Nulla ipsum felis, semper id eleifend in, placerat nec ipsum. Nunc ut leo tincidunt, facilisis leo egestas, sollicitudin lacus. Curabitur at ex eget libero convallis volutpat.",
             "Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque eu tristique lacus, sed porta nisl. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum libero neque, faucibus sed condimentum sed, aliquet vitae massa. Sed dignissim a velit tempus feugiat. Etiam sollicitudin, neque sit amet posuere semper, enim enim facilisis quam, ac sollicitudin lectus purus ut urna. Vivamus interdum odio nec felis interdum mollis. Praesent et massa quis augue accumsan laoreet. Nullam ultrices, dui ac condimentum cursus, lectus elit molestie velit, vitae consequat elit arcu sed massa. Praesent at lacinia ante, varius lacinia urna. Donec pretium gravida nunc, sed congue mi tincidunt eu. Aenean ut diam eget orci dignissim placerat. Pellentesque fermentum aliquet velit et fermentum. Etiam ut risus dapibus, dictum augue ac, ornare metus."
         };
+        #endregion LoremIpsum
 
-        /// <summary>
-        /// String array of args that will trigger help text.
-        /// </summary>
-        public readonly static string[] HelpStrings =
-        {
-            "/?",
-            "?",
-            "/help",
-            "help",
-            "-help",
-            "/huh",
-            "huh",
-            "-huh"
-        };
-
+        #region Morse
         /// <summary>
         /// Dictionary of alphabetic to Morse code translation values.
         /// </summary>
@@ -92,6 +315,21 @@ namespace Extensions
             {'?',"..--.."},
             {' ',"-...-"}
         };
+        #endregion Morse
+
+        #region Quote
+        /// <summary>
+        /// Enum of possible quote types.
+        /// </summary>
+        public enum QuoteType { Single, Double };
+        #endregion Quote
+
+        #region Substring
+        /// <summary>
+        /// List of processing options for .Substring() method.
+        /// </summary>
+        public enum SubstringType { FromHead, FromTail, LeftOfIndex, RigthOfIndex };
+        #endregion Substring
 
         #region TimeZone
 
@@ -390,223 +628,6 @@ namespace Extensions
         };
 
         #endregion TimeZone
-
-        #region Binary Constrants
-
-        /// <summary>
-        /// Enum of the binary number types.
-        /// </summary>
-        public enum NumberType 
-        {
-            Bytes,
-            KB, 
-            MB,
-            GB,
-            TB,
-            PB,
-            EB,
-            ZB,
-            YB,
-            BB,
-            GpB,
-            SB,
-            PaB,
-            AB,
-            PlB,
-            BrB,
-            SoB,
-            QB,
-            KaB,
-            RB,
-            DB,
-            HB,
-            MrB,
-            DdB,
-            RtB,
-            ShB,
-            CB,
-            KkB
-        }
-
-        /// <summary>
-        /// Number of bits per byte.
-        /// </summary>
-        public const double BitsPerByte = 8;
-
-        /// <summary>
-        /// Number of bytes in a Kilobyte.
-        /// </summary>
-        public const double KB = 1024;
-
-        /// <summary>
-        /// Number of bytes in a Megabyte.
-        /// </summary>
-        public const double MB = KB * 1024;
-
-        /// <summary>
-        /// Number of bytes in a Gigabyte.
-        /// </summary>
-        public const double GB = MB * 1024;
-
-        /// <summary>
-        /// Number of bytes in a Terabyte.
-        /// </summary>
-        public const double TB = GB * 1024;
-
-        /// <summary>
-        /// Number of bytes in a Petabyte.
-        /// </summary>
-        public const double PB = TB * 1024;
-
-        /// <summary>
-        /// Number of bytes in a Exabyte.
-        /// </summary>
-        public const double EB = PB * 1024;
-
-        /// <summary>
-        /// Number of bytes in a Zettabyte.
-        /// </summary>
-        public const double ZB = EB * 1024;
-
-        /// <summary>
-        /// Number of bytes in a Yottabyte.
-        /// </summary>
-        public const double YB = ZB * 1024;
-
-        /// <summary>
-        /// Number of bytes in a Brontobyte.
-        /// </summary>
-        public const double BB = YB * 1024;
-
-        /// <summary>
-        /// Number of bytes in a Geopbyte.
-        /// </summary>
-        public const double GpB = BB * 1024;
-
-        /// <summary>
-        /// Number of bytes in a Saganbyte.
-        /// </summary>
-        public const double SB = GpB * 1024;
-
-        /// <summary>
-        /// Number of bytes in a Pijabyte.
-        /// </summary>
-        public const double PaB = SB * 1024;
-
-        /// <summary>
-        /// Number of bytes in a Alphabyte.
-        /// </summary>
-        public const double AB = PaB * 1024;
-
-        /// <summary>
-        /// Number of bytes in a Pectrolbyte.
-        /// </summary>
-        public const double PlB = AB * 1024;
-
-        /// <summary>
-        /// Number of bytes in a Bolgerbyte.
-        /// </summary>
-        public const double BrB = PlB * 1024;
-
-        /// <summary>
-        /// Number of bytes in a Sambobyte.
-        /// </summary>
-        public const double SoB = BrB * 1024;
-
-        /// <summary>
-        /// Number of bytes in a Quesabyte.
-        /// </summary>
-        public const double QB = SoB * 1024;
-
-        /// <summary>
-        /// Number of bytes in a Kinsabyte.
-        /// </summary>
-        public const double KaB = QB * 1024;
-
-        /// <summary>
-        /// Number of bytes in a Rutherbyte.
-        /// </summary>
-        public const double RB = KaB * 1024;
-
-        /// <summary>
-        /// Number of bytes in a Dubnibyte.
-        /// </summary>
-        public const double DB = RB * 1024;
-
-        /// <summary>
-        /// Number of bytes in a Hassiubyte.
-        /// </summary>
-        public const double HB = DB * 1024;
-
-        /// <summary>
-        /// Number of bytes in a Meitnerbyte.
-        /// </summary>
-        public const double MrB = HB * 1024;
-
-        /// <summary>
-        /// Number of bytes in a Darmstadbyte.
-        /// </summary>
-        public const double DdB = MrB * 1024;
-
-        /// <summary>
-        /// Number of bytes in a Roentbyte.
-        /// </summary>
-        public const double RtB = DdB * 1024;
-
-        /// <summary>
-        /// Number of bytes in a Sophobyte.
-        /// </summary>
-        public const double ShB = RtB * 1024;
-
-        /// <summary>
-        /// Number of bytes in a Coperbyte.
-        /// </summary>
-        public const double CB = ShB * 1024;
-
-        /// <summary>
-        /// Number of bytes in a Koentekbyte.
-        /// </summary>
-        public const double KkB = CB * 1024;
-
-        #endregion Binary Constrants
-
-        #region Cryptography
-
-        /// <summary>
-        /// List of encryption providers to use.
-        /// </summary>
-        public enum EncryptionProvider
-        {
-            AES,
-            DES,
-            DSA,
-            MD5,
-            RNG,
-            RSA,
-            SHA1,
-            SHA256,
-            SHA384,
-            SHA512,
-            TrippleDES
-        }
-
-        #endregion Cryptography
-
-        #region Quote
-        /// <summary>
-        /// Enum of possible quote types.
-        /// </summary>
-        public enum QuoteType { Single, Double };
-        #endregion Quote
-
-        /// <summary>
-        /// Enum of possible enumerable types.
-        /// </summary>
-        public enum EnumerableType { Dictionary, NameValueCollection };
-
-        /// <summary>
-        /// Enum of possible frequency in which interest compounding is done.
-        /// </summary>
-        public enum CompoundFrequency { Monthly, Yearly };
     }
 }
+#pragma warning restore CS1587, CS1591
