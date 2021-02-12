@@ -1,8 +1,8 @@
 ﻿# Extensions.dll contains extension methods that enhance existing C# classes thus making life easier for developers.
-[![icon](https://github.com/cjvandyk/Quix/blob/master/Extensions/Images/Extensions-64x64.png?raw=true)](https://github.com/cjvandyk/quix/Extensions)<br>
-![GIF](https://github.com/cjvandyk/Quix/blob/master/Extensions/Images/Extensions.gif)<br><br>
+[![icon](https://raw.githubusercontent.com/cjvandyk/Extensions/master/Images/Extensions-64x64.png)](https://github.com/cjvandyk/Extensions)<br>
+![GIF](https://github.com/cjvandyk/Extensions/blob/main/Images/Extensions.gif)<br><br>
 ![GIF](https://github.com/cjvandyk/Extensions/blob/main/Images/Easy%20Date%20convertion%20GIF.gif)<br>
-![License](https://img.shields.io/github/license/cjvandyk/quix) ![Maintained](https://img.shields.io/maintenance/yes/2021) [![GitHub Release](https://img.shields.io/github/release/cjvandyk/quix.svg)](https://GitHub.com/cjvandyk/quix/releases/) ![NuGet Badge](https://buildstats.info/nuget/Extensions.CS) [![Repo Size](https://img.shields.io/github/repo-size/cjvandyk/quix)](https://github.com/cjvandyk/quix/Extensions) [![Closed Issues](https://img.shields.io/github/issues-closed/cjvandyk/quix.svg)](https://GitHub.com/cjvandyk/quix/issues?q=is%3Aissue+is%3Aclosed) [![Open Issues](https://img.shields.io/github/issues/cjvandyk/quix.svg)](https://github.com/cjvandyk/quix/issues) [![Contributors](https://img.shields.io/github/contributors/cjvandyk/quix.svg)](https://GitHub.com/cjvandyk/quix/graphs/contributors/) ![Languages](https://img.shields.io/github/languages/count/cjvandyk/quix.svg) [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ExtensionsCS/Extensions?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Discord](https://github.com/cjvandyk/Quix/blob/master/Extensions/Images/Discord.png?raw=true)](https://discord.com/channels/799027565465305088/799027565993394219) [![Twitter](https://img.shields.io/twitter/follow/cjvandyk?style=social)](https://twitter.com/intent/follow?screen_name=cjvandyk)
+![License](https://img.shields.io/github/license/cjvandyk/Extensions) ![Maintained](https://img.shields.io/maintenance/yes/2021) [![GitHub Release](https://img.shields.io/github/release/cjvandyk/extensions.svg)](https://GitHub.com/cjvandyk/extensions/releases/) ![NuGet Badge](https://buildstats.info/nuget/Extensions.CS) [![Repo Size](https://img.shields.io/github/repo-size/cjvandyk/extensions)](https://github.com/cjvandyk/Extensions) [![Closed Issues](https://img.shields.io/github/issues-closed/cjvandyk/extensions.svg)](https://GitHub.com/cjvandyk/extensions/issues?q=is%3Aissue+is%3Aclosed) [![Open Issues](https://img.shields.io/github/issues/cjvandyk/extensions.svg)](https://github.com/cjvandyk/extensions/issues) [![Contributors](https://img.shields.io/github/contributors/cjvandyk/extensions.svg)](https://GitHub.com/cjvandyk/extensions/graphs/contributors/) ![Languages](https://img.shields.io/github/languages/count/cjvandyk/extensions.svg) [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ExtensionsCS/Extensions?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Discord](https://github.com/cjvandyk/Extensions/blob/main/Images/Discord.png?raw=true)](https://discord.com/channels/799027565465305088/799027565993394219) [![Twitter](https://img.shields.io/twitter/follow/cjvandyk?style=social)](https://twitter.com/intent/follow?screen_name=cjvandyk)
 
 The following classes have been extended:
 
@@ -11,6 +11,7 @@ The following classes have been extended:
     - System.DateTime
     - System.Diagnostics.Process
     - System.Double
+    - System.Long
     - System.Net.WebException
     - System.Object
     - System.String
@@ -195,6 +196,14 @@ with these methods:
             `"noreplay-at-crayveon.com".IsEmail()`<br>
         will return False._
 
+- ### **IsEven()**
+    > _Checks if the given number is even.<br>
+        For example:<br>
+            `234.IsEven()`<br>
+        will return True whereas<br>
+            `339.IsEven()`<br>
+        will return False._
+
 - ### **IsLower()**
     > _Validates that the given string object contains only lower case letters.<br>
         For example:<br>
@@ -214,6 +223,14 @@ with these methods:
         will return True whereas<br>
             `"abc123".IsNumeric()`<br>
         will return False._
+
+- ### **IsOdd()**
+    > _Checks if the given number is odd.<br>
+        For example:<br>
+            `234.IsOdd()`<br>
+        will return False whereas<br>
+            `339.IsOdd()`<br>
+        will return True._
 
 - ### **IsStrong()**
     > _Validates that the given string object contains a strong password string.<br>
