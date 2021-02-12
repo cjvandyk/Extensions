@@ -18,13 +18,26 @@ namespace TESTING
     {
         static void Main(string[] args)
         {
-            long l = 3;
-            Console.WriteLine($"{l} {l.IsEven()}");
-            Console.WriteLine($"{l} {l.IsOdd()}");
-            l = 6;
-            Console.WriteLine($"{l} {l.IsEven()}");
-            Console.WriteLine($"{l} {l.IsOdd()}");
-            Console.WriteLine(l.GetNthPrime(1000000));
+            //If a number n is not a prime, it can be factored into two factors a and b:
+            //n = a * b
+            //Now a and b can't be both greater than the square root of n, since then the 
+            //product a * b would be greater than sqrt(n) * sqrt(n) = n. So in any factorization 
+            //of n, at least one of the factors must be smaller than the square root of n, and if 
+            //we can't find any factors less than or equal to the square root, n must be a prime.
+            //System.Numerics.BigInteger big = 0;
+            //UInt64 big = (UInt64)Math.Pow(2, 82589933);
+            //for (long C = 0; C < 82589933; C++)
+            //{                
+            //    big = big * 2;
+            //}
+            //long l = 3;
+            //Console.WriteLine($"{l} {l.IsEven()}");
+            //Console.WriteLine($"{l} {l.IsOdd()}");
+            //l = 6;
+            //Console.WriteLine($"{l} {l.IsEven()}");
+            //Console.WriteLine($"{l} {l.IsOdd()}");
+            ////553:17 vs 17:10
+            //Console.WriteLine(l.GetNthPrimeAsync(10000000));
             Array.Test();
             DateTime.Test();
             Dictionary.Test();

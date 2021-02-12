@@ -629,5 +629,28 @@ namespace Extensions
 
         #endregion TimeZone
     }
+
+    #region PrimeNumbers
+    /// <summary>
+    /// Class to contain prime number details during async processing.
+    /// </summary>
+    public class PrimeNumber
+    {
+        /// <summary>
+        /// The number being evaluated as a prime number.
+        /// </summary>
+        public long number { get; set; }
+        /// <summary>
+        /// The result of the prime number evaluation.
+        /// </summary>
+        public bool isPrime { get; set; } = false;
+
+        public PrimeNumber(long target)
+        {
+            number = target;
+            isPrime = false;
+        }
+    }
+    #endregion PrimeNumbers
 }
 #pragma warning restore CS1587, CS1591

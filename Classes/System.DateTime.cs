@@ -18,6 +18,14 @@ namespace Extensions
     /// </summary>
     public static class DateTimeExtensions
     {
+        #region Ago
+        private static DateTime Ago(this DateTime time,
+                                   int number)
+        {
+            return default;
+        }
+        #endregion Ago
+
         #region ToTimeZone()
         public static System.DateTime ToTimeZone(this System.DateTime dateTime,
                                           Constants.TimeZone fromZone = 

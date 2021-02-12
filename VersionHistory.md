@@ -121,7 +121,7 @@
 		  compiler ambiguity that required fully qualified object names before.<br>
 
 ### **2.3.480 (2021-02-12)**<br>
-	- Made NuGet package backward compatible to .NET 3.5<br>
+	- Made NuGet package backward compatible from .NET 3.5 to .NET 5.0<br>
 	- Add .pdb to NuGet package to allow interactive debugging by other developers.<br>
 	- Add .xml documentation to NuGet package.<br>
 	- Cleaned up compiler messages.<br>

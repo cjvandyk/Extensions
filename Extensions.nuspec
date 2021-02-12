@@ -625,6 +625,9 @@
     <file src="bin\$configuration$\$id$.dll" target="lib" />
     <file src="bin\$configuration$\$id$.pdb" target="lib" />
     <file src="bin\$configuration$\$id$.xml" target="lib" />
+    <file src="bin\$configuration$\$id$.dll" target="lib\net5.0" />
+    <file src="bin\$configuration$\$id$.pdb" target="lib\net5.0" />
+    <file src="bin\$configuration$\$id$.xml" target="lib\net5.0" />
     <file src="bin\$configuration$\$id$.dll" target="lib\net48" />
     <file src="bin\$configuration$\$id$.pdb" target="lib\net48" />
     <file src="bin\$configuration$\$id$.xml" target="lib\net48" />
