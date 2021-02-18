@@ -10,10 +10,21 @@
     <projectUrl>https://github.com/cjvandyk/Extensions</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/cjvandyk/Extensions/master/Images/Extensions-64x64.png</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <description>Extensions.dll contains extension methods that enhance existing C# classes thus making life easier for developers.</description>
+    <description>Extensions.dll contains extension methods that enhance existing C# classes thus making life easier for developers.
+                 Extensions.dll supports all versions of .NET from 3.5 through 5.0
+                 Highlights are methods such as:
+                 Use .Save() and .Load() for easy state saving of any object in C#.
+                 Use .Retry() to easily handle 429 throttling errors in web calls.
+                 Use .IsPrime() to determine if a number is a prime number.
+                 Use .GetNthPrime() and .GetNthPrimeAsync to get the Nth prime number capable of calculating 10,000,000 primes/minute on an Intel Core i7-6700K CPU @ 4.00 GHz using 7 threads on 8 logical cores.
+                 Use .ReplaceTokens() to replace multiple strings in string dictionary style.
+                 Use .IsStrong() to validate strong passwords.
+                 Use .ToTimeZone() to quickly convert any given time to any given time zone.
+                 Use .Elevate() to restart current process in admin mode if it doesn't have admin rights.
+                 Use .CompoundInterest() to calculate any given interest over any given perior at any given interval.
+                 and many, many more.</description>
     <packageTypes>
       <packageType name="Dependency" />
-      <packageType name="Extensions" />
     </packageTypes>
     <!--<dependencies>-->
       <!--<group targetFramework=".NETFramework4.8.0">-->
@@ -28,6 +39,8 @@
       DoubleQuote()
       Elevate()
       Get()
+      GetNthPrime()
+      GetNthPrimeAsync()
       GetTimeZoneString()
       GetUrlRoot()
       HasLower()
@@ -35,19 +48,24 @@
       HasSymbol()
       HasUpper()
       IsAlphabetic()
-      IsNumeric()
       IsAlphaNumeric()
       IsChar()
+      IsEven()
+      IsNumeric()
+      IsOdd()
+      IsPrime()
       IsStrong()
       IsUrlRoot()
       IsVowel()
       Lines()
+      Load()
       LoremIpsum()
       Print()
       printf()
       Quote()
       ReplaceTokens()
       Retry()
+      Save()
       Set()
       SingleQuote()
       Substring()
@@ -101,6 +119,19 @@
       Get()
       Language extension for properties.  Use to get the value of the
       extension property in question.
+
+      GetNthPrime()
+      Get the Nth prime number.
+      For example:
+      Extensions.Universal.GetNthPrime(1000)
+      will return the 1000th prime number - 7919.
+
+      GetNthPrimeAsync()
+      Get the Nth prime number using multi threading and asynchronous
+      processing.
+      For example:
+      Extensions.Universal.GetNthPrime(1000)
+      will return the 1000th prime number - 7919.
 
       GetTimeZoneString()
       Get the registry ID string that can be used with
@@ -221,6 +252,14 @@
       "noreplay-at-crayveon.com".IsEmail()
       will return False.
 
+      IsEven()
+      Checks if the given number is even.
+      For example:
+      234.IsEven()
+      will return True whereas
+      339.IsEven()
+      will return False.
+
       IsLower()
       Validates that the given string object contains only lower case letters.
       For example:
@@ -240,6 +279,22 @@
       will return True whereas
       "abc123".IsNumeric()
       will return False.
+
+      IsOdd()
+      Checks if the given number is odd.
+      For example:
+      234.IsOdd()
+      will return False whereas
+      339.IsOdd()
+      will return True.
+
+      IsPrime()
+      Checks if the given number is a prime number.
+      For example:
+      27.IsPrime()
+      will return False whereas
+      29.IsPrime()
+      will return True.
 
       IsStrong()
       Validates that the given string object contains a strong password string.
@@ -622,50 +677,6 @@
     <tags>Extensions C# cjvandyk Crayveon 429 Retry-After ThrottlingHandler TimeZone CountWords Trim QueryString MorseCode Binary LoremIpsum ZipCode Vowel UrlRoot Elevate CompoundInterest StrongPassword</tags>
   </metadata>
   <files>
-    <file src="bin\$configuration$\$id$.dll" target="lib" />
-    <file src="bin\$configuration$\$id$.pdb" target="lib" />
-    <file src="bin\$configuration$\$id$.xml" target="lib" />
-    <file src="bin\$configuration$\$id$.dll" target="lib\net5.0" />
-    <file src="bin\$configuration$\$id$.pdb" target="lib\net5.0" />
-    <file src="bin\$configuration$\$id$.xml" target="lib\net5.0" />
-    <file src="bin\$configuration$\$id$.dll" target="lib\net48" />
-    <file src="bin\$configuration$\$id$.pdb" target="lib\net48" />
-    <file src="bin\$configuration$\$id$.xml" target="lib\net48" />
-    <file src="bin\$configuration$\$id$.dll" target="lib\net472" />
-    <file src="bin\$configuration$\$id$.pdb" target="lib\net472" />
-    <file src="bin\$configuration$\$id$.xml" target="lib\net472" />
-    <file src="bin\$configuration$\$id$.dll" target="lib\net471" />
-    <file src="bin\$configuration$\$id$.pdb" target="lib\net471" />
-    <file src="bin\$configuration$\$id$.xml" target="lib\net471" />
-    <file src="bin\$configuration$\$id$.dll" target="lib\net47" />
-    <file src="bin\$configuration$\$id$.pdb" target="lib\net47" />
-    <file src="bin\$configuration$\$id$.xml" target="lib\net47" />
-    <file src="bin\$configuration$\$id$.dll" target="lib\net462" />
-    <file src="bin\$configuration$\$id$.pdb" target="lib\net462" />
-    <file src="bin\$configuration$\$id$.xml" target="lib\net462" />
-    <file src="bin\$configuration$\$id$.dll" target="lib\net461" />
-    <file src="bin\$configuration$\$id$.pdb" target="lib\net461" />
-    <file src="bin\$configuration$\$id$.xml" target="lib\net461" />
-    <file src="bin\$configuration$\$id$.dll" target="lib\net46" />
-    <file src="bin\$configuration$\$id$.pdb" target="lib\net46" />
-    <file src="bin\$configuration$\$id$.xml" target="lib\net46" />
-    <file src="bin\$configuration$\$id$.dll" target="lib\net452" />
-    <file src="bin\$configuration$\$id$.pdb" target="lib\net452" />
-    <file src="bin\$configuration$\$id$.xml" target="lib\net452" />
-    <file src="bin\$configuration$\$id$.dll" target="lib\net451" />
-    <file src="bin\$configuration$\$id$.pdb" target="lib\net451" />
-    <file src="bin\$configuration$\$id$.xml" target="lib\net451" />
-    <file src="bin\$configuration$\$id$.dll" target="lib\net45" />
-    <file src="bin\$configuration$\$id$.pdb" target="lib\net45" />
-    <file src="bin\$configuration$\$id$.xml" target="lib\net45" />
-    <file src="bin\$configuration$\$id$.dll" target="lib\net403" />
-    <file src="bin\$configuration$\$id$.pdb" target="lib\net403" />
-    <file src="bin\$configuration$\$id$.xml" target="lib\net403" />
-    <file src="bin\$configuration$\$id$.dll" target="lib\net40" />
-    <file src="bin\$configuration$\$id$.pdb" target="lib\net40" />
-    <file src="bin\$configuration$\$id$.xml" target="lib\net40" />
-    <file src="bin\$configuration$\$id$.dll" target="lib\net35" />
-    <file src="bin\$configuration$\$id$.pdb" target="lib\net35" />
-    <file src="bin\$configuration$\$id$.xml" target="lib\net35" />
+    <file src="bin\$configuration$\**" target="lib" />
   </files>
 </package>

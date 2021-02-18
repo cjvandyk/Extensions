@@ -331,8 +331,25 @@ namespace Extensions
         public enum SubstringType { FromHead, FromTail, LeftOfIndex, RigthOfIndex };
         #endregion Substring
 
-        #region TimeZone
+        #region TimeSpan
+        /// <summary>
+        /// Enum for the timespan type returned from .Sum()
+        /// </summary>
+        public enum TimeSpanSumType 
+        { 
+            Seconds, 
+            Minutes, 
+            Hours, 
+            Days, 
+            Weeks, 
+            Years, 
+            Decades, 
+            Centuries, 
+            Mellinnia
+        };
+        #endregion TimeSpan
 
+        #region TimeZone
         /// <summary>
         /// Enum of possible time zones.
         /// </summary>
@@ -626,31 +643,7 @@ namespace Extensions
             { TimeZone.YakutskStandardTime, "Yakutsk Standard Time" },
             { TimeZone.YukonStandardTime, "Yukon Standard Time" }
         };
-
         #endregion TimeZone
     }
-
-    #region PrimeNumbers
-    /// <summary>
-    /// Class to contain prime number details during async processing.
-    /// </summary>
-    public class PrimeNumber
-    {
-        /// <summary>
-        /// The number being evaluated as a prime number.
-        /// </summary>
-        public long number { get; set; }
-        /// <summary>
-        /// The result of the prime number evaluation.
-        /// </summary>
-        public bool isPrime { get; set; } = false;
-
-        public PrimeNumber(long target)
-        {
-            number = target;
-            isPrime = false;
-        }
-    }
-    #endregion PrimeNumbers
 }
 #pragma warning restore CS1587, CS1591

@@ -8,15 +8,23 @@ The following classes have been extended:
 
     - System.Array
     - System.Collections.Generic.Dictionary
+    - System.Collections.Generic.List
     - System.DateTime
     - System.Diagnostics.Process
     - System.Double
+    - System.Int16
+    - System.Int32
+    - System.Int64
     - System.Long
     - System.Net.WebException
     - System.Object
     - System.String
     - System.Text.StringBuilder
     - System.TimeZoneInfo
+    - System.UInt16
+    - System.UInt32
+    - System.UInt64
+    - System.ULong
 
 with these methods:
 
@@ -26,8 +34,8 @@ with these methods:
         For example:<br>
             `double val = 100.00;`<br>
             `val.CompoundInterest(5,`<br>
-                                  `10,`<br>
-                                  `Constants.CompoundFrequency.Yearly);`<br>
+                                 `10,`<br>
+                                 `Constants.CompoundFrequency.Yearly);`<br>
         will return 162.889462677744_
 
 - ### **CopyTo()**
@@ -79,6 +87,19 @@ with these methods:
         you know the type to which the returned value needs to be cast.<br>
         A derived override method for Get() and Set() can be defined<br>
         using specific class objects if finer controls is needed.<br>_
+
+- ### **GetNthPrime()**
+    > _Get the Nth prime number.<br>
+        For example:<br>
+            `Extensions.Universal.GetNthPrime(1000)`<br>
+        will return the 1000th prime number - 7919._
+
+- ### **GetNthPrimeAsync()**
+    > _Get the Nth prime number using multi threading and asynchronous<br>
+        processing.<br>
+        For example:<br>
+            `Extensions.Universal.GetNthPrime(1000)`<br>
+        will return the 1000th prime number - 7919._
 
 - ### **GetTimeZoneString()**
     > _Get the registry ID string that can be used with<br>
@@ -230,6 +251,14 @@ with these methods:
             `234.IsOdd()`<br>
         will return False whereas<br>
             `339.IsOdd()`<br>
+        will return True._
+
+- ### **IsPrime()**
+    > _Checks if the given number is a prime number.<br>
+        For example:<br>
+            `27.IsPrime()`<br>
+        will return False whereas<br>
+            `29.IsPrime()`<br>
         will return True._
 
 - ### **IsStrong()**

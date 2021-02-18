@@ -120,7 +120,7 @@
 	      e.g. String class became StringExtensions.  This helps eliminate<br>
 		  compiler ambiguity that required fully qualified object names before.<br>
 
-### **2.3.480 (2021-02-12)**<br>
+### **2.3.500 (2021-02-12)**<br>
 	- Made NuGet package backward compatible from .NET 3.5 to .NET 5.0<br>
 	- Add .pdb to NuGet package to allow interactive debugging by other developers.<br>
 	- Add .xml documentation to NuGet package.<br>
@@ -140,3 +140,41 @@
 	- Add `enum Constants.SubstringType`<br>
 	- Add `System.String.Substring()`<br>
 	- Add `System.Text.StringBuilder.Substring()`<br>
+
+### **3.0.500 (2021-02-19)**<br>
+	- Added Prime Number calculation functionality!<br>
+	- Add `Extensions.PrimeNumbers` class<br>
+	- Add `Extensions.Universal.GetNthPrime()`<br>
+	- Add `Extensions.Universal.GetNthPrimeAsync()`<br>
+	- Add `long.IsEven()`<br>
+	- Add `long.IsOdd()`<br>
+	- Add `long.IsPrime()`<br>
+	- Add `System.Double.IsEven()`<br>
+	- Add `System.Double.IsOdd()`<br>
+	- Add `System.Double.IsPrime()`<br>
+	- Add `System.Int16.IsEven()`<br>
+	- Add `System.Int16.IsOdd()`<br>
+	- Add `System.Int16.IsPrime()`<br>
+	- Add `System.Int32.IsEven()`<br>
+	- Add `System.Int32.IsOdd()`<br>
+	- Add `System.Int32.IsPrime()`<br>
+	- Add `System.Int64.IsEven()`<br>
+	- Add `System.Int64.IsOdd()`<br>
+	- Add `System.Int64.IsPrime()`<br>
+	- Add `short.IsEven()`<br>
+	- Add `short.IsOdd()`<br>
+	- Add `short.IsPrime()`<br>
+	- Add `System.UInt16.IsEven()`<br>
+	- Add `System.UInt16.IsOdd()`<br>
+	- Add `System.UInt16.IsPrime()`<br>
+	- Add `System.UInt32.IsEven()`<br>
+	- Add `System.UInt32.IsOdd()`<br>
+	- Add `System.UInt32.IsPrime()`<br>
+	- Add `System.UInt64.IsEven()`<br>
+	- Add `System.UInt64.IsOdd()`<br>
+	- Add `System.UInt64.IsPrime()`<br>
+	- Add `System.ULong.IsEven()`<br>
+	- Add `System.ULong.IsOdd()`<br>
+	- Add `System.ULong.IsPrime()`<br>
+	- Add `enum Constants.TimeSpanSumType`<br>
+	- Add `System.Collections.Generic.List<TimeSpan>.Sum()`<br>

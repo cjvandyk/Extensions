@@ -546,6 +546,44 @@ namespace Extensions
             return Convert.ToInt16(number);
         }
         #endregion Convert.To Overloaded Methods
+
+        #region IsEven()
+        /// <summary>
+        /// Checks if the given number is even.
+        /// </summary>
+        /// <param name="number">The given number to check.</param>
+        /// <returns>True if the number is even, else False.</returns>
+        public static bool IsEven(this double number)
+        {
+            ValidateNoNulls(number);
+            return (number % 2 == 0);
+        }
+        #endregion IsEven()
+
+        #region IsOdd()
+        /// <summary>
+        /// Checks if the given number is odd.
+        /// </summary>
+        /// <param name="number">The given number to check.</param>
+        /// <returns>True if the number is odd, else False.</returns>
+        public static bool IsOdd(this double number)
+        {
+            ValidateNoNulls(number);
+            return (number % 2 != 0);
+        }
+        #endregion IsOdd()
+
+        #region IsPrime()
+        /// <summary>
+        /// Checks if the given number is a prime number.
+        /// </summary>
+        /// <param name="number">The given number to evaluate as a prime.</param>
+        /// <returns>True if the given number is prime, else False.</returns>
+        public static bool IsPrime(this double number)
+        {
+            return UInt64Extensions.IsPrime((System.UInt64)number, true);
+        }
+        #endregion IsPrime()
     }
 }
 #pragma warning restore CS1587

@@ -15,7 +15,7 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
-    <AssemblyVersion>1.0.161</AssemblyVersion>
+    <AssemblyVersion>1.0.260</AssemblyVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -42,6 +42,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -58,6 +59,7 @@
     <Compile Include="Tests\Dictionary.cs" />
     <Compile Include="Tests\Double.cs" />
     <Compile Include="Tests\Object.cs" />
+    <Compile Include="Tests\PrimeNumbers.cs" />
     <Compile Include="Tests\Process.cs" />
     <Compile Include="Tests\String.cs" />
     <Compile Include="Tests\TimeZoneInfo.cs" />
