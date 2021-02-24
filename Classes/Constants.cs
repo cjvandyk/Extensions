@@ -268,6 +268,13 @@ namespace Extensions
         };
         #endregion LoremIpsum
 
+        #region Mersenne
+        /// <summary>
+        /// Enum of possible comparison types in the Mersenne type.
+        /// </summary>
+        public enum MersenneComparisonType { Greater, Less };
+        #endregion Mersenne
+
         #region Morse
         /// <summary>
         /// Dictionary of alphabetic to Morse code translation values.
