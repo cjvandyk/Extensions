@@ -28,6 +28,13 @@ The following classes have been extended:
 
 with these methods:
 
+- ### **Bigest()**
+    > _Return the bigest of two given values.<br>
+        For example:<br>
+            `Bigest(23, 31)`<br>
+        will return<br>
+            `31`_
+
 - ### **CompoundInterest()**
     > _Calculate compounded interest end value given an amount, percent<br>
         interest per year and number of years.<br>
@@ -89,14 +96,20 @@ with these methods:
         using specific class objects if finer controls is needed.<br>_
 
 - ### **GetNthPrime()**
-    > _Get the Nth prime number.<br>
+    > _Get the Nth prime number.  It will serialize the list of discovered<br>
+        prime numbers to file in order to eliminate duplicate calculation<br>
+		of prime numbers.  Use `Universal.PrimeStatePath` to override the<br>
+		path where the discovered list of prime numbers is saved.<br>
         For example:<br>
             `Extensions.Universal.GetNthPrime(1000)`<br>
         will return the 1000th prime number - 7919._
 
 - ### **GetNthPrimeAsync()**
     > _Get the Nth prime number using multi threading and asynchronous<br>
-        processing.<br>
+        processing.  It will serialize the list of discovered<br>
+        prime numbers to file in order to eliminate duplicate calculation<br>
+		of prime numbers.  Use `Universal.PrimeStatePath` to override the<br>
+		path where the discovered list of prime numbers is saved.<br>
         For example:<br>
             `Extensions.Universal.GetNthPrime(1000)`<br>
         will return the 1000th prime number - 7919._
@@ -465,6 +478,13 @@ with these methods:
         will return<br>
             `https://blog.cjvandyk.com/sites/Rocks`<br>
             `'https://blog.cjvandyk.com/sites/Rocks'`_
+
+- ### **Smallest()**
+    > _Return the smallest of two given values.<br>
+        For example:<br>
+            `Smallest(23, 31)`<br>
+        will return<br>
+            `23`_
 
 - ### **Substring()**
     > _Extends the `.Substring(startIndex)` and `.Substring(startIndex, length)`<br>

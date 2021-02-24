@@ -13,7 +13,7 @@
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-    <AssemblyVersion>3.0.500</AssemblyVersion>
+    <AssemblyVersion>3.1.540</AssemblyVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -64,6 +64,7 @@
     <None Include="NuGet\Extensions.cs.2.1.480.nupkg" />
     <None Include="NuGet\Extensions.cs.2.2.480.nupkg" />
     <None Include="NuGet\Extensions.cs.2.3.500.nupkg" />
+    <None Include="NuGet\Extensions.cs.3.0.500.nupkg" />
     <None Include="README.md" />
     <None Include="VersionHistory.md" />
   </ItemGroup>
@@ -90,7 +91,7 @@
     <Compile Include="Classes\System.Int32.cs" />
     <Compile Include="Classes\System.Int64.cs" />
     <Compile Include="Classes\System.Long.cs" />
-    <Compile Include="Classes\System.Mersenne32.cs" />
+    <Compile Include="Classes\System.Mersenne64.cs" />
     <Compile Include="Classes\System.Net.WebException.cs" />
     <Compile Include="Classes\System.Object.cs" />
     <Compile Include="Classes\System.Short.cs" />

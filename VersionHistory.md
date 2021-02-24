@@ -178,3 +178,13 @@
 	- Add `System.ULong.IsPrime()`<br>
 	- Add `enum Constants.TimeSpanSumType`<br>
 	- Add `System.Collections.Generic.List<TimeSpan>.Sum()`<br>
+
+### **3.1.500 (2021-02-26)**<br>
+	- Incorporate `.Save()` and `.Load()` into `.GetNthPrime()` and<br>
+	    `.GetNthPrimeAsync()` in order to eliminate duplicate calculation<br>
+		of prime numbers.  Use `Universal.PrimeStatePath` to override the<br>
+		path where the discovered list of prime numbers is saved.<br>
+	- Add `Universal.PrimeStatePath`<br>
+	- Add `Universal.Smallest()`<br>
+	- Add `Universal.Bigest()`<br>
+	- Add `Constrants.MersenneComparisonType`<br>

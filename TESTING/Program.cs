@@ -18,6 +18,11 @@ namespace TESTING
     {
         static void Main(string[] args)
         {
+            bool[] b1 = new bool[] { true, false, false, true };
+            bool[] b2 = new bool[] { true, false, false, true };
+            Mersenne64.GreaterThan(ref b1, ref b2);
+            Mersenne64 m = new Mersenne64(new bool[] { true, false, true, false, true });
+            bool[] result = m.Mod(new bool[] { true, true, true });
             ////If a number n is not a prime, it can be factored into two factors a and b:
             ////n = a * b
             ////Now a and b can't be both greater than the square root of n, since then the 

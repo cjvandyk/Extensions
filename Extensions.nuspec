@@ -34,6 +34,7 @@
     <summary>
       Extensions.dll contains extension methods that enhance existing C# classes thus making life easier for developers.
       These methods are included:
+      Biggest()
       CompoundInterest()
       CopyTo()
       DoubleQuote()
@@ -68,6 +69,7 @@
       Save()
       Set()
       SingleQuote()
+      Smallest()
       Substring()
       ToBinary()
       ToEnum()
@@ -79,6 +81,13 @@
       Words()
     </summary>
     <releaseNotes>
+      Bigest()
+      Return the bigest of two given values.
+      For example:
+      Bigest(23, 31)
+      will return
+      31
+
       CompoundInterest()
       Calculate compounded interest end value given an amount, percent
       interest per year and number of years.
@@ -121,13 +130,21 @@
       extension property in question.
 
       GetNthPrime()
-      Get the Nth prime number.
+      Get the Nth prime number using multi threading and asynchronous
+      processing.  It will serialize the list of discovered
+      prime numbers to file in order to eliminate duplicate calculation
+      of prime numbers.  Use `Universal.PrimeStatePath` to override the
+      path where the discovered list of prime numbers is saved.
       For example:
       Extensions.Universal.GetNthPrime(1000)
       will return the 1000th prime number - 7919.
 
       GetNthPrimeAsync()
       Get the Nth prime number using multi threading and asynchronous
+      processing.  It will serialize the list of discovered
+      prime numbers to file in order to eliminate duplicate calculation
+      of prime numbers.  Use `Universal.PrimeStatePath` to override the
+      path where the discovered list of prime numbers is saved.
       processing.
       For example:
       Extensions.Universal.GetNthPrime(1000)
@@ -479,6 +496,13 @@
       will return
       https://blog.cjvandyk.com/sites/Rocks
       'https://blog.cjvandyk.com/sites/Rocks'
+
+      Smallest()
+      Return the smallest of two given values.
+      For example:
+      Smallest(23, 31)
+      will return
+      23
 
       Substring()
       Extends the ".Substring(startIndex)" and ".Substring(startIndex, length)"
