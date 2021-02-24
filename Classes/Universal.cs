@@ -21,6 +21,26 @@ namespace Extensions
         /// The private object used to manage locks on file I/O.
         /// </summary>
         private static readonly object lockManager = new object();
+        /// <summary>
+        /// String path where to .Save() and .Load() the prime number list
+        /// so as to avoid recalculating the same numbers repeatedly.
+        /// </summary>
+        public static string PrimeStatePath = "primes.state";
+
+        #region Bigest()
+        /// <summary>
+        /// Returns the smallest of two given values.
+        /// </summary>
+        /// <param name="val1">The first value to compare.</param>
+        /// <param name="val2">The second value to compare.</param>
+        /// <returns>The smallest of the two given values.</returns>
+        public static int Bigest(int val1, int val2)
+        {
+            if (val1 > val2) return val1;
+            if (val2 > val1) return val2;
+            return val1;  //val1 == val2
+        }
+        #endregion Bigest()
 
         #region IsEven()
         /// <summary>
@@ -101,7 +121,7 @@ namespace Extensions
         public static long GetNthPrime(long Nth)
         {
             List<long> lst = new List<long>();
-            lst = lst.Load("primes.state");
+            lst = lst.Load(PrimeStatePath);
             long current = 3;
             if (lst == null)
             {
@@ -125,7 +145,7 @@ namespace Extensions
                     lst.Add(current);
                 }
             }
-            //lst.Save("primes.state");
+            lst.Save(PrimeStatePath);
             return lst[(int)Nth - 1];
         }
 
@@ -138,7 +158,7 @@ namespace Extensions
         public static async System.Threading.Tasks.Task<long> GetNthPrimeAsync(long Nth)
         {
             List<long> lst = new List<long>();
-            lst = lst.Load("primes.state");
+            lst = lst.Load(PrimeStatePath);
             long current = 3;
             if (lst == null)
             {
@@ -211,7 +231,7 @@ namespace Extensions
                 //    lst.Add(current);
                 //}
             }
-            //lst.Save("primes.state");
+            lst.Save(PrimeStatePath);
             return lst[(int)Nth - 1];
         }
 
@@ -345,6 +365,21 @@ namespace Extensions
             }
         }
         #endregion printf()
+
+        #region Smallest()
+        /// <summary>
+        /// Returns the smallest of two given values.
+        /// </summary>
+        /// <param name="val1">The first value to compare.</param>
+        /// <param name="val2">The second value to compare.</param>
+        /// <returns>The smallest of the two given values.</returns>
+        public static int Smallest(int val1, int val2)
+        {
+            if (val1 < val2) return val1;
+            if (val2 < val1) return val2;
+            return val1;  //val1 == val2
+        }
+        #endregion Smallest()
 
         #region ValidateNoNulls()
         /// <summary>
