@@ -13,7 +13,7 @@
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-    <AssemblyVersion>3.1.540</AssemblyVersion>
+    <AssemblyVersion>3.1.505</AssemblyVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -64,7 +64,8 @@
     <None Include="NuGet\Extensions.cs.2.1.480.nupkg" />
     <None Include="NuGet\Extensions.cs.2.2.480.nupkg" />
     <None Include="NuGet\Extensions.cs.2.3.500.nupkg" />
-    <None Include="NuGet\Extensions.cs.3.0.500.nupkg" />
+    <None Include="NuGet\extensions.cs.3.0.500.nupkg" />
+    <None Include="NuGet\Extensions.cs.3.1.500.nupkg" />
     <None Include="README.md" />
     <None Include="VersionHistory.md" />
   </ItemGroup>
@@ -96,6 +97,7 @@
     <Compile Include="Classes\System.Object.cs" />
     <Compile Include="Classes\System.Short.cs" />
     <Compile Include="Classes\System.String.cs" />
+    <Compile Include="Classes\System.Timer.cs" />
     <Compile Include="Classes\System.TimeZoneInfo.cs" />
     <Compile Include="Classes\System.UInt16.cs" />
     <Compile Include="Classes\System.UInt32.cs" />

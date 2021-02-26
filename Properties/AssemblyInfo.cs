@@ -16,7 +16,7 @@ using System.Runtime.InteropServices;
                  "\nUse.Save() and.Load() for easy state saving of any object in C#." +
                  "\nUse.Retry() to easily handle 429 throttling errors in web calls." +
                  "\nUse.IsPrime() to determine if a number is a prime number." +
-                 "\nUse.GetNthPrime() and.GetNthPrimeAsync to get the Nth prime number capable of calculating 10, 000, 000 primes / minute on an Intel Core i7 - 6700K CPU @ 4.00 GHz using 7 threads on 8 logical cores." +
+                 "\nUse.GetNthPrime() and.GetNthPrimeAsync() to get the Nth prime number capable of calculating 10, 000, 000 primes / minute on an Intel Core i7 - 6700K CPU @ 4.00 GHz using 7 threads on 8 logical cores." +
                  "\nUse.ReplaceTokens() to replace multiple strings in string dictionary style." +
                  "\nUse.IsStrong() to validate strong passwords." +
                  "\nUse.ToTimeZone() to quickly convert any given time to any given time zone." +
@@ -48,7 +48,7 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.1")]
-[assembly: AssemblyVersion("3.0.500")]
-[assembly: AssemblyFileVersion("3.0.500")]
+[assembly: AssemblyVersion("3.1.505")]
+[assembly: AssemblyFileVersion("3.1.505")]
 
-[assembly: AssemblyInformationalVersion("3.0.500")]
+[assembly: AssemblyInformationalVersion("3.1.505")]

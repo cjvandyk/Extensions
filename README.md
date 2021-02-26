@@ -20,6 +20,7 @@ The following classes have been extended:
     - System.Object
     - System.String
     - System.Text.StringBuilder
+    - System.Timer
     - System.TimeZoneInfo
     - System.UInt16
     - System.UInt32
@@ -548,6 +549,19 @@ with these methods:
             `2abc3`<br>
             `3abc4`<br>
             `4`_
+
+- ### **System.Timer class**
+	> _This class provides and easy way to time things like a stopwatch.<br>
+        `.Start()` starts the timer.<br>
+	    `.Stop()` stops the timer.<br>
+	    `.Pause()` pauses the timer.<br>
+	    `.Resume()` resumes the timer.<br>
+	    `.Reset()` resets the timer.<br>
+        For example:<br>
+            `System.Timer timer = new System.Timer();`<br>
+            `timer.Start();`<br>
+            ` <DO STUFF> `<br>
+            `System.TimeSpan howlong = timer.Stop();`_
 
 - ### **ToBinary()**
     > _This method returns the given string represented in 1s and 0s as<br>

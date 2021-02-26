@@ -185,6 +185,12 @@
 		of prime numbers.  Use `Universal.PrimeStatePath` to override the<br>
 		path where the discovered list of prime numbers is saved.<br>
 	- Add `Universal.PrimeStatePath`<br>
+	- Add `System.Timer` class<br>
+	- Add `System.Timer.Start()`<br>
+	- Add `System.Timer.Stop()`<br>
+	- Add `System.Timer.Pause()`<br>
+	- Add `System.Timer.Resume()`<br>
+	- Add `System.Timer.Reset()`<br>
 	- Add `Universal.Smallest()`<br>
 	- Add `Universal.Bigest()`<br>
-	- Add `Constrants.MersenneComparisonType`<br>
+	- Add `Constants.MersenneComparisonType`<br>

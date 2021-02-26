@@ -21,6 +21,7 @@
                  Use .IsStrong() to validate strong passwords.
                  Use .ToTimeZone() to quickly convert any given time to any given time zone.
                  Use .Elevate() to restart current process in admin mode if it doesn't have admin rights.
+                 Use System.Timer to quickly and easily time anything.
                  Use .CompoundInterest() to calculate any given interest over any given perior at any given interval.
                  and many, many more.</description>
     <packageTypes>
@@ -71,6 +72,7 @@
       SingleQuote()
       Smallest()
       Substring()
+      System.Timer class
       ToBinary()
       ToEnum()
       ToNumberBytes()
@@ -568,6 +570,19 @@
       2abc3
       3abc4
       4
+
+      System.Timer class
+      This class provides and easy way to time things like a stopwatch.
+      .Start() starts the timer.
+      .Stop() stops the timer.
+      .Pause() pauses the timer.
+      .Resume() resumes the timer.
+      .Reset() resets the timer.
+      For example:
+      System.Timer timer = new System.Timer();
+      timer.Start();
+      DO STUFF
+      System.TimeSpan howlong = timer.Stop();
 
       ToBinary()
       This method returns the given string represented in 1s and 0s as
