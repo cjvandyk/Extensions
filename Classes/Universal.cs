@@ -42,6 +42,28 @@ namespace Extensions
         }
         #endregion Bigest()
 
+        #region GetFQDN()
+        /// <summary>
+        /// Returns the current computer Fully Qualified Domain Name.
+        /// </summary>
+        /// <returns>Returns the current computer Fully Qualified Domain Name.</returns>
+        public static string GetFQDN()
+        {
+            string domainName = System.Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties().DomainName;
+            string hostName = System.Net.Dns.GetHostName();
+            if (domainName == "")
+            {
+                return hostName;
+            }
+            domainName = "." + domainName;
+            if (!hostName.EndsWith(domainName))
+            {
+                hostName = domainName;
+            }
+            return hostName;
+        }
+        #endregion GetFQDN()
+
         #region IsEven()
         /// <summary>
         /// Checks if the given number is even.
@@ -380,6 +402,38 @@ namespace Extensions
             return val1;  //val1 == val2
         }
         #endregion Smallest()
+
+        #region TimeStamp()
+        /// <summary>
+        /// Returns the current local date time stamp as a string in either
+        /// "YYYY-MM-DD" or "YYYY-MM-DD@hh.mm.ss.nnn" format.
+        /// </summary>
+        /// <param name="DateOnly">If true, return the current local date
+        /// time stamp as "YYYY-MM-DD" else return it as 
+        /// "YYYY-MM-DD@hh.mm.ss.nnn"</param>
+        /// <returns>Returns the current local date time stamp as a string in
+        /// either "YYYY-MM-DD" or "YYYY-MM-DD@hh.mm.ss.nnn" format.</returns>
+        public static string TimeStamp(bool DateOnly = false)
+        {
+            System.DateTime now = System.DateTime.Now;
+            if (DateOnly)
+            {
+                return now.Year.ToString() + "-" +
+                    now.Month.ToString("d2") + "-" +
+                    now.Day.ToString("d2");
+            }
+            else
+            {
+                return now.Year.ToString() + "-" +
+                    now.Month.ToString("d2") + "-" +
+                    now.Day.ToString("d2") + "@" +
+                    now.Hour.ToString("d2") + "." +
+                    now.Minute.ToString("d2") + "." +
+                    now.Second.ToString("d2") + "." +
+                    now.Millisecond.ToString("d3");
+            }
+        }
+        #endregion TimeStamp
 
         #region ValidateNoNulls()
         /// <summary>

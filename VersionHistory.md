@@ -194,3 +194,11 @@
 	- Add `Universal.Smallest()`<br>
 	- Add `Universal.Bigest()`<br>
 	- Add `Constants.MersenneComparisonType`<br>
+
+### **3.2.500 (2021-03-05)**<br>
+	- Add `Constants.HexChars`<br>
+	- Add `Extensions.NewCustomGuid()`<br>
+	- Add `String.ContainsAny()`<br>
+	- Add `String.ContainsOnly()`<br>
+	- Add `Universal.GetFQDN()`<br>
+	- Add `Universal.TimeStamp()`<br>

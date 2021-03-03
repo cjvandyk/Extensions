@@ -249,6 +249,31 @@ namespace Extensions
         };
         #endregion Help
 
+        #region Hexadecimal
+        /// <summary>
+        /// Character array of all hexadecimal lower case characters.
+        /// </summary>
+        public readonly static char[] HexChars =
+        {
+            '0',
+            '1',
+            '2',
+            '3',
+            '4',
+            '5',
+            '6',
+            '7',
+            '8',
+            '9',
+            'a',
+            'b',
+            'c',
+            'd',
+            'e',
+            'f'
+        };
+        #endregion Hexadecimal
+
         #region LoremIpsum
         /// <summary>
         /// String array of lorem ipsum text.

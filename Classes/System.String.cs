@@ -21,6 +21,102 @@ namespace Extensions
     /// </summary>
     public static class StringExtensions
     {
+        #region ContainsAny()
+        /// <summary>
+        /// Checks if the given string contains any of the strings provided in
+        /// the IEnumerable.
+        /// </summary>
+        /// <param name="str">The given string to check.</param>
+        /// <param name="chars">The character array to validate against.</param>
+        /// <returns>True if the given string contains any characters provided
+        /// in the character array, otherwise False.</returns>
+        public static bool ContainsAny(this System.String str,
+                                       char[] chars)
+        {
+            foreach (char C in chars)
+            {
+                if (str.Contains(C))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Checks if the given string contains any of the strings provided in
+        /// the IEnumerable.
+        /// </summary>
+        /// <param name="str">The given string to check.</param>
+        /// <param name="strings">The IEnumerable i.e. List of strings or
+        /// string array to validate against.</param>
+        /// <returns>True if the given string contains any of the strings
+        /// provided in the IEnumerable, otherwise False.</returns>
+        public static bool ContainsAny(this System.String str,
+                                       IEnumerable<string> strings)
+        {
+            foreach (string C in strings)
+            {
+                if (str.Contains(C))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        #endregion ContainsAny()
+
+        #region ContainsOnly()
+        /// <summary>
+        /// Checks if the given string contains only the characters provided in
+        /// the IEnumerable.
+        /// </summary>
+        /// <param name="str">The given string to check.</param>
+        /// <param name="chars">The character array to validate against.</param>
+        /// <returns>True if the given string only contains characters provided
+        /// in the IEnumerable, otherwise False.</returns>
+        public static bool ContainsOnly(this System.String str,
+                                        char[] chars)
+        {
+            string remain = str;
+            foreach (char C in chars)
+            {
+                remain = remain.Replace(C.ToString(), "");
+            }
+            remain = remain.Trim();
+            if (remain == "")
+            {
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Checks if the given string contains only the strings provided in
+        /// the IEnumerable.
+        /// </summary>
+        /// <param name="str">The given string to check.</param>
+        /// <param name="strings">The IEnumerable i.e. List of strings or
+        /// string array to validate against.</param>
+        /// <returns>True if the given string only contains strings provided
+        /// in the IEnumerable, otherwise False.</returns>
+        public static bool ContainsOnly(this System.String str,
+                                        IEnumerable<string> strings)
+        {
+            string remain = str;
+            foreach (string C in strings)
+            {
+                remain = remain.Replace(C, "");
+            }
+            remain = remain.Trim();
+            if (remain == "")
+            {
+                return true;
+            }
+            return false;
+        }
+        #endregion ContainsOnly()
+
         #region DoubleQuote()
         /// <summary>
         /// Return the given string encased in double quotes.

@@ -15,6 +15,7 @@ The following classes have been extended:
     - System.Int16
     - System.Int32
     - System.Int64
+    - System.Logging (added)
     - System.Long
     - System.Net.WebException
     - System.Object
@@ -44,7 +45,23 @@ with these methods:
             `val.CompoundInterest(5,`<br>
                                  `10,`<br>
                                  `Constants.CompoundFrequency.Yearly);`<br>
-        will return 162.889462677744_
+        will return 162.889462677744 _
+
+- ### **ContainsAny()**
+    > _Checks if the given string contains any of a list of characters or<br>
+        strings provided.<br>
+        For example:<br>
+            `"abcdef1234567890".ContainsAny(Constants.HexChars)`<br>
+        will return True._
+
+- ### **ContainsOnly()**
+    > _Checks if the given string contains only characters or strings<br>
+        in the list provided.<br>
+        For example:<br>
+            `"abcdef1234567890".ContainsOnly(Constants.HexChars)`<br>
+        will return True while<br>
+            `"abcdefg1234567890".ContainsOnly(Constants.HexChars)`<br>
+        will return False because of the "g"._
 
 - ### **CopyTo()**
     > _Copies a given length of bytes from a byte[] starting at a definable<br>
@@ -95,6 +112,9 @@ with these methods:
         you know the type to which the returned value needs to be cast.<br>
         A derived override method for Get() and Set() can be defined<br>
         using specific class objects if finer controls is needed.<br>_
+
+- ### **GetFQDN()**
+    > _Get the current computer Fully Qualified Domain Name._
 
 - ### **GetNthPrime()**
     > _Get the Nth prime number.  It will serialize the list of discovered<br>
@@ -379,6 +399,12 @@ with these methods:
         Assumes the input value to be in Morse code format already.<br>
         Use `.ToMorseCode()` to pre-convert text if needed._
 
+- ### **NewCustomGuid()**
+    > _Returns a custom GUID starting with a custom string.<br>
+        For example:<br>
+            `Extensions.NewCustomGuid("012")`<br>
+        will return a new GUID that starts with "012"._
+
 - ### **Print()**
     > _Print the byte[] to console, separated by spaces and space padded<br>
         on the right to allow proper alignment for debug/testing output.<br>
@@ -562,6 +588,19 @@ with these methods:
             `timer.Start();`<br>
             ` <DO STUFF> `<br>
             `System.TimeSpan howlong = timer.Stop();`_
+
+- ### **TimeStamp()**
+    > _Returns a string representing the current local date time stamp to<br>
+        either just the day or down to the millisecond.  Used for creating<br>
+        unique log file names.<br>
+        For example:<br>
+            `TimeStamp()`<br>
+        will return<br>
+            `2021-03-01@06.01.02.003`<br>
+        whereas<br>
+            `TimeStamp(true)`<br>
+        will return<br>
+            `2021-03-01`_
 
 - ### **ToBinary()**
     > _This method returns the given string represented in 1s and 0s as<br>

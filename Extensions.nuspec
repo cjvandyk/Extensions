@@ -37,10 +37,13 @@
       These methods are included:
       Biggest()
       CompoundInterest()
+      ContainsAny()
+      ContainsOnly()
       CopyTo()
       DoubleQuote()
       Elevate()
       Get()
+      GetFQDN()
       GetNthPrime()
       GetNthPrimeAsync()
       GetTimeZoneString()
@@ -62,6 +65,8 @@
       Lines()
       Load()
       LoremIpsum()
+      MorseCodeBeep()
+      NewCustomGuid()
       Print()
       printf()
       Quote()
@@ -73,6 +78,7 @@
       Smallest()
       Substring()
       System.Timer class
+      TimeStamp()
       ToBinary()
       ToEnum()
       ToNumberBytes()
@@ -99,6 +105,22 @@
       10,
       Constants.CompoundFrequency.Yearly);
       will return 162.889462677744
+
+      ContainsAny()
+      Checks if the given string contains any of a list of characters or
+      strings provided.
+      For example:
+      "abcdef1234567890".ContainsAny(Constants.HexChars)
+      will return True.
+
+      ContainsOnly()
+      Checks if the given string contains only characters or strings
+      in the list provided.
+      For example:
+      "abcdef1234567890".ContainsOnly(Constants.HexChars)
+      will return True while
+      "abcdefg1234567890".ContainsOnly(Constants.HexChars)
+      will return False because of the "g".
 
       CopyTo()
       Copies a given length of bytes from a byte[] starting at a definable
@@ -130,6 +152,9 @@
       Get()
       Language extension for properties.  Use to get the value of the
       extension property in question.
+
+      GetFQDN()
+      Get the current computer Fully Qualified Domain Name.
 
       GetNthPrime()
       Get the Nth prime number using multi threading and asynchronous
@@ -417,6 +442,12 @@
       Assumes the input value to be in Morse code format already.
       Use .ToMorseCode() to pre-convert text if needed.
 
+      NewCustomGuid()
+      Returns a custom GUID starting with a custom string.
+      For example:
+      Extensions.NewCustomGuid("012")
+      will return a new GUID that starts with "012".
+
       Print()
       Print the byte[] to console, separated by spaces and space padded
       on the right to allow proper alignment for debug/testing output.
@@ -583,6 +614,19 @@
       timer.Start();
       DO STUFF
       System.TimeSpan howlong = timer.Stop();
+
+      TimeStamp()
+      Returns a string representing the current local date time stamp to
+      either just the day or down to the millisecond.  Used for creating
+      unique log file names.
+      For example:
+      TimeStamp()
+      will return
+      2021-03-01@06.01.02.003
+      whereas
+      TimeStamp(true)
+      will return
+      2021-03-01
 
       ToBinary()
       This method returns the given string represented in 1s and 0s as

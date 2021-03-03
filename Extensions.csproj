@@ -13,7 +13,7 @@
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-    <AssemblyVersion>3.1.505</AssemblyVersion>
+    <AssemblyVersion>3.1.515</AssemblyVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -88,9 +88,11 @@
     <Compile Include="Classes\System.DateTime.cs" />
     <Compile Include="Classes\System.Diagnostics.Process.cs" />
     <Compile Include="Classes\System.Double.cs" />
+    <Compile Include="Classes\System.Guid.cs" />
     <Compile Include="Classes\System.Int16.cs" />
     <Compile Include="Classes\System.Int32.cs" />
     <Compile Include="Classes\System.Int64.cs" />
+    <Compile Include="Classes\System.Logging.cs" />
     <Compile Include="Classes\System.Long.cs" />
     <Compile Include="Classes\System.Mersenne64.cs" />
     <Compile Include="Classes\System.Net.WebException.cs" />
