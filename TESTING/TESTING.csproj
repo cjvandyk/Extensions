@@ -15,7 +15,7 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
-    <AssemblyVersion>1.0.308</AssemblyVersion>
+    <AssemblyVersion>1.0.347</AssemblyVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -58,6 +58,7 @@
     <Compile Include="Tests\DateTime.cs" />
     <Compile Include="Tests\Dictionary.cs" />
     <Compile Include="Tests\Double.cs" />
+    <Compile Include="Tests\Guid.cs" />
     <Compile Include="Tests\Object.cs" />
     <Compile Include="Tests\PrimeNumbers.cs" />
     <Compile Include="Tests\Process.cs" />

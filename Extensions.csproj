@@ -13,7 +13,7 @@
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-    <AssemblyVersion>3.1.515</AssemblyVersion>
+    <AssemblyVersion>3.2.500</AssemblyVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -66,6 +66,7 @@
     <None Include="NuGet\Extensions.cs.2.3.500.nupkg" />
     <None Include="NuGet\extensions.cs.3.0.500.nupkg" />
     <None Include="NuGet\Extensions.cs.3.1.500.nupkg" />
+    <None Include="NuGet\Extensions.cs.3.2.500.nupkg" />
     <None Include="README.md" />
     <None Include="VersionHistory.md" />
   </ItemGroup>

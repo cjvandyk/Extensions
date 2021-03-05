@@ -33,6 +33,7 @@ namespace Extensions
         public static bool ContainsAny(this System.String str,
                                        char[] chars)
         {
+            ValidateNoNulls(str, chars);
             foreach (char C in chars)
             {
                 if (str.Contains(C))
@@ -55,6 +56,7 @@ namespace Extensions
         public static bool ContainsAny(this System.String str,
                                        IEnumerable<string> strings)
         {
+            ValidateNoNulls(str, strings);
             foreach (string C in strings)
             {
                 if (str.Contains(C))
@@ -63,6 +65,37 @@ namespace Extensions
                 }
             }
             return false;
+        }
+
+        /// <summary>
+        /// Checks if the given string contains any of the strings provided in
+        /// the IEnumerable.
+        /// </summary>
+        /// <param name="str">The given string to check.</param>
+        /// <param name="chars">The character array to validate against.</param>
+        /// <returns>True if the given string contains any characters provided
+        /// in the character array, otherwise False.</returns>
+        public static bool ContainsAny(this System.Text.StringBuilder str,
+                                       char[] chars)
+        {
+            ValidateNoNulls(str, chars);
+            return ContainsAny(str.ToString(), chars);
+        }
+
+        /// <summary>
+        /// Checks if the given string contains any of the strings provided in
+        /// the IEnumerable.
+        /// </summary>
+        /// <param name="str">The given string to check.</param>
+        /// <param name="strings">The IEnumerable i.e. List of strings or
+        /// string array to validate against.</param>
+        /// <returns>True if the given string contains any of the strings
+        /// provided in the IEnumerable, otherwise False.</returns>
+        public static bool ContainsAny(this System.Text.StringBuilder str,
+                                       IEnumerable<string> strings)
+        {
+            ValidateNoNulls(str, strings);
+            return ContainsAny(str.ToString(), strings);
         }
         #endregion ContainsAny()
 
@@ -78,6 +111,7 @@ namespace Extensions
         public static bool ContainsOnly(this System.String str,
                                         char[] chars)
         {
+            ValidateNoNulls(str, chars);
             string remain = str;
             foreach (char C in chars)
             {
@@ -103,6 +137,7 @@ namespace Extensions
         public static bool ContainsOnly(this System.String str,
                                         IEnumerable<string> strings)
         {
+            ValidateNoNulls(str, strings);
             string remain = str;
             foreach (string C in strings)
             {
@@ -114,6 +149,37 @@ namespace Extensions
                 return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Checks if the given string contains only the characters provided in
+        /// the IEnumerable.
+        /// </summary>
+        /// <param name="str">The given string to check.</param>
+        /// <param name="chars">The character array to validate against.</param>
+        /// <returns>True if the given string only contains characters provided
+        /// in the IEnumerable, otherwise False.</returns>
+        public static bool ContainsOnly(this System.Text.StringBuilder str,
+                                        char[] chars)
+        {
+            ValidateNoNulls(str, chars);
+            return ContainsOnly(str.ToString(), chars);
+        }
+
+        /// <summary>
+        /// Checks if the given string contains only the strings provided in
+        /// the IEnumerable.
+        /// </summary>
+        /// <param name="str">The given string to check.</param>
+        /// <param name="strings">The IEnumerable i.e. List of strings or
+        /// string array to validate against.</param>
+        /// <returns>True if the given string only contains strings provided
+        /// in the IEnumerable, otherwise False.</returns>
+        public static bool ContainsOnly(this System.Text.StringBuilder str,
+                                        IEnumerable<string> strings)
+        {
+            ValidateNoNulls(str, strings);
+            return ContainsOnly(str.ToString(), strings);
         }
         #endregion ContainsOnly()
 
@@ -224,6 +290,46 @@ namespace Extensions
         //}
 
         #endregion Encrypt
+
+        #region ExceedsLength()
+        /// <summary>
+        /// Checks if a referenced offset exceeds the length of the string.
+        /// </summary>
+        /// <param name="str">The current string to check against.</param>
+        /// <param name="offset">The referenced offset value.</param>
+        /// <param name="increment">Should the offset be incremented before
+        /// the length comparison takes place.</param>
+        /// <returns></returns>
+        public static bool ExceedsLength(this System.String str, 
+                                        ref int offset, 
+                                        bool increment = true)
+        {
+            if (increment)
+            {
+                offset++;
+            }
+            if (offset >= str.Length)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Checks if a referenced offset exceeds the length of the string.
+        /// </summary>
+        /// <param name="str">The current string to check against.</param>
+        /// <param name="offset">The referenced offset value.</param>
+        /// <param name="increment">Should the offset be incremented before
+        /// the length comparison takes place.</param>
+        /// <returns></returns>
+        public static bool ExceedsLength(this System.Text.StringBuilder str, 
+                                        ref int offset, 
+                                        bool increment = true)
+        {
+            return ExceedsLength(str.ToString(), ref offset, increment);
+        }
+        #endregion ExceedsLength()
 
         #region GetUrlRoot()
         /// <summary>
@@ -1128,6 +1234,139 @@ namespace Extensions
         }
         #endregion LoremIpsum()
 
+        #region Match()
+        /// <summary>
+        /// Checks if the current string matches a given search mask.
+        /// It ignores duplicate '*' in the mask.  '*' is matched against
+        /// 0 or more characters.  Duplicate '?' is treated as requiring
+        /// the number of characters.  '?' is matched against 1 or more
+        /// characters.
+        /// For example:
+        ///     "abcdefgh".Match("***a?c*")
+        /// will return True while
+        ///     "abcdefgh".Match("***ac*")
+        /// will return False but
+        ///     "abcdefgh".Match("?a?c*")
+        /// will also return False because the first '?' requires a character
+        /// before 'a'.
+        /// </summary>
+        /// <param name="str">The current string being matched.</param>
+        /// <param name="mask">The search mask being used for the match.</param>
+        /// <param name="ignoreCase">Switch to ignore case sensitivity.</param>
+        /// <returns>True if the current string matches the given search mask.</returns>
+        public static bool Match(this System.String str, 
+                                 string mask, 
+                                 bool ignoreCase = true)
+        {
+            ValidateNoNulls(str, mask);
+            if (mask == "*")
+            {
+                return true;
+            }
+            if (ignoreCase)
+            {
+                str = str.ToLower();
+                mask = mask.ToLower();
+            }
+            mask = mask.Singularize('*');
+            int strOffset = 0;
+            int maskOffset = 0;
+            bool found = false;
+            while (maskOffset < mask.Length)
+            {
+                switch (mask[maskOffset])
+                {
+                    case '*':
+                        maskOffset++;
+                        if (maskOffset >= mask.Length)
+                        {
+                            return true;
+                        }
+                        found = false;
+                        while (strOffset < str.Length)
+                        {
+                            if (str[strOffset] != mask[maskOffset])
+                            {
+                                strOffset++;
+                            }
+                            else
+                            {
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found)
+                        {
+                            return false;
+                        }
+                        break;
+                    case '?':
+                        if (str.ExceedsLength(ref strOffset))
+                        {
+                            return true;
+                        }
+                        maskOffset++;
+                        break;
+                    default:
+                        found = false;
+                        while (strOffset < str.Length)
+                        {
+                            if (str[strOffset] != mask[maskOffset])
+                            {
+                                strOffset++;
+                            }
+                            else
+                            {
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (found)
+                        {
+                            maskOffset++;
+                            strOffset++;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                        if (strOffset >= str.Length)
+                        {
+                            return true;
+                        }
+                        break;
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Checks if the current string matches a given search mask.
+        /// It ignores duplicate '*' in the mask.  '*' is matched against
+        /// 0 or more characters.  Duplicate '?' is treated as requiring
+        /// the number of characters.  '?' is matched against 1 or more
+        /// characters.
+        /// For example:
+        ///     "abcdefgh".Match("***a?c*")
+        /// will return True while
+        ///     "abcdefgh".Match("***ac*")
+        /// will return False but
+        ///     "abcdefgh".Match("?a?c*")
+        /// will also return False because the first '?' requires a character
+        /// before 'a'.
+        /// </summary>
+        /// <param name="str">The current string being matched.</param>
+        /// <param name="mask">The search mask being used for the match.</param>
+        /// <param name="ignoreCase">Switch to ignore case sensitivity.</param>
+        /// <returns>True if the current string matches the given search mask.</returns>
+        public static bool Match(this System.Text.StringBuilder str,
+                                 string mask,
+                                 bool ignoreCase = true)
+        {
+            return Match(str.ToString(), mask, ignoreCase);
+        }
+        #endregion Match()
+
         #region MorseCodeBeep()
         /// <summary>
         /// Takes a given System.String representing Morse code and audiblize
@@ -1318,6 +1557,66 @@ namespace Extensions
             return SingleQuote(str.ToString());
         }
         #endregion SingleQuote()
+
+        #region Singularize()
+        /// <summary>
+        /// Parses the given string removing multiples of a given character.
+        /// </summary>
+        /// <param name="str">The string to parse.</param>
+        /// <param name="target">The character to de-duplicate.</param>
+        /// <param name="ignoreCase">Switch to ignore case during comparrison.</param>
+        /// <returns>The given string with multiples of the given character
+        /// removed.</returns>
+        public static System.String Singularize(this System.String str,
+                                                char target,
+                                                bool ignoreCase = true)
+        {
+            ValidateNoNulls(str, target);
+            if (str.Length == 1)
+            {
+                return str;
+            }
+            string result = str[0].ToString();
+            if (ignoreCase)
+            {
+                for (int C = 1; C < str.Length; C++)
+                {
+                    if (str[C].ToString().ToLower()
+                        != str[C - 1].ToString().ToLower())
+                    {
+                        result += str[C];
+                    }
+                }
+            }
+            else
+            {
+                for (int C = 1; C < str.Length; C++)
+                {
+                    if (str[C]!= str[C - 1])
+                    {
+                        result += str[C];
+                    }
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Parses the given string removing multiples of a given character.
+        /// </summary>
+        /// <param name="str">The string to parse.</param>
+        /// <param name="target">The character to de-duplicate.</param>
+        /// <param name="ignoreCase">Switch to ignore case during comparrison.</param>
+        /// <returns>The given string with multiples of the given character
+        /// removed.</returns>
+        public static System.String Singularize(this System.Text.StringBuilder str,
+                                                char target,
+                                                bool ignoreCase = true)
+        {
+            ValidateNoNulls(str, target);
+            return Singularize(str.ToString(), target, ignoreCase);
+        }
+        #endregion Singularize()
 
         #region Substring()
         /// <summary>
@@ -1621,6 +1920,22 @@ namespace Extensions
         }
 
         /// <summary>
+        /// Converts the given querystring to a Dictionary.
+        /// </summary>
+        /// <param name="str">The given querystring to convert.</param>
+        /// <param name="separator">Defaults to ampersand per W3C standards.</param>
+        /// <param name="assigner">Defaults to = per W3C standards.</param>
+        /// <returns>The parsed dictionary containing querystring values.</returns>
+        public static Dictionary<string, string> QueryStringToDictionary(
+            this System.Text.StringBuilder str,
+            char separator = '&',
+            char assigner = '=')
+        {
+            ValidateNoNulls(str, separator, assigner);
+            return QueryStringToDictionary(str.ToString(), separator, assigner);
+        }
+
+        /// <summary>
         /// Converts the given querystring to a NameValueCollection.
         /// </summary>
         /// <param name="str">The given querystring to convert.</param>
@@ -1641,6 +1956,25 @@ namespace Extensions
                 nvc.Add(kvp.Key, kvp.Value);
             }
             return nvc;
+        }
+
+        /// <summary>
+        /// Converts the given querystring to a NameValueCollection.
+        /// </summary>
+        /// <param name="str">The given querystring to convert.</param>
+        /// <param name="separator">Defaults to ampersand per W3C standards.</param>
+        /// <param name="assigner">Defaults to = per W3C standards.</param>
+        /// <returns>The parsed NameValueCollection containing querystring
+        /// values.</returns>
+        public static System.Collections.Specialized.NameValueCollection QueryStringToNameValueCollection(
+            this System.Text.StringBuilder str,
+            char separator = '&',
+            char assigner = '=')
+        {
+            ValidateNoNulls(str, separator, assigner);
+            return QueryStringToNameValueCollection(str.ToString(), 
+                                                    separator, 
+                                                    assigner);
         }
         #endregion ToEnumerable
 

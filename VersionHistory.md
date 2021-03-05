@@ -200,5 +200,12 @@
 	- Add `Extensions.NewCustomGuid()`<br>
 	- Add `String.ContainsAny()`<br>
 	- Add `String.ContainsOnly()`<br>
+	- Add `String.ExceedsLength()`<br>
+	- Add `String.Match()`<br>
+	- Add `String.Singularize()`<br>
+	- Add `Universal.GetExecutingAssembly()`<br>
+	- Add `Universal.GetExecutingAssemblyName()`<br>
+	- Add `Universal.GetExecutingAssemblyFolder()`<br>
+	- Add `Universal.GetExecutingAssemblyFullPath()`<br>
 	- Add `Universal.GetFQDN()`<br>
 	- Add `Universal.TimeStamp()`<br>

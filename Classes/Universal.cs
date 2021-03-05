@@ -18,6 +18,10 @@ namespace Extensions
     public static class Universal
     {
         /// <summary>
+        /// The assembly used on out calls.
+        /// </summary>
+        private static System.Reflection.Assembly assembly;
+        /// <summary>
         /// The private object used to manage locks on file I/O.
         /// </summary>
         private static readonly object lockManager = new object();
@@ -41,6 +45,100 @@ namespace Extensions
             return val1;  //val1 == val2
         }
         #endregion Bigest()
+
+        #region GetExecutingAssembly...()
+        /// <summary>
+        /// Gets the current assembly through reflection.
+        /// </summary>
+        /// <returns>The current Entry or Executing assembly.</returns>
+        public static System.Reflection.Assembly GetExecutingAssembly()
+        {
+            return System.Reflection.Assembly.GetEntryAssembly() == null ?
+                System.Reflection.Assembly.GetExecutingAssembly() :
+                System.Reflection.Assembly.GetEntryAssembly();
+        }
+
+        /// <summary>
+        /// Gets the name of the current assembly.
+        /// </summary>
+        /// <param name="asm">Out parm to hold the assembly.</param>
+        /// <param name="escaped">Should the value be escaped?</param>
+        /// <returns>Returns the name of the current assembly, optionally 
+        /// escaped.</returns>
+        private static string GetExecutingAssemblyName(
+            out System.Reflection.Assembly asm,
+            bool escaped = false)
+        {
+            asm = GetExecutingAssembly();
+            string result = asm.ManifestModule.Name;
+            if (escaped)
+            {
+                return System.Uri.EscapeDataString(result);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Gets the name of the current assembly.
+        /// </summary>
+        /// <param name="escaped">Should the value be escaped?</param>
+        /// <returns>Returns the name of the current assembly, optionally 
+        /// escaped.</returns>
+        public static string GetExecutingAssemblyName(bool escaped = false)
+        {
+            return GetExecutingAssemblyName(out assembly, escaped);
+        }
+
+        /// <summary>
+        /// Gets the folder path of the current assembly.
+        /// </summary>
+        /// <param name="asm">Out parm to hold the assembly.</param>
+        /// <param name="escaped">Should the value be escaped?</param>
+        /// <returns>Returns the folder path of the current assembly, 
+        /// optionally escaped.</returns>
+        private static string GetExecutingAssemblyFolder(
+            out System.Reflection.Assembly asm,
+            bool escaped = false)
+        {
+            asm = GetExecutingAssembly();
+            string result = System.IO.Path.GetDirectoryName(asm.Location)
+                .TrimEnd('\\');
+            if (escaped)
+            {
+                return System.Uri.EscapeDataString(result);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Gets the folder path of the current assembly.
+        /// </summary>
+        /// <param name="asm">Out parm to hold the assembly.</param>
+        /// <param name="escaped">Should the value be escaped?</param>
+        /// <returns>Returns the folder path of the current assembly, 
+        /// optionally escaped.</returns>
+        public static string GetExecutingAssemblyFolder(bool escaped = false)
+        {
+            return GetExecutingAssemblyFolder(out assembly, escaped);
+        }
+
+        /// <summary>
+        /// Gets the full path and file name of the current assembly.
+        /// </summary>
+        /// <param name="escaped">Should the value be escaped?</param>
+        /// <returns>Returns the full path and file name of the current
+        /// assembly, optionally escaped.</returns>
+        public static string GetExecutingAssemblyFullPath(bool escaped = false)
+        {
+            string result = GetExecutingAssemblyFolder(out assembly) + "\\" +
+                assembly.ManifestModule.Name;
+            if (escaped)
+            {
+                return System.Uri.EscapeDataString(result);
+            }
+            return result;
+        }
+        #endregion GetExecutingAssembly...()
 
         #region GetFQDN()
         /// <summary>

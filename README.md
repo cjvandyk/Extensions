@@ -90,6 +90,17 @@ with these methods:
             `System.Diagnostics.Process.GetCurrentProcess().Elevate(args)`<br>
         will restart the current console app in admin mode._
 
+- ### **ExceedsLength()**
+    > _Checks if a referenced offset exceeds the length of the string.<br>
+        Optionally increments the offset as well.<br>
+        For example:<br>
+            `"https://blog.cjvandyk.com Rocks!".ExceedsLength(30)`<br>
+        will return False while<br>
+            `"https://blog.cjvandyk.com Rocks!".ExceedsLength(31, false)`<br>
+        will also return False and<br>
+            `"https://blog.cjvandyk.com Rocks!".ExceedsLength(31)`<br>
+        will return True._
+
 - ### **Get()**
     > _Language extension for properties.  Use to set the value of the<br>
         extension property in question.<br>
@@ -112,6 +123,19 @@ with these methods:
         you know the type to which the returned value needs to be cast.<br>
         A derived override method for Get() and Set() can be defined<br>
         using specific class objects if finer controls is needed.<br>_
+
+- ### **GetExecutingAssembly()**
+    > _Gets the current Entry or Executing assembly through reflection._
+
+- ### **GetExecutingAssemblyName()**
+    > _Gets the name of the current assembly, optionally escaped._
+
+- ### **GetExecutingAssemblyFolder()**
+    > _Gets the folder location of the current assembly, optionally escaped._
+
+- ### **GetExecutingAssemblyFullPath()**
+    > _Gets the full path and file name of the current assembly, optionally<br>
+        escaped._
 
 - ### **GetFQDN()**
     > _Get the current computer Fully Qualified Domain Name._
@@ -392,6 +416,21 @@ with these methods:
             odio. Sed pulvinar molestie justo, eu hendrerit nunc blandit eu.<br> 
             Suspendisse et sapien quis ipsum scelerisque rutrum."<br>_
 
+- ### **Match()**
+    > _Checks if the current string matches a given search mask.<br>
+        It ignores duplicate '*' in the mask.  '*' is matched against<br>
+        0 or more characters.  Duplicate '?' is treated as requiring<br>
+        the number of characters.  '?' is matched against 1 or more<br>
+        characters.<br>
+        For example:<br>
+            `"abcdefgh".Match("***a?c*")`<br>
+        will return True while<br>
+            `"abcdefgh".Match("***ac*")`<br>
+        will return False but<br>
+            `"abcdefgh".Match("?a?c*")`<br>
+        will also return False because the first '?' requires a character<br>
+        before 'a'._
+
 - ### **MorseCodeBeep()**
     > _Takes a given System.String representing Morse code and audiblize<br>
         it according to standards.<br>
@@ -505,6 +544,14 @@ with these methods:
         will return<br>
             `https://blog.cjvandyk.com/sites/Rocks`<br>
             `'https://blog.cjvandyk.com/sites/Rocks'`_
+
+- ### **Singularize()**
+    > _Parses the given string removing multiples of a given character.<br>
+        For example:<br>
+            `string searchMask = "***??abc*";`<br>
+            `searchMask.Singularize('*')`<br>
+        will return<br>
+            `"*??abc*"`_
 
 - ### **Smallest()**
     > _Return the smallest of two given values.<br>
