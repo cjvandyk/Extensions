@@ -232,6 +232,21 @@ namespace Extensions
         public enum EnumerableType { Dictionary, NameValueCollection };
         #endregion EnumerationType
 
+        #region ErrorType
+        /// <summary>
+        /// Enum of error types to validate.
+        /// </summary>
+        public enum ErrorType { IntNonNegative, Null };
+        /// <summary>
+        /// Array holding all error types for easier passing.
+        /// </summary>
+        public static ErrorType[] ErrorTypeAll =
+        {
+            ErrorType.IntNonNegative,
+            ErrorType.Null
+        };
+        #endregion ErrorType
+
         #region Help
         /// <summary>
         /// String array of args that will trigger help text.

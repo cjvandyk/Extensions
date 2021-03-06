@@ -209,3 +209,11 @@
 	- Add `Universal.GetExecutingAssemblyFullPath()`<br>
 	- Add `Universal.GetFQDN()`<br>
 	- Add `Universal.TimeStamp()`<br>
+
+### **3.3.500 (2021-03-05)**<br>
+	- Improved `Universal.ValidateNoNulls()` by<br>
+		specifying the parameter number in the exception.<br>
+		changing the return type to bool.<br>
+	- Add `Constants.ErrorType`<br>
+	- Add `Universal.Validate()`<br>
+	- Add error handling to `byte[].CopyTo()`<br>
