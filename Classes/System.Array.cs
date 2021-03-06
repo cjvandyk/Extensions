@@ -32,7 +32,7 @@ namespace Extensions
                                     int length, 
                                     int start = 0)
         {
-            ValidateNoNulls(bytes, length, start);
+            Validate(Constants.ErrorTypeAll, bytes, length, start);
             byte[] result = new byte[length];
             for (int C = start; C < length + start; C++)
             {
