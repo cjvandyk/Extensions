@@ -212,3 +212,11 @@
 
 ### **3.3.500 (2021-03-19)**<br>
 	- Fixed https://github.com/cjvandyk/Extensions/issues/10 <br>
+	- Improved `Universal.ValidateNoNulls()` by<br>
+		specifying the parameter number in the exception.<br>
+		changing the return type to bool.<br>
+	- Add `Constants.ErrorType`<br>
+	- Add `Universal.Validate()`<br>
+	- Add error handling to `byte[].CopyTo()`<br>
+  - Add error handling to `Universal.IsEvent()`, `Universal.IsOdd()` and `Universal.IsPrime()`
+  

@@ -554,12 +554,16 @@ namespace Extensions
         /// where we chose NOT to validate the double dbl in this case.
         /// </summary>
         /// <param name="parms">The variable set of parameters.</param>
-        public static void ValidateNoNulls(params object[] parms)
+        public static bool ValidateNoNulls(params object[] parms)
         {
             for (int C = 0; C < parms.Length; C++)
             {
-                if (parms[C] == null) throw new ArgumentNullException();
+                if (parms[C] == null)
+                {
+                    throw new ArgumentNullException("Parameter #" + C);
+                }
             }
+            return true;
         }
 
         /// <summary>
