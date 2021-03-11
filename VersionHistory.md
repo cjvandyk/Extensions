@@ -218,5 +218,5 @@
 	- Add `Constants.ErrorType`<br>
 	- Add `Universal.Validate()`<br>
 	- Add error handling to `byte[].CopyTo()`<br>
-  - Add error handling to `Universal.IsEvent()`, `Universal.IsOdd()` and `Universal.IsPrime()`
-  
+	- Add error handling to `Universal.IsEvent()`, `Universal.IsOdd()` and `Universal.IsPrime()`<br>
+	- Add error handling to `System.Double.CompoundInterest()`<br>
