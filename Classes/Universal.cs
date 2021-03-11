@@ -170,7 +170,7 @@ namespace Extensions
         /// <returns>True if the number is even, else False.</returns>
         private static bool IsEven(this System.Numerics.BigInteger number)
         {
-            ValidateNoNulls(number);
+            Validate(Constants.ErrorTypeAll, number);
             return (number % 2 == 0);
         }
         #endregion IsEven()
@@ -183,7 +183,7 @@ namespace Extensions
         /// <returns>True if the number is odd, else False.</returns>
         private static bool IsOdd(this System.Numerics.BigInteger number)
         {
-            ValidateNoNulls(number);
+            Validate(Constants.ErrorTypeAll, number);
             return (number % 2 != 0);
         }
         #endregion IsOdd()
@@ -196,7 +196,7 @@ namespace Extensions
         /// <returns>True if the given number is a prime number, else False.</returns>
         private static bool IsPrime(this System.Numerics.BigInteger number)
         {
-            ValidateNoNulls(number);
+            Validate(Constants.ErrorTypeAll, number);
             if (number == 2) return true;
             if (IsEven(number)) return false;
             bool prime = true;
@@ -533,7 +533,7 @@ namespace Extensions
         }
         #endregion TimeStamp
 
-        #region ValidateNoNulls()
+        #region Validate()
         /// <summary>
         /// Makes quick work of null validating all parameters you pass to it.
         /// This method takes a variable number of parameters and validates that
@@ -618,12 +618,12 @@ namespace Extensions
                             if ((int)parms[C] < 0)
                             {
                                 throw new ArgumentOutOfRangeException(
-                                    "Parameter #" + C, 
+                                    "Parameter #" + C,
                                     "Value must be >= 0");
                             }
                         }
                         break;
-                }                
+                }
             }
             return true;
         }
@@ -641,7 +641,7 @@ namespace Extensions
         //        }
         //    }
         //}
-        #endregion ValidateNoNulls()
+        #endregion Validate()
     }
 }
 #pragma warning restore CS1587, CS1998, IDE0059, IDE0028
