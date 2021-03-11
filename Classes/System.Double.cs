@@ -516,7 +516,7 @@ namespace Extensions
                                               Constants.CompoundFrequency frequency = 
                                                   Constants.CompoundFrequency.Monthly)
         {
-            ValidateNoNulls(amount, percent, years, frequency);
+            Validate(Constants.ErrorTypeAll, amount, percent, years, frequency);
             double result = amount;
             double Percent = percent / 100 / (
                 frequency == Constants.CompoundFrequency.Yearly ? 1 : 12);
