@@ -209,3 +209,6 @@
 	- Add `Universal.GetExecutingAssemblyFullPath()`<br>
 	- Add `Universal.GetFQDN()`<br>
 	- Add `Universal.TimeStamp()`<br>
+
+### **3.3.500 (2021-03-19)**<br>
+	- Fixed https://github.com/cjvandyk/Extensions/issues/10 <br>

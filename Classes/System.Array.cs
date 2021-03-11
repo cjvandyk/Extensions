@@ -32,9 +32,25 @@ namespace Extensions
                                     int length, 
                                     int start = 0)
         {
-            ValidateNoNulls(bytes, length, start);
+            Validate(Constants.ErrorTypeAll, bytes, length, start);
+            if (length == 0)
+            {
+                throw new ArgumentOutOfRangeException(
+                    "length",
+                    length,
+                    "Length of the byte[] cannot be zero.");
+            }
+            if (start > bytes.Length - 1)
+            {
+                throw new ArgumentOutOfRangeException(
+                    "start",
+                    start,
+                    "Starting offset cannot be larger than the byte[] length");
+            }
             byte[] result = new byte[length];
-            for (int C = start; C < length + start; C++)
+            for (int C = start; C < (length + start > bytes.Length ?
+                                     bytes.Length - start :
+                                     length + start); C++)
             {
                 result[C - start] = bytes[C];
             }
