@@ -1272,9 +1272,9 @@ namespace Extensions
         public static string LoremIpsum(this System.String str, 
                                         int Paragraphs)
         {
-            ValidateNoNulls(str, Paragraphs);
+            Validate(ErrorTypeAll, str, Paragraphs);
             str = null;
-            for (int i = 0; i < Paragraphs; i++)
+            for (int i = 0; i < (Paragraphs > 10 ? 10 : Paragraphs); i++)
             {
                 str += Extensions.Constants.LoremIpsum[i] + '\n' + '\n';
             }
@@ -1293,7 +1293,6 @@ namespace Extensions
         public static string LoremIpsum(this System.Text.StringBuilder str,
                                         int Paragraphs)
         {
-            ValidateNoNulls(str, Paragraphs);
             return LoremIpsum(str.ToString(), Paragraphs);
         }
         #endregion LoremIpsum()
