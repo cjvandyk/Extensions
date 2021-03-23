@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using static Extensions.Constants;
 using static Extensions.Universal;
 
 namespace Extensions
@@ -21,6 +22,37 @@ namespace Extensions
     /// </summary>
     public static class StringExtensions
     {
+        #region BeginsWith()
+        /// <summary>
+        /// Checks if the current string begins with the given target string.
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="target"></param>
+        /// <param name="ignorecase"></param>
+        /// <returns></returns>
+        public static bool BeginsWith(this System.String str,
+                                        string target,
+                                        bool ignorecase = true)
+        {
+            ValidateNoNulls(str, target);
+            if (ignorecase)
+            {
+                if (str.ToLower().Substring(0, target.Length) == target.ToLower())
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                if (str.Substring(0, target.Length) == target)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        #endregion BeginsWith()
+
         #region ContainsAny()
         /// <summary>
         /// Checks if the given string contains any of the strings provided in
@@ -330,6 +362,38 @@ namespace Extensions
             return ExceedsLength(str.ToString(), ref offset, increment);
         }
         #endregion ExceedsLength()
+
+        #region GetSiteUrl()
+        /// <summary>
+        /// Get the tenant root for the given string object containing a URL.
+        /// For example:
+        ///   "https://blog.cjvandyk.com/sites/Approval".GetTenantUrl()
+        ///   will return "https://blog.cjvandyk.com".
+        /// </summary>
+        /// <param name="url">The System.String object containing the URL
+        /// from which the tenant root is to be extracted.</param>
+        /// <returns>The tenant root of the URL given the URL string.</returns>
+        public static string GetSiteUrl(this System.String url)
+        {
+            return url.Substring(-1, "/", SubstringType.LeftOfIndex, 5);
+        }
+        #endregion GetSiteUrl()
+
+        #region GetTenantUrl()
+        /// <summary>
+        /// Get the tenant root for the given string object containing a URL.
+        /// For example:
+        ///   "https://blog.cjvandyk.com/sites/Approval".GetTenantUrl()
+        ///   will return "https://blog.cjvandyk.com".
+        /// </summary>
+        /// <param name="url">The System.String object containing the URL
+        /// from which the tenant root is to be extracted.</param>
+        /// <returns>The tenant root of the URL given the URL string.</returns>
+        public static string GetTenantUrl(this System.String url)
+        {
+            return GetUrlRoot(url);
+        }
+        #endregion GetTenantUrl()
 
         #region GetUrlRoot()
         /// <summary>
@@ -1625,7 +1689,8 @@ namespace Extensions
         /// of characters from the head of the given string.
         /// </summary>
         /// <param name="str">The given string that is being searched.</param>
-        /// <param name="length">The requested length of characters to return.</param>
+        /// <param name="length">The requested length of characters to return.
+        /// Use -1 for max.</param>
         /// <param name="type">The type of return string requested.</param>
         /// <returns>FromHead returns the "length" of characters from the head
         /// of the given string.
@@ -1636,7 +1701,11 @@ namespace Extensions
                                        Constants.SubstringType type = 
                                            Constants.SubstringType.FromHead)
         {
-            ValidateNoNulls(str, length, type);
+            Validate(ErrorTypeAll, str, length, type);
+            if (length == -1)
+            {
+                length = int.MaxValue;
+            }
             switch (type)
             {
                 case Constants.SubstringType.FromHead:
@@ -1671,7 +1740,8 @@ namespace Extensions
         /// search index.
         /// </summary>
         /// <param name="str">The given string that is being searched.</param>
-        /// <param name="length">The requested length of characters to return.</param>
+        /// <param name="length">The requested length of characters to return.
+        /// Use -1 for max.</param>
         /// <param name="index">The string to search for.</param>
         /// <param name="type">The type of return string requested.</param>
         /// <param name="occurrence">The number of occurrences to match.</param>
@@ -1688,9 +1758,13 @@ namespace Extensions
                                            Constants.SubstringType.LeftOfIndex,
                                        int occurrence = 1)
         {
-            ValidateNoNulls(str, length, index, type, occurrence);
+            Validate(ErrorTypeAll, str, length, index, type, occurrence);
             int offset;
             string temp = str;
+            if (length == -1)
+            {
+                length = int.MaxValue;
+            }
             switch (type)
             {
                 case Constants.SubstringType.LeftOfIndex:
@@ -1748,7 +1822,8 @@ namespace Extensions
         /// of characters from the head of the given string.
         /// </summary>
         /// <param name="str">The given string that is being searched.</param>
-        /// <param name="length">The requested length of characters to return.</param>
+        /// <param name="length">The requested length of characters to return.
+        /// Use -1 for max.</param>
         /// <param name="type">The type of return string requested.</param>
         /// <returns>FromHead returns the "length" of characters from the head
         /// of the given string.
@@ -1759,7 +1834,7 @@ namespace Extensions
                                        Constants.SubstringType type =
                                            Constants.SubstringType.FromHead)
         {
-            ValidateNoNulls(str, length, type);
+            Validate(ErrorTypeAll, str, length, type);
             return Substring(str.ToString(),
                              length,
                              type);
@@ -1773,7 +1848,8 @@ namespace Extensions
         /// search index.
         /// </summary>
         /// <param name="str">The given string that is being searched.</param>
-        /// <param name="length">The requested length of characters to return.</param>
+        /// <param name="length">The requested length of characters to return.
+        /// Use -1 for max.</param>
         /// <param name="index">The string to search for.</param>
         /// <param name="type">The type of return string requested.</param>
         /// <param name="occurrence">The number of occurrences to match.</param>
@@ -1790,7 +1866,7 @@ namespace Extensions
                                            Constants.SubstringType.LeftOfIndex,
                                        int occurrence = 1)
         {
-            ValidateNoNulls(str, length, index, type, occurrence);
+            Validate(ErrorTypeAll, str, length, index, type, occurrence);
             return Substring(str.ToString(), 
                              length,
                              index,
@@ -1812,7 +1888,7 @@ namespace Extensions
         public static string Substring(this System.Text.StringBuilder str,
                                        int startIndex)
         {
-            ValidateNoNulls(str, startIndex);
+            Validate(ErrorTypeAll, str, startIndex);
             return str.ToString().Substring(startIndex);
         }
 
@@ -1832,7 +1908,7 @@ namespace Extensions
                                        int startIndex,
                                        int length)
         {
-            ValidateNoNulls(str, startIndex, length);
+            Validate(ErrorTypeAll, str, startIndex, length);
             return str.ToString().Substring(startIndex, length);
         }
         #endregion Substring()
@@ -2078,6 +2154,28 @@ namespace Extensions
             return TrimLength(str.ToString(), length, suffix);
         }
         #endregion TrimLength()
+
+        #region TrimStart()
+        /// <summary>
+        /// Trims the starting target string from the current string.
+        /// </summary>
+        /// <param name="str">The current string to be trimmed.</param>
+        /// <param name="target">The target string to trim off the current
+        /// string.</param>
+        /// <returns>The current string minus the target string IF the current
+        /// string begins with the target string, else it returns the current
+        /// string.</returns>
+        public static string TrimStart(this System.String str,
+                                       string target)
+        {
+            ValidateNoNulls(str, target);
+            if (str.BeginsWith(target))
+            {
+                return str.Substring(target.Length);
+            }
+            return str;
+        }
+        #endregion TrimStart()
 
         #region Words()
         /// <summary>

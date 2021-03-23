@@ -602,27 +602,30 @@ namespace Extensions
         public static bool Validate(Constants.ErrorType[] errors,
                                     params object[] parms)
         {
-            for (int C = 0; C < errors.Length; C++)
+            foreach (Constants.ErrorType error in errors)
             {
-                switch (errors[C])
+                for (int C = 0; C < parms.Length; C++)
                 {
-                    case Constants.ErrorType.Null:
-                        if (parms[C] == null)
-                        {
-                            throw new ArgumentNullException("Parameter #" + C);
-                        }
-                        break;
-                    case Constants.ErrorType.IntNonNegative:
-                        if (parms[C].GetType() == typeof(int))
-                        {
-                            if ((int)parms[C] < 0)
+                    switch (error)
+                    {
+                        case Constants.ErrorType.Null:
+                            if (parms[C] == null)
                             {
-                                throw new ArgumentOutOfRangeException(
-                                    "Parameter #" + C,
-                                    "Value must be >= 0");
+                                throw new ArgumentNullException("Parameter #" + C);
                             }
-                        }
-                        break;
+                            break;
+                        case Constants.ErrorType.IntNonNegative:
+                            if (parms[C].GetType() == typeof(int))
+                            {
+                                if ((int)parms[C] < 0)
+                                {
+                                    throw new ArgumentOutOfRangeException(
+                                        "Parameter #" + C,
+                                        "Value must be >= 0");
+                                }
+                            }
+                            break;
+                    }
                 }
             }
             return true;
