@@ -236,14 +236,14 @@ namespace Extensions
         /// <summary>
         /// Enum of error types to validate.
         /// </summary>
-        public enum ErrorType { IntNonNegative, Null };
+        public enum ErrorType { Null, IntNonNegative };
         /// <summary>
         /// Array holding all error types for easier passing.
         /// </summary>
         public static ErrorType[] ErrorTypeAll =
         {
-            ErrorType.IntNonNegative,
-            ErrorType.Null
+            ErrorType.Null,
+            ErrorType.IntNonNegative
         };
         #endregion ErrorType
 
@@ -375,7 +375,7 @@ namespace Extensions
         /// <summary>
         /// List of processing options for .Substring() method.
         /// </summary>
-        public enum SubstringType { FromHead, FromTail, LeftOfIndex, RigthOfIndex };
+        public enum SubstringType { FromHead, FromTail, LeftOfIndex, RigthOfIndex, IndexValue };
         #endregion Substring
 
         #region TimeSpan

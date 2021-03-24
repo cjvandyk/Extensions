@@ -1445,7 +1445,7 @@ namespace Extensions
                                          int frequency = 999, 
                                          int duration = 100)
         {
-            ValidateNoNulls(str, frequency, duration);
+            Validate(ErrorTypeAll, str, frequency, duration);
             foreach (char c in str)
             {
                 switch (c)
