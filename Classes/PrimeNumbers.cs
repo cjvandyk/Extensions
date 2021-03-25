@@ -17,7 +17,7 @@ namespace Extensions
         /// <summary>
         /// The number being evaluated as a prime number.
         /// </summary>
-        public long Number { get; set; }
+        public System.UInt64 Number { get; set; }
         /// <summary>
         /// The result of the prime number evaluation.
         /// </summary>
@@ -27,7 +27,7 @@ namespace Extensions
         /// Class constructor method.
         /// </summary>
         /// <param name="target">The target number to store.</param>
-        public PrimeNumber(long target)
+        public PrimeNumber(System.UInt64 target)
         {
             Number = target;
             IsPrime = false;

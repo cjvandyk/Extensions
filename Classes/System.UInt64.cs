@@ -58,7 +58,7 @@ namespace Extensions
         public static bool IsPrime(this System.UInt64 number,
                                    bool INTERNAL_USE_ONLY)
         {
-            for (System.UInt64 C = 3; C < (Math.Ceiling(Math.Sqrt(number))); C += 2)
+            for (System.UInt64 C = 3; C <= (Math.Ceiling(Math.Sqrt(number))); C += 2)
             {
                 if ((number % C) == 0)
                 {

@@ -238,18 +238,18 @@ namespace Extensions
         /// </summary>
         /// <param name="Nth">The count number of the requested prime.</param>
         /// <returns>The requested Nth prime number.</returns>
-        public static long GetNthPrime(long Nth)
+        public static System.UInt64 GetNthPrime(System.UInt64 Nth)
         {
-            List<long> lst = new List<long>();
+            List<System.UInt64> lst = new List<System.UInt64>();
             lst = lst.Load(PrimeStatePath);
-            long current = 3;
+            System.UInt64 current = 3;
             if (lst == null)
             {
-                lst = new List<long>();
+                lst = new List<System.UInt64>();
                 lst.Add(2);
                 lst.Add(3);
             }
-            if (lst.Count >= Nth)
+            if ((System.UInt64)lst.Count >= Nth)
             {
                 return lst[(int)Nth - 1];
             }
@@ -257,10 +257,10 @@ namespace Extensions
             {
                 current = lst[lst.Count - 1];
             }
-            while (lst.Count < Nth)
+            while ((System.UInt64)lst.Count < Nth)
             {
                 current += 2;
-                if (ULongExtensions.IsPrime((ulong)current))
+                if (ULongExtensions.IsPrime((System.UInt64)current))
                 {
                     lst.Add(current);
                 }
@@ -275,18 +275,18 @@ namespace Extensions
         /// </summary>
         /// <param name="Nth">The count number of the requested prime.</param>
         /// <returns>The requested Nth prime number.</returns>
-        public static async System.Threading.Tasks.Task<long> GetNthPrimeAsync(long Nth)
+        public static async System.Threading.Tasks.Task<System.UInt64> GetNthPrimeAsync(System.UInt64 Nth)
         {
-            List<long> lst = new List<long>();
+            List<System.UInt64> lst = new List<System.UInt64>();
             lst = lst.Load(PrimeStatePath);
-            long current = 3;
+            System.UInt64 current = 3;
             if (lst == null)
             {
-                lst = new List<long>();
+                lst = new List<System.UInt64>();
                 lst.Add(2);
                 lst.Add(3);
             }
-            if (lst.Count >= Nth)
+            if ((System.UInt64)lst.Count >= Nth)
             {
                 return lst[(int)Nth - 1];
             }
@@ -296,7 +296,7 @@ namespace Extensions
             }
             //List<System.Threading.Tasks.Task> tasks = new List<System.Threading.Tasks.Task>();
             int cpus = Environment.ProcessorCount - 1;
-            while (lst.Count < Nth)
+            while ((System.UInt64)lst.Count < Nth)
             {
                 //for (int C = 0; C < cpus; C++)
                 //{
@@ -362,11 +362,11 @@ namespace Extensions
         /// <returns></returns>
         private async static System.Threading.Tasks.Task<PrimeNumber> IsPrimeAsync(PrimeNumber prime)
         {
-            for (long C = 3; C < (Math.Ceiling(Math.Sqrt(prime.Number))); C += 2)
+            for (ulong C = 3; C <= (Math.Ceiling(Math.Sqrt(prime.Number))); C += 2)
             {
                 if ((prime.Number % C) == 0)
                 {
-                    break;
+                    return prime;
                 }
             }
             prime.IsPrime = true;
