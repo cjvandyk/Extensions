@@ -16,7 +16,7 @@ namespace Extensions
     /// </summary>
     public static class Constants
     {
-        #region Binary Constrants
+        #region Binary Constants
 
         /// <summary>
         /// Enum of the binary number types.
@@ -194,7 +194,11 @@ namespace Extensions
         /// </summary>
         public const double KkB = CB * 1024;
 
-        #endregion Binary Constrants
+        /// <summary>
+        /// Number of bytes in a CornelionByte.
+        /// </summary>
+        public const string CornelionByte = "1 x 10 ^ 100,000,000";
+        #endregion Binary Constants
 
         #region CompoundFrequency
         /// <summary>
