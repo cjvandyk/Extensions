@@ -212,7 +212,7 @@ namespace System
         public static void Err(string Message,
                                int ID = 0)
         {
-            Msg(Message, ID, "INF");
+            Msg(Message, ID, "ERR");
         }
 
         /// <summary>
