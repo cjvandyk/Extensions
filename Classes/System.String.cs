@@ -1685,7 +1685,8 @@ namespace Extensions
         /// <summary>
         /// Extension method to handle FromHead and FromTail types
         /// which allows the caller to return the requested length
-        /// of characters from the head of the given string.
+        /// of characters from the head or the tail of the given 
+        /// string.
         /// </summary>
         /// <param name="str">The given string that is being searched.</param>
         /// <param name="length">The requested length of characters to return.
