@@ -36,6 +36,7 @@
     <summary>
       Extensions.dll contains extension methods that enhance existing C# classes thus making life easier for developers.
       These methods are included:
+      BeginsWith()
       Biggest()
       CompoundInterest()
       ContainsAny()
@@ -43,6 +44,7 @@
       CopyTo()
       DoubleQuote()
       Elevate()
+      Err()
       ExceedsLength()
       Get()
       GetExecutingAssembly()
@@ -52,22 +54,32 @@
       GetFQDN()
       GetNthPrime()
       GetNthPrimeAsync()
+      GetSiteUrl()
+      GetTenantUrl()
       GetTimeZoneString()
       GetUrlRoot()
       HasLower()
       HasNumeric()
       HasSymbol()
       HasUpper()
+      HtmlDecode()
+      HtmlEncode()
+      Inf()
       IsAlphabetic()
       IsAlphaNumeric()
       IsChar()
+      IsEmail()
       IsEven()
+      IsLower()
       IsNumeric()
       IsOdd()
       IsPrime()
       IsStrong()
+      IsUpper()
       IsUrlRoot()
       IsVowel()
+      IsZipCode()
+      Left()
       Lines()
       Load()
       LoremIpsum()
@@ -77,6 +89,7 @@
       Print()
       printf()
       Quote()
+      RemoveExtraSpace()
       ReplaceTokens()
       Retry()
       Save()
@@ -85,18 +98,33 @@
       Singularize()
       Smallest()
       Substring()
+      System.Logging class
       System.Timer class
       TimeStamp()
       ToBinary()
       ToEnum()
+      ToMorseCode()
+      ToQueryString
       ToNumberBytes()
       ToMB()
       ToGB()
       ToTB()...
       ToTimeZone()
+      TrimLength()
+      TrimStart()
+      Validate()
+      ValidateNoNulls()
       Words()
+      Wrn()
     </summary>
     <releaseNotes>
+      BeginsWith()
+      Reduces checking if a given string starts with another given string
+      from this:
+      (str.ToLower().Substring(0, target.Length) == target.ToLower())
+      to this:
+      str.BeginsWith(target, true)
+
       Bigest()
       Return the bigest of two given values.
       For example:
@@ -157,6 +185,10 @@
       System.Diagnostics.Process.GetCurrentProcess().Elevate(args)
       will restart the current console app in admin mode.
 
+      Err()
+      Write an Error message to active channels (console, event log, file)
+      using the System.Logging class.
+        
       ExceedsLength()
       Checks if a referenced offset exceeds the length of the string.
       Optionally increments the offset as well.
@@ -208,6 +240,20 @@
       For example:
       Extensions.Universal.GetNthPrime(1000)
       will return the 1000th prime number - 7919.
+
+      GetSiteUrl()
+      Given a full SharePoint Online object URL, this method will return
+      the site collection part of the URL.
+      For example:
+      "https://crayveon.sharepoint.com/sites/TheSite/lists/TheList".GetTenantUrl()
+      would return https://crayveon.sharepoint.com/sites/TheSite
+
+      GetTenantUrl()
+      Given a full SharePoint Online object URL, this method will return
+      only the tenant part of the URL.
+      For example:
+      "https://crayveon.sharepoint.com/sites/TheSite/lists/TheList".GetTenantUrl()
+      would return https://crayveon.sharepoint.com
 
       GetTimeZoneString()
       Get the registry ID string that can be used with
@@ -284,6 +330,10 @@
       "https://blog.cjvandyk.com/sites/Rocks Rolls!".HtmlEncode()
       will return
       https://blog.cjvandyk.com/sites/Rocks &lt;&gt; Rolls!
+
+      Inf()
+      Write an Information message to active channels (console, event log, file)
+      using the System.Logging class.
 
       IsAlphabetic()
       Validates that the given string object contains all alphabetic
@@ -429,6 +479,9 @@
       will return False.
       "1234".IsZipCode()
       will return False.
+
+      Left()
+      This method returns text to the left of the index string.
 
       Lines()
       This method returns the number of lines/sentences in the given string
@@ -783,6 +836,26 @@
       "The Extensions.cs NuGet package rocks!".TrimLength(20, ">>")
       will return "The Extensions.cs >>"
 
+      Validate()
+      Makes quick work of conducting multiple types of validations on all
+      parameters.  It takes a parameter array of ErrorType and conducts
+      the appropriate validation such as null checking, non-zero checking
+      etc. against the parameter array passed.
+      For example:
+      Validate(Constants.ErrorTypeAll, amount, percent, years, frequency);
+      will perform all defined error checks against the amount, percent,
+      years and frequency parameters.
+
+      TrimStart()
+      Trims a given string rather than just a character, from the start of
+      the target string.  The traditional Trim() only allowed char values
+      to be trimmed.  TrimStart() solves that limitation in an easier to
+      fashion that using Substring().
+      For example:
+      "https://blog.cjvandyk.com".TrimStart("https://")
+      will return
+      "blog.cjvandyk.com"
+
       ValidateNoNulls()
       Makes quick work of null validating all parameters you pass to it.
       This method takes a variable number of parameters and validates that
@@ -810,6 +883,10 @@
       will return 4 whereas
       "ThisIsMyTest".Words()
       will return 1.
+
+      Wrn()
+      Write a Warning message to active channels (console, event log, file)
+      using the System.Logging class.
     </releaseNotes>
     <copyright>$copyright$</copyright>
     <tags>Extensions C# cjvandyk Crayveon 429 Retry-After ThrottlingHandler TimeZone CountWords Trim QueryString MorseCode Binary LoremIpsum ZipCode Vowel UrlRoot Elevate CompoundInterest StrongPassword</tags>

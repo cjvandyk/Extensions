@@ -107,7 +107,7 @@ namespace System
             }
             else
             {
-                _logfile = File;
+                _logfile = File.Substring(File.LastIndexOf('.'), Constants.SubstringType.LeftOfIndex);
             }
             _eventlog = new System.Diagnostics.EventLog();
             _eventlog.Source = "Application";

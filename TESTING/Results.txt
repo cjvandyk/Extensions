@@ -1,0 +1,71 @@
+Per @ehsanyzp: 
+
+Describe the bug
+Per @EhsanYzp: 
+
+To Reproduce
+Steps to reproduce the behavior:
+Pass negative or out of index values as parameters.
+
+Expected behavior
+Exception handling describing the error.
+
+Desktop (please complete the following information):
+
+OS: [Windows]
+Version [3.1.500]
+
+100 digits
+00:00:00.0055215
+Remainder:
+1
+
+1000 digits
+00:00:00.2690635 (+900 = +4773.02%)
+Remainder:
+1
+
+2000 digits
+00:00:01.7994264 (+1000 = +568.77%)
+Remainder:
+1
+
+3000 digits
+00:00:04.3543146 (+1000 = +141.98%)
+Remainder:
+1
+
+4000 digits
+00:00:08.8722291 (+1000 = +103.76%)
+Remainder:
+1
+
+5000 digits
+00:00:16.8951807 (+1000 = +90.43%)
+Remainder:
+1
+
+6000 digits
+00:00:27.9308367 (+1000 = +65.32%)
+Remainder:
+1
+
+7000 digits
+00:00:42.1560366 (+1000 = +50.93%)
+Remainder:
+1
+
+8000 digits
+00:01:02.9323185 (+1000 = +49.28%)
+Remainder:
+1
+
+9000 digits
+00:01:35.2015593 (+1000 = +51.28%)
+Remainder:
+1
+
+10000 digits
+00:02:16.8531096 (+1000 = +43.75%)
+Remainder:
+1

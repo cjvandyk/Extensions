@@ -30,6 +30,13 @@ The following classes have been extended:
 
 with these methods:
 
+- ### **BeginsWith()**
+    > _Reduces checking if a given string starts with another given string<br>
+        from this:<br>
+            `(str.ToLower().Substring(0, target.Length) == target.ToLower())`<br>
+        to this:<br>
+            `str.BeginsWith(target, true)`_
+
 - ### **Bigest()**
     > _Return the bigest of two given values.<br>
         For example:<br>
@@ -89,6 +96,10 @@ with these methods:
         For example:<br>
             `System.Diagnostics.Process.GetCurrentProcess().Elevate(args)`<br>
         will restart the current console app in admin mode._
+
+- ### **Err()**
+    > _Write an Error message to active channels (console, event log, file)<br>
+        using the System.Logging class._
 
 - ### **ExceedsLength()**
     > _Checks if a referenced offset exceeds the length of the string.<br>
@@ -158,6 +169,20 @@ with these methods:
         For example:<br>
             `Extensions.Universal.GetNthPrime(1000)`<br>
         will return the 1000th prime number - 7919._
+
+- ### **GetSiteUrl()**
+    > _Given a full SharePoint Online object URL, this method will return<br>
+        the site collection part of the URL.<br>
+        For example:<br>
+            `"https://crayveon.sharepoint.com/sites/TheSite/lists/TheList".GetTenantUrl()`<br>
+        would return `https://crayveon.sharepoint.com/sites/TheSite`_
+
+- ### **GetTenantUrl()**
+    > _Given a full SharePoint Online object URL, this method will return<br>
+        only the tenant part of the URL.<br>
+        For example:<br>
+            `"https://crayveon.sharepoint.com/sites/TheSite/lists/TheList".GetTenantUrl()`<br>
+        would return `https://crayveon.sharepoint.com`_
 
 - ### **GetTimeZoneString()**
     > _Get the registry ID string that can be used with<br>
@@ -231,6 +256,10 @@ with these methods:
             `"https://blog.cjvandyk.com/sites/Rocks <&> Rolls!".HtmlEncode()`<br>
         will return<br>
             `https://blog.cjvandyk.com/sites/Rocks &lt;&amp;&gt; Rolls!`_
+
+- ### **Inf()**
+    > _Write an Information message to active channels (console, event log, file)<br>
+        using the System.Logging class._
 
 - ### **IsAlphabetic()**
     > _Validates that the given string object contains all alphabetic<br>
@@ -377,6 +406,11 @@ with these methods:
         will return False.<br>
             `"1234".IsZipCode()`<br>
         will return False._
+
+- ### **Left()**
+    > _This method returns text to the left of the index string.  Use negative
+        values for occurrence if the occurrence count should start from the end
+        instead of its default from the beginning of the string._
 
 - ### **Lines()**
     > _This method returns the number of lines/sentences in the given string<br>
@@ -750,6 +784,36 @@ with these methods:
             `"The Extensions.cs NuGet package rocks!".TrimLength(20, ">>")`<br>
         will return "The Extensions.cs >>"<br>_
 
+- ### **TrimStart()**
+    > _Trims a given string rather than just a character, from the start of<br>
+        the target string.  The traditional Trim() only allowed char values<br>
+        to be trimmed.  TrimStart() solves that limitation in an easier to<br>
+        fashion that using Substring().<br>
+        For example:<br>
+            `"https://blog.cjvandyk.com".TrimStart("https://")`<br>
+            will return<br>
+            `"blog.cjvandyk.com"`_
+
+- ### **Validate()**
+    > _Makes quick work of conducting multiple types of validations on all<br>
+        parameters.  It takes a parameter array of ErrorType and conducts<br>
+        the appropriate validation such as null checking, non-zero checking<br>
+        etc. against the parameter array passed.<br>
+        For example:<br>
+            `Validate(Constants.ErrorTypeAll, amount, percent, years, frequency);`<br>
+            will perform all defined error checks against the `amount`, `percent`,<br>
+            `years` and `frequency` parameters._
+
+	
+	
+	
+
+	- Add `Logging.ConstructMessage()`.<br>
+	- Add `Logging.ConsoleMessage()`.<br>
+	- Add `Logging.EventLogMessage()`.<br>
+	- Add `Logging.FileMessage()`.<br>
+
+
 - ### **ValidateNoNulls()**
     > _Makes quick work of null validating all parameters you pass to it.<br>
         This method takes a variable number of parameters and validates that<br>
@@ -777,3 +841,7 @@ with these methods:
         will return 4 whereas<br>
             `"ThisIsMyTest".Words()`<br>
         will return 1._
+
+- ### **Wrn()**
+    > _Write a Warning message to active channels (console, event log, file)<br>
+        using the System.Logging class._

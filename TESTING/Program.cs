@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Extensions;
+using static Extensions.Universal;
 
 namespace TESTING
 {
@@ -149,17 +150,24 @@ namespace TESTING
             //Console.WriteLine(l.GetNthPrime(100000));
             //ts = System.DateTime.Now - start;
             //Console.WriteLine(ts.TotalSeconds);
-            Console.WriteLine("================================");
-            Array.Test();
-            DateTime.Test();
-            Dictionary.Test();
-            Double.Test();
-            Object.Test();
-            Process.Test();
-            String.Test();
-            TimeZoneInfo.Test();
-            PrimeNumbers.Test();
+            ////Console.WriteLine("================================");
+            ////Array.Test();
+            ////DateTime.Test();
+            ////Dictionary.Test();
+            ////Double.Test();
+            ////Object.Test();
+            ////Process.Test();
+            ////String.Test();
+            ////TimeZoneInfo.Test();
+            ////PrimeNumbers.Test();
             //WebException.Test();
+
+            //Test System.String.Left()
+            printf(".Left()", ConsoleColor.Yellow);
+            string s = "https://blog.cjvandyk.com/sites/Rocks/SubSite/Lists/LibraryName/Folder1/Folder2/Doc.txt";
+            printf(s);
+            printf(s.Left("/", 4));
+            printf(s.Left("/", -4));
         }
     }
 }

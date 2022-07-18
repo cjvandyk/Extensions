@@ -146,9 +146,9 @@
 	- Add `Extensions.PrimeNumbers` class<br>
 	- Add `Extensions.Universal.GetNthPrime()`.<br>
 	- Add `Extensions.Universal.GetNthPrimeAsync()`.<br>
-	- Add `long.IsEven()`.<br>
-	- Add `long.IsOdd()`.<br>
-	- Add `long.IsPrime()`.<br>
+	- Add `System.long.IsEven()`.<br>
+	- Add `System.long.IsOdd()`.<br>
+	- Add `System.long.IsPrime()`.<br>
 	- Add `System.Double.IsEven()`.<br>
 	- Add `System.Double.IsOdd()`.<br>
 	- Add `System.Double.IsPrime()`.<br>
@@ -161,9 +161,9 @@
 	- Add `System.Int64.IsEven()`.<br>
 	- Add `System.Int64.IsOdd()`.<br>
 	- Add `System.Int64.IsPrime()`.<br>
-	- Add `short.IsEven()`.<br>
-	- Add `short.IsOdd()`.<br>
-	- Add `short.IsPrime()`.<br>
+	- Add `System.short.IsEven()`.<br>
+	- Add `System.short.IsOdd()`.<br>
+	- Add `System.short.IsPrime()`.<br>
 	- Add `System.UInt16.IsEven()`.<br>
 	- Add `System.UInt16.IsOdd()`.<br>
 	- Add `System.UInt16.IsPrime()`.<br>
@@ -198,11 +198,11 @@
 ### **3.2.500 (2021-03-05)**<br>
 	- Add `Constants.HexChars`.<br>
 	- Add `Extensions.NewCustomGuid()`.<br>
-	- Add `String.ContainsAny()`.<br>
-	- Add `String.ContainsOnly()`.<br>
-	- Add `String.ExceedsLength()`.<br>
-	- Add `String.Match()`.<br>
-	- Add `String.Singularize()`.<br>
+	- Add `System.String.ContainsAny()`.<br>
+	- Add `System.String.ContainsOnly()`.<br>
+	- Add `System.String.ExceedsLength()`.<br>
+	- Add `System.String.Match()`.<br>
+	- Add `System.String.Singularize()`.<br>
 	- Add `Universal.GetExecutingAssembly()`.<br>
 	- Add `Universal.GetExecutingAssemblyName()`.<br>
 	- Add `Universal.GetExecutingAssemblyFolder()`.<br>
@@ -220,23 +220,29 @@
 		specifying the parameter number in the exception<br>
 		changing the return type to bool.<br>
 	- Improved `Extensions.PrimeNumber` class to use UInt64 instead of long.
-	- Expand `String.Substring()` to handle -1 as length indicating max string length.<br>
+	- Expand `System.String.Substring()` to handle -1 as length indicating max string length.<br>
 	- Add `Constants.ErrorType`.<br>
 	- Add `Universal.Validate()`.<br>
 	- Add error handling to `byte[].CopyTo()`.<br>
 	- Add error handling to `Universal.IsEven()`, `Universal.IsOdd()` and `Universal.IsPrime()`.<br>
 	- Add error handling to `System.Double.CompoundInterest()`.<br>
 	- Add `IndexValue` to `Constants.SubStringType`.<br>
-	- Add negative and out of bound error handling to `String.Substring()`.<br>
-	- Add `String.TrimStart()`.<br>
-	- Add `String.GetTenantUrl()`.<br>
-	- Add `String.GetSiteUrl()`.<br>
-	- Add `String.BeginsWith()`.<br>
+	- Add negative and out of bound error handling to `System.String.Substring()`.<br>
+	- Add `System.String.TrimStart()`.<br>
+	- Add `System.String.GetTenantUrl()`.<br>
+	- Add `System.String.GetSiteUrl()`.<br>
+	- Add `System.String.BeginsWith()`.<br>
 	- Add `System.Logging` class.<br>
-	- Add `Logging.Inf()`.<br>
-	- Add `Logging.Wrn()`.<br>
-	- Add `Logging.Err()`.<br>
-	- Add `Logging.ConstructMessage()`.<br>
-	- Add `Logging.ConsoleMessage()`.<br>
-	- Add `Logging.EventLogMessage()`.<br>
-	- Add `Logging.FileMessage()`.<br>
+	- Add `System.Logging.Inf()`.<br>
+	- Add `System.Logging.Wrn()`.<br>
+	- Add `System.Logging.Err()`.<br>
+	- Add `System.Logging.ConstructMessage()`.<br>
+	- Add `System.Logging.ConsoleMessage()`.<br>
+	- Add `System.Logging.EventLogMessage()`.<br>
+	- Add `System.Logging.FileMessage()`.<br>
+	- Corrected `System.String.SubString()` comments to clarify .FromTail value.
+
+### **3.4.600 (2022-07-15)**<br>
+	- Added .NET 6.0 support.<br>
+	- Add `System.String.Left()`.
+	- Add `System.Text.StringBuilder.IndexOf()`.

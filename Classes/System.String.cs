@@ -1233,6 +1233,91 @@ namespace Extensions
         }
         #endregion IsZipCode()
 
+        #region Left()
+        /// <summary>
+        /// Returns text to the left of the index string.  Use negative values
+        /// for occurrence if the occurrence count should start from the end
+        /// instead of its default from the beginning of the string.
+        /// </summary>
+        /// <param name="str">A System.String object.</param>
+        /// <returns>Returns text to the left of the index string.  Use negative values
+        /// for occurrence if the occurrence count should start from the end
+        /// instead of its default from the beginning of the string.</returns>
+        public static string Left(this System.String str, 
+                                  string index, 
+                                  int occurrence = 1)
+        {
+            ValidateNoNulls(str, index, occurrence);
+            if (str.IndexOf(index) > 0)
+            {
+                if (occurrence == 1)
+                {
+                    return str.Substring(0, str.IndexOf(index));
+                }
+                if (occurrence == -1)
+                {
+                    return str.Substring(0, str.LastIndexOf(index));
+                }
+                if (occurrence > 1)
+                {
+                    string remainder = str.Substring(str.IndexOf(index));
+                    for (int C = 1; C <= occurrence; C++)
+                    {
+                        remainder = remainder.Substring(remainder.IndexOf(index) + 1);
+                    }
+                    return str.Replace(index + remainder, "");
+                }
+                if (occurrence < -1)
+                {
+                    string remainder = str.Substring(0, str.LastIndexOf(index));
+                    for (int C = -1; C > occurrence; C--)
+                    {
+                        remainder = remainder.Substring(0, remainder.LastIndexOf(index));
+                        if (remainder.IndexOf(index) == -1)
+                        {
+                            return remainder;
+                        }
+                    }
+                    return remainder;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Returns text to the left of the index string.
+        /// </summary>
+        /// <param name="str">A System.String object.</param>
+        /// <returns>Returns text to the left of the index string.</returns>
+        public static string Left(this System.Text.StringBuilder str,
+                                  string index,
+                                  int occurrence)
+        {
+            ValidateNoNulls(str, index, occurrence);
+            if (occurrence == 1)
+            {
+                return str.Substring(0, str.IndexOf(index));
+            }
+            else
+            {
+                if (occurrence == -1)
+                {
+                    //return str.Substring(0, str.LastIndexOf(index));
+                }
+            }
+            if (occurrence > 1)
+            {
+                string remainder = str.Substring(str.IndexOf(index));
+                for (int C = 1; C <= occurrence; C++)
+                {
+                    remainder = remainder.Substring(remainder.IndexOf(index));
+                }
+                return remainder;
+            }
+            return null;
+        }
+        #endregion Left()
+
         #region Lines()
         /// <summary>
         /// Returns the number of sentences in the given string object.
@@ -1274,9 +1359,9 @@ namespace Extensions
         {
             Validate(ErrorTypeAll, str, Paragraphs);
             str = null;
-            for (int i = 0; i < (Paragraphs > 10 ? 10 : Paragraphs); i++)
+            for (int C = 0; C < (Paragraphs > 10 ? 10 : Paragraphs); C++)
             {
-                str += Extensions.Constants.LoremIpsum[i] + '\n' + '\n';
+                str += Extensions.Constants.LoremIpsum[C] + '\n' + '\n';
             }
             return str;
         }

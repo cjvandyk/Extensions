@@ -26,14 +26,14 @@ namespace TESTING
         }
 
         #region GenerateNSamples
-        public static void GenerateNSamples(int itterations)
+        public static void GenerateNSamples(System.UInt64 itterations)
         {
             TimeSpan ts;
             System.DateTime start;
             List<TimeSpan> sync = new List<TimeSpan>();
             List<TimeSpan> async = new List<TimeSpan>();
-            int multiplier = 10000000;
-            for (int C = 0; C < itterations; C++)
+            System.UInt64 multiplier = 10000000;
+            for (System.UInt64 C = 0; C < itterations; C++)
             {
                 printf($"Calculating the {multiplier / 1000000} millionth prime asynchronously", ConsoleColor.Yellow);
                 start = System.DateTime.Now;
@@ -53,7 +53,7 @@ namespace TESTING
                 printf($"============={C}===================");
             }
             printf($"Itterations: [{itterations}]");
-            double primes = itterations * multiplier;
+            System.UInt64 primes = itterations * multiplier;
             printf($"Primes calculated: [{primes / 1000000}million]");
             double syncTime = sync.Sum(Constants.TimeSpanSumType.Seconds);
             printf($"Synchronous time:  [{syncTime} seconds]");
