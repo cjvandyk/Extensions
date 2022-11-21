@@ -10,6 +10,8 @@
 using System;
 using System.Collections.Generic;
 
+using System.Threading.Tasks;
+using System.Linq;
 using Extensions;
 using static Extensions.Universal;
 
@@ -66,6 +68,40 @@ namespace Extensions
                 }
             }
             return result;
+        }
+
+        /// <summary>
+        /// Process a list of objects of type T using multiple threads.
+        /// </summary>
+        /// <typeparam name="T">The type of objects in the list.</typeparam>
+        /// <param name="lst">The list of objects to process.</param>
+        /// <param name="processLoopInstanceMethod">The method to process
+        /// each individual item.</param>
+        public static void MultiThread<T>(
+            this List<T> lst,
+            Action<T> processLoopInstanceMethod)
+        {
+            Parallel.ForEach(lst, obj =>
+            {
+                processLoopInstanceMethod(obj);
+            });
+        }
+
+        /// <summary>
+        /// Process a list of objects of type T using a single thread.
+        /// </summary>
+        /// <typeparam name="T">The type of objects in the list.</typeparam>
+        /// <param name="lst">The list of objects to process.</param>
+        /// <param name="processLoopInstanceMethod">The method to process
+        /// each individual item.</param>
+        public static void SingleThread<T>(
+            this List<T> lst,
+            Action<T> processLoopInstanceMethod)
+        {
+            foreach (T obj in lst)
+            {
+                processLoopInstanceMethod(obj);
+            }
         }
         #endregion Sum<TimeSpan>
     }
