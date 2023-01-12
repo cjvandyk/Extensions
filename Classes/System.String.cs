@@ -569,7 +569,11 @@ namespace Extensions
         public static string HtmlDecode(this System.String str)
         {
             ValidateNoNulls(str);
+#if NET5_0_OR_GREATER
             return System.Web.HttpUtility.HtmlDecode(str);
+#else
+            return System.Net.WebUtility.HtmlDecode(str);
+#endif
         }
 
         /// <summary>
@@ -593,7 +597,11 @@ namespace Extensions
         public static string HtmlEncode(this System.String str)
         {
             ValidateNoNulls(str);
+#if NET5_0_OR_GREATER
             return System.Web.HttpUtility.HtmlEncode(str);
+#else
+            return System.Net.WebUtility.HtmlEncode(str);
+#endif
         }
 
         /// <summary>
