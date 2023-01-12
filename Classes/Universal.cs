@@ -394,8 +394,8 @@ namespace Extensions
                             filePath,
                             System.IO.FileMode.Open))
                     {
-                        var serializer = new System.Runtime.Serialization.NetDataContractSerializer();
-                        obj = (T)serializer.Deserialize(stream);
+                        var serializer = new System.Runtime.Serialization.DataContractSerializer(typeof(T));
+                        obj = (T)serializer.ReadObject(stream);
                         return obj;
                     }
                 }
@@ -432,8 +432,8 @@ namespace Extensions
                             filePath,
                             System.IO.FileMode.Create))
                     {
-                        var serializer = new System.Runtime.Serialization.NetDataContractSerializer();
-                        serializer.Serialize(stream, obj);
+                        var serializer = new System.Runtime.Serialization.DataContractSerializer(typeof(T));
+                        serializer.WriteObject(stream, obj);
                         return true;
                     }
                 }
