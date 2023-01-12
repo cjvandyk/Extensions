@@ -16,7 +16,7 @@ namespace Extensions
     /// <summary>
     /// Extension methods for the GCCH set of classes.
     /// </summary>
-    public static class GCCH
+    public static partial class GCCH
     {
         #region GCCH()
         /// <summary>
