@@ -163,11 +163,17 @@ namespace TESTING
             //WebException.Test();
 
             //Test System.String.Left()
-            printf(".Left()", ConsoleColor.Yellow);
-            string s = "https://blog.cjvandyk.com/sites/Rocks/SubSite/Lists/LibraryName/Folder1/Folder2/Doc.txt";
-            printf(s);
-            printf(s.Left("/", 4));
-            printf(s.Left("/", -4));
+            //printf(".Left()", ConsoleColor.Yellow);
+            //string s = "https://blog.cjvandyk.com/sites/Rocks/SubSite/Lists/LibraryName/Folder1/Folder2/Doc.txt";
+            //printf(s);
+            //printf(s.Left("/", 4));
+            //printf(s.Left("/", -4));
+
+            string s = "https://blog.cjvandyk.com";
+            if (s.BeginsWith("https://blog.cjvandyk.com/sites/Rocks"))
+            {
+
+            }
         }
     }
 }
