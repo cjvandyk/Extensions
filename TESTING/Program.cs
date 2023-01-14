@@ -168,6 +168,10 @@ namespace TESTING
             printf(s);
             printf(s.Left("/", 4));
             printf(s.Left("/", -4));
+
+            string s2 = "https://blog.cjvandyk.com";
+            if (s2.BeginsWith("https://blog.cjvandyk.com/sites/Rocks"))
+            { }
         }
     }
 }
