@@ -1,173 +1,181 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <ProjectGuid>{331A7C3B-45DC-4E04-85BF-DE1934C6B3FA}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Extensions</RootNamespace>
-    <AssemblyName>Extensions</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-    <AssemblyVersion>3.3.533</AssemblyVersion>
-    <TargetFrameworkProfile />
+    <TargetFrameworks>net7.0;net6.0;net5.0;netstandard2.1;netstandard2.0;netcoreapp3.1;netcoreapp3.0;netcoreapp2.2;netcoreapp2.1;netcoreapp2.0;net48;net472;net471;net47;net462;net461;net46;net452;net451;net45</TargetFrameworks>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <PackageProjectUrl>https://github.com/cjvandyk/extensions</PackageProjectUrl>
+    <PackageTags>extensions;crayveon;cjvandyk;429</PackageTags>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>Extensions.cs</PackageId>
+    <Authors>cjvandyk</Authors>
+    <RepositoryUrl>https://github.com/cjvandyk/Extensions</RepositoryUrl>
+	<Title>Extensions</Title>
+    <Description>Extensions.dll contains extension methods that enhance existing C# classes thus making life easier for developers.  Extensions.dll supports all versions of.NET from 4.5 through 7.0.  Highlights are methods such as:  -Use.Save() and.Load() for easy state saving of any object in C#.  -Use.Retry() to easily handle 429 throttling errors in web calls.  -Use System.Timer class to quickly add stopwatch timing functionality.  -Use.IsPrime() to determine if a number is a prime number.  -Use.GetNthPrime() and.GetNthPrimeAsync() to get the Nth prime number capable of calculating 10, 000, 000 primes / minute on an Intel Core i7 - 6700K CPU @ 4.00 GHz using 7 threads on 8 logical cores.  -Use.ReplaceTokens() to replace multiple strings in string dictionary style.  -Use.IsStrong() to validate strong passwords.  -Use.ToTimeZone() to quickly convert any given time to any given time zone.  -Use.Elevate() to restart current process in admin mode if it doesn't have admin rights.  -Use.CompoundInterest() to calculate any given interest over any given period at any given interval, and many, many more.</Description>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Extensions.xml</DocumentationFile>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.1|AnyCPU'">
+    <WarningLevel>3</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.1|AnyCPU'">
+    <WarningLevel>3</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>Images\Extensions.ico</ApplicationIcon>
-    <FileVersion>1.0.29.0</FileVersion>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+    <WarningLevel>3</WarningLevel>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="Microsoft.Identity.Client, Version=4.43.2.0, Culture=neutral, PublicKeyToken=0a613f4dd989e8ae, processorArchitecture=MSIL">
-      <HintPath>..\..\nuget\Microsoft.Identity.Client.4.43.2\lib\net461\Microsoft.Identity.Client.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Configuration.ConfigurationManager, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\..\nuget\System.Configuration.ConfigurationManager.6.0.0\lib\net461\System.Configuration.ConfigurationManager.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.OracleClient" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.IdentityModel" />
-    <Reference Include="System.IO, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\nuget\System.IO.4.3.0\lib\net462\System.IO.dll</HintPath>
-      <Private>True</Private>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Net" />
-    <Reference Include="System.Net.Http">
-      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.7.1\System.Net.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Runtime, Version=4.1.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\nuget\System.Runtime.4.3.1\lib\net462\System.Runtime.dll</HintPath>
-      <Private>True</Private>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Security" />
-    <Reference Include="System.Security.AccessControl, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\nuget\System.Security.AccessControl.6.0.0\lib\net461\System.Security.AccessControl.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\nuget\System.Security.Cryptography.Algorithms.4.3.1\lib\net463\System.Security.Cryptography.Algorithms.dll</HintPath>
-      <Private>True</Private>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\nuget\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
-      <Private>True</Private>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\nuget\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
-      <Private>True</Private>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.2, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\nuget\System.Security.Cryptography.X509Certificates.4.3.2\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
-      <Private>True</Private>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Security.Permissions, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\..\nuget\System.Security.Permissions.6.0.0\lib\net461\System.Security.Permissions.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Security.Principal.Windows, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\nuget\System.Security.Principal.Windows.5.0.0\lib\net461\System.Security.Principal.Windows.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ServiceProcess" />
-    <Reference Include="System.Transactions" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+    <WarningLevel>3</WarningLevel>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
+    <PackageReference Include="Microsoft.Identity.Client">
+      <Version>4.45.0</Version>
+    </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="BuildNuGet.bat" />
-    <None Include="Extensions.nuspec" />
-    <None Include="LICENSE" />
-    <None Include="NuGet\Extensions.cs.1.0.1.nupkg" />
-    <None Include="NuGet\Extensions.cs.1.1.27.nupkg" />
-    <None Include="NuGet\Extensions.cs.1.1.28.nupkg" />
-    <None Include="NuGet\Extensions.cs.2.0.1.nupkg" />
-    <None Include="NuGet\Extensions.cs.2.1.480.nupkg" />
-    <None Include="NuGet\Extensions.cs.2.2.480.nupkg" />
-    <None Include="NuGet\Extensions.cs.2.3.500.nupkg" />
-    <None Include="NuGet\extensions.cs.3.0.500.nupkg" />
-    <None Include="NuGet\Extensions.cs.3.1.500.nupkg" />
-    <None Include="NuGet\Extensions.cs.3.2.500.nupkg" />
-    <None Include="packages.config" />
-    <None Include="README.md" />
-    <None Include="VersionHistory.md" />
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
+    <PackageReference Include="Microsoft.Identity.Client">
+      <Version>4.45.0</Version>
+    </PackageReference>
   </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="Microsoft.Identity.Client">
+      <Version>4.45.0</Version>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
+    <PackageReference Include="Microsoft.Identity.Client">
+      <Version>4.45.0</Version>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
+    <PackageReference Include="Microsoft.Identity.Client">
+      <Version>4.45.0</Version>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.2'">
+    <PackageReference Include="Microsoft.Identity.Client">
+      <Version>4.45.0</Version>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
+    <PackageReference Include="Microsoft.Identity.Client">
+      <Version>4.45.0</Version>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.0'">
+    <PackageReference Include="Microsoft.Identity.Client">
+      <Version>4.45.0</Version>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <PackageReference Include="Microsoft.Identity.Client">
+      <Version>4.45.0</Version>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+    <PackageReference Include="Microsoft.Identity.Client">
+      <Version>4.45.0</Version>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net471'">
+    <PackageReference Include="Microsoft.Identity.Client">
+      <Version>4.45.0</Version>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net47'">
+    <PackageReference Include="Microsoft.Identity.Client">
+      <Version>4.45.0</Version>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net462'">
+    <PackageReference Include="Microsoft.Identity.Client">
+      <Version>4.45.0</Version>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
+    <PackageReference Include="Microsoft.Identity.Client">
+      <Version>4.45.0</Version>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net46'">
+    <PackageReference Include="Microsoft.Identity.Client">
+      <Version>4.45.0</Version>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net452'">
+    <PackageReference Include="Microsoft.Identity.Client">
+      <Version>4.45.0</Version>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net451'">
+    <PackageReference Include="Microsoft.Identity.Client">
+      <Version>4.45.0</Version>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+    <PackageReference Include="Microsoft.Identity.Client">
+      <Version>4.45.0</Version>
+    </PackageReference>
+  </ItemGroup>
+
   <ItemGroup>
-    <Content Include=".gitignore" />
-    <Content Include="Images\Discord.png" />
-    <Content Include="Images\Easy Date convertion GIF.gif" />
-    <Content Include="Images\Extensions-64x64.png" />
-    <Content Include="Images\Extensions.gif" />
+    <Compile Remove="Extensions5\**" />
+    <Compile Remove="Extensions6\**" />
+    <Compile Remove="Extensions7\**" />
+    <Compile Remove="Projects\**" />
+    <Compile Remove="TemplateClassLibrary\**" />
+    <Compile Remove="TESTING\**" />
+    <EmbeddedResource Remove="Extensions5\**" />
+    <EmbeddedResource Remove="Extensions6\**" />
+    <EmbeddedResource Remove="Extensions7\**" />
+    <EmbeddedResource Remove="Projects\**" />
+    <EmbeddedResource Remove="TemplateClassLibrary\**" />
+    <EmbeddedResource Remove="TESTING\**" />
+    <None Remove="Extensions5\**" />
+    <None Remove="Extensions6\**" />
+    <None Remove="Extensions7\**" />
+    <None Remove="Projects\**" />
+    <None Remove="TemplateClassLibrary\**" />
+    <None Remove="TESTING\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Classes\GCCH.CertAuth.cs" />
+    <Compile Remove="Classes\System.Logging.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Extensions.csproj.old" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Images\Extensions.ico" />
-    <Content Include="Images\Extensions.png" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="Classes\Constants.cs" />
-    <Compile Include="Classes\GCCH.CertAuth.cs" />
-    <Compile Include="Classes\PrimeNumbers.cs" />
-    <Compile Include="Classes\System.Array.cs" />
-    <Compile Include="Classes\System.Collections.Generic.Dictionary.cs" />
-    <Compile Include="Classes\System.Collections.Generic.List.cs" />
-    <Compile Include="Classes\System.Console.cs" />
-    <Compile Include="Classes\System.DateTime.cs" />
-    <Compile Include="Classes\System.Diagnostics.Process.cs" />
-    <Compile Include="Classes\System.Double.cs" />
-    <Compile Include="Classes\System.Guid.cs" />
-    <Compile Include="Classes\System.Int16.cs" />
-    <Compile Include="Classes\System.Int32.cs" />
-    <Compile Include="Classes\System.Int64.cs" />
-    <Compile Include="Classes\System.Logging.cs" />
-    <Compile Include="Classes\System.Long.cs" />
-    <Compile Include="Classes\System.Mersenne64.cs" />
-    <Compile Include="Classes\System.Net.WebException.cs" />
-    <Compile Include="Classes\System.Object.cs" />
-    <Compile Include="Classes\System.Short.cs" />
-    <Compile Include="Classes\System.String.cs" />
-    <Compile Include="Classes\System.Text.StringBuilder.cs" />
-    <Compile Include="Classes\System.Timer.cs" />
-    <Compile Include="Classes\System.TimeZoneInfo.cs" />
-    <Compile Include="Classes\System.UInt16.cs" />
-    <Compile Include="Classes\System.UInt32.cs" />
-    <Compile Include="Classes\System.UInt64.cs" />
-    <Compile Include="Classes\System.ULong.cs" />
-    <Compile Include="Classes\Universal.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Update="Images\Extensions-64x64.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>
