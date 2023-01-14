@@ -349,3 +349,8 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 /Projects
+/Extensions5
+/Extensions6
+/Extensions7
+/NuGet/Extensions.cs.3.4.600.nupkg
+/Extensions.csproj.old
