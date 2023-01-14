@@ -35,18 +35,21 @@ namespace Extensions
                                         bool ignorecase = true)
         {
             ValidateNoNulls(str, target);
-            if (ignorecase)
+            if (target.Length <= str.Length)
             {
-                if (str.ToLower().Substring(0, target.Length) == target.ToLower())
+                if (ignorecase)
                 {
-                    return true;
+                    if (str.ToLower().Substring(0, target.Length) == target.ToLower())
+                    {
+                        return true;
+                    }
                 }
-            }
-            else
-            {
-                if (str.Substring(0, target.Length) == target)
+                else
                 {
-                    return true;
+                    if (str.Substring(0, target.Length) == target)
+                    {
+                        return true;
+                    }
                 }
             }
             return false;
