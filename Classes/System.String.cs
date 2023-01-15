@@ -1250,10 +1250,15 @@ namespace Extensions
         /// for occurrence if the occurrence count should start from the end
         /// instead of its default from the beginning of the string.
         /// </summary>
-        /// <param name="str">A System.String object.</param>
-        /// <returns>Returns text to the left of the index string.  Use negative values
-        /// for occurrence if the occurrence count should start from the end
-        /// instead of its default from the beginning of the string.</returns>
+        /// <param name="str">A System.Text.StringBuilder object being
+        /// searched.</param>
+        /// <param name="index">The System.String value used as the target
+        /// of the search.</param>
+        /// <param name="occurrence">The number of matches to find.</param>
+        /// <returns>Returns text to the left of the index string.  Use
+        /// negative values for occurrence if the occurrence count should
+        /// start from the end instead of its default from the beginning of
+        /// the string.</returns>
         public static string Left(this System.String str, 
                                   string index, 
                                   int occurrence = 1)
@@ -1296,10 +1301,19 @@ namespace Extensions
         }
 
         /// <summary>
-        /// Returns text to the left of the index string.
+        /// Returns text to the left of the index string.  Use negative values
+        /// for occurrence if the occurrence count should start from the end
+        /// instead of its default from the beginning of the string.
         /// </summary>
-        /// <param name="str">A System.String object.</param>
-        /// <returns>Returns text to the left of the index string.</returns>
+        /// <param name="str">A System.Text.StringBuilder object being
+        /// searched.</param>
+        /// <param name="index">The System.String value used as the target
+        /// of the search.</param>
+        /// <param name="occurrence">The number of matches to find.</param>
+        /// <returns>Returns text to the left of the index string.  Use
+        /// negative values for occurrence if the occurrence count should
+        /// start from the end instead of its default from the beginning of
+        /// the string.</returns>
         public static string Left(this System.Text.StringBuilder str,
                                   string index,
                                   int occurrence)
