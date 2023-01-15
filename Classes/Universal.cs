@@ -113,7 +113,6 @@ namespace Extensions
         /// <summary>
         /// Gets the folder path of the current assembly.
         /// </summary>
-        /// <param name="asm">Out parm to hold the assembly.</param>
         /// <param name="escaped">Should the value be escaped?</param>
         /// <returns>Returns the folder path of the current assembly, 
         /// optionally escaped.</returns>
