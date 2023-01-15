@@ -4,138 +4,23 @@
     <TargetFrameworks>net7.0;net6.0;net5.0;netstandard2.1;netstandard2.0;netcoreapp3.1;netcoreapp3.0;netcoreapp2.2;netcoreapp2.1;netcoreapp2.0;net48;net472;net471;net47;net462;net461;net46;net452;net451;net45</TargetFrameworks>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <PackageProjectUrl>https://github.com/cjvandyk/extensions</PackageProjectUrl>
-    <PackageTags>extensions;crayveon;cjvandyk;429</PackageTags>
+    <PackageTags>Extensions;C#;cjvandyk;Crayveon;429;Retry-After;ThrottlingHandler;TimeZone;CountWords;Trim;QueryString;MorseCode;Binary;LoremIpsum;ZipCode;Vowel;UrlRoot;Elevate;CompoundInterest;StrongPassword</PackageTags>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>Extensions.cs</PackageId>
-    <Authors>cjvandyk</Authors>
+	<Authors>cjvandyk</Authors>
     <RepositoryUrl>https://github.com/cjvandyk/Extensions</RepositoryUrl>
-	<Title>Extensions</Title>
+	<Title>Extensions.cs</Title>
     <Description>Extensions.dll contains extension methods that enhance existing C# classes thus making life easier for developers.  Extensions.dll supports all versions of.NET from 4.5 through 7.0.  Highlights are methods such as:  -Use.Save() and.Load() for easy state saving of any object in C#.  -Use.Retry() to easily handle 429 throttling errors in web calls.  -Use System.Timer class to quickly add stopwatch timing functionality.  -Use.IsPrime() to determine if a number is a prime number.  -Use.GetNthPrime() and.GetNthPrimeAsync() to get the Nth prime number capable of calculating 10, 000, 000 primes / minute on an Intel Core i7 - 6700K CPU @ 4.00 GHz using 7 threads on 8 logical cores.  -Use.ReplaceTokens() to replace multiple strings in string dictionary style.  -Use.IsStrong() to validate strong passwords.  -Use.ToTimeZone() to quickly convert any given time to any given time zone.  -Use.Elevate() to restart current process in admin mode if it doesn't have admin rights.  -Use.CompoundInterest() to calculate any given interest over any given period at any given interval, and many, many more.</Description>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>Extensions-128x128.png</PackageIcon>
+    <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+    <RepositoryType>git</RepositoryType>
+    <PackageReleaseNotes>- Updated to support .NET 7.0
+- Fixed bug #19</PackageReleaseNotes>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.1|AnyCPU'">
-    <WarningLevel>3</WarningLevel>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.1|AnyCPU'">
-    <WarningLevel>3</WarningLevel>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
-    <WarningLevel>3</WarningLevel>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
-    <WarningLevel>3</WarningLevel>
-  </PropertyGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
-    <PackageReference Include="Microsoft.Identity.Client">
-      <Version>4.45.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
-    <PackageReference Include="Microsoft.Identity.Client">
-      <Version>4.45.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="Microsoft.Identity.Client">
-      <Version>4.45.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
-    <PackageReference Include="Microsoft.Identity.Client">
-      <Version>4.45.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
-    <PackageReference Include="Microsoft.Identity.Client">
-      <Version>4.45.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.2'">
-    <PackageReference Include="Microsoft.Identity.Client">
-      <Version>4.45.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
-    <PackageReference Include="Microsoft.Identity.Client">
-      <Version>4.45.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.0'">
-    <PackageReference Include="Microsoft.Identity.Client">
-      <Version>4.45.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
-    <PackageReference Include="Microsoft.Identity.Client">
-      <Version>4.45.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
-    <PackageReference Include="Microsoft.Identity.Client">
-      <Version>4.45.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net471'">
-    <PackageReference Include="Microsoft.Identity.Client">
-      <Version>4.45.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net47'">
-    <PackageReference Include="Microsoft.Identity.Client">
-      <Version>4.45.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net462'">
-    <PackageReference Include="Microsoft.Identity.Client">
-      <Version>4.45.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
-    <PackageReference Include="Microsoft.Identity.Client">
-      <Version>4.45.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net46'">
-    <PackageReference Include="Microsoft.Identity.Client">
-      <Version>4.45.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net452'">
-    <PackageReference Include="Microsoft.Identity.Client">
-      <Version>4.45.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net451'">
-    <PackageReference Include="Microsoft.Identity.Client">
-      <Version>4.45.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
-    <PackageReference Include="Microsoft.Identity.Client">
-      <Version>4.45.0</Version>
-    </PackageReference>
-  </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="Extensions5\**" />
@@ -160,6 +45,7 @@
 
   <ItemGroup>
     <Compile Remove="Classes\GCCH.CertAuth.cs" />
+    <Compile Remove="Classes\GCCH.cs" />
     <Compile Remove="Classes\System.Logging.cs" />
   </ItemGroup>
 
@@ -168,11 +54,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Images\Extensions.ico" />
+    <Content Include="Images\Extensions-128x128.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Images\Extensions-64x64.png">
+    <None Include="Images\Extensions-128x128.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
