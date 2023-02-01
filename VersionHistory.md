@@ -246,3 +246,12 @@
 	- Added .NET 6.0 support.<br>
 	- Add `System.String.Left()`.
 	- Add `System.Text.StringBuilder.IndexOf()`.
+
+### **3.5.700 (2023-01-14)**<br>
+	- Added .NET 7.0 support.<br>
+
+### **4.0.700 (2023-02-01)**<br>
+	- Added System.Identity classes.
+
+### **4.1.700 (2023-02-01)**<br>
+	- Changed GetTenantString() method to return blank instead of null when uninitialized.
