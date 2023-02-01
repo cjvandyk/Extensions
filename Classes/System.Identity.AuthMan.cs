@@ -101,7 +101,7 @@ namespace System.Identity
         /// return null.</returns>
         public static string GetTenantString()
         {
-            return ActiveAuth == null ? null : ActiveAuth.TenantString;
+            return ActiveAuth == null ? "" : ActiveAuth.TenantString;
         }
     }
 }
