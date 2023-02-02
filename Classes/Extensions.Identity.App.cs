@@ -7,10 +7,11 @@
 /// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
 /// </summary>
 
+using System;
 using Microsoft.Identity.Client;
 using System.Security.Cryptography.X509Certificates;
 
-namespace System.Identity
+namespace Extensions.Identity
 {
     /// <summary>
     /// A class for managing ConfidentialClientApplications in Azure.

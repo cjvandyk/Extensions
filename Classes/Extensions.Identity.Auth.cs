@@ -19,7 +19,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Runtime.CompilerServices;
 
-namespace System.Identity
+namespace Extensions.Identity
 {
     /// <summary>
     /// Auth class for holding authentication objects.
@@ -77,7 +77,7 @@ namespace System.Identity
         /// <summary>
         /// The authentication refresh timer of the current Auth object.
         /// </summary>
-        public Threading.Timer Timer { get; private set; }
+        public System.Threading.Timer Timer { get; private set; }
 
         /// <summary>
         /// The constructor that populates all the member variables of this
@@ -147,7 +147,7 @@ namespace System.Identity
                 new MediaTypeWithQualityHeaderValue("application/json"));
             //Define the refresh timer that will fire 5 minutes before the
             //expiration of the AuthenticationResult.
-            Timer = new Threading.Timer(
+            Timer = new System.Threading.Timer(
                 RefreshAuth,
                 null,
                 (AuthResult.ExpiresOn - DateTime.UtcNow).Subtract(

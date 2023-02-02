@@ -15,7 +15,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 
-namespace System.Identity
+namespace Extensions.Identity
 {
     /// <summary>
     /// Authentication Manager class for working with M365 and GCCHigh.

@@ -255,3 +255,7 @@
 
 ### **4.1.700 (2023-02-01)**<br>
 	- Changed GetTenantString() method to return blank instead of null when uninitialized.
+
+### **4.2.700 (2023-02-02)**<br>
+	- Moved the System.Identity class to Extensions.Identity.
+	- Added the Extensions.Graph class.

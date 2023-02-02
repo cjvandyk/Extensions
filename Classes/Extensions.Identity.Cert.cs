@@ -7,9 +7,10 @@
 /// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
 /// </summary>
 
+using System;
 using System.Security.Cryptography.X509Certificates;
 
-namespace System.Identity
+namespace Extensions.Identity
 {
     /// <summary>
     /// Class for working with certificates.
