@@ -12,6 +12,7 @@ using System.Collections.Generic;
 
 using static Extensions.Identity.AuthMan;
 using Microsoft.Graph;
+using System.Linq;
 
 namespace Extensions
 {
@@ -21,6 +22,140 @@ namespace Extensions
     /// </summary>
     public static class Graph
     {
+        /// <summary>
+        /// A method to get a Group by name.
+        /// </summary>
+        /// <param name="name">The name of the Group to get.</param>
+        /// <returns>The Group object if found, else null.</returns>
+        public static Group GetGroup(string name)
+        {
+            //Setup a list of QueryOption values.
+            var queryOptions = new List<QueryOption>()
+            {
+                new QueryOption("$count", "true"),
+                new QueryOption("$filter", $"displayName eq '{name}'")
+            };
+            //Query using the specified options.
+            var groups = ActiveAuth.GraphClient.Groups
+                .Request(queryOptions)
+                .Header("ConsistencyLevel", "eventual")
+                .GetAsync().GetAwaiter().GetResult();
+            //There should only be 1 group.  If so, return it.
+            if ((groups != null) && (groups.Count == 1))
+            {
+                return groups[0];
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// A method to duplicate an existing M365 group.
+        /// </summary>
+        /// <param name="groupName">The name of the group to duplicate.</param>
+        /// <param name="newName">The name to use for the new group.</param>
+        /// <returns></returns>
+        public static string DuplicateGroup(string groupName, string newName)
+        {
+            //Setup query options.
+            var queryOptions = new List<QueryOption>()
+            {
+                new QueryOption("$count", "true"),
+                new QueryOption("$filter", $"displayName eq '{groupName}'")
+            };
+            //Find the target group.
+            var groups = ActiveAuth.GraphClient.Groups
+                .Request(queryOptions)
+                .Header("ConsistencyLevel", "eventual")
+                .GetAsync().GetAwaiter().GetResult();
+            //If the group is not found, return null.
+            if (groups.Count != 1)
+            {
+                return null;
+            }
+            //Setup group types.  Unified = M365
+            List<string> groupTypes = new List<string>()
+            {
+                "Unified"
+            };
+            //Duplicate group info except name.
+            var newGroupInfo = new Group
+            {
+                Description = groups[0].Description,
+                DisplayName = newName,
+                GroupTypes = (IEnumerable<string>)groupTypes,
+                MailEnabled = groups[0].MailEnabled,
+                MailNickname = newName,
+                SecurityEnabled = groups[0].SecurityEnabled,
+                AdditionalData = groups[0].AdditionalData
+            };
+            //Create the new group.
+            var newGroup = ActiveAuth.GraphClient.Groups
+                .Request()
+                .AddAsync(newGroupInfo)
+                .GetAwaiter().GetResult();
+            //Return the ID of the new group.
+            return newGroup.Id;
+        }
+
+        /// <summary>
+        /// A method to retrieve a list of ID values (GUID) for all members
+        /// of a specified Group.
+        /// </summary>
+        /// <param name="groupId">The ID (GUID) of the target group.</param>
+        /// <returns>A list of strings representing the IDs of member 
+        /// users.</returns>
+        public static List<string> GetMembers(string groupId)
+        {
+            //Create the aggregation container.
+            List<string> members = new List<string>();
+            List<User> users = new List<User>();
+            //Get the first page of members.
+            var usersPage = ActiveAuth.GraphClient.Groups[groupId].Members
+                .Request().GetAsync().GetAwaiter().GetResult();
+            //Add members to the temporary list.
+            users.AddRange(usersPage.CurrentPage.OfType<User>());
+            //Recurively iterate until all members are found.
+            while (usersPage.NextPageRequest != null)
+            {
+                usersPage = usersPage.NextPageRequest
+                    .GetAsync().GetAwaiter().GetResult();
+                users.AddRange(usersPage.CurrentPage.OfType<User>());
+            }
+            //Iterate the temporary list and grab the IDs.
+            foreach (var user in users)
+            {
+                members.Add(user.Id);
+            }
+            //Return the list of IDs.
+            return members;
+        }
+
+        /// <summary>
+        /// Method to add one or more users to a group.
+        /// </summary>
+        /// <param name="groupId">The ID of the target group.</param>
+        /// <param name="userIds">A list of IDs (GUIDs) of users to add to
+        /// the target group.</param>
+        public static async void CreateMembers(string groupId, List<string> userIds)
+        {
+            //During bulk operations, this method may be called many times.
+            //Yield to prevent UI lockup.
+            System.Threading.Thread.Yield();
+            //Add the Graph location prefix.
+            //NOTE: The use of .com for both Commercial and GCCHigh tenants.
+            for (int C = 0; C < userIds.Count; C++)
+            {
+                userIds[C] = $"https://graph.microsoft.com/v1.0/directoryObjects/{userIds[C]}";
+            }
+            var group = new Group
+            {
+                AdditionalData = new Dictionary<string, object>()
+                {
+                    {"members@odata.bind", (object)userIds}
+                }
+            };
+        }
+
         /// <summary>
         /// Get the site ID (GUID) of the specified site.
         /// </summary>

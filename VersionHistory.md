@@ -240,22 +240,42 @@
 	- Add `System.Logging.ConsoleMessage()`.<br>
 	- Add `System.Logging.EventLogMessage()`.<br>
 	- Add `System.Logging.FileMessage()`.<br>
-	- Corrected `System.String.SubString()` comments to clarify .FromTail value.
+	- Corrected `System.String.SubString()` comments to clarify .FromTail value.<br>
 
 ### **3.4.600 (2022-07-15)**<br>
-	- Added .NET 6.0 support.<br>
-	- Add `System.String.Left()`.
-	- Add `System.Text.StringBuilder.IndexOf()`.
+	- Add **.NET 6.0** support.<br>
+	- Add `System.String.Left()`.<br>
+	- Add `System.Text.StringBuilder.IndexOf()`.<br>
 
 ### **3.5.700 (2023-01-14)**<br>
-	- Added .NET 7.0 support.<br>
+	- Add **.NET 7.0** support.<br>
 
 ### **4.0.700 (2023-02-01)**<br>
-	- Added System.Identity classes.
+	- Add `System.Identity.App` class.<br>
+	- Add `System.Identity.Auth` class.<br>
+	- Add `System.Identity.AuthMan` class.<br>
+	- Add `System.Identity.Cert` class.<br>
+	- Add `System.Identity.Scopes` class.<br>
 
 ### **4.1.700 (2023-02-01)**<br>
-	- Changed GetTenantString() method to return blank instead of null when uninitialized.
+	- Fixed `System.Identity.Authman.GetTenantString()` method to return blank instead of null when uninitialized.<br>
 
 ### **4.2.700 (2023-02-02)**<br>
-	- Moved the System.Identity class to Extensions.Identity.
-	- Added the Extensions.Graph class.
+	- Moved the `System.Identity.App` class to `Extensions.Identity.App`.<br>
+	- Moved the `System.Identity.Auth` class to `Extensions.Identity.Auth`.<br>
+	- Moved the `System.Identity.AuthMan` class to `Extensions.Identity.AuthMan`.<br>
+	- Moved the `System.Identity.Cert` class to `Extensions.Identity.Cert`.<br>
+	- Moved the `System.Identity.Scopes` class to `Extensions.Identity.Scopes`.<br>
+	- Add `Extensions.Graph.CreateListItem()`.<br>
+	- Add `Extensions.Graph.GetListId()`.<br>
+	- Add `Extensions.Graph.GetListItem()`.<br>
+	- Add `Extensions.Graph.GetListItems()`.<br>
+	- Add `Extensions.Graph.GetSiteId()`.<br>
+	- Add `Extensions.Graph.GetSites()`.<br>
+	- Add `Extensions.Graph.UpdateListItemFields()`.<br>
+
+### **4.3.700 (2023-02-03)**<br>
+	- Add `Extensions.Graph.GetGroup()`.<br>
+	- Add `Extensions.Graph.DuplicateGroup()`.<br>
+	- Add `Extensions.Graph.GetMembers()`.<br>
+	- Add `Extensions.Graph.CreateMembers()`.<br>
