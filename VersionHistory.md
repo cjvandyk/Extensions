@@ -285,6 +285,7 @@
 	- Add command line feedback to `Extensions.Graph.GetListItems()`.<br>
 	- Add command line feedback to `Extensions.Graph.GetMembers()`.<br>
 	- Add command line feedback to `Extensions.Graph.GetSites()`.<br>
+	- Add Microsoft.Graph.Core.dll, Microsoft.Graph.dll, Microsoft.Itentity.Client.dll and Microsoft.ItentityModel.Abstractions.dll dependency binaries.
 	- Improved `Extensions.Graph.GetListItems()` to use `NextPageRequest` aggregation instead of an explicit `PageIterator`.<br>
 	- Improved `Extensions.Graph.GetSites()` to use `NextPageRequest` aggregation instead of an explicit `PageIterator`.<br>
 	- Fixed `Extensions.Identity.Cert.GetCertByThumbPrint()` to support self signed certificates.<br>
