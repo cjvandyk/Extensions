@@ -89,7 +89,7 @@ namespace Extensions.Identity
             //Create the app using appId, cert and authority.
             return ConfidentialClientApplicationBuilder.Create(appId)
                 .WithCertificate(cert)
-                .WithAuthority(authority)
+                .WithAuthority(new Uri(authority))
                 .Build();
         }
 

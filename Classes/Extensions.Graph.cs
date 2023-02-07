@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using static Extensions.Identity.AuthMan;
 using Microsoft.Graph;
 using System.Linq;
+using System.Reflection;
 
 namespace Extensions
 {
@@ -46,6 +47,28 @@ namespace Extensions
                 return groups[0];
             }
             return null;
+        }
+
+        public static List<Group> GetGroups()
+        {
+            //Create the aggregation container.
+            var groups = new List<Group>();
+            //Get the first page of groups.
+            var groupsPage = ActiveAuth.GraphClient.Groups.Request()
+                .GetAsync().GetAwaiter().GetResult();
+            //Add members to the temporary list.
+            groups.AddRange(groupsPage.CurrentPage.OfType<Group>());
+            //Recurively iterate until all members are found.
+            while (groupsPage.NextPageRequest != null)
+            {
+                groupsPage = groupsPage.NextPageRequest
+                    .GetAsync().GetAwaiter().GetResult();
+                groups.AddRange(groupsPage.CurrentPage.OfType<Group>());
+                //Add visual feedback for command line usage.
+                WriteCount(groups.Count);
+            }
+            Console.WriteLine(groups.Count);
+            return groups;
         }
 
         /// <summary>
@@ -120,6 +143,7 @@ namespace Extensions
                 usersPage = usersPage.NextPageRequest
                     .GetAsync().GetAwaiter().GetResult();
                 users.AddRange(usersPage.CurrentPage.OfType<User>());
+                WriteCount(users.Count);                
             }
             //Iterate the temporary list and grab the IDs.
             foreach (var user in users)
@@ -127,6 +151,7 @@ namespace Extensions
                 members.Add(user.Id);
             }
             //Return the list of IDs.
+            Console.WriteLine(members.Count);
             return members;
         }
 
@@ -179,19 +204,19 @@ namespace Extensions
             //Create the aggregation container.
             var sites = new List<Site>();
             //Get the first page of sites.
-            var sitePage1 = ActiveAuth.GraphClient.Sites.Request()
+            var sitesPage = ActiveAuth.GraphClient.Sites.Request()
                 .GetAsync().GetAwaiter().GetResult();
-            //Create the iterator for multiple pages.
-            var sitePageIterator = PageIterator<Site>.CreatePageIterator(
-                ActiveAuth.GraphClient, 
-                sitePage1,
-                (C) =>
-                {
-                    sites.Add(C);
-                    return true;
-                });
-            //Iterate pages to get all data.
-            sitePageIterator.IterateAsync().GetAwaiter().GetResult();
+            sites.AddRange(sitesPage.CurrentPage.OfType<Site>());
+            //Recurively iterate until all members are found.
+            while (sitesPage.NextPageRequest != null)
+            {
+                sitesPage = sitesPage.NextPageRequest
+                    .GetAsync().GetAwaiter().GetResult();
+                sites.AddRange(sitesPage.CurrentPage.OfType<Site>());
+                //Add visual feedback for command line usage.
+                WriteCount(sites.Count);
+            }
+            Console.WriteLine(sites.Count);
             return sites;
         }
 
@@ -271,11 +296,11 @@ namespace Extensions
             else
             {
                 //Create the first page.
-                IListItemsCollectionPage listItemsPage1 = null;
+                IListItemsCollectionPage listItemsPage = null;
                 try
                 {
                     //Get the first page of results.
-                    listItemsPage1 = ActiveAuth.GraphClient.Sites["root"]
+                    listItemsPage = ActiveAuth.GraphClient.Sites["root"]
                         .SiteWithPath(sitePath)
                         .Lists[listName]
                         .Items
@@ -293,23 +318,23 @@ namespace Extensions
                     }
                 }
                 //If not results were found, return the empty list.
-                if (listItemsPage1 == null)
+                if (listItemsPage == null)
                 {
                     return listItems;
                 }
-                //Results were found so create the page iterator.
-                var listItemsPageIterator = PageIterator<ListItem>
-                    .CreatePageIterator(ActiveAuth.GraphClient,
-                                        listItemsPage1,
-                                        (C) =>
-                                        {
-                                            listItems.Add(C);
-                                            return true;
-                                        });
-                //Get all pages.
-                listItemsPageIterator.IterateAsync().GetAwaiter().GetResult();
+                listItems.AddRange(listItemsPage.CurrentPage.OfType<ListItem>());
+                //Recurively iterate until all members are found.
+                while (listItemsPage.NextPageRequest != null)
+                {
+                    listItemsPage = listItemsPage.NextPageRequest
+                        .GetAsync().GetAwaiter().GetResult();
+                    listItems.AddRange(listItemsPage.CurrentPage.OfType<ListItem>());
+                    //Add visual feedback for command line usage.
+                    WriteCount(listItems.Count);
+                }
             }
             //Return the aggregated list.
+            Console.WriteLine(listItems.Count);
             return listItems;
         }
 
@@ -386,6 +411,15 @@ namespace Extensions
             {
                 Fields = CreateFieldValueSet(newFields)
             };
+        }
+
+        internal static void WriteCount(int count)
+        {
+            var left = Console.CursorLeft;
+            var top = Console.CursorTop;
+            Console.Write(count);
+            Console.CursorLeft = left;
+            Console.CursorTop = top;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿# Extensions.dll Version History.
+﻿# Extensions.cs Version History.
 
 ### **1.0.1 (2021-01-08)**<br>
 	- Add `System.Diagnostics.Process.Elevate()`.<br>
@@ -142,7 +142,7 @@
 	- Add `System.Text.StringBuilder.Substring()`.<br>
 
 ### **3.0.500 (2021-02-19)**<br>
-	- Added Prime Number calculation functionality!<br>
+	- Add Prime Number calculation functionality!<br>
 	- Add `Extensions.PrimeNumbers` class<br>
 	- Add `Extensions.Universal.GetNthPrime()`.<br>
 	- Add `Extensions.Universal.GetNthPrimeAsync()`.<br>
@@ -220,7 +220,7 @@
 		specifying the parameter number in the exception<br>
 		changing the return type to bool.<br>
 	- Improved `Extensions.PrimeNumber` class to use UInt64 instead of long.
-	- Expand `System.String.Substring()` to handle -1 as length indicating max string length.<br>
+	- Improved `System.String.Substring()` to handle -1 as length indicating max string length.<br>
 	- Add `Constants.ErrorType`.<br>
 	- Add `Universal.Validate()`.<br>
 	- Add error handling to `byte[].CopyTo()`.<br>
@@ -240,7 +240,7 @@
 	- Add `System.Logging.ConsoleMessage()`.<br>
 	- Add `System.Logging.EventLogMessage()`.<br>
 	- Add `System.Logging.FileMessage()`.<br>
-	- Corrected `System.String.SubString()` comments to clarify .FromTail value.<br>
+	- Fixed `System.String.SubString()` comments to clarify .FromTail value.<br>
 
 ### **3.4.600 (2022-07-15)**<br>
 	- Add **.NET 6.0** support.<br>
@@ -279,3 +279,13 @@
 	- Add `Extensions.Graph.DuplicateGroup()`.<br>
 	- Add `Extensions.Graph.GetMembers()`.<br>
 	- Add `Extensions.Graph.CreateMembers()`.<br>
+
+### **4.4.700 (2023-02-03)**<br>
+	- Add `Extensions.Graph.GetGroups()`.<br>
+	- Add command line feedback to `Extensions.Graph.GetListItems()`.<br>
+	- Add command line feedback to `Extensions.Graph.GetMembers()`.<br>
+	- Add command line feedback to `Extensions.Graph.GetSites()`.<br>
+	- Improved `Extensions.Graph.GetListItems()` to use `NextPageRequest` aggregation instead of an explicit `PageIterator`.<br>
+	- Improved `Extensions.Graph.GetSites()` to use `NextPageRequest` aggregation instead of an explicit `PageIterator`.<br>
+	- Fixed `Extensions.Identity.Cert.GetCertByThumbPrint()` to support self signed certificates.<br>
+	- Fixed `Extensions.Identity.App.GetApp()` to pass a Uri instead of string for Authority.<br>

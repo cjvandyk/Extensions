@@ -66,7 +66,7 @@ namespace Extensions.Identity
                 //Only return valid certificates.  Should only return 1 cert.
                 certCollection = certCollection.Find(X509FindType.FindByThumbprint,
                                                      thumbPrint,
-                                                     true);
+                                                     false);  //For self signed cert.
                 //If a valid cert was found, return it, otherwise return null.
                 return certCollection.Count == 0 ? null : certCollection[0];
             }
