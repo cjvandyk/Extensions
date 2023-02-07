@@ -845,3 +845,5 @@ with these methods:
 - ### **Wrn()**
     > _Write a Warning message to active channels (console, event log, file)<br>
         using the System.Logging class._
+
+![Visitor Count](https://profile-counter.glitch.me/{cjvandyk}/count.svg)
