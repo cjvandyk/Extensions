@@ -1,4 +1,4 @@
-﻿#pragma warning disable CS1587
+﻿#pragma warning disable CS1587, CS1998, IDE0059, IDE0028
 
 /// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
@@ -8,8 +8,6 @@
 /// </summary>
 
 using System;
-
-using Extensions;
 using static Extensions.Universal;
 
 namespace Extensions
@@ -17,7 +15,8 @@ namespace Extensions
     /// <summary>
     /// Extensions to the long class.
     /// </summary>
-    public static class LongExtensions
+    [Serializable]
+    public static partial class LongExtensions
     {
         #region IsEven()
         /// <summary>
@@ -58,4 +57,4 @@ namespace Extensions
         #endregion IsPrime()
     }
 }
-#pragma warning restore CS1587
+#pragma warning restore CS1587, CS1998, IDE0059, IDE0028
