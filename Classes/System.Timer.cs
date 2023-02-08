@@ -1,4 +1,4 @@
-﻿#pragma warning disable CS1587, IDE1006
+﻿#pragma warning disable CS1587, IDE1006, CS1998, IDE0059, IDE0028
 
 /// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
@@ -7,17 +7,13 @@
 /// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
 /// </summary>
 
-using System;
-
-using Extensions;
-using static Extensions.Universal;
-
 namespace System
 {
     /// <summary>
     /// Timer class for timing things like a stopwatch.
     /// </summary>
-    public class Timer
+    [Serializable]
+    public partial class Timer
     {
         private System.DateTime? start { get; set; }
         private System.DateTime? stop { get; set; }
@@ -92,4 +88,4 @@ namespace System
         #endregion Timer
     }
 }
-#pragma warning restore CS1587, IDE1006
+#pragma warning restore CS1587, IDE1006, CS1998, IDE0059, IDE0028
