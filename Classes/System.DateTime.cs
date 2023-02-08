@@ -1,4 +1,4 @@
-﻿#pragma warning disable CS1587, CS1591
+﻿#pragma warning disable CS1587, CS1591, CS1998, IDE0059, IDE0028
 
 /// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
@@ -8,7 +8,6 @@
 /// </summary>
 
 using System;
-
 using static Extensions.Universal;
 
 namespace Extensions
@@ -16,7 +15,8 @@ namespace Extensions
     /// <summary>
     /// Extensions for the System.DateTime class.
     /// </summary>
-    public static class DateTimeExtensions
+    [Serializable]
+    public static partial class DateTimeExtensions
     {
         #region Ago
         private static DateTime Ago(this DateTime time,
@@ -46,4 +46,4 @@ namespace Extensions
         #endregion ToTimeZone()
     }
 }
-#pragma warning restore CS1587, CS1591
+#pragma warning restore CS1587, CS1591, CS1998, IDE0059, IDE0028
