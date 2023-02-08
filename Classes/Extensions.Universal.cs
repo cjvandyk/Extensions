@@ -15,7 +15,8 @@ namespace Extensions
     /// <summary>
     /// Universal class for constants and enums.
     /// </summary>
-    public static class Universal
+    [Serializable]
+    public static partial class Universal
     {
         /// <summary>
         /// The assembly used on out calls.
