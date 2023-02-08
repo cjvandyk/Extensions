@@ -1,4 +1,4 @@
-﻿#pragma warning disable CS1587, CS0162, IDE0060
+﻿#pragma warning disable CS1587, CS0162, IDE0060, CS1998, IDE0059, IDE0028
 
 /// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
@@ -8,8 +8,6 @@
 /// </summary>
 
 using System;
-
-using Extensions;
 using static Extensions.Universal;
 
 namespace Extensions
@@ -17,7 +15,8 @@ namespace Extensions
     /// <summary>
     /// Extensions for the System.UInt64 class.
     /// </summary>
-    public static class UInt64Extensions
+    [Serializable]
+    public static partial class UInt64Extensions
     {
         #region IsEven()
         /// <summary>
@@ -71,4 +70,4 @@ namespace Extensions
         #endregion IsPrime()
     }
 }
-#pragma warning restore CS1587, CS0162, IDE0060
+#pragma warning restore CS1587, CS0162, IDE0060, CS1998, IDE0059, IDE0028
