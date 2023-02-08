@@ -1,4 +1,4 @@
-﻿#pragma warning disable CS1587
+﻿#pragma warning disable CS1587, CS1998, IDE0059, IDE0028
 
 /// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
@@ -9,18 +9,15 @@
 
 using System;
 using System.Collections.Generic;
-
 using System.Threading.Tasks;
-using System.Linq;
-using Extensions;
-using static Extensions.Universal;
 
 namespace Extensions
 {
     /// <summary>
     /// Extension methods for the System.Collections.Generic.List class.
     /// </summary>
-    public static class ListExtensions
+    [Serializable]
+    public static partial class ListExtensions
     {
         #region Sum<TimeSpan>
         /// <summary>
@@ -106,4 +103,4 @@ namespace Extensions
         #endregion Sum<TimeSpan>
     }
 }
-#pragma warning restore CS1587
+#pragma warning restore CS1587, CS1998, IDE0059, IDE0028
