@@ -1,4 +1,4 @@
-﻿#pragma warning disable CS1587
+﻿#pragma warning disable CS1587, CS1998, IDE0059, IDE0028
 
 /// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
@@ -17,7 +17,8 @@ namespace Extensions
     /// <summary>
     /// Extension methods for the System.Collections.Generic.Dictionary class.
     /// </summary>
-    public static class DictionaryExtensions
+    [Serializable]
+    public static partial class DictionaryExtensions
     {
         #region ToQueryString()
         /// <summary>
@@ -46,4 +47,4 @@ namespace Extensions
         #endregion ToQueryString()
     }
 }
-#pragma warning restore CS1587
+#pragma warning restore CS1587, CS1998, IDE0059, IDE0028
