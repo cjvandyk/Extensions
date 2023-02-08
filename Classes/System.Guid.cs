@@ -1,4 +1,4 @@
-﻿#pragma warning disable CS1587
+﻿#pragma warning disable CS1587, CS1998, IDE0059, IDE0028
 
 /// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
@@ -9,15 +9,13 @@
 
 using System;
 
-using Extensions;
-using static Extensions.Universal;
-
 namespace Extensions
 {
     /// <summary>
     /// Extensions for the Guid class.
     /// </summary>
-    public static class Guid
+    [Serializable]
+    public static partial class Guid
     {
         /// <summary>
         /// Returns a custom GUID starting with a custom string.
@@ -42,3 +40,4 @@ namespace Extensions
         }
     }
 }
+#pragma warning restore CS1587, CS1998, IDE0059, IDE0028
