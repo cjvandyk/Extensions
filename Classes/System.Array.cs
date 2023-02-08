@@ -1,5 +1,5 @@
 ﻿//#pragma warning disable IDE1006, IDE0017, CS0162, IDE0060, IDE0079 // Naming Styles, Simplify declaration (FQCN used), break after return, Remove unused (string[] args, Remove unnecessary suppression)
-#pragma warning disable CS1587
+#pragma warning disable CS1587, CS1998, IDE0059, IDE0028
 
 /// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
@@ -9,7 +9,6 @@
 /// </summary>
 
 using System;
-
 using static Extensions.Universal;
 
 namespace Extensions
@@ -17,7 +16,8 @@ namespace Extensions
     /// <summary>
     /// Extension methods for the System.Array class.
     /// </summary>
-    public static class ArrayExtensions
+    [Serializable]
+    public static partial class ArrayExtensions
     {
         #region byte[]
         /// <summary>
@@ -77,4 +77,4 @@ namespace Extensions
         #endregion byte[]
     }
 }
-#pragma warning restore CS1587
+#pragma warning restore CS1587, CS1998, IDE0059, IDE0028
