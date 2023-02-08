@@ -1,4 +1,4 @@
-﻿#pragma warning disable CS1587, CS0162
+﻿#pragma warning disable CA1416, CS1587, CS0162, CS1998, IDE0059, IDE0028
 
 /// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
@@ -10,7 +10,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using static Extensions.Constants;
 using static Extensions.Universal;
 
@@ -20,7 +19,8 @@ namespace Extensions
     /// Extension methods for the System.String and System.Text.StringBuilder
     /// classes.
     /// </summary>
-    public static class StringExtensions
+    [Serializable]
+    public static partial class StringExtensions
     {
         #region BeginsWith()
         /// <summary>
@@ -2351,4 +2351,4 @@ namespace Extensions
         //}
     }
 }
-#pragma warning restore CS1587, CS0162
+#pragma warning restore CA1416, CS1587, CS0162, CS1998, IDE0059, IDE0028
