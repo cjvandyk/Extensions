@@ -15,6 +15,7 @@ namespace Extensions.Identity
     /// <summary>
     /// Class for working with certificates.
     /// </summary>
+    [Serializable]
     public static partial class Cert
     {
         /// <summary>
