@@ -7,6 +7,7 @@
 /// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
 /// </summary>
 
+using System;
 using System.Collections.Generic;
 
 namespace Extensions
@@ -14,7 +15,8 @@ namespace Extensions
     /// <summary>
     /// Constants used in the Extensions methods.
     /// </summary>
-    public static class Constants
+    [Serializable]
+    public static partial class Constants
     {
         #region Binary Constants
 
