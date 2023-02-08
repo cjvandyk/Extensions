@@ -1,4 +1,4 @@
-﻿#pragma warning disable CS1587, CS1998, IDE0059, IDE0028
+﻿#pragma warning disable CS0168, CS1587, CS1998, IDE0059, IDE0028
 
 /// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
@@ -7,13 +7,12 @@
 /// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
 /// </summary>
 
-using System;
-using System.Collections.Generic;
-
 using static Extensions.Identity.AuthMan;
 using Microsoft.Graph;
+using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Extensions
 {
@@ -21,7 +20,8 @@ namespace Extensions
     /// An extension class that makes working with Microsoft.Graph in GCCHigh
     /// environments easy.
     /// </summary>
-    public static class Graph
+    [Serializable]
+    public static partial class Graph
     {
         /// <summary>
         /// A method to get a Group by name.
@@ -49,24 +49,89 @@ namespace Extensions
             return null;
         }
 
-        public static List<Group> GetGroups()
+        /// <summary>
+        /// A method to retrieve a list containing all the Microsoft.Graph.Group
+        /// values in the tenant that match the specified filter value.
+        /// </summary>
+        /// <param name="filter">An OData filter string to apply.</param>
+        /// <returns>A list containing all the Microsoft.Graph.Group values in
+        /// the tenant matching the given OData filter.</returns>
+        public static List<Group> GetGroups(string filter)
         {
-            //Create the aggregation container.
             var groups = new List<Group>();
+            GetGroups(ref groups, filter);
+            return groups;
+        }
+
+        /// <summary>
+        /// A method to retrieve a list containing all the Microsoft.Graph.Group
+        /// values in the tenant.
+        /// </summary>
+        /// <param name="groups">A reference to the aggregation container.</param>
+        /// <param name="filter">An OData filter string to apply.</param>
+        /// <returns>A list containing all the Microsoft.Graph.Group values in
+        /// the tenant matching the given OData filter.</returns>
+        internal static void GetGroups(ref List<Group> groups, string filter = "")
+        {
             //Get the first page of groups.
-            var groupsPage = ActiveAuth.GraphClient.Groups.Request()
-                .GetAsync().GetAwaiter().GetResult();
-            //Add members to the temporary list.
-            groups.AddRange(groupsPage.CurrentPage.OfType<Group>());
-            //Recurively iterate until all members are found.
-            while (groupsPage.NextPageRequest != null)
+            IGraphServiceGroupsCollectionPage groupsPage = null;
+            if (filter == "")
             {
-                groupsPage = groupsPage.NextPageRequest
+                //There's no filter, so get all Groups.
+                groupsPage = ActiveAuth.GraphClient.Groups.Request()
                     .GetAsync().GetAwaiter().GetResult();
-                groups.AddRange(groupsPage.CurrentPage.OfType<Group>());
+            }
+            else
+            {
+                //Apply the specified filter to the Groups request.
+                groupsPage = ActiveAuth.GraphClient.Groups.Request()
+                    .Filter(filter)
+                    .GetAsync().GetAwaiter().GetResult();
+            }
+            GetGroupsPages(ref groups, ref groupsPage);
+        }
+
+        /// <summary>
+        /// A method to iterate a page collection reference and add retrieved
+        /// items to an aggregation container reference.
+        /// </summary>
+        /// <param name="groups">A reference to the aggregation container.</param>
+        /// <param name="page">A reference to the first page to iterate.</param>
+        internal static void GetGroupsPages(
+            ref List<Group> groups, 
+            ref IGraphServiceGroupsCollectionPage page)
+        {
+            //Add items to the temporary list.
+            groups.AddRange(page.CurrentPage.OfType<Group>());
+            //Recurively iterate until all items are found.
+            while (page.NextPageRequest != null)
+            {
+                page = page.NextPageRequest
+                    .GetAsync().GetAwaiter().GetResult();
+                groups.AddRange(page.CurrentPage.OfType<Group>());
                 //Add visual feedback for command line usage.
                 WriteCount(groups.Count);
             }
+        }
+
+        /// <summary>
+        /// A method to aggregate all Groups in the tenant across 36 threads,
+        /// returning the cumulative list of Groups.
+        /// </summary>
+        /// <returns>A list of all Groups in the tenant.</returns>
+        public static List<Group> GetGroups()
+        {
+            var groups = new List<Group>();
+            List<string> starters = new List<string>()
+            {
+                "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o",
+                "p","q","r","s","t","u","v","w","x","y","z","1","2","3","4",
+                "5","6","7","8","9","0"
+            };
+            Parallel.ForEach(starters, starter =>
+            {
+                GetGroups(ref groups, $"startswith(displayName, '{starter}')");
+            });
             Console.WriteLine(groups.Count);
             return groups;
         }
@@ -413,14 +478,23 @@ namespace Extensions
             };
         }
 
+        /// <summary>
+        /// Write visible feedback to console for command line usage.  The
+        /// feedback is written in a fixed location providing a counter like
+        /// experience without screen scroll.
+        /// </summary>
+        /// <param name="count">The count to write.</param>
         internal static void WriteCount(int count)
         {
+            //Capture the current cursor location.
             var left = Console.CursorLeft;
             var top = Console.CursorTop;
+            //Write output.
             Console.Write(count);
+            //Reset the cursor location.
             Console.CursorLeft = left;
             Console.CursorTop = top;
         }
     }
 }
-#pragma warning restore CS1587, CS1998, IDE0059, IDE0028
+#pragma warning restore CS0168, CS1587, CS1998, IDE0059, IDE0028
