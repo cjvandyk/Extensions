@@ -1,4 +1,4 @@
-﻿#pragma warning disable CS1587, IDE0044
+﻿#pragma warning disable CS0162, CS0219, CS0414, CS1587, CS1591, CS1998, IDE0028, IDE0044, IDE0059
 
 /// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
@@ -22,9 +22,7 @@
 /// </summary>
 
 using System;
-
 using System.Collections;
-using Extensions;
 using static Extensions.Constants;
 using static Extensions.Universal;
 
@@ -37,7 +35,8 @@ namespace Extensions
     /// Cornellion = 1 with 100,000,000 zeros.
     /// Cornellion requires 333,333,334 bits to represent.
     /// </summary>
-    public class Mersenne64
+    [Serializable]
+    public partial class Mersenne64
     {
         static int HighestSetBit(ref BitArray b)
         {
@@ -912,4 +911,4 @@ namespace Extensions
         }
     }
 }
-#pragma warning restore CS1587, IDE0044
+#pragma warning restore CS0162, CS0219, CS0414, CS1587, CS1591, CS1998, IDE0028, IDE0044, IDE0059
