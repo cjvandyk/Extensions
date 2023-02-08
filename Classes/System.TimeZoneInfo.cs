@@ -1,4 +1,4 @@
-﻿#pragma warning disable CS1587
+﻿#pragma warning disable CS1587, CS1998, IDE0059, IDE0028
 
 /// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
@@ -8,7 +8,6 @@
 /// </summary>
 
 using System;
-
 using static Extensions.Universal;
 
 namespace Extensions
@@ -16,7 +15,8 @@ namespace Extensions
     /// <summary>
     /// Extension methods for the System.DateTime.TimeZoneInfo class.
     /// </summary>
-    public static class TimeZoneInfoExtensions
+    [Serializable]
+    public static partial class TimeZoneInfoExtensions
     {
         #region GetTimeZoneString()
         /// <summary>
@@ -33,4 +33,4 @@ namespace Extensions
         #endregion GetTimeZoneString()
     }
 }
-#pragma warning restore CS1587
+#pragma warning restore CS1587, CS1998, IDE0059, IDE0028
