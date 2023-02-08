@@ -1,4 +1,4 @@
-﻿#pragma warning disable CS1587
+﻿#pragma warning disable CS1587, CS1998, IDE0059, IDE0028
 
 /// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
@@ -7,12 +7,15 @@
 /// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
 /// </summary>
 
+using System;
+
 namespace Extensions
 {
     /// <summary>
     /// Class to contain prime number details during async processing.
     /// </summary>
-    public class PrimeNumber
+    [Serializable]
+    public partial class PrimeNumber
     {
         /// <summary>
         /// The number being evaluated as a prime number.
@@ -34,4 +37,4 @@ namespace Extensions
         }
     }
 }
-#pragma warning restore CS1587
+#pragma warning restore CS1587, CS1998, IDE0059, IDE0028
