@@ -8,18 +8,16 @@
 /// </summary>
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
+using System.IO;
+using System.Text.Json;
 
 namespace Extensions.Identity
 {
     /// <summary>
     /// Authentication Manager class for working with M365 and GCCHigh.
     /// </summary>
+    [Serializable]
     public static partial class AuthMan
     {
         /// <summary>
@@ -31,6 +29,26 @@ namespace Extensions.Identity
         /// The currently active Auth object from the stack.
         /// </summary>
         public static Auth ActiveAuth { get; private set; } = null;
+
+        /// <summary>
+        /// Constructor method.
+        /// </summary>
+        static AuthMan()
+        {
+            //Load config from file.
+            using (StreamReader sr = new StreamReader(
+                GetRunFolder() + "\\" + $"TenantConfig.json"))
+            {
+                var tenantConfig = 
+                    JsonSerializer.Deserialize<TenantConfig>(sr.ReadToEnd());
+                //Initialize auth with config values.
+                GetAuth(tenantConfig.TenantId,
+                        tenantConfig.AppClientId,
+                        tenantConfig.CertThumbPrint,
+                        tenantConfig.TenantString);
+                sr.Close();
+            }
+        }
 
         /// <summary>
         /// Method to get a matching Auth object from the stack or if it
@@ -102,6 +120,17 @@ namespace Extensions.Identity
         public static string GetTenantString()
         {
             return ActiveAuth == null ? "" : ActiveAuth.TenantString;
+        }
+
+        /// <summary>
+        /// A method to return the current execution folder.
+        /// </summary>
+        /// <returns>A string containing the execution folder path.</returns>
+        public static string GetRunFolder()
+        {
+            return Path.GetDirectoryName(
+                System.Reflection.Assembly.GetEntryAssembly()
+                .Location.TrimEnd('\\'));  //Ensure no double trailing slash.
         }
     }
 }
