@@ -1,4 +1,4 @@
-﻿#pragma warning disable CS1587, CS1998, IDE0059, IDE0028
+﻿#pragma warning disable CS0162, CS1587, CS1998, IDE0059, IDE0028
 
 /// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
@@ -7,8 +7,8 @@
 /// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
 /// </summary>
 
-using System;
 using Microsoft.Identity.Client;
+using System;
 using System.Security.Cryptography.X509Certificates;
 
 namespace Extensions.Identity
@@ -16,6 +16,7 @@ namespace Extensions.Identity
     /// <summary>
     /// A class for managing ConfidentialClientApplications in Azure.
     /// </summary>
+    [Serializable]
     public static partial class App
     {
         /// <summary>
@@ -127,4 +128,4 @@ namespace Extensions.Identity
         }
     }
 }
-#pragma warning restore CS1587, CS1998, IDE0059, IDE0028
+#pragma warning restore CS0162, CS1587, CS1998, IDE0059, IDE0028
