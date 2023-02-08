@@ -7,17 +7,14 @@
 /// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
 /// </summary>
 
-using System;
-using System.Collections.Generic;
-
 using Microsoft.Graph;
 using Microsoft.Identity.Client;
+using System;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
-using System.Net.Http;
 using System.Threading;
-using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace Extensions.Identity
 {
