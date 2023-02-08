@@ -1,4 +1,4 @@
-﻿#pragma warning disable CS1587
+﻿#pragma warning disable CS1587, CS1998, IDE0059, IDE0028
 
 /// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
@@ -9,7 +9,6 @@
 
 using System;
 using System.Linq;
-
 using static Extensions.Universal;
 
 namespace Extensions
@@ -17,7 +16,8 @@ namespace Extensions
     /// <summary>
     /// Extensions for the System.Diagnostics.Process class.
     /// </summary>
-    public static class ProcessExtensions
+    [Serializable]
+    public static partial class ProcessExtensions
     {
         #region Elevate()
         /// <summary>
@@ -49,4 +49,4 @@ namespace Extensions
         #endregion Elevate()
     }
 }
-#pragma warning restore CS1587
+#pragma warning restore CS1587, CS1998, IDE0059, IDE0028
