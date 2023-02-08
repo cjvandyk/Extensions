@@ -7,11 +7,14 @@
 /// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
 /// </summary>
 
+using System;
+
 namespace Extensions.Identity
 {
     /// <summary>
     /// A class containing the various scope string arrays.
     /// </summary>
+    [Serializable]
     public static partial class Scopes
     {
         /// <summary>
