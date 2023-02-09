@@ -105,7 +105,7 @@ namespace Extensions.Identity
         public static string GetAuthority(EnvironmentName environmentName,
                                           string tenantString)
         {
-            string result = "https://login.microsoftonline.";
+            string result = "https://login.microsoftonline";
             switch (environmentName)
             {
                 case EnvironmentName.O365China:
