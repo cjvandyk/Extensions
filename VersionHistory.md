@@ -280,7 +280,7 @@
 	- Add `Extensions.Graph.GetMembers()`.<br>
 	- Add `Extensions.Graph.CreateMembers()`.<br>
 
-### **4.4.700 (2023-02-03)**<br>
+### **4.4.700 (2023-02-07)**<br>
 	- Add `Extensions.Graph.GetGroups()`.<br>
 	- Add command line feedback to `Extensions.Graph.GetListItems()`.<br>
 	- Add command line feedback to `Extensions.Graph.GetMembers()`.<br>
@@ -290,3 +290,11 @@
 	- Improved `Extensions.Graph.GetSites()` to use `NextPageRequest` aggregation instead of an explicit `PageIterator`.<br>
 	- Fixed `Extensions.Identity.Cert.GetCertByThumbPrint()` to support self signed certificates.<br>
 	- Fixed `Extensions.Identity.App.GetApp()` to pass a Uri instead of string for Authority.<br>
+
+### **4.5.700 (2023-02-)**<br>
+	- Add default tenant configuration via JSON.
+	- Add `Extensions.Graph.GetGroups()`.<br>
+	- Add `GetGroups(string filter)`.<br>
+	- Improved `GetGroups()` performance by threading across alphanumeric start characters.
+	- Updated class signatures to [Serializable] and partial.
+	- Add Extensions.Identity.Auth ctor that loads the cert from a provided byte[].
