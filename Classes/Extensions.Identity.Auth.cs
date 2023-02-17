@@ -108,6 +108,36 @@ namespace Extensions.Identity
         }
 
         /// <summary>
+        /// The constructor that populates all the member variables of this
+        /// instance of the Auth object.
+        /// </summary>
+        /// <param name="tenantId">The Tenant/Directory ID of the target.</param>
+        /// <param name="appId">The Application/Client ID of the target.</param>
+        /// <param name="cert">The raw byte array of the certificate.</param>
+        /// <param name="tenantString">The base tenant string used with the 
+        /// current Auth object e.g. for "contoso.sharepoint.com" it would 
+        /// be "contoso".</param>
+        public Auth(string tenantId,
+                    string appId,
+                    byte[] cert,
+                    string tenantString)
+        {
+            //Load the certificate from the byte array.
+            Cert = new X509Certificate2(cert);
+            //Generate the unique ID.
+            Id = AuthMan.GetKey(tenantId, appId, Cert.Thumbprint);
+            //Save the parms.
+            TenantId = tenantId;
+            AppId = appId;
+            ThumbPrint = Cert.Thumbprint;
+            TenantString = tenantString;
+            //Get the application.
+            App = Identity.App.GetApp(appId, Cert.Thumbprint, tenantString);
+            //Call refresh method to populate the rest.
+            RefreshAuth(null);
+        }
+
+        /// <summary>
         /// The method that refreshes the current Auth object's related
         /// authentication members.
         /// </summary>
