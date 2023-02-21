@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 
 namespace Extensions.Identity
@@ -35,18 +36,29 @@ namespace Extensions.Identity
         /// </summary>
         static AuthMan()
         {
-            //Load config from file.
-            using (StreamReader sr = new StreamReader(
-                GetRunFolder() + "\\" + $"TenantConfig.json"))
+            try
             {
-                var tenantConfig = 
-                    JsonSerializer.Deserialize<TenantConfig>(sr.ReadToEnd());
-                //Initialize auth with config values.
-                GetAuth(tenantConfig.TenantId,
-                        tenantConfig.AppClientId,
-                        tenantConfig.CertThumbPrint,
-                        tenantConfig.TenantString);
-                sr.Close();
+                //Load config from file.
+                using (StreamReader sr = new StreamReader(
+                    GetRunFolder() + "\\" + $"TenantConfig.json"))
+                {
+                    var tenantConfig =
+                        JsonSerializer.Deserialize<TenantConfig>(sr.ReadToEnd());
+                    //Initialize auth with config values.
+                    GetAuth(tenantConfig.TenantId,
+                            tenantConfig.AppClientId,
+                            tenantConfig.CertThumbPrint,
+                            tenantConfig.TenantString);
+                    sr.Close();
+                }
+            }
+            catch (Exception ex) 
+            {
+                //Default to environment variables if no JSON provided.
+                GetAuth(Environment.GetEnvironmentVariable("TenantId"),
+                        Environment.GetEnvironmentVariable("AppClientId"),
+                        Environment.GetEnvironmentVariable("CertThumbPrint"),
+                        Environment.GetEnvironmentVariable("TenantString"));
             }
         }
 
@@ -82,6 +94,47 @@ namespace Extensions.Identity
             {
                 //If it is not, generate a new Auth object.
                 var auth = new Auth(tenantId, appId, thumbPrint, tenantString);
+                //Push it to the stack.
+                AuthStack.Add(auth.Id, auth);
+                //Set the current ActiveAuth to the new stack instance.
+                ActiveAuth = AuthStack[auth.Id];
+            }
+            //Return the ActiveAuth object.
+            return ActiveAuth;
+        }
+
+        /// <summary>
+        /// Method to get a matching Auth object from the stack or if it
+        /// doesn't exist on the stack, generate the new Auth object and
+        /// push it to the stack.
+        /// </summary>
+        /// <param name="tenantId">The Tenant/Directory ID to use for the 
+        /// Auth object.</param>
+        /// <param name="appId">The Application/Client ID to use for the 
+        /// Auth object.</param>
+        /// <param name="cert">The certificate to use for the Auth 
+        /// object.</param>
+        /// <param name="tenantString">The base tenant string to use for 
+        /// the Auth object e.g. for "contoso.sharepoint.com" it would 
+        /// be "contoso".</param>
+        /// <returns>A valid Auth object from the stack.</returns>
+        public static Auth GetAuth(string tenantId,
+                                   string appId,
+                                   X509Certificate2 cert,
+                                   string tenantString)
+        {
+            //Generate the key from the parms.
+            string key = GetKey(tenantId, appId, cert.Thumbprint);
+            //Check if the key is on the stack.
+            if (AuthStack.ContainsKey(key))
+            {
+                //If it is, set the current ActiveAuth to that stack instance.
+                ActiveAuth = AuthStack[key];
+            }
+            else
+            {
+                //If it is not, generate a new Auth object.
+                var auth = new Auth(tenantId, appId, cert.Thumbprint, tenantString);
                 //Push it to the stack.
                 AuthStack.Add(auth.Id, auth);
                 //Set the current ActiveAuth to the new stack instance.
