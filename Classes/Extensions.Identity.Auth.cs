@@ -113,17 +113,16 @@ namespace Extensions.Identity
         /// </summary>
         /// <param name="tenantId">The Tenant/Directory ID of the target.</param>
         /// <param name="appId">The Application/Client ID of the target.</param>
-        /// <param name="cert">The raw byte array of the certificate.</param>
+        /// <param name="cert">The certificate to use.</param>
         /// <param name="tenantString">The base tenant string used with the 
         /// current Auth object e.g. for "contoso.sharepoint.com" it would 
         /// be "contoso".</param>
         public Auth(string tenantId,
                     string appId,
-                    byte[] cert,
+                    X509Certificate2 cert,
                     string tenantString)
         {
-            //Load the certificate from the byte array.
-            Cert = new X509Certificate2(cert);
+            Cert = cert;
             //Generate the unique ID.
             Id = AuthMan.GetKey(tenantId, appId, Cert.Thumbprint);
             //Save the parms.
