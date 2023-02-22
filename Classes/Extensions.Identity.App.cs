@@ -112,31 +112,10 @@ namespace Extensions.Identity
             //Get the authority URL for the given environment.
             string authority = GetAuthority(environmentName, tenantString);
             //Create the app using appId, cert and authority.
-            var app = PublicClientApplicationBuilder.Create(appId)
+            return PublicClientApplicationBuilder.Create(appId)
                 .WithAuthority(new Uri(authority))
                 .WithDefaultRedirectUri()
                 .Build();
-            var accounts = app.GetAccountsAsync().GetAwaiter().GetResult();
-            if (GetPublicAppAuthResult(
-                ref app,
-                ref accounts,
-                PublicAppAuthResultType.Silent) == null)
-            {
-                if (GetPublicAppAuthResult(
-                    ref app,
-                    ref accounts,
-                    PublicAppAuthResultType.Interactive) == null)
-                {
-                    if (GetPublicAppAuthResult(
-                        ref app,
-                        ref accounts,
-                        PublicAppAuthResultType.Prompt) == null)
-                    {
-                        return null;
-                    }
-                }
-            }
-            return app;
         }
 
         /// <summary>
