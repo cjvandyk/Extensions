@@ -15,6 +15,7 @@ using System.Net.Http.Headers;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
+using static Extensions.Identity.App;
 
 namespace Extensions.Identity
 {
@@ -29,17 +30,17 @@ namespace Extensions.Identity
         /// </summary>
         public string Id { get; private set; }
         /// <summary>
+        ///The type of ClientApplication the current Auth object is using.
+        /// </summary>
+        public ClientApplicationType AppType { get; private set; }
+        /// <summary>
         /// The certificate of the current Auth object.
         /// </summary>
         public X509Certificate2 Cert { get; private set; }
         /// <summary>
         /// The current IConfidentialClientApplication of the current Auth object.
         /// </summary>
-        public IConfidentialClientApplication App { get; private set; }
-        /// <summary>
-        /// The current IPublicClientApplication of the current Auth object.
-        /// </summary>
-        public IPublicClientApplication PublicApp { get; private set; }
+        public object App { get; private set; }
         /// <summary>
         /// The current AuthenticationResult of the current Auth object.
         /// </summary>
@@ -91,14 +92,17 @@ namespace Extensions.Identity
         /// <param name="tenantString">The base tenant string used with the 
         /// current Auth object e.g. for "contoso.sharepoint.com" it would 
         /// be "contoso".</param>
+        /// <param name="appType">The type of ClientApplication to use.</param>
         public Auth(string tenantId, 
                     string appId, 
                     string thumbPrint, 
-                    string tenantString)
+                    string tenantString,
+                    ClientApplicationType appType = ClientApplicationType.Confidential)
         {
             //Generate the unique ID.
             Id = AuthMan.GetKey(tenantId, appId, thumbPrint);
             //Save the parms.
+            AppType = appType;
             TenantId = tenantId;
             AppId = appId;
             ThumbPrint = thumbPrint;
@@ -121,15 +125,18 @@ namespace Extensions.Identity
         /// <param name="tenantString">The base tenant string used with the 
         /// current Auth object e.g. for "contoso.sharepoint.com" it would 
         /// be "contoso".</param>
+        /// <param name="appType">The type of ClientApplication to use.</param>
         public Auth(string tenantId,
                     string appId,
                     X509Certificate2 cert,
-                    string tenantString)
+                    string tenantString,
+                    ClientApplicationType appType = ClientApplicationType.Confidential)
         {
             Cert = cert;
             //Generate the unique ID.
             Id = AuthMan.GetKey(tenantId, appId, Cert.Thumbprint);
             //Save the parms.
+            AppType = appType;
             TenantId = tenantId;
             AppId = appId;
             ThumbPrint = Cert.Thumbprint;
@@ -149,18 +156,21 @@ namespace Extensions.Identity
         /// <param name="tenantString">The base tenant string used with the 
         /// current Auth object e.g. for "contoso.sharepoint.com" it would 
         /// be "contoso".</param>
+        /// <param name="appType">The type of ClientApplication to use.</param>
         public Auth(string tenantId,
                     string appId,
-                    string tenantString)
+                    string tenantString,
+                    ClientApplicationType appType = ClientApplicationType.Public)
         {
             //Generate the unique ID.
             Id = AuthMan.GetKey(tenantId, appId, "PublicClientApplication");
             //Save the parms.
+            AppType = appType;
             TenantId = tenantId;
             AppId = appId;
             TenantString = tenantString;
             //Get the application.
-            PublicApp = Identity.App.GetApp(appId, tenantString);
+            App = Identity.App.GetApp(appId, tenantString);
             //Call refresh method to populate the rest.
             RefreshAuth(null);
         }
@@ -173,9 +183,17 @@ namespace Extensions.Identity
         public void RefreshAuth(Object obj)
         {
             //Build the application.
-            App = Identity.App.GetApp(AppId, Cert, TenantString);
+            switch (AppType)
+            {
+                case ClientApplicationType.Confidential:
+                    App = Identity.App.GetApp(AppId, Cert, TenantString);
+                    break;
+                case ClientApplicationType.Public:
+                    App = Identity.App.GetApp(AppId, TenantString);
+                    break;
+            }
             //Get a valid AuthenticationResult for the app.
-            AuthResult = GetAuthResult(App, TenantId);
+            AuthResult = GetAuthResult(App, TenantId, AppType);
             //Build the GraphServiceClient object using the AuthenticatedResult
             //from the previous step.
             GraphClient = new GraphServiceClient(
@@ -217,12 +235,15 @@ namespace Extensions.Identity
         /// <param name="app">The application previously generated.</param>
         /// <param name="tenantId">The Tenant/Directory ID of the target 
         /// tenant.</param>
+        /// <param name="appType">The type of ClientApplication to use.</param>
         /// <param name="scopes">The authentication scopes to target.</param>
         /// <returns>The AuthenticationResult containing the AccessToken
         /// to use for requests.</returns>
-        public AuthenticationResult GetAuthResult(IConfidentialClientApplication app,
-                                                  string tenantId,
-                                                  string[] scopes = null)
+        public AuthenticationResult GetAuthResult(
+            object app,
+            string tenantId,
+            ClientApplicationType appType = ClientApplicationType.Confidential,
+            string[] scopes = null)
         {
             //If no scopes are specified, default to the current Scopes.
             if (scopes is null)
@@ -234,9 +255,37 @@ namespace Extensions.Identity
                 Scopes = scopes;
             }
             //Generate the result.
-            AuthResult = app.AcquireTokenForClient(scopes)
-                .WithTenantId(tenantId)
-                .ExecuteAsync().GetAwaiter().GetResult();
+            switch (appType)
+            {
+                case ClientApplicationType.Confidential:
+                    var appC = app as IConfidentialClientApplication;
+                    AuthResult = appC.AcquireTokenForClient(scopes)
+                        .WithTenantId(tenantId)
+                        .ExecuteAsync().GetAwaiter().GetResult();
+                    break;
+                case ClientApplicationType.Public:
+                    var appP = app as IPublicClientApplication;
+                    var accounts = appP.GetAccountsAsync().GetAwaiter().GetResult();
+                    AuthResult = GetPublicAppAuthResult(
+                        ref appP,
+                        ref accounts,
+                        PublicAppAuthResultType.Silent);
+                    if (AuthResult == null)
+                    {
+                        AuthResult = GetPublicAppAuthResult(
+                            ref appP,
+                            ref accounts,
+                            PublicAppAuthResultType.Interactive);
+                        if (AuthResult == null)
+                        {
+                            AuthResult = GetPublicAppAuthResult(
+                                ref appP,
+                                ref accounts,
+                                PublicAppAuthResultType.Prompt);
+                        }
+                    }
+                    break;
+            }
             return AuthResult;
         }
     }
