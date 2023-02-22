@@ -1,4 +1,4 @@
-﻿#pragma warning disable CS1587, CS1998, IDE0059, IDE0028
+﻿#pragma warning disable CS0168, CS1587, CS1998, IDE0059, IDE0028
 
 /// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
@@ -153,7 +153,6 @@ namespace Extensions.Identity
         /// Auth object.</param>
         /// <param name="appId">The Application/Client ID to use for the 
         /// Auth object.</param>
-        /// object.</param>
         /// <param name="tenantString">The base tenant string to use for 
         /// the Auth object e.g. for "contoso.sharepoint.com" it would 
         /// be "contoso".</param>
@@ -226,4 +225,4 @@ namespace Extensions.Identity
         }
     }
 }
-#pragma warning restore CS1587, CS1998, IDE0059, IDE0028
+#pragma warning restore CS0168, CS1587, CS1998, IDE0059, IDE0028
