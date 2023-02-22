@@ -280,7 +280,7 @@
 	- Add `Extensions.Graph.GetMembers()`.<br>
 	- Add `Extensions.Graph.CreateMembers()`.<br>
 
-### **4.4.700 (2023-02-03)**<br>
+### **4.4.700 (2023-02-07)**<br>
 	- Add `Extensions.Graph.GetGroups()`.<br>
 	- Add command line feedback to `Extensions.Graph.GetListItems()`.<br>
 	- Add command line feedback to `Extensions.Graph.GetMembers()`.<br>
@@ -290,3 +290,15 @@
 	- Improved `Extensions.Graph.GetSites()` to use `NextPageRequest` aggregation instead of an explicit `PageIterator`.<br>
 	- Fixed `Extensions.Identity.Cert.GetCertByThumbPrint()` to support self signed certificates.<br>
 	- Fixed `Extensions.Identity.App.GetApp()` to pass a Uri instead of string for Authority.<br>
+
+### **4.5.700 (2023-02-22)**<br>
+	- Add default tenant configuration via JSON.
+	- Add `EnvironmentVariable` based auth attempt to the ctor for cases where no JSON is provided.
+	- Add `Extensions.Graph.GetGroups()`.<br>
+	- Add `Extensions.Graph.GetGroups(string filter)` overload.<br>
+	- Add `Extensions.Identity.Auth()` class ctor overload to use a provided X509 certificate instead of a thumbprint.  This is usefull for cases where the cert is resource embedded.
+	- Add `Extensions.Identity.AuthMan.GetAuth()` method overload to support resource embedded certificates.
+	- Add `Extensions.Identity.App.GetApp()` overload to support `IPublicClientApplication`.
+	- Add `Extensions.Identity.Auth` ctor overload to support `IPublicClientApplication`.
+	- Add `Extensions.Identity.AuthMan.GetPublicAuth() method to support `IPublicClientApplication`.
+	- Updated class signatures to `[Serializable]` and `partial`.
