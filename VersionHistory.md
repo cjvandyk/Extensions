@@ -302,3 +302,8 @@
 	- Add `Extensions.Identity.Auth` ctor overload to support `IPublicClientApplication`.
 	- Add `Extensions.Identity.AuthMan.GetPublicAuth() method to support `IPublicClientApplication`.
 	- Updated class signatures to `[Serializable]` and `partial`.
+
+### **4.6.700 (2023-02-)**<br>
+	- Add `Extensions.Identity.Auth.ClientApplicationType` to differentiate between `IConfidentialClientApplication` and `IPublicClientApplication` types used in `Extensions.Identity.Auth` class.
+	- Merge Public and Confidential ClientApplication.
+	- Fixed `Extensions.Identity.AuthMan` ctor bug.
