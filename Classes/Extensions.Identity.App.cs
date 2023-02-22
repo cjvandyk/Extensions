@@ -160,7 +160,7 @@ namespace Extensions.Identity
         /// <param name="authType">The type of authentication to use.  Values
         /// range from least to most intrusive to the end user.</param>
         /// <returns>A valid AuthenticationResult or null.</returns>
-        internal static AuthenticationResult? GetPublicAppAuthResult(
+        internal static AuthenticationResult GetPublicAppAuthResult(
             ref IPublicClientApplication app,
             ref System.Collections.Generic.IEnumerable<IAccount> accounts,
             PublicAppAuthResultType authType)
