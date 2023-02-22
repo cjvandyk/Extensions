@@ -145,6 +145,45 @@ namespace Extensions.Identity
         }
 
         /// <summary>
+        /// Method to get a matching Auth object from the stack or if it
+        /// doesn't exist on the stack, generate the new Auth object and
+        /// push it to the stack.
+        /// </summary>
+        /// <param name="tenantId">The Tenant/Directory ID to use for the 
+        /// Auth object.</param>
+        /// <param name="appId">The Application/Client ID to use for the 
+        /// Auth object.</param>
+        /// object.</param>
+        /// <param name="tenantString">The base tenant string to use for 
+        /// the Auth object e.g. for "contoso.sharepoint.com" it would 
+        /// be "contoso".</param>
+        /// <returns>A valid Auth object from the stack.</returns>
+        public static Auth GetPublicAuth(string tenantId,
+                                         string appId,
+                                         string tenantString)
+        {
+            //Generate the key from the parms.
+            string key = GetKey(tenantId, appId, "PublicClientApplication");
+            //Check if the key is on the stack.
+            if (AuthStack.ContainsKey(key))
+            {
+                //If it is, set the current ActiveAuth to that stack instance.
+                ActiveAuth = AuthStack[key];
+            }
+            else
+            {
+                //If it is not, generate a new Auth object.
+                var auth = new Auth(tenantId, appId, tenantString);
+                //Push it to the stack.
+                AuthStack.Add(auth.Id, auth);
+                //Set the current ActiveAuth to the new stack instance.
+                ActiveAuth = AuthStack[auth.Id];
+            }
+            //Return the ActiveAuth object.
+            return ActiveAuth;
+        }
+
+        /// <summary>
         /// Internal method to generate a consistent key for the Auth object.
         /// </summary>
         /// <param name="tenantId">The Tenant/Directory ID to use for the 
