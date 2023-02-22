@@ -54,11 +54,18 @@ namespace Extensions.Identity
             }
             catch (Exception ex) 
             {
-                //Default to environment variables if no JSON provided.
-                GetAuth(Environment.GetEnvironmentVariable("TenantId"),
-                        Environment.GetEnvironmentVariable("AppClientId"),
-                        Environment.GetEnvironmentVariable("CertThumbPrint"),
-                        Environment.GetEnvironmentVariable("TenantString"));
+                try
+                {
+                    //Default to environment variables if no JSON provided.
+                    GetAuth(Environment.GetEnvironmentVariable("TenantId"),
+                            Environment.GetEnvironmentVariable("AppClientId"),
+                            Environment.GetEnvironmentVariable("CertThumbPrint"),
+                            Environment.GetEnvironmentVariable("TenantString"));
+                }
+                catch (Exception ex2)
+                {
+                    //Swallow exception if no config values available.
+                }
             }
         }
 
