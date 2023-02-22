@@ -33,9 +33,13 @@ namespace Extensions.Identity
         /// </summary>
         public X509Certificate2 Cert { get; private set; }
         /// <summary>
-        /// The current ConfidentialClientApplication of the current Auth object.
+        /// The current IConfidentialClientApplication of the current Auth object.
         /// </summary>
         public IConfidentialClientApplication App { get; private set; }
+        /// <summary>
+        /// The current IPublicClientApplication of the current Auth object.
+        /// </summary>
+        public IPublicClientApplication PublicApp { get; private set; }
         /// <summary>
         /// The current AuthenticationResult of the current Auth object.
         /// </summary>
@@ -132,6 +136,31 @@ namespace Extensions.Identity
             TenantString = tenantString;
             //Get the application.
             App = Identity.App.GetApp(appId, Cert.Thumbprint, tenantString);
+            //Call refresh method to populate the rest.
+            RefreshAuth(null);
+        }
+
+        /// <summary>
+        /// The constructor that populates all the member variables of this
+        /// instance of the Auth object.
+        /// </summary>
+        /// <param name="tenantId">The Tenant/Directory ID of the target.</param>
+        /// <param name="appId">The Application/Client ID of the target.</param>
+        /// <param name="tenantString">The base tenant string used with the 
+        /// current Auth object e.g. for "contoso.sharepoint.com" it would 
+        /// be "contoso".</param>
+        public Auth(string tenantId,
+                    string appId,
+                    string tenantString)
+        {
+            //Generate the unique ID.
+            Id = AuthMan.GetKey(tenantId, appId, "PublicClientApplication");
+            //Save the parms.
+            TenantId = tenantId;
+            AppId = appId;
+            TenantString = tenantString;
+            //Get the application.
+            PublicApp = Identity.App.GetApp(appId, tenantString);
             //Call refresh method to populate the rest.
             RefreshAuth(null);
         }
