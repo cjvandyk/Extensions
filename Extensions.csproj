@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net7.0;net6.0;net5.0;netstandard2.1;netstandard2.0;netcoreapp3.1;net48;net472;net471;net47;net462;net461</TargetFrameworks>
+    <TargetFrameworks>net7.0;net6.0;netstandard2.1;netstandard2.0;netcoreapp3.1;net48;net472;net471;net47;net462</TargetFrameworks>
 	<NoWarn>$(NoWarn);CS1587</NoWarn>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <PackageProjectUrl>https://github.com/cjvandyk/extensions</PackageProjectUrl>
@@ -27,21 +27,36 @@
     <Compile Remove="Extensions5\**" />
     <Compile Remove="Extensions6\**" />
     <Compile Remove="Extensions7\**" />
+    <Compile Remove="ItemTemplate\**" />
     <Compile Remove="Projects\**" />
     <Compile Remove="TemplateClassLibrary\**" />
     <Compile Remove="TESTING\**" />
+    <Compile Remove="VSIXProject\**" />
+    <Compile Remove="VSIX\**" />
+    <Compile Remove="~CsVisualStudioExtensions\**" />
+    <Compile Remove="~ExtensionsClass\**" />
     <EmbeddedResource Remove="Extensions5\**" />
     <EmbeddedResource Remove="Extensions6\**" />
     <EmbeddedResource Remove="Extensions7\**" />
+    <EmbeddedResource Remove="ItemTemplate\**" />
     <EmbeddedResource Remove="Projects\**" />
     <EmbeddedResource Remove="TemplateClassLibrary\**" />
     <EmbeddedResource Remove="TESTING\**" />
+    <EmbeddedResource Remove="VSIXProject\**" />
+    <EmbeddedResource Remove="VSIX\**" />
+    <EmbeddedResource Remove="~CsVisualStudioExtensions\**" />
+    <EmbeddedResource Remove="~ExtensionsClass\**" />
     <None Remove="Extensions5\**" />
     <None Remove="Extensions6\**" />
     <None Remove="Extensions7\**" />
+    <None Remove="ItemTemplate\**" />
     <None Remove="Projects\**" />
     <None Remove="TemplateClassLibrary\**" />
     <None Remove="TESTING\**" />
+    <None Remove="VSIXProject\**" />
+    <None Remove="VSIX\**" />
+    <None Remove="~CsVisualStudioExtensions\**" />
+    <None Remove="~ExtensionsClass\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -71,7 +86,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
     <PackageReference Include="Microsoft.Identity.Client" Version="4.49.1" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">

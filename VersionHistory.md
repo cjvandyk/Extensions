@@ -303,7 +303,12 @@
 	- Add `Extensions.Identity.AuthMan.GetPublicAuth() method to support `IPublicClientApplication`.
 	- Updated class signatures to `[Serializable]` and `partial`.
 
-### **4.6.700 (2023-02-)**<br>
+### **4.6.700 (2023-02-22)**<br>
 	- Add `Extensions.Identity.Auth.ClientApplicationType` to differentiate between `IConfidentialClientApplication` and `IPublicClientApplication` types used in `Extensions.Identity.Auth` class.
-	- Merge Public and Confidential ClientApplication.
 	- Fixed `Extensions.Identity.AuthMan` ctor bug.
+	- Merge Public and Confidential ClientApplication.
+
+### **4.7.700 (2023-02-24)**<br>
+	- Add `System.Logit` class for logging functionality.
+	- Add `~ExtensionsClass` project for new Class extension in Visual Studio.
+	- Add `~CsVisualStudioExtensions` project to house Visual Studio extensions.
