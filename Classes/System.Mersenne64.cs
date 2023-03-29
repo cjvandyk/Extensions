@@ -24,7 +24,7 @@
 using System;
 using System.Collections;
 using static Extensions.Constants;
-using static Extensions.Universal;
+using static Extensions.Core;
 
 namespace Extensions
 {

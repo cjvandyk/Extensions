@@ -1,4 +1,4 @@
-﻿#pragma warning disable CS1587
+﻿#pragma warning disable CA1416, CS0162, CS0168, CS1587, CS1591, CS1998, IDE0028, IDE0059
 
 /// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
@@ -8,413 +8,1003 @@
 /// </summary>
 
 using System;
-
-using Extensions;
-using static Extensions.Universal;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading;
+using Microsoft.Extensions.Logging;
+using Microsoft.Graph;
 
 namespace System
 {
     /// <summary>
-    /// Class that provides easy logging mechanisms to screen, event log or file.
+    /// Logging class with options for targeting screen, file, Event Log,
+    /// SharePoint list, ILogger and database.
     /// </summary>
-    public class Logging
+    [Serializable]
+    public static partial class Logit
     {
         /// <summary>
-        /// Lock used when writing to log file.
+        /// Class containing the instance of the Logit engine.
         /// </summary>
-        private static System.Threading.ReaderWriterLockSlim _lock = 
-            new System.Threading.ReaderWriterLockSlim();
-        /// <summary>
-        /// The last cursor position top value.
-        /// </summary>
-        private static int _top { get; set; }
-        /// <summary>
-        /// The last cursor position left value.
-        /// </summary>
-        private static int _left { get; set; }
-        /// <summary>
-        /// The last console foreground color.
-        /// </summary>
-        private static ConsoleColor _text { get; set; }
-        /// <summary>
-        /// The last console background color.
-        /// </summary>
-        private static ConsoleColor _background { get; set; }
-        /// <summary>
-        /// The event log to use for writing.
-        /// </summary>
-        private static System.Diagnostics.EventLog _eventlog { get; set; }
-        /// <summary>
-        /// The file system writer used to log to file.
-        /// </summary>
-        private static System.IO.StreamWriter _file { get; set; }
-        /// <summary>
-        /// The file path to the current log file.
-        /// </summary>
-        private static string _logfile { get; set; }
-        /// <summary>
-        /// Private stringbuilder used to generate log messages.
-        /// </summary>
-        private static System.Text.StringBuilder _str { get; set; }
-        #region Output Control Switches
-        /// <summary>
-        /// Trigger to control messages being written to the LogFile.
-        /// </summary>
-        public static bool WriteToFile { get; set; } = true;
-        /// <summary>
-        /// Trigger to control messages being written to the console.
-        /// </summary>
-        public static bool WriteToConsole { get; set; } = true;
-        /// <summary>
-        /// Trigger to control messages being written to the Event Log.
-        /// </summary>
-        public static bool WriteToEventLog { get; set; } = false;
-        /// <summary>
-        /// Switch to control if a date/time stamp is injected with the message.
-        /// </summary>
-        public static bool Stamp { get; set; }
-        #endregion Output Control Switches
-
-        #region Constructor
-        /// <summary>
-        /// Class constructor.
-        /// </summary>
-        /// <param name="File">Optional log file path.  If no value
-        /// is provided, the log file is created in the executing assembly's
-        /// current folder.</param>
-        /// <param name="UseTimeStamp">Optional flag used to control if
-        /// date/time stamps are added to logging messages.</param>
-        /// <param name="LogToConsole">Optional flag used to turn on/off
-        /// logging to the console.</param>
-        /// <param name="LogToEventLog">Optional flag used to turn on/off
-        /// logging to the Windows event log.</param>
-        /// <param name="LogToFile">Optional flag used to turn on/off
-        /// logging to file.</param>
-        public Logging(string File = "",
-                       bool UseTimeStamp = true,
-                       bool LogToConsole = true,
-                       bool LogToEventLog = false,
-                       bool LogToFile = true)
+        [Serializable]
+        public partial class Instance
         {
-            if (File == "")
+            #region Globals
+            /// <summary>
+            /// The delegate method to call in order to determine if debug
+            /// logging should take place.
+            /// </summary>
+            public Func<bool> IsDebugMethod { get; private set; }
+            /// <summary>
+            /// The file to which logging will be done if the logToFile
+            /// switch is set to true.
+            /// </summary>
+            public string LogFile { get; private set; } =
+                GetExecutingAssemblyFileName() + TimeStamp() + ".log";
+            /// <summary>
+            /// The default message type if none is specified.
+            /// </summary>
+            public MessageType DefaultLogMessageType { get; private set; }
+                = MessageType.Information;
+            /// <summary>
+            /// The ILogger instance to use for logging.
+            /// </summary>
+            public ILogger ILogger { get; private set; } = null;
+            /// <summary>
+            /// A Graph client for logging to SharePoint.
+            /// </summary>
+            public GraphServiceClient GraphClient { get; private set; } = null;
+            /// <summary>
+            /// The base URL of the SharePoint site housing the target list.
+            /// </summary>
+            public string LogSiteUrl { get; private set; } = null;
+            /// <summary>
+            /// The list name for the target list when logging to SharePoint.
+            /// </summary>
+            public string LogListName { get; private set; } = null;
+            #endregion Globals
+
+            #region Switches
+            /// <summary>
+            /// When set to true, will output logging content to the console.
+            /// Default = true;
+            /// </summary>
+            public bool LogToConsole { get; set; } = true;
+            /// <summary>
+            /// When set to true, will output logging content to the log file.
+            /// Default = false;
+            /// </summary>
+            public bool LogToFile { get; set; } = false;
+            /// <summary>
+            /// When set to true, will output logging content to the Event Log.
+            /// Default = false;
+            /// </summary>
+            public bool LogToEventLog { get; set; } = false;
+            /// <summary>
+            /// When set to true, will output logging content to a provided
+            /// ILogger client.
+            /// </summary>
+            public bool LogToILogger { get; set; } = false;
+            /// <summary>
+            /// When set to true, will output logging content to a SharePoint list.
+            /// Default = false;
+            /// </summary>
+            public bool LogToSPList { get; set; } = false;
+            /// <summary>
+            /// When set to true, will output logging content to a database.
+            /// Default = false;
+            /// </summary>
+            public bool LogToDB { get; set; } = false;
+            /// <summary>
+            /// Define if timestamps should be prepended to messages.
+            /// Default = true;
+            /// </summary>
+            public bool IncludeTimeStamp { get; set; } = true;
+            /// <summary>
+            /// Define if console output should be in a static location thus
+            /// constantly overwriting the previous output.  This is useful in
+            /// status updates like % complete etc.
+            /// Default = false;
+            /// </summary>
+            public bool StaticConsoleLocation { get; set; } = false;
+            #endregion Switches
+
+            #region Constructors
+            /// <summary>
+            /// Default constructor that logs only to the console.
+            /// </summary>
+            /// <param name="isDebugMethod">A delegate method called to determine
+            /// if debug logging should happen.</param>
+            /// <param name="defaultLogMessageType">The default message type to
+            /// use in logging if type isn't specified.</param>
+            /// <param name="logToConsole">Bool determining if logging is done to
+            /// the console.</param>
+            /// <param name="logToFile">Bool determining if logging is done to
+            /// a file.</param>
+            /// <param name="logToEventLog">Bool determining if logging is done to
+            /// the Event Log.</param>
+            /// <param name="logToILogger">Bool determining if logging is done to
+            /// the provided ILogger.</param>
+            /// <param name="iLogger">The ILogger instance to use for logging.</param>
+            public Instance(
+                Func<bool> isDebugMethod,
+                MessageType defaultLogMessageType = MessageType.Information,
+                bool logToConsole = true,
+                bool logToFile = false,
+                bool logToEventLog = false,
+                bool logToILogger = false,
+                ILogger iLogger = null)
             {
-                _logfile = GetExecutingAssemblyFolder() +
-                    "\\" +
-                    GetExecutingAssemblyName().Replace(" ", "_") +
-                    "." +
-                    Universal.TimeStamp() +
-                    ".csv";
+                //Capture the delegate method.
+                IsDebugMethod = isDebugMethod;
+                //Configure if logging should take place to the console.
+                LogToConsole = logToConsole;
+                //Configure if logging should take place to file.
+                LogToFile = logToFile;
+                //Configure the default log file for this session.
+                LogFile = GetExecutingAssemblyFileName() + TimeStamp() + ".log";
+                //Configure if logging should take place to the Event Log.
+                LogToEventLog = logToEventLog;
+                //Configure the default log message type for this session.
+                DefaultLogMessageType = defaultLogMessageType;
+                //Configure if logging should take place to ILogger.
+                LogToILogger = logToILogger;
+                //Configure the default ILogger instance for this session.
+                ILogger = iLogger;
+                //Update default instance to this.
+                activeLogitInstance = this;
             }
-            else
+
+            /// <summary>
+            /// Default constructor that logs only to the console.
+            /// </summary>
+            /// <param name="isDebugMethod">A delegate method called to determine
+            /// if debug logging should happen.</param>
+            /// <param name="graphClient">The GraphServiceClient to use for
+            /// writing SharePoint list entries.</param>
+            /// <param name="spSiteUrl">The base URL of the SharePoint site
+            /// that houses the target list.</param>
+            /// <param name="spListName">The GUID of the target SharePoint list
+            /// to which logging will be done.</param>
+            /// <param name="defaultLogMessageType">The default message type to
+            /// use in logging if type isn't specified.</param>
+            /// <param name="logToConsole">Bool determining if logging is done to
+            /// the console.</param>
+            /// <param name="logToFile">Bool determining if logging is done to
+            /// a file.</param>
+            /// <param name="logToEventLog">Bool determining if logging is done to
+            /// the Event Log.</param>
+            /// <param name="logToSPList">Bool determining if logging is done to
+            /// a SharePoint list.</param>
+            /// <param name="logToDatabase">Bool determining if logging is done to
+            /// a database.</param>
+            /// <param name="logToILogger">Bool determining if logging is done to
+            /// the provided ILogger.</param>
+            /// <param name="iLogger">The ILogger instance to use for logging.</param>
+            public Instance(
+                Func<bool> isDebugMethod,
+                GraphServiceClient graphClient,
+                string spSiteUrl,
+                string spListName,
+                MessageType defaultLogMessageType =
+                    MessageType.Information,
+                bool logToConsole = true,
+                bool logToFile = false,
+                bool logToEventLog = false,
+                bool logToSPList = false,
+                bool logToDatabase = false,
+                bool logToILogger = false,
+                ILogger iLogger = null)
             {
-                _logfile = File.Substring(File.LastIndexOf('.'), Constants.SubstringType.LeftOfIndex);
+                //Capture the delegate method.
+                IsDebugMethod = isDebugMethod;
+                //Configure if logging should take place to the console.
+                LogToConsole = logToConsole;
+                //Configure if logging should take place to file.
+                LogToFile = logToFile;
+                //Configure the default log file for this session.
+                LogFile = GetExecutingAssemblyFileName() + TimeStamp() + ".log";
+                //Configure if logging should take place to the Event Log.
+                LogToEventLog = logToEventLog;
+                //Configure if logging should take place to ILogger.
+                LogToILogger = logToILogger;
+                //Configure the default ILogger instance for this session.
+                ILogger = iLogger;
+                //Configure if logging should take place to a SharePoint list.
+                LogToSPList = logToSPList;
+                //Configure the default GraphServiceClient to use for logging.
+                GraphClient = graphClient;
+                //Configure the default SharePoint site for this session.
+                LogSiteUrl = spSiteUrl;
+                //Configure the default SharePoint list for this session.
+                LogListName = spListName;
+                //Configure if logging should take place to a database.
+                LogToDB = logToDatabase;
+                //Configure the default log message type for this session.
+                DefaultLogMessageType = defaultLogMessageType;
+                //Update default instance to this.
+                activeLogitInstance = this;
             }
-            _eventlog = new System.Diagnostics.EventLog();
-            _eventlog.Source = "Application";
-            _str = new System.Text.StringBuilder();
-            WriteToConsole = LogToConsole;
-            WriteToEventLog = LogToEventLog;
-            WriteToFile = LogToFile;
-            Stamp = UseTimeStamp;
+            #endregion Constructors
+
+            #region Worker Methods
+            /// <summary>
+            /// Called to write "Information" entries.
+            /// </summary>
+            /// <param name="message">The string message to log.</param>
+            /// <param name="eventId">The Event Log event ID to use.</param>
+            public async void Inf(
+                string message,
+                int eventId = 0)
+            {
+                System.Logit.Inf(message, eventId, this);
+            }
+
+            /// <summary>
+            /// Called to write "Warning" entries.
+            /// </summary>
+            /// <param name="message">The string message to log.</param>
+            /// <param name="eventId">The Event Log event ID to use.</param>
+            public async void Wrn(
+                string message,
+                int eventId = 0)
+            {
+                System.Logit.Wrn(message, eventId, this);
+            }
+
+            /// <summary>
+            /// Called to write "Error" entries.
+            /// </summary>
+            /// <param name="message">The string message to log.</param>
+            /// <param name="eventId">The Event Log event ID to use.</param>
+            public async void Err(
+                string message,
+                int eventId = 0)
+            {
+                System.Logit.Err(message, eventId, this);
+            }
+
+            /// <summary>
+            /// Called to write "Verbose" entries.
+            /// </summary>
+            /// <param name="message">The string message to log.</param>
+            /// <param name="eventId">The Event Log event ID to use.</param>
+            public async void Vrb(
+                string message,
+                int eventId = 0)
+            {
+                System.Logit.Vrb(message, eventId, this);
+            }
+            #endregion Worker Methods
         }
-        #endregion Constructor
+
+        #region Globals
+        /// <summary>
+        /// The lock object to prevent file I/O clashes.
+        /// </summary>
+        private static ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
+        /// <summary>
+        /// Lock object for marshalling static console location output.
+        /// </summary>
+        private static readonly object _lockStaticConsoleLocation = new object();
+        /// <summary>
+        /// Define the type of messages that can be written.
+        /// </summary>
+        public enum MessageType
+        {
+            Error,
+            Warning,
+            Information,
+            Verbose
+        }
+        /// <summary>
+        /// Define the types of logs that can be written.
+        /// </summary>
+        public enum LogType
+        {
+            Console,
+            File,
+            EventLog,
+            SPList,
+            ILogger,
+            Database
+        }
+        /// <summary>
+        /// The currently active Logit engine instance that will handle
+        /// requests.
+        /// </summary>
+        public static Instance activeLogitInstance { get; set; } 
+            = new Instance(IsDebug);
+        #endregion Globals
+
+        #region Debug Switch
+        /// <summary>
+        /// Default delegate method to enable logging.
+        /// </summary>
+        /// <returns>Always true when no delegate is provided.</returns>
+        public static bool IsDebug()
+        {
+            return true;
+        }
 
         /// <summary>
-        /// Private method to write to active message receptors.
+        /// Intended method for calling delegate debug switch determinors.
         /// </summary>
-        /// <param name="Message">Message to write.</param>
-        /// <param name="ID">An event ID to include with the log entry.</param>
-        /// <param name="MessageType">The type of message i.e. INF, WRN or ERR.</param>
-        private static void Msg(string Message, 
-                                int ID = 0,
-                                string MessageType = "INF")
+        /// <param name="func">The delegate method to call.</param>
+        /// <returns>The return value of the delegate method.</returns>
+        public static bool IsDebug(Func<bool> func)
         {
-            if (WriteToConsole)
+            return func();
+        }
+        #endregion Debug Switch
+
+        #region Utility Methods
+        /// <summary>
+        /// This method will save the current console foreground color
+        /// and then write the parameter passed message to the console
+        /// output in different colors based on the MessageType before
+        /// restoring the console foreground to the original color it had
+        /// before the method was called.  Colors are red for Error, yellow
+        /// for Warning, gray for Information and cyan for Verbose.
+        /// </summary>
+        /// <param name="message">Output to write.</param>
+        /// <param name="isDebugValidationMethod">The name of the delegate method
+        /// to call to determine if debug logging should happen.</param>
+        /// <param name="messageType">The type of message to write.  Default
+        /// value is MessageType.Information.</param>
+        private static void writeConsoleMessage(
+            string message,
+            Func<bool> isDebugValidationMethod = null,
+            MessageType messageType = MessageType.Information)
+        {
+            //Save the current console foreground color.
+            var foreground = Console.ForegroundColor;
+            //Save the current console background color.
+            var background = Console.BackgroundColor;
+            try
             {
-                switch (MessageType.ToUpper())
+                //Check if a debug validation method was specified.
+                if (isDebugValidationMethod != null)
                 {
-                    case "INF":
-                        ConsoleMessage(Message,
-                                       ID,
-                                       ConsoleColor.White,
-                                       ConsoleColor.Black);
-                        break;
-                    case "WRN":
-                        ConsoleMessage(Message,
-                                       ID,
-                                       ConsoleColor.Yellow,
-                                       ConsoleColor.Black);
-                        break;
-                    case "ERR":
-                        ConsoleMessage(Message,
-                                       ID,
-                                       ConsoleColor.Red,
-                                       ConsoleColor.Black);
-                        break;
+                    //Check if debug is on.  If not, no logging takes place.
+                    if (IsDebug(isDebugValidationMethod))
+                    {
+                        //Set console output to:
+                        //red for error,
+                        //yellow for warning,
+                        //gray for information,
+                        //cyan for verbose.
+                        switch (messageType)
+                        {
+                            case MessageType.Error:
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                break;
+                            case MessageType.Warning:
+                                Console.ForegroundColor = ConsoleColor.Yellow;
+                                break;
+                            case MessageType.Information:
+                                Console.ForegroundColor = ConsoleColor.Gray;
+                                break;
+                            case MessageType.Verbose:
+                                Console.ForegroundColor = ConsoleColor.Cyan;
+                                break;
+                        }
+                        //Default the background to black.
+                        Console.BackgroundColor = ConsoleColor.Black;
+                        //Write the error.
+                        Console.WriteLine(message);
+                        //Reset the console colors.
+                        Console.ForegroundColor = foreground;
+                        Console.BackgroundColor = background;
+                    }
                 }
             }
-            if (WriteToEventLog)
+            catch (Exception ex)
             {
-                switch (MessageType.ToUpper())
+                //Logging code may NEVER terminate its parent through exceptions.
+                try
                 {
-                    case "INF":
-                        EventLogMessage(Message,
-                                        Diagnostics.EventLogEntryType.Information,
-                                        ID);
-                        break;
-                    case "WRN":
-                        EventLogMessage(Message,
-                                        Diagnostics.EventLogEntryType.Warning,
-                                        ID);
-                        break;
-                    case "ERR":
-                        EventLogMessage(Message,
-                                        Diagnostics.EventLogEntryType.Error,
-                                        ID);
-                        break;
+                    //Write the error in red to the console.
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(ex.ToString());
+                    Console.ForegroundColor = foreground;
+                    Console.BackgroundColor = background;
+                }
+                catch (Exception ex2)
+                {
+                    //Just reset the console colors.
+                    Console.ForegroundColor = foreground;
+                    Console.BackgroundColor = background;
                 }
             }
-            if (WriteToFile)
+        }
+
+        /// <summary>
+        /// This method will save the current console foreground color
+        /// and then write the parameter passed message to the console
+        /// output in different colors based on the MessageType before
+        /// restoring the console foreground to the original color it had
+        /// before the method was called.  Colors are red for Error, yellow
+        /// for Warning, gray for Information and cyan for Verbose.
+        /// </summary>
+        /// <param name="message">Output to write.</param>
+        /// <param name="isDebugValidationMethod">The name of the delegate method
+        /// to call to determine if debug logging should happen.</param>
+        public static void writeConsoleError(
+            string message,
+            Func<bool> isDebugValidationMethod = null)
+        {
+            writeConsoleMessage(message, isDebugValidationMethod, MessageType.Error);
+        }
+
+        /// <summary>
+        /// Turn the currently running assembly name into a pathed file name
+        /// string that can be used as a log file name.
+        /// This method can also be called with a (false) parameter to simply
+        /// return the fully qualified path to the current executing assembly
+        /// file name.
+        /// </summary>
+        /// <param name="noSpacesinFileName">If true, spaces are replaced
+        /// with underscores.</param>
+        /// <returns>Unique string representing the fully qualified path to
+        /// the executing assembly with spaces in the file name portion of
+        /// the string replaced by underscores e.g. 
+        /// C:\Users\CvD\My Documents\App Name.exe
+        /// becomes
+        /// C:\Users\CvD\My_Documents\App_Name.exe</returns>
+        public static string GetExecutingAssemblyFileName(
+            bool noSpacesinFileName = true)
+        {
+            //Logging code may NEVER terminate its parent through exceptions.
+            try
             {
-                FileMessage(Message,
-                            MessageType,
-                            ID);
+                return Path.GetDirectoryName(
+                    Reflection.Assembly.GetEntryAssembly().Location)
+                    .TrimEnd('\\') + "\\" + //Ensure no double trailing slash.
+                    Uri.EscapeDataString(
+                    Reflection.Assembly.GetEntryAssembly()
+                    .ManifestModule.Name.Replace(" ", "_"));
+            }
+            catch (Exception ex)
+            {
+                //Write exception info to the console in default red.
+                writeConsoleError(ex.ToString());
+                //Return empty string instead of null as null could cause an
+                //exception to be thrown by the calling code.
+                return "";
             }
         }
 
         /// <summary>
-        /// Write an Information message to logs.
+        /// Strip "http://" and "https://" headers from URLs and replace
+        /// forward slashes (/) with underscored (_) and spaces with
+        /// dashes (-).
+        /// This is useful for turning a web URL into a log file name or
+        /// part thereof.
         /// </summary>
-        /// <param name="Message">Message to write.</param>
-        /// <param name="ID">Optional event ID to include.</param>
-        public static void Inf(string Message, 
-                               int ID = 0)
+        /// <param name="url">The URL to transform.</param>
+        /// <returns>The transformed URL value.</returns>
+        public static string htmlStrip(string url)
         {
-            Msg(Message, ID, "INF");
+            //Logging code may NEVER terminate its parent through exceptions.
+            try
+            {
+                return url.ToLower().Replace("https://", "")
+                                    .Replace("http://", "")
+                                    .Replace("/", "_")
+                                    .Replace(" ", "-");
+            }
+            catch (Exception ex)
+            {
+                //Write exception info to the console in default red.
+                writeConsoleError(ex.ToString());
+                //Return empty string instead of null as null could cause an
+                //exception to be thrown by the calling code.
+                return "";
+            }
         }
 
         /// <summary>
-        /// Write a Warning message to logs.
+        /// This method returns the current Zulu (GMT) date/time value as a
+        /// string stamp in the format yyyy-MM-dd@hh.mm.ss.ttt 
+        /// e.g. 2017-07-04@09.03.01.567Z
         /// </summary>
-        /// <param name="Message">Message to write.</param>
-        /// <param name="ID">Optional event ID to include.</param>
-        public static void Wrn(string Message, 
-                               int ID = 0)
+        /// <returns>String stamp in the format yyyy-MM-dd@hh.mm.ss.ttt
+        /// e.g. 2017-07-04@09.03.01.567Z</returns>
+        public static string timeStampZulu()
         {
-            Msg(Message, ID, "WRN");
+            //Logging code may NEVER terminate its parent through exceptions.
+            try
+            {
+                var time = DateTime.UtcNow;
+                return time.Year.ToString() + "-" +
+                    time.Month.ToString("d2") + "-" +
+                    time.Day.ToString("d2") + "@" +
+                    time.Hour.ToString("d2") + "." +
+                    time.Minute.ToString("d2") + "." +
+                    time.Second.ToString("d2") + "." +
+                    time.Millisecond.ToString("d3");
+            }
+            catch (Exception ex)
+            {
+                //Write exception info to the console in default red.
+                writeConsoleError(ex.ToString());
+                //Return empty string instead of null as null could cause an
+                //exception to be thrown by the calling code.
+                return "";
+            }
         }
 
         /// <summary>
-        /// Write an Error message to logs.
+        /// This method returns the current local date/time value as a
+        /// string stamp in the format yyyy-MM-dd@hh.mm.ss.ttt 
+        /// e.g. 2017-07-04@09.03.01.567Z
         /// </summary>
-        /// <param name="Message">Message to write.</param>
-        /// <param name="ID">Optional event ID to include.</param>
-        public static void Err(string Message,
-                               int ID = 0)
+        /// <returns>String stamp in the format yyyy-MM-dd@hh.mm.ss.ttt
+        /// e.g. 2017-07-04@09.03.01.567Z</returns>
+        public static string TimeStamp()
         {
-            Msg(Message, ID, "ERR");
+            //Logging code may NEVER terminate its parent through exceptions.
+            try
+            {
+                var time = DateTime.UtcNow;
+                return time.Year.ToString() + "-" +
+                    time.Month.ToString("d2") + "-" +
+                    time.Day.ToString("d2") + "@" +
+                    time.Hour.ToString("d2") + "." +
+                    time.Minute.ToString("d2") + "." +
+                    time.Second.ToString("d2") + "." +
+                    time.Millisecond.ToString("d3");
+            }
+            catch (Exception ex)
+            {
+                //Write exception info to the console in default red.
+                writeConsoleError(ex.ToString());
+                //Return empty string instead of null as null could cause an
+                //exception to be thrown by the calling code.
+                return "";
+            }
         }
 
         /// <summary>
-        /// Construct the final message by prepending the date/time stamp if
-        /// the switch is active, appending the ID and 1-N string arguments.
+        /// This method returns the executing computer's Fully Qualified
+        /// Domain Name.
         /// </summary>
-        /// <param name="ID">The event ID to include.</param>
-        /// <param name="Text">An array of text strings to append.</param>
+        /// <returns>FQDN</returns>
+        public static string getFQDN()
+        {
+            //Logging code may NEVER terminate its parent through exceptions.
+            try
+            {
+                string domainName =
+                    System.Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties().DomainName;
+                string hostName = System.Net.Dns.GetHostName();
+                domainName = "." + domainName;
+                if (!hostName.EndsWith(domainName))
+                {
+                    hostName += domainName;
+                }
+                return hostName;
+            }
+            catch (Exception ex)
+            {
+                //Write exception info to the console in default red.
+                writeConsoleError(ex.ToString());
+                //Return empty string instead of null as null could cause an
+                //exception to be thrown by the calling code.
+                return "";
+            }
+        }
+
+        /// <summary>
+        /// Used to build output text with the date/time stamp
+        /// depending on the value of the includeTimeStamp switch.
+        /// </summary>
+        /// <param name="message">The message to stamp if needed.</param>
+        /// <param name="includeTimeStamp"></param>
         /// <returns></returns>
-        public static string ConstructMessage(int ID, 
-                                              params string[] Text)
+        public static string prependTimeStamp(
+            string message,
+            bool includeTimeStamp = false)
         {
-            _str.Clear();
-            if (Stamp)
+            //Logging code may NEVER terminate its parent through exceptions.
+            try
             {
-                _str.Append(Universal.TimeStamp() + ", ");
+                if (!includeTimeStamp)
+                {
+                    //No timestamp needed.  Simply return the message.
+                    return message;
+                }
+                //The inclusion of a comma (,) between the timestamp and the
+                //message is intentional.  This allows for importing of log
+                //file output into a spreadsheet via comma separated value
+                //(CSV) format while splitting timestamps and messages for
+                //sorting and filtering purposes.
+                return TimeStamp() + "  >>>   ," + message;
             }
-            _str.Append(ID + ", ");
-            foreach (string str in Text)
+            catch (Exception ex)
             {
-                _str.Append(str + ", ");
-            }
-            return _str.ToString();
-        }
-
-        #region Console
-        /// <summary>
-        /// Write a message to the command console.
-        /// </summary>
-        /// <param name="Message">The message to write to the console.</param>
-        /// <param name="ID">Optional event ID to include.</param>
-        private static void ConsoleMessage(string Message, 
-                                           int ID = 0)
-        {
-            if (Message == null)
-            {
-                Console.WriteLine(ConstructMessage(ID, "NULL"));
-            }
-            else
-            {
-                Console.WriteLine(ConstructMessage(ID, Message));
+                //Write exception info to the console in default red.
+                writeConsoleError(ex.ToString());
+                return ex.ToString();
             }
         }
+        #endregion Utility Methods
 
+        #region Worker Methods
         /// <summary>
-        /// Write a message to the command console.
+        /// Method to write a log to console.
         /// </summary>
-        /// <param name="Message">The message to write to the console.</param>
-        /// <param name="ID">Optional event ID to include.</param>
-        /// <param name="FixedLocation">Optional switch to keep the cursor
-        /// fixed in its location.  This is useful when writing progress
-        /// messages like percent complete.</param>
-        private static void ConsoleMessage(string Message, 
-                                           int ID = 0,
-                                           bool FixedLocation = false)
+        /// <param name="message">The message to write.</param>
+        /// <param name="foreground">the foreground color of the console
+        /// for the message.</param>
+        /// <param name="background">The background color of the console
+        /// for the message.  Defaults to black.</param>
+        public async static void Log(
+            string message,
+            ConsoleColor foreground,
+            ConsoleColor background = ConsoleColor.Black)
         {
-            if (FixedLocation)
-            {
-                SetCursor();
-                ConsoleMessage(Message, 
-                               ID);
-                SetCursor(true);
-            }
-            else
-            {
-                ConsoleMessage(Message, 
-                               ID);
-            }
+            Log(message,
+                0,
+                MessageType.Information,
+                null,
+                activeLogitInstance.IsDebugMethod,
+                foreground,
+                background);
         }
 
         /// <summary>
-        /// Write a message to the command console.
+        /// Log the message to the log file, provided the logging was
+        /// initialized.
         /// </summary>
-        /// <param name="Message">The message to write to the console.</param>
-        /// <param name="ID">Optional event ID to include.</param>
-        /// <param name="TextColor">Control the text color of the output.</param>
-        /// <param name="FixedLocation">Optional switch to keep the cursor
-        /// fixed in its location.  This is useful when writing progress
-        /// messages like percent complete.</param>
-        private static void ConsoleMessage(
-            string Message,
-            int ID = 0,
-            ConsoleColor TextColor = ConsoleColor.Gray, 
-            bool FixedLocation = false)
+        /// <param name="message">The message being logged.</param>
+        /// <param name="eventId">An event ID to use if logging to the
+        /// system Event Log.</param>
+        /// <param name="messageType">The message type to use.</param>
+        /// <param name="instance">The Logit instance to use.  If null,
+        /// the default instance is used.</param>
+        /// <param name="isDebugValidationMethod">A delegate method provided
+        /// which when called, will determine if the caller wants debug logging
+        /// to take place or not.</param>
+        /// <param name="foreground">The foreground color to use when
+        /// logging to console.  Defaults to gray.</param>
+        /// <param name="background">The background color to use when
+        /// logging to console.  Defaults to black.</param>
+        public async static void Log(
+            string message,
+            int eventId = 0,
+            MessageType messageType = MessageType.Information,
+            Instance instance = null,
+            Func<bool> isDebugValidationMethod = null,
+            ConsoleColor foreground = ConsoleColor.Gray,
+            ConsoleColor background = ConsoleColor.Black)
         {
-            if (Console.ForegroundColor != TextColor)
+            //Logging code may NEVER terminate its parent through exceptions.
+            try
             {
-                _text = Console.ForegroundColor;
-                Console.ForegroundColor = TextColor;
-                ConsoleMessage(Message, 
-                               ID, 
-                               FixedLocation);
-                Console.ForegroundColor = _text;
+                //Check if a debug func was specified.
+                if (isDebugValidationMethod != null)
+                {
+                    //Check if debug is enabled.
+                    if (IsDebug(isDebugValidationMethod))
+                    {
+                        //Check if a Logit instance was passed.
+                        if (instance == null)
+                        {
+                            instance = activeLogitInstance;
+                        }
+                        //Check if we should log to Console.
+                        if (instance.LogToConsole)
+                        {
+                            //Save the current console colors.
+                            var foreColor = Console.ForegroundColor;
+                            var backColor = Console.BackgroundColor;
+                            //Set console output to:
+                            //red for error,
+                            //yellow for warning,
+                            //gray for information,
+                            //cyan for verbose.
+                            switch (messageType)
+                            {
+                                case MessageType.Information:
+                                    Console.ForegroundColor = ConsoleColor.Gray;
+                                    break;
+                                case MessageType.Warning:
+                                    Console.ForegroundColor = ConsoleColor.Yellow;
+                                    break;
+                                case MessageType.Error:
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    break;
+                                case MessageType.Verbose:
+                                    Console.ForegroundColor = ConsoleColor.Cyan;
+                                    break;
+                            }
+                            //Check if an override foreground color was specified.
+                            if (foreColor != foreground)
+                            {
+                                Console.ForegroundColor = foreground;
+                            }
+                            //Check if an override background color was specified.
+                            if (backColor != background)
+                            {
+                                Console.BackgroundColor = background;
+                            }
+                            //Are we keeping output in a static location?
+                            if (instance.StaticConsoleLocation)
+                            {
+                                //Leverage the lock to ensure multiple threads
+                                //don't try to write to console concurrently.
+                                lock (_lockStaticConsoleLocation)
+                                {
+                                    //Grab the current cursor position.
+                                    var cursorTop = Console.CursorTop;
+                                    var cursorLeft = Console.CursorLeft;
+                                    //Output the message with a large trailing
+                                    //blank to clear previous output from the static
+                                    //console line.
+                                    Console.WriteLine(
+                                        prependTimeStamp(message)
+                                        .PadRight(120, ' '));
+                                    //Reset the cursor after output.
+                                    Console.CursorTop = cursorTop;
+                                    Console.CursorLeft = cursorLeft;
+                                }
+                            }
+                            //No static output location is required.
+                            else
+                            {
+                                //Simply write the message to the console.
+                                Console.WriteLine(prependTimeStamp(message));
+                            }
+                            //Reset console colors.
+                            Console.ForegroundColor = foreColor;
+                            Console.BackgroundColor = backColor;
+                        }
+                        //Check if should log to EventLog
+                        if (instance.LogToEventLog)
+                        {
+                            //Set the default EventLog type.
+                            System.Diagnostics.EventLogEntryType targetType =
+                                System.Diagnostics.EventLogEntryType.Error;
+                            //Change the default to match the message type.
+                            switch (messageType)
+                            {
+                                case MessageType.Warning:
+                                    targetType =
+                                        System.Diagnostics.EventLogEntryType.Warning;
+                                    break;
+                                case MessageType.Information:
+                                    targetType =
+                                        System.Diagnostics.EventLogEntryType.Information;
+                                    break;
+                                case MessageType.Verbose:
+                                    targetType =
+                                        System.Diagnostics.EventLogEntryType.Information;
+                                    break;
+                            }
+                            //Check if an event ID was specified.
+                            if (eventId != 0)
+                            {
+                                //Event ID specified so include it in the write.
+                                System.Diagnostics.EventLog.WriteEntry(
+                                    "Application",
+                                    message,
+                                    targetType);
+                            }
+                            else
+                            {
+                                //No event ID so write without it.
+                                System.Diagnostics.EventLog.WriteEntry(
+                                    "Application",
+                                    message,
+                                    targetType);
+                            }
+                        }
+                        //Check if we should log to file.
+                        if (instance.LogToFile)
+                        {
+                            //Extra try/catch/finally to handle file locking.
+                            try
+                            {
+                                //Obtain a lock, waiting up to 10 seconds to do so.
+                                if (_lock.TryEnterWriteLock(10000))
+                                {
+                                    //Write to the configured log file.
+                                    System.IO.File.AppendAllText(
+                                        instance.LogFile,
+                                        messageType.ToString() +
+                                            ", " +
+                                            prependTimeStamp(message) + "\n");
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                //Write exception info to the console in default red.
+                                writeConsoleError(ex.ToString());
+                                System.Diagnostics.EventLog.WriteEntry(
+                                    "Application",
+                                    ex.ToString(),
+                                    System.Diagnostics.EventLogEntryType.Error);
+                            }
+                            finally
+                            {
+                                _lock.ExitWriteLock();
+                            }
+                        }
+                        //Check if logging should be done to a SharePoint list.
+                        if (instance.LogToSPList)
+                        {
+                            var client = instance.GraphClient;
+                            if (client != null)
+                            {
+                                try
+                                {
+                                    var dic = new Dictionary<string, object>();
+                                    var msg = message.Split("|||".ToCharArray());
+                                    if (msg.Length == 2)
+                                    {
+                                        dic.Add("Title", msg[0]);
+                                        dic.Add("Message", msg[1]);
+                                    }
+                                    else
+                                    {
+                                        dic.Add("Title", message);
+                                    }
+                                    var listItem = new Microsoft.Graph.ListItem
+                                    {
+                                        Fields = new Microsoft.Graph.FieldValueSet
+                                        {
+                                            AdditionalData = dic
+                                        }
+                                    };
+                                    var result = client.Sites["root"]
+                                        .SiteWithPath($"/sites/{instance.LogSiteUrl}")
+                                        .Lists[instance.LogListName]
+                                        .Items
+                                        .Request()
+                                        .AddAsync(listItem)
+                                        .GetAwaiter().GetResult();
+                                }
+                                catch (Exception ex)
+                                {
+                                    System.Diagnostics.EventLog.WriteEntry(
+                                        "Application",
+                                        ex.ToString());
+                                }
+                            }
+                        }
+                        //Check if message should be logged to ILogger.
+                        if (instance.LogToILogger)
+                        {
+                            switch (messageType)
+                            {
+                                case MessageType.Information:
+                                    instance.ILogger.LogInformation(message);
+                                    break;
+                                case MessageType.Warning:
+                                    instance.ILogger.LogWarning(message);
+                                    break;
+                                case MessageType.Error:
+                                    instance.ILogger.LogError(message);
+                                    break;
+                                case MessageType.Verbose:
+                                    instance.ILogger.LogInformation(message);
+                                    break;
+                            }
+                        }
+                        //Check if message should be logged to database.
+                        if (instance.LogToDB)
+                        {
+                            throw new NotImplementedException("DB logging coming soon!");
+                        }
+                    }
+                }
             }
-            else
+            //Something went wrong.
+            catch (Exception ex)
             {
-                ConsoleMessage(Message, 
-                               ID, 
-                               FixedLocation);
+                //Logging code may NEVER terminate its parent through exceptions.
+                try
+                {
+                    if (instance == null)
+                    {
+                        instance = activeLogitInstance;
+                    }
+                    //Log exception to console and event log!
+                    var fore = Console.ForegroundColor;
+                    var back = Console.BackgroundColor;
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    //Write console output, stamped if needed.
+                    Console.WriteLine(prependTimeStamp(ex.ToString()));
+                    //Reset the console foreground color.
+                    Console.ForegroundColor = fore;
+                    Console.BackgroundColor = back;
+                    System.Diagnostics.EventLog.WriteEntry(
+                        "Application",
+                        ex.ToString(),
+                        System.Diagnostics.EventLogEntryType.Error);
+                }
+                catch (Exception ex2)
+                {
+                    //Swallow the error.
+                }
             }
         }
 
         /// <summary>
-        /// Write a message to the command console.
+        /// Called to write "Information" entries.
         /// </summary>
-        /// <param name="Message">The message to write to the console.</param>
-        /// <param name="ID">Optional event ID to include.</param>
-        /// <param name="TextColor">Control the text color of the output.</param>
-        /// <param name="BackgroundColor">Control the background color.</param>
-        /// <param name="FixedLocation">Optional switch to keep the cursor
-        /// fixed in its location.  This is useful when writing progress
-        /// messages like percent complete.</param>
-        public static void ConsoleMessage(
-            string Message,
-            int ID = 0,
-            ConsoleColor TextColor = ConsoleColor.Gray,
-            ConsoleColor BackgroundColor = ConsoleColor.Black,
-            bool FixedLocation = false)
+        /// <param name="message">The string message to log.</param>
+        /// <param name="eventId">The Event Log event ID to use.</param>
+        /// <param name="instance">Return value from Log() method.</param>
+        public async static void Inf(
+            string message,
+            int eventId = 0,
+            Instance instance = null)
         {
-            if (Console.BackgroundColor != BackgroundColor)
+            if (instance == null)
             {
-                _background = Console.BackgroundColor;
-                Console.BackgroundColor = BackgroundColor;
-                ConsoleMessage(Message, 
-                               ID, 
-                               TextColor, 
-                               FixedLocation);
-                Console.BackgroundColor = _background;
+                instance = activeLogitInstance;
             }
-            else
-            {
-                ConsoleMessage(Message, 
-                               ID, 
-                               TextColor, 
-                               FixedLocation);
-            }
+            Log(message, eventId, MessageType.Information, instance);
         }
 
         /// <summary>
-        /// Set or capture the cursor position on the console.
+        /// Called to write "Warning" entries.
         /// </summary>
-        /// <param name="reset">If true, set the console cursor to the last
-        /// captured coordinates.  If false, capture the current console
-        /// cursor coordinates.  Default it false.</param>
-        private static void SetCursor(bool reset = false)
+        /// <param name="message">The string message to log.</param>
+        /// <param name="eventId">The Event Log event ID to use.</param>
+        /// <param name="instance">Return value from Log() method.</param>
+        public async static void Wrn(
+            string message,
+            int eventId = 0,
+            Instance instance = null)
         {
-            if (reset)
+            if (instance == null)
             {
-                Console.CursorTop = _top;
-                Console.CursorLeft = _left;
+                instance = activeLogitInstance;
             }
-            else
-            {
-                _top = Console.CursorTop;
-                _left = Console.CursorLeft;
-            }
+            Log(message, eventId, MessageType.Warning, instance);
         }
-        #endregion Console
 
-        #region EventLog
         /// <summary>
-        /// Write a message to the Windows Event Log.
+        /// Called to write "Error" entries.
         /// </summary>
-        /// <param name="Message">The message to write.</param>
-        /// <param name="EntryType">The type of entry to make i.e. Error,
-        /// Warning or Information.</param>
-        /// <param name="ID">Optional event ID to include.</param>
-        public static void EventLogMessage(
-            string Message, 
-            System.Diagnostics.EventLogEntryType EntryType =
-                System.Diagnostics.EventLogEntryType.Information,
-            int ID = 0)
+        /// <param name="message">The string message to log.</param>
+        /// <param name="eventId">The Event Log event ID to use.</param>
+        /// <param name="instance">Return value from Log() method.</param>
+        public async static void Err(
+            string message,
+            int eventId = 0,
+            Instance instance = null)
         {
-            _eventlog.WriteEntry(ConstructMessage(ID, Message), 
-                                 EntryType, 
-                                 ID);
-        }
-        #endregion EventLog
-
-        #region File
-        /// <summary>
-        /// Write a message to file.
-        /// </summary>
-        /// <param name="Message">Message to write.</param>
-        /// <param name="EntryType">Type of message i.e. ERR, WRN or INF.</param>
-        /// <param name="ID">Optional ID to include.</param>
-        public static void FileMessage(string Message,
-                                       string EntryType = "INF",
-                                       int ID = 0)
-        {
-            if (!_lock.IsWriteLockHeld)
+            if (instance == null)
             {
-                _lock.EnterWriteLock();
-                _file = new IO.StreamWriter(_logfile, true);
-                _file.WriteLine(
-                    ConstructMessage(ID, 
-                                     EntryType, 
-                                     Message));
-                _file.Close();
-                _lock.ExitWriteLock();
+                instance = activeLogitInstance;
             }
+            Log(message, eventId, MessageType.Error, instance);
         }
-        #endregion File
+
+        /// <summary>
+        /// Called to write "Verbose" entries.
+        /// </summary>
+        /// <param name="message">The string message to log.</param>
+        /// <param name="eventId">The Event Log event ID to use.</param>
+        /// <param name="instance">Return value from Log() method.</param>
+        public async static void Vrb(
+            string message,
+            int eventId = 0,
+            Instance instance = null)
+        {
+            if (instance == null)
+            {
+                instance = activeLogitInstance;
+            }
+            Log(message, eventId, MessageType.Verbose, instance);
+        }
+        #endregion Worker Methods
     }
 }
+
+#pragma warning restore CA1416, CS0162, CS0168, CS1587, CS1591, CS1998, IDE0028, IDE0059

@@ -9,7 +9,7 @@
 
 using System;
 using System.Linq;
-using static Extensions.Universal;
+using static Extensions.Core;
 
 namespace Extensions
 {

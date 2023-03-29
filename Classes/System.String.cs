@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using static Extensions.Constants;
-using static Extensions.Universal;
+using static Extensions.Core;
 
 namespace Extensions
 {
@@ -2022,6 +2022,63 @@ namespace Extensions
             return str.ToString().Substring(startIndex, length);
         }
         #endregion Substring()
+
+        #region TailString()
+        /// <summary>
+        /// Method to return the tail end of a string following a given string
+        /// index location e.g. 
+        /// TailString(
+        ///   "https://contoso.sharepoint.us/sites/HomeSite/lists/MyList",
+        ///   "/",
+        ///   3)
+        /// would return "sites/HomeSite/lists/MyList".
+        /// TailString(
+        ///   "https://contoso.sharepoint.us/sites/HomeSite/lists/MyList",
+        ///   "/",
+        ///   6)
+        /// would return "MyList" etc.
+        /// </summary>
+        /// <param name="str">The string to inspect.</param>
+        /// <param name="index">The substring to locate.</param>
+        /// <param name="occurrence">The number of times the method needs to 
+        /// locate the index in str.</param>
+        /// <returns>Returns the tail end of a string following a given string
+        /// index location</returns>
+        public static string TailString(this System.String str,
+                                        string index,
+                                        int occurrence = 1)
+        {
+            Validate(ErrorTypeAll, str, index, occurrence);
+            int offset;
+            if (occurrence > 1)
+            {
+                string baseStr = str;
+                while (occurrence > 0)
+                {
+                    offset = baseStr.IndexOf(index);
+                    if (offset > 0)
+                    {
+                        baseStr = baseStr.Substring(offset + index.Length);
+                        occurrence--;
+                    }
+                    else
+                    {
+                        baseStr = baseStr.Substring(offset + index.Length);
+                        return baseStr;
+                    }
+                }
+            }
+            offset = str.LastIndexOf(index);
+            if (offset > 0)
+            {
+                return str.Substring(offset + index.Length);
+            }
+            else
+            {
+                return str;
+            }
+        }
+        #endregion
 
         #region ToBinary()
         /// <summary>

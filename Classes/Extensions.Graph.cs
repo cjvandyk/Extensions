@@ -7,12 +7,13 @@
 /// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
 /// </summary>
 
-using static Extensions.Identity.AuthMan;
 using Microsoft.Graph;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static Extensions.Identity.AuthMan;
+using static System.Logit;
 
 namespace Extensions
 {
@@ -132,7 +133,7 @@ namespace Extensions
             {
                 GetGroups(ref groups, $"startswith(displayName, '{starter}')");
             });
-            Console.WriteLine(groups.Count);
+            Inf(groups.Count.ToString());
             return groups;
         }
 
@@ -216,7 +217,7 @@ namespace Extensions
                 members.Add(user.Id);
             }
             //Return the list of IDs.
-            Console.WriteLine(members.Count);
+            Inf(members.Count.ToString());
             return members;
         }
 
@@ -281,7 +282,7 @@ namespace Extensions
                 //Add visual feedback for command line usage.
                 WriteCount(sites.Count);
             }
-            Console.WriteLine(sites.Count);
+            Inf(sites.Count.ToString());
             return sites;
         }
 
@@ -318,6 +319,17 @@ namespace Extensions
         }
 
         /// <summary>
+        /// Method to get a field value from a ListItem object.
+        /// </summary>
+        /// <param name="item">The item to get data from.</param>
+        /// <param name="field">The field to target.</param>
+        /// <returns>The value of the field in the item.</returns>
+        public static string GetFld(this ListItem item, string field)
+        {
+            return item.Fields.AdditionalData[field].ToString();
+        }
+
+        /// <summary>
         /// Get all or just one item(s) in a specified list.
         /// </summary>
         /// <param name="listName">The name of the list e.g. "Documents"</param>
@@ -326,11 +338,12 @@ namespace Extensions
         /// <param name="id">The ID value of the item e.g. "3".  This value
         /// defaults to null and in such case, will result in all items being
         /// returned.</param>
+        /// <param name="filter">The filter syntax to use.</param>
         /// <returns>A list of ListItem containing the item(s).</returns>
-        public static List<ListItem> GetListItems(
-            string listName,
-            string sitePath,
-            string id = null)
+        public static List<ListItem> GetListItems(string listName,
+                                                  string sitePath,
+                                                  string id = null,
+                                                  string filter = null)
         {
             //Create the aggregation container.
             List<ListItem> listItems = new List<ListItem>();
@@ -364,23 +377,37 @@ namespace Extensions
                 IListItemsCollectionPage listItemsPage = null;
                 try
                 {
-                    //Get the first page of results.
-                    listItemsPage = ActiveAuth.GraphClient.Sites["root"]
-                        .SiteWithPath(sitePath)
-                        .Lists[listName]
-                        .Items
-                        .Request()
-                        .Expand("Fields")
-                        .GetAsync().GetAwaiter().GetResult();
+                    if (filter == null)
+                    {
+                        //Get the first page of results.
+                        listItemsPage = ActiveAuth.GraphClient.Sites["root"]
+                            .SiteWithPath(sitePath)
+                            .Lists[listName]
+                            .Items
+                            .Request()
+                            .Expand("Fields")
+                            .GetAsync().GetAwaiter().GetResult();
+                    }
+                    else
+                    {
+                        //Get the first page of results.
+                        listItemsPage = ActiveAuth.GraphClient.Sites["root"]
+                            .SiteWithPath(sitePath)
+                            .Lists[listName]
+                            .Items
+                            .Request()
+                            .Expand("Fields")
+                            .Filter(filter)
+                            .GetAsync().GetAwaiter().GetResult();
+                    }
                 }
                 catch (Exception ex)
                 {
                     if (ex.Message.Contains("Requested site could not be found"))
                     {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine(ex.ToString());
-                        throw;
+                        Err(ex.ToString());
                     }
+                    throw;
                 }
                 //If not results were found, return the empty list.
                 if (listItemsPage == null)
@@ -399,8 +426,47 @@ namespace Extensions
                 }
             }
             //Return the aggregated list.
-            Console.WriteLine(listItems.Count);
+            Inf(listItems.Count.ToString());
             return listItems;
+        }
+
+        /// <summary>
+        /// Get all items in a given list updated since a given datetime and
+        /// with a pending status.
+        /// </summary>
+        /// <param name="listName">The name of the list from which to get 
+        /// items e.g. "Documents".</param>
+        /// <param name="sitePath">The site path of the site containing the 
+        /// list e.g. "/sites/MySite"</param>
+        /// <param name="dateTime">The date/time string to use to narrow
+        /// down the returned result set e.g. "2017-07-04".  If not specified
+        /// and the default value of null is found, this field will default
+        /// to the current date/time minus one day.</param>
+        /// <returns>A list of ListItem containing the item(s).</returns>
+        public static List<ListItem> GetPendingListItemsUpdatedSince(
+            string listName,
+            string sitePath,
+            string dateTime = null)
+        {
+            if (dateTime == null)
+            {
+                dateTime = DateTime.Now.AddDays(-1).ToString();
+            }
+            var items = GetListItems(
+                listName,
+                sitePath,
+                null,
+                $"fields/Modified gt '{dateTime}'");
+            Inf($"Pre-filtered items:[{items.Count}]");
+            for (int C = items.Count - 1; C >= 0; C--)
+            {
+                if (items[C].GetJsonString("Status").ToLower() != "pending")
+                {
+                    items.RemoveAt(C);
+                }
+            }
+            Inf($"Post-filtered items:[{items.Count}]");
+            return items;
         }
 
         /// <summary>

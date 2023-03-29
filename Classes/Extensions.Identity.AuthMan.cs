@@ -12,6 +12,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
+using System.Text.Json.Nodes;
+using static Extensions.Core;
+using static System.Logit;
 
 namespace Extensions.Identity
 {
@@ -29,7 +32,15 @@ namespace Extensions.Identity
         /// <summary>
         /// The currently active Auth object from the stack.
         /// </summary>
-        public static Auth ActiveAuth { get; private set; } = null;
+        public static Auth ActiveAuth { get; private set; }
+            = GetAuth(GetEnv("TenantDirectoryId"),
+                      GetEnv("ApplicationClientId"),
+                      GetEnv("CertificateThumbprint"),
+                      GetEnv("TenantString"));
+        /// <summary>
+        /// An empty JSON node.
+        /// </summary>
+        public static JsonNode jsonNode = JsonNode.Parse("{}");
 
         /// <summary>
         /// Constructor method.
@@ -57,14 +68,14 @@ namespace Extensions.Identity
                 try
                 {
                     //Default to environment variables if no JSON provided.
-                    GetAuth(Environment.GetEnvironmentVariable("TenantId"),
-                            Environment.GetEnvironmentVariable("AppClientId"),
-                            Environment.GetEnvironmentVariable("CertThumbPrint"),
-                            Environment.GetEnvironmentVariable("TenantString"));
+                    GetAuth(GetEnv("TenantId"),
+                            GetEnv("AppClientId"),
+                            GetEnv("CertThumbPrint"),
+                            GetEnv("TenantString"));
                 }
                 catch (Exception ex2)
                 {
-                    //Swallow exception if no config values available.
+                    throw new Exception("No config values available to GetAuth()");
                 }
             }
         }
@@ -83,14 +94,23 @@ namespace Extensions.Identity
         /// <param name="tenantString">The base tenant string to use for 
         /// the Auth object e.g. for "contoso.sharepoint.com" it would 
         /// be "contoso".</param>
+        /// <param name="scopeType">The scope type of the Auth.</param>
+        /// <param name="authStackReset">Boolean to trigger a clearing of the 
+        /// Auth stack.</param>
         /// <returns>A valid Auth object from the stack.</returns>
         public static Auth GetAuth(string tenantId, 
                                    string appId,
                                    string thumbPrint,
-                                   string tenantString)
+                                   string tenantString,
+                                   ScopeType scopeType = ScopeType.Graph,
+                                   bool authStackReset = false)
         {
+            if (authStackReset)
+            {
+                AuthStack.Clear();
+            }
             //Generate the key from the parms.
-            string key = GetKey(tenantId, appId, thumbPrint);
+            string key = GetKey(tenantId, appId, thumbPrint, scopeType.ToString());
             //Check if the key is on the stack.
             if (AuthStack.ContainsKey(key))
             {
@@ -100,7 +120,12 @@ namespace Extensions.Identity
             else
             {
                 //If it is not, generate a new Auth object.
-                var auth = new Auth(tenantId, appId, thumbPrint, tenantString);
+                var auth = new Auth(tenantId, 
+                                    appId, 
+                                    thumbPrint, 
+                                    tenantString,
+                                    Auth.ClientApplicationType.Confidential,
+                                    scopeType);
                 //Push it to the stack.
                 AuthStack.Add(auth.Id, auth);
                 //Set the current ActiveAuth to the new stack instance.
@@ -124,14 +149,19 @@ namespace Extensions.Identity
         /// <param name="tenantString">The base tenant string to use for 
         /// the Auth object e.g. for "contoso.sharepoint.com" it would 
         /// be "contoso".</param>
+        /// <param name="scopeType">The scope type of the Auth.</param>
+        /// <param name="authStackReset">Boolean to trigger a clearing of the 
+        /// Auth stack.</param>
         /// <returns>A valid Auth object from the stack.</returns>
         public static Auth GetAuth(string tenantId,
                                    string appId,
                                    X509Certificate2 cert,
-                                   string tenantString)
+                                   string tenantString,
+                                   ScopeType scopeType = ScopeType.Graph,
+                                   bool authStackReset = false)
         {
             //Generate the key from the parms.
-            string key = GetKey(tenantId, appId, cert.Thumbprint);
+            string key = GetKey(tenantId, appId, cert.Thumbprint, scopeType.ToString());
             //Check if the key is on the stack.
             if (AuthStack.ContainsKey(key))
             {
@@ -141,7 +171,12 @@ namespace Extensions.Identity
             else
             {
                 //If it is not, generate a new Auth object.
-                var auth = new Auth(tenantId, appId, cert.Thumbprint, tenantString);
+                var auth = new Auth(tenantId, 
+                                    appId, 
+                                    cert.Thumbprint, 
+                                    tenantString,
+                                    Auth.ClientApplicationType.Confidential,
+                                    scopeType);
                 //Push it to the stack.
                 AuthStack.Add(auth.Id, auth);
                 //Set the current ActiveAuth to the new stack instance.
@@ -169,7 +204,7 @@ namespace Extensions.Identity
                                          string tenantString)
         {
             //Generate the key from the parms.
-            string key = GetKey(tenantId, appId, "PublicClientApplication");
+            string key = GetKey(tenantId, appId, "PublicClientApplication", "");
             //Check if the key is on the stack.
             if (AuthStack.ContainsKey(key))
             {
@@ -198,16 +233,19 @@ namespace Extensions.Identity
         /// Auth object.</param>
         /// <param name="thumbPrint">The certificate thumbprint to use for 
         /// the Auth object.</param>
+        /// <param name="scopeType">The scope type to use.</param>
         /// <returns>A string consisting of the lower case version of the
         /// specified parameters in the format of
         /// {TenantID}=={AppId}=={ThumbPrint}"</returns>
         internal static string GetKey(string tenantId, 
                                       string appId, 
-                                      string thumbPrint)
+                                      string thumbPrint,
+                                      string scopeType)
         {
             return tenantId.ToLower() + "==" + 
                    appId.ToLower() + "==" + 
-                   thumbPrint.ToLower();
+                   thumbPrint.ToLower() + "==" +
+                   scopeType.ToLower();
         }
 
         /// <summary>
@@ -217,7 +255,52 @@ namespace Extensions.Identity
         /// return null.</returns>
         public static string GetTenantString()
         {
-            return ActiveAuth == null ? "" : ActiveAuth.TenantString;
+            if (ActiveAuth != null)
+            {
+                return ActiveAuth.TenantString;
+            }
+            else
+            {
+                try
+                {
+                    string env = GetEnv("TenantString");
+                    if (env != null)
+                    {
+                        return env;
+                    }
+                    else
+                    {
+                        try
+                        {
+                            //Load config from file.
+                            using (StreamReader sr = new StreamReader(
+                                GetRunFolder() + "\\" + $"TenantConfig.json"))
+                            {
+                                var tenantConfig = 
+                                    JsonSerializer.Deserialize<Extensions.TenantConfig>(sr.ReadToEnd());
+                                sr.Close();
+                                return tenantConfig.TenantString;
+                            }
+                        }
+                        catch (Exception ex2)
+                        {
+                            Err(ex2.ToString());
+                            throw;
+                        }
+                        finally
+                        {
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Err(ex.ToString());
+                    throw;
+                }
+                finally
+                {
+                }
+            }
         }
 
         /// <summary>

@@ -9,7 +9,7 @@
 /// </summary>
 
 using System;
-using static Extensions.Universal;
+using static Extensions.Core;
 
 namespace Extensions
 {
@@ -72,7 +72,7 @@ namespace Extensions
                        (b < 10 ? "   " : 
                        (b < 100 ? "  " : " ")));
             }
-            Universal.printf(str);
+            Core.printf(str);
         }
         #endregion byte[]
     }
