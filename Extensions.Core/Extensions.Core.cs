@@ -890,6 +890,90 @@ namespace Extensions
             return new System.Guid((StartWith.ToLower() +
                 result.ToString().ToLower().Substring(StartWith.Length)));
         }
+
+        #region ContainsOnly()
+        /// <summary>
+        /// Checks if the given string contains only the characters provided in
+        /// the IEnumerable.
+        /// </summary>
+        /// <param name="str">The given string to check.</param>
+        /// <param name="chars">The character array to validate against.</param>
+        /// <returns>True if the given string only contains characters provided
+        /// in the IEnumerable, otherwise False.</returns>
+        public static bool ContainsOnly(this System.String str,
+                                        char[] chars)
+        {
+            ValidateNoNulls(str, chars);
+            string remain = str;
+            foreach (char C in chars)
+            {
+                remain = remain.Replace(C.ToString(), "");
+            }
+            remain = remain.Trim();
+            if (remain == "")
+            {
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Checks if the given string contains only the strings provided in
+        /// the IEnumerable.
+        /// </summary>
+        /// <param name="str">The given string to check.</param>
+        /// <param name="strings">The IEnumerable i.e. List of strings or
+        /// string array to validate against.</param>
+        /// <returns>True if the given string only contains strings provided
+        /// in the IEnumerable, otherwise False.</returns>
+        public static bool ContainsOnly(this System.String str,
+                                        IEnumerable<string> strings)
+        {
+            ValidateNoNulls(str, strings);
+            string remain = str;
+            foreach (string C in strings)
+            {
+                remain = remain.Replace(C, "");
+            }
+            remain = remain.Trim();
+            if (remain == "")
+            {
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Checks if the given string contains only the characters provided in
+        /// the IEnumerable.
+        /// </summary>
+        /// <param name="str">The given string to check.</param>
+        /// <param name="chars">The character array to validate against.</param>
+        /// <returns>True if the given string only contains characters provided
+        /// in the IEnumerable, otherwise False.</returns>
+        public static bool ContainsOnly(this System.Text.StringBuilder str,
+                                        char[] chars)
+        {
+            ValidateNoNulls(str, chars);
+            return ContainsOnly(str.ToString(), chars);
+        }
+
+        /// <summary>
+        /// Checks if the given string contains only the strings provided in
+        /// the IEnumerable.
+        /// </summary>
+        /// <param name="str">The given string to check.</param>
+        /// <param name="strings">The IEnumerable i.e. List of strings or
+        /// string array to validate against.</param>
+        /// <returns>True if the given string only contains strings provided
+        /// in the IEnumerable, otherwise False.</returns>
+        public static bool ContainsOnly(this System.Text.StringBuilder str,
+                                        IEnumerable<string> strings)
+        {
+            ValidateNoNulls(str, strings);
+            return ContainsOnly(str.ToString(), strings);
+        }
+        #endregion ContainsOnly()
     }
 }
 #pragma warning restore CS0162, CS0168, CS1587, CS1998, IDE0059, IDE0028
