@@ -8,7 +8,7 @@
 /// </summary>
 
 using System;
-using static Extensions.Universal;
+using static Extensions.Core;
 
 namespace Extensions
 {

@@ -8,7 +8,7 @@
 /// </summary>
 
 using System;
-using static Extensions.Universal;
+using static Extensions.Core;
 
 namespace Extensions
 {
@@ -44,7 +44,7 @@ namespace Extensions
             ValidateNoNulls(lines, textColor);
             foreach (string str in lines)
             {
-                Universal.printf(str, textColor);
+                Core.printf(str, textColor);
             }
         }
     }

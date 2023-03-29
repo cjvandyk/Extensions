@@ -10,7 +10,7 @@
 using System;
 using System.Collections.Generic;
 
-using static Extensions.Universal;
+using static Extensions.Core;
 
 namespace Extensions
 {

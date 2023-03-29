@@ -9,7 +9,7 @@
 
 using System;
 using System.Collections.Generic;
-using static Extensions.Universal;
+using static Extensions.Core;
 
 namespace Extensions
 {
@@ -24,6 +24,86 @@ namespace Extensions
         /// </summary>
         private static Dictionary<string, object> extensionProperties = 
             new Dictionary<string, object>();
+        /// <summary>
+        /// The private object used to manage locks on file I/O.
+        /// </summary>
+        private static readonly object lockManager = new object();
+
+        #region T Load<T>()
+        /// <summary>
+        /// Universal object method used to serialize ANY object from disk.
+        /// </summary>
+        /// <typeparam name="T">The type of the target object.</typeparam>
+        /// <param name="obj">The triggering object.</param>
+        /// <param name="filePath">The path on disk for the save file.</param>
+        /// <returns>The object of type T loaded from disk.</returns>
+        public static T Load<T>(this T obj,
+                                   string filePath = "File.bin")
+        {
+            try
+            {
+                lock (lockManager)
+                {
+                    using (System.IO.Stream stream =
+                        System.IO.File.Open(
+                            filePath,
+                            System.IO.FileMode.Open))
+                    {
+                        var serializer = new System.Runtime.Serialization.DataContractSerializer(typeof(T));
+                        obj = (T)serializer.ReadObject(stream);
+                        return obj;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //Dump error.
+                ConsoleColor currentColor = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(ex.ToString());
+                Console.ForegroundColor = currentColor;
+                return default;
+            }
+        }
+        #endregion T Load<T>()
+
+        #region T Save<T>()
+        /// <summary>
+        /// Universal object method used to serialize ANY object to disk.
+        /// </summary>
+        /// <typeparam name="T">The type of the target object.</typeparam>
+        /// <param name="obj">The triggering object.</param>
+        /// <param name="filePath">The path on disk for the save file.</param>
+        /// <returns>True if save successful, otherwise False.</returns>
+        public static bool Save<T>(this T obj,
+                                   string filePath = "File.bin")
+        {
+            try
+            {
+                lock (lockManager)
+                {
+                    using (System.IO.Stream stream =
+                        System.IO.File.Open(
+                            filePath,
+                            System.IO.FileMode.Create))
+                    {
+                        var serializer = new System.Runtime.Serialization.DataContractSerializer(typeof(T));
+                        serializer.WriteObject(stream, obj);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //Dump error.
+                ConsoleColor currentColor = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(ex.ToString());
+                Console.ForegroundColor = currentColor;
+                return false;
+            }
+        }
+        #endregion T Save<T>()
 
         #region Get()
         /// <summary>

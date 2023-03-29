@@ -8,7 +8,7 @@
 /// </summary>
 
 using System;
-using static Extensions.Universal;
+using static Extensions.Core;
 
 namespace Extensions
 {
@@ -18,6 +18,40 @@ namespace Extensions
     [Serializable]
     public static partial class Int32Extensions
     {
+        #region Smallest()
+        /// <summary>
+        /// Returns the smallest of two given values.
+        /// </summary>
+        /// <param name="val1">The first value to compare.</param>
+        /// <param name="val2">The second value to compare.</param>
+        /// <returns>The smallest of the two given values.</returns>
+        public static int Smallest(int val1, int val2)
+        {
+            if (val1 < val2)
+                return val1;
+            if (val2 < val1)
+                return val2;
+            return val1;  //val1 == val2
+        }
+        #endregion Smallest()
+
+        #region Bigest()
+        /// <summary>
+        /// Returns the smallest of two given values.
+        /// </summary>
+        /// <param name="val1">The first value to compare.</param>
+        /// <param name="val2">The second value to compare.</param>
+        /// <returns>The smallest of the two given values.</returns>
+        public static int Bigest(int val1, int val2)
+        {
+            if (val1 > val2)
+                return val1;
+            if (val2 > val1)
+                return val2;
+            return val1;  //val1 == val2
+        }
+        #endregion Bigest()
+
         #region IsEven()
         /// <summary>
         /// Checks if the given number is even.
