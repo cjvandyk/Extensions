@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFrameworks>net7.0;net6.0;netstandard2.1;netstandard2.0;netcoreapp3.1;net48;net472;net471;net47;net462</TargetFrameworks>
+	<LangVersion>latest</LangVersion>
+	<ImplicitUsings>disable</ImplicitUsings>
 	<NoWarn>$(NoWarn);CS1587</NoWarn>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <PackageProjectUrl>https://github.com/cjvandyk/extensions</PackageProjectUrl>
@@ -24,6 +26,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Extensions.Identity\**" />
+    <Compile Remove="Extensions.Logit\**" />
+    <Compile Remove="Extensions.New\**" />
+    <Compile Remove="Extensions.State\**" />
+    <Compile Remove="Extensions.Telemetry\**" />
     <Compile Remove="Extensions5\**" />
     <Compile Remove="Extensions6\**" />
     <Compile Remove="Extensions7\**" />
@@ -35,6 +42,11 @@
     <Compile Remove="VSIX\**" />
     <Compile Remove="~CsVisualStudioExtensions\**" />
     <Compile Remove="~ExtensionsClass\**" />
+    <EmbeddedResource Remove="Extensions.Identity\**" />
+    <EmbeddedResource Remove="Extensions.Logit\**" />
+    <EmbeddedResource Remove="Extensions.New\**" />
+    <EmbeddedResource Remove="Extensions.State\**" />
+    <EmbeddedResource Remove="Extensions.Telemetry\**" />
     <EmbeddedResource Remove="Extensions5\**" />
     <EmbeddedResource Remove="Extensions6\**" />
     <EmbeddedResource Remove="Extensions7\**" />
@@ -46,6 +58,11 @@
     <EmbeddedResource Remove="VSIX\**" />
     <EmbeddedResource Remove="~CsVisualStudioExtensions\**" />
     <EmbeddedResource Remove="~ExtensionsClass\**" />
+    <None Remove="Extensions.Identity\**" />
+    <None Remove="Extensions.Logit\**" />
+    <None Remove="Extensions.New\**" />
+    <None Remove="Extensions.State\**" />
+    <None Remove="Extensions.Telemetry\**" />
     <None Remove="Extensions5\**" />
     <None Remove="Extensions6\**" />
     <None Remove="Extensions7\**" />
@@ -63,10 +80,14 @@
     <Compile Remove="Classes\GCCH.CertAuth.cs" />
     <Compile Remove="Classes\GCCH.cs" />
     <Compile Remove="Classes\System.Logging.cs" />
+    <Compile Remove="Classes\System.Logit.cs" />
+    <Compile Remove="Classes\System.Logit.Instance.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="Extensions.csproj.old" />
+    <None Remove="Microsoft.Graph.Core.dll" />
+    <None Remove="Microsoft.Graph.dll" />
   </ItemGroup>
 
   <ItemGroup>
@@ -74,6 +95,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="D:\SOURCE\Extensions\.editorconfig" />
     <None Include="Images\Extensions-128x128.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
@@ -86,114 +108,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Identity" Version="1.8.2" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.15.1" />
+    <PackageReference Include="Extensions.Logit" Version="4.9.700" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Identity.Client" Version="4.49.1" />
+    <PackageReference Include="Microsoft.Graph" Version="4.54.0" />
+    <PackageReference Include="Microsoft.Identity.Client" Version="4.51.0" />
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.0" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
-    <PackageReference Include="Microsoft.Graph">
-      <Version>4.52.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-    <PackageReference Include="Microsoft.Graph">
-      <Version>4.52.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
-    <PackageReference Include="Microsoft.Graph">
-      <Version>4.52.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
-    <PackageReference Include="Microsoft.Graph">
-      <Version>4.52.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="Microsoft.Graph">
-      <Version>4.52.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
-    <PackageReference Include="Microsoft.Graph">
-      <Version>4.52.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
-    <PackageReference Include="Microsoft.Graph">
-      <Version>4.52.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.2'">
-    <PackageReference Include="Microsoft.Graph">
-      <Version>4.52.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
-    <PackageReference Include="Microsoft.Graph">
-      <Version>4.52.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.0'">
-    <PackageReference Include="Microsoft.Graph">
-      <Version>4.52.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
-    <PackageReference Include="Microsoft.Graph">
-      <Version>4.52.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
-    <PackageReference Include="Microsoft.Graph">
-      <Version>4.52.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net471'">
-    <PackageReference Include="Microsoft.Graph">
-      <Version>4.52.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net47'">
-    <PackageReference Include="Microsoft.Graph">
-      <Version>4.52.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net462'">
-    <PackageReference Include="Microsoft.Graph">
-      <Version>4.52.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
-    <PackageReference Include="Microsoft.Graph">
-      <Version>4.52.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
   <ItemGroup>
-    <None Update="Microsoft.Graph.Core.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Microsoft.Graph.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="Microsoft.Identity.Client.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -203,6 +128,10 @@
     <None Update="TenantConfig.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EditorConfigFiles Remove="D:\SOURCE\Extensions\.editorconfig" />
   </ItemGroup>
 
 </Project>
