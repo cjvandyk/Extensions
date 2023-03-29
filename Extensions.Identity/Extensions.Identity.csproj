@@ -30,6 +30,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="Extensions.Core" Version="4.9.700" />
 	  <PackageReference Include="Extensions.Logit" Version="4.9.700" />
 	  <PackageReference Include="Microsoft.Graph" Version="4.54.0" />
 	  <PackageReference Include="Microsoft.Identity.Client" Version="4.51.0" />

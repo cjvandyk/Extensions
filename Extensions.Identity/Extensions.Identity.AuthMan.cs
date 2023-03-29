@@ -13,7 +13,7 @@ using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-//using static Extensions.Core;
+using static Extensions.Core;
 using static System.Logit;
 
 namespace Extensions.Identity
