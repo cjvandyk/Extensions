@@ -188,6 +188,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Images\Extensions-128x128.png" />
+    <None Include="SnippetTryCatchFinally.snippet" />
     <Content Include="~ExtensionsClass.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
