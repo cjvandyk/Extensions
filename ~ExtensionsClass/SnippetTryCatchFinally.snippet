@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Try Catch Finally block</Title>
+			<Shortcut>trycf</Shortcut>
+			<Author>Cornelius J. van Dyk</Author>
+			<Description>C# snippet to insert a Try Catch Finally block.</Description>
+		</Header>
+		<Snippet>
+			<Code Language="CSharp">
+				<![CDATA[try
+						 {
+							//Code here
+						 }
+						 catch (Exception ex)
+						 {
+							Err(ex.ToString());
+						 }
+						 finally
+						 {
+						 }]]>
+			</Code>
+			<Imports>
+				<Import>
+					<Namespace>System.Logit</Namespace>
+				</Import>
+			</Imports>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>
