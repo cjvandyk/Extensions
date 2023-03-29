@@ -2406,6 +2406,25 @@ namespace Extensions
         //    }
         //    return false;
         //}
+
+        /// <summary>
+        /// Returns a custom GUID starting with a custom string.
+        /// </summary>
+        /// <param name="StartWith">A string containing hexadecimal
+        /// characters with which the GUID should start.</param>
+        /// <returns>A System.Guid that starts with the given characters.</returns>
+        public static System.Guid NewCustomGuid(string StartWith = "")
+        {
+            if (!StartWith.ToLower().ContainsOnly(Constants.HexChars))
+            {
+                throw new Exception(
+                    $"Value [{StartWith}] contains non-hex characters!\n" +
+                    "GUID values can only contain hexadecimal characters.");
+            }
+            System.Guid result = System.Guid.NewGuid();
+            return new System.Guid((StartWith.ToLower() +
+                result.ToString().ToLower().Substring(StartWith.Length)));
+        }
     }
 }
 #pragma warning restore CA1416, CS1587, CS0162, CS1998, IDE0059, IDE0028
