@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net7.0;net6.0;netstandard2.1;netstandard2.0;netcoreapp3.1;net48;net472;net471;net47;net462</TargetFrameworks>
+	<LangVersion>latest</LangVersion>
+	<ImplicitUsings>disable</ImplicitUsings>
+	<GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <PackageProjectUrl>https://github.com/cjvandyk/extensions</PackageProjectUrl>
+    <PackageTags>Extensions;C#;cjvandyk;Crayveon;String</PackageTags>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>Extensions.String</PackageId>
+    <Authors>cjvandyk</Authors>
+    <RepositoryUrl>https://github.com/cjvandyk/Extensions</RepositoryUrl>
+    <Title>Extensions.String</Title>
+    <Description>Extensions.String contains extension methods for the String class.</Description>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+    <RepositoryType>git</RepositoryType>
+    <PackageReleaseNotes>- Updated to support .NET 7.0</PackageReleaseNotes>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<None Include="README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Extensions.Core" Version="4.9.700" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Images\Extensions-128x128.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
+
+</Project>

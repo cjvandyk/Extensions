@@ -31,6 +31,8 @@
     <Compile Remove="Extensions.Logit\**" />
     <Compile Remove="Extensions.New\**" />
     <Compile Remove="Extensions.State\**" />
+    <Compile Remove="Extensions.String\Images\**" />
+    <Compile Remove="Extensions.String\obj\**" />
     <Compile Remove="Extensions.Telemetry\**" />
     <Compile Remove="Extensions5\**" />
     <Compile Remove="Extensions6\**" />
@@ -48,6 +50,8 @@
     <EmbeddedResource Remove="Extensions.Logit\**" />
     <EmbeddedResource Remove="Extensions.New\**" />
     <EmbeddedResource Remove="Extensions.State\**" />
+    <EmbeddedResource Remove="Extensions.String\Images\**" />
+    <EmbeddedResource Remove="Extensions.String\obj\**" />
     <EmbeddedResource Remove="Extensions.Telemetry\**" />
     <EmbeddedResource Remove="Extensions5\**" />
     <EmbeddedResource Remove="Extensions6\**" />
@@ -65,6 +69,8 @@
     <None Remove="Extensions.Logit\**" />
     <None Remove="Extensions.New\**" />
     <None Remove="Extensions.State\**" />
+    <None Remove="Extensions.String\Images\**" />
+    <None Remove="Extensions.String\obj\**" />
     <None Remove="Extensions.Telemetry\**" />
     <None Remove="Extensions5\**" />
     <None Remove="Extensions6\**" />
@@ -89,6 +95,11 @@
 
   <ItemGroup>
     <None Remove="Extensions.csproj.old" />
+    <None Remove="Extensions.String\Directory.Build.props" />
+    <None Remove="Extensions.String\Extensions.nuspec" />
+    <None Remove="Extensions.String\LICENSE" />
+    <None Remove="Extensions.String\README.md" />
+    <None Remove="Extensions.String\VersionHistory.md" />
     <None Remove="Microsoft.Graph.Core.dll" />
     <None Remove="Microsoft.Graph.dll" />
   </ItemGroup>
@@ -135,6 +146,10 @@
 
   <ItemGroup>
     <EditorConfigFiles Remove="D:\SOURCE\Extensions\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Extensions.String\" />
   </ItemGroup>
 
 </Project>
