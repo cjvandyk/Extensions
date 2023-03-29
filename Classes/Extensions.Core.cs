@@ -167,6 +167,74 @@ namespace Extensions
             }
         }
 
+        #region LogitCore
+        /// <summary>
+        /// Method to write error messages to console.
+        /// </summary>
+        /// <param name="message">Message to write.</param>
+        public static void E(string message)
+        {
+            L(message, ConsoleColor.Red, ConsoleColor.Black);
+        }
+
+        /// <summary>
+        /// Method to write warning messages to console.
+        /// </summary>
+        /// <param name="message">Message to write.</param>
+        public static void W(string message)
+        {
+            L(message, ConsoleColor.Yellow, ConsoleColor.Black);
+        }
+
+        /// <summary>
+        /// Method to write information messages to console.
+        /// </summary>
+        /// <param name="message">Message to write.</param>
+        public static void I(string message)
+        {
+            L(message, ConsoleColor.Gray, ConsoleColor.Black);
+        }
+
+        /// <summary>
+        /// Method to write verbose messages to console.
+        /// </summary>
+        /// <param name="message">Message to write.</param>
+        public static void V(string message)
+        {
+            L(message, ConsoleColor.Cyan, ConsoleColor.Black);
+        }
+
+        /// <summary>
+        /// Method to write a message to console in specified colors.
+        /// </summary>
+        /// <param name="message">The message to write.</param>
+        /// <param name="foreground">The foreground color to use.</param>
+        /// <param name="background">The background color to use.</param>
+        public static void L(string message,
+                             ConsoleColor foreground = ConsoleColor.Gray,
+                             ConsoleColor background = ConsoleColor.Black)
+        {
+            //Save the current console colors.
+            var foreColor = Console.ForegroundColor;
+            var backColor = Console.BackgroundColor;
+            //Check if an override foreground color was specified.
+            if (foreColor != foreground)
+            {
+                Console.ForegroundColor = foreground;
+            }
+            //Check if an override background color was specified.
+            if (backColor != background)
+            {
+                Console.BackgroundColor = background;
+            }
+            //Simply write the message to the console.
+            Console.WriteLine(message);
+            //Reset console colors.
+            Console.ForegroundColor = foreColor;
+            Console.BackgroundColor = backColor;
+        }
+        #endregion LogitCore
+
         #region GetCVersion()
         /// <summary>
         /// Method to get the CVersion.
@@ -748,25 +816,6 @@ namespace Extensions
                 return AzureEnvironment.USGovGCC;
             }
             return AzureEnvironment.Commercial;
-        }
-
-        /// <summary>
-        /// Method to get the ActiveAuth.
-        /// </summary>
-        /// <returns>The current ActiveAuth.</returns>
-        public static Auth GetActiveAuth()
-        {
-            return AuthMan.ActiveAuth;
-        }
-
-        /// <summary>
-        /// Method to get a GUID that starts with a custom value.
-        /// </summary>
-        /// <param name="StartWith">The string to use.</param>
-        /// <returns>A GUID that starts with the given string.</returns>
-        public static System.Guid GetCustomGuid(string StartWith = "")
-        {
-            return Extensions.Guid.NewCustomGuid(StartWith);
         }
 
         /// <summary>

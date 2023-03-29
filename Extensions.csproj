@@ -26,6 +26,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Extensions.Core\**" />
     <Compile Remove="Extensions.Identity\**" />
     <Compile Remove="Extensions.Logit\**" />
     <Compile Remove="Extensions.New\**" />
@@ -42,6 +43,7 @@
     <Compile Remove="VSIX\**" />
     <Compile Remove="~CsVisualStudioExtensions\**" />
     <Compile Remove="~ExtensionsClass\**" />
+    <EmbeddedResource Remove="Extensions.Core\**" />
     <EmbeddedResource Remove="Extensions.Identity\**" />
     <EmbeddedResource Remove="Extensions.Logit\**" />
     <EmbeddedResource Remove="Extensions.New\**" />
@@ -58,6 +60,7 @@
     <EmbeddedResource Remove="VSIX\**" />
     <EmbeddedResource Remove="~CsVisualStudioExtensions\**" />
     <EmbeddedResource Remove="~ExtensionsClass\**" />
+    <None Remove="Extensions.Core\**" />
     <None Remove="Extensions.Identity\**" />
     <None Remove="Extensions.Logit\**" />
     <None Remove="Extensions.New\**" />
