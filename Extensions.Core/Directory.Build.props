@@ -1,0 +1,10 @@
+﻿<Project>
+	<PropertyGroup>
+		<VersionPrefix>4.9.700</VersionPrefix>
+		<LangVersion>latest</LangVersion>
+		<Company>Cornelius J. van Dyk</Company>
+		<Copyright>Copyright © 2020-2023</Copyright>
+	    <xDescription>Extensions.Core contains relay and helper methods for the Extensions set of solutions.</xDescription>
+		<Product>www.nuget.org/packages/Extensions.Core</Product>
+	</PropertyGroup>
+</Project>
