@@ -105,7 +105,7 @@ namespace Extensions
                     msg.Attachments = allAttachments;
                 }
             }
-            GetActiveAuth().GraphClient.Users[from]
+            Identity.AuthMan.ActiveAuth.GraphClient.Users[from]
                 .SendMail(msg, true)
                 .Request()
                 .PostAsync()
