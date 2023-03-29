@@ -9,13 +9,27 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq.Expressions;
 using static Extensions.Universal;  //NuGet Extensions.cs
+using static System.Logit;          //NuGet Extensions.Logit
 
 namespace $rootnamespace$
 {
     [Serializable]
 	public static partial class $safeitemrootname$
 	{
+		try
+		{
+			//Code here.
+		}
+		catch (Exception ex)
+		{
+			Err(ex.ToString());
+		}
+		finally
+		{
+		}
 	}
 }
 
