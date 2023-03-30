@@ -153,7 +153,7 @@ namespace Extensions.Identity
             //Get the application.
             App = Identity.App.GetApp(appId, Cert.Thumbprint, tenantString);
             //Set the scopes for this Auth object.
-            Scopes = GetScopes(scopeType);
+            Scopes = Identity.Scopes.GetScopes(scopeType);
             //Call refresh method to populate the rest.
             RefreshAuth(null);
         }

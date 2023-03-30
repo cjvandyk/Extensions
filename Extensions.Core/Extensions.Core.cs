@@ -546,7 +546,9 @@ namespace Extensions
         /// <param name="foreground">Overrideable text color, default to white.</param>
         /// <param name="background">Overrideable background color, default to
         /// black.</param>
+#pragma warning disable IDE1006 // Naming Styles
         public static void printf(object msg, 
+#pragma warning restore IDE1006 // Naming Styles
                                   ConsoleColor foreground = ConsoleColor.White, 
                                   ConsoleColor background = ConsoleColor.Black)
         {

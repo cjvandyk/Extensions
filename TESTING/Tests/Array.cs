@@ -10,7 +10,7 @@
 using System;
 
 using Extensions;
-using static Extensions.Universal;
+using static Extensions.Core;
 
 namespace TESTING
 {

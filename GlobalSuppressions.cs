@@ -1,5 +1,4 @@
-﻿#pragma warning disable CS1587
-
+﻿#pragma warning disable CS1587 // XML comment is not placed on a valid language element
 /// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
@@ -13,13 +12,9 @@
 // a specific target and scoped to a namespace, type, member, etc.
 
 using System.Diagnostics.CodeAnalysis;
+#pragma warning restore CS1587 // XML comment is not placed on a valid language element
 
-[assembly: SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "Unnecessary")]
-[assembly: SuppressMessage("Style", "CS1591:Missing XML comment for publicly visible type or member", Justification = "Unnecessary")]
-[assembly: SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>", Scope = "member", Target = "~M:Extensions.StringExtensions.IsStrong(System.String,System.Int32,System.Boolean,System.Boolean,System.Boolean,System.Boolean)~System.Boolean")]
-[assembly: SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>", Scope = "member", Target = "~F:Extensions.ObjectExtensions.extensionProperties")]
-[assembly: SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>", Scope = "member", Target = "~M:Extensions.ProcessExtensions.Elevate(System.Diagnostics.Process,System.String[])~System.Boolean")]
-[assembly: SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>", Scope = "member", Target = "~M:Extensions.Universal.Load``1(``0,System.String)~``0")]
-[assembly: SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "<Pending>", Scope = "member", Target = "~M:Extensions.Universal.printf(System.Object,System.ConsoleColor,System.ConsoleColor)")]
-//#pragma warning disable CS0162  // break after return
-#pragma warning restore CS1587
+[assembly: SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "Unnecessary")]
+[assembly: SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "Unnecessary")]
+[assembly: SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "Unnecessary")]
+[assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "Unnecessary")]

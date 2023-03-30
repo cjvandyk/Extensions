@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Extensions.Universal;
+using static Extensions.Core;
 
 namespace TESTING
 {
@@ -38,14 +38,14 @@ namespace TESTING
                 printf($"Calculating the {multiplier / 1000000} millionth prime asynchronously", ConsoleColor.Yellow);
                 start = System.DateTime.Now;
                 printf(start);
-                printf(GetNthPrimeAsync(multiplier).Result);
+                //printf(GetNthPrimeAsync(multiplier).Result);
                 ts = System.DateTime.Now - start;
                 printf(ts.TotalSeconds);
                 async.Add(ts);
                 printf($"Calculating the {multiplier / 1000000} millionth prime synchronously", ConsoleColor.Yellow);
                 start = System.DateTime.Now;
                 printf(start);
-                printf(GetNthPrime(multiplier));
+                //printf(GetNthPrime(multiplier));
                 ts = System.DateTime.Now - start;
                 sync.Add(ts);
                 printf(ts.TotalSeconds);
