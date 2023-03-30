@@ -11,14 +11,37 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Extensions;
-using static Extensions.Universal;
+using Microsoft.Graph;
+using static Extensions.Core;
+using static System.Logit;
 
 namespace TESTING
 {
     class Program
     {
+        [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto, CallingConvention = System.Runtime.InteropServices.CallingConvention.StdCall)]
+        public static extern void mouse_event(uint dwFlags, uint dx, uint dy, uint cButtons, uint dwExtraInfo);
+        //Mouse actions
+        private const int MOUSEEVENTF_LEFTDOWN = 0x02;
+        private const int MOUSEEVENTF_LEFTUP = 0x04;
+        private const int MOUSEEVENTF_RIGHTDOWN = 0x08;
+        private const int MOUSEEVENTF_RIGHTUP = 0x10;
+
         static void Main(string[] args)
         {
+            Inf("Testing");
+
+            //Call the imported function with the cursor's current position
+            uint X = (uint)System.Windows.Forms.Cursor.Position.X;
+            uint Y = (uint)System.Windows.Forms.Cursor.Position.Y;
+            Random random = new Random(27);
+            for (int C = 0; C < 10000; C++)
+            {
+                System.Threading.Thread.Sleep(random.Next(2000, 5000));
+                mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, 80, 50, 0, 0);
+            }
+
+            var auth = Extensions.Identity.AuthMan.GetAuth("tenantid", "appid", "thumbprint", "tenantstring");
             //bool[] b1 = new bool[] { true, false, false, true };
             //bool[] b2 = new bool[] { true, false, false, true };
             //Mersenne64.GreaterThan(ref b1, ref b2);

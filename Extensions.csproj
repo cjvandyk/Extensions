@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net7.0;net6.0;netstandard2.1;netstandard2.0;netcoreapp3.1;net48;net472;net471;net47;net462</TargetFrameworks>
+    <TargetFrameworks>net7.0;net6.0;netstandard2.1;netstandard2.0;net48;net472;net471;net47;net462</TargetFrameworks>
 	<LangVersion>latest</LangVersion>
 	<ImplicitUsings>disable</ImplicitUsings>
 	<NoWarn>$(NoWarn);CS1587</NoWarn>
@@ -26,82 +26,57 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Extensions.Azure\**" />
     <Compile Remove="Extensions.Core\**" />
+    <Compile Remove="Extensions.Graph\**" />
     <Compile Remove="Extensions.Identity\**" />
     <Compile Remove="Extensions.Logit\**" />
     <Compile Remove="Extensions.New\**" />
     <Compile Remove="Extensions.State\**" />
-    <Compile Remove="Extensions.String\Images\**" />
-    <Compile Remove="Extensions.String\obj\**" />
+    <Compile Remove="Extensions.String\**" />
     <Compile Remove="Extensions.Telemetry\**" />
-    <Compile Remove="Extensions5\**" />
-    <Compile Remove="Extensions6\**" />
-    <Compile Remove="Extensions7\**" />
-    <Compile Remove="ItemTemplate\**" />
-    <Compile Remove="Projects\**" />
-    <Compile Remove="TemplateClassLibrary\**" />
     <Compile Remove="TESTING\**" />
-    <Compile Remove="VSIXProject\**" />
     <Compile Remove="VSIX\**" />
     <Compile Remove="~CsVisualStudioExtensions\**" />
     <Compile Remove="~ExtensionsClass\**" />
+    <EmbeddedResource Remove="Extensions.Azure\**" />
     <EmbeddedResource Remove="Extensions.Core\**" />
+    <EmbeddedResource Remove="Extensions.Graph\**" />
     <EmbeddedResource Remove="Extensions.Identity\**" />
     <EmbeddedResource Remove="Extensions.Logit\**" />
     <EmbeddedResource Remove="Extensions.New\**" />
     <EmbeddedResource Remove="Extensions.State\**" />
-    <EmbeddedResource Remove="Extensions.String\Images\**" />
-    <EmbeddedResource Remove="Extensions.String\obj\**" />
+    <EmbeddedResource Remove="Extensions.String\**" />
     <EmbeddedResource Remove="Extensions.Telemetry\**" />
-    <EmbeddedResource Remove="Extensions5\**" />
-    <EmbeddedResource Remove="Extensions6\**" />
-    <EmbeddedResource Remove="Extensions7\**" />
-    <EmbeddedResource Remove="ItemTemplate\**" />
-    <EmbeddedResource Remove="Projects\**" />
-    <EmbeddedResource Remove="TemplateClassLibrary\**" />
     <EmbeddedResource Remove="TESTING\**" />
-    <EmbeddedResource Remove="VSIXProject\**" />
     <EmbeddedResource Remove="VSIX\**" />
     <EmbeddedResource Remove="~CsVisualStudioExtensions\**" />
     <EmbeddedResource Remove="~ExtensionsClass\**" />
+    <None Remove="Extensions.Azure\**" />
     <None Remove="Extensions.Core\**" />
+    <None Remove="Extensions.Graph\**" />
     <None Remove="Extensions.Identity\**" />
     <None Remove="Extensions.Logit\**" />
     <None Remove="Extensions.New\**" />
     <None Remove="Extensions.State\**" />
-    <None Remove="Extensions.String\Images\**" />
-    <None Remove="Extensions.String\obj\**" />
+    <None Remove="Extensions.String\**" />
     <None Remove="Extensions.Telemetry\**" />
-    <None Remove="Extensions5\**" />
-    <None Remove="Extensions6\**" />
-    <None Remove="Extensions7\**" />
-    <None Remove="ItemTemplate\**" />
-    <None Remove="Projects\**" />
-    <None Remove="TemplateClassLibrary\**" />
     <None Remove="TESTING\**" />
-    <None Remove="VSIXProject\**" />
     <None Remove="VSIX\**" />
     <None Remove="~CsVisualStudioExtensions\**" />
     <None Remove="~ExtensionsClass\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Classes\GCCH.CertAuth.cs" />
-    <Compile Remove="Classes\GCCH.cs" />
-    <Compile Remove="Classes\System.Logging.cs" />
-    <Compile Remove="Classes\System.Logit.cs" />
-    <Compile Remove="Classes\System.Logit.Instance.cs" />
+    <Compile Remove="Classes\System.Mersenne64.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="Extensions.csproj.old" />
-    <None Remove="Extensions.String\Directory.Build.props" />
-    <None Remove="Extensions.String\Extensions.nuspec" />
-    <None Remove="Extensions.String\LICENSE" />
-    <None Remove="Extensions.String\README.md" />
-    <None Remove="Extensions.String\VersionHistory.md" />
     <None Remove="Microsoft.Graph.Core.dll" />
     <None Remove="Microsoft.Graph.dll" />
+    <None Remove="Microsoft.Identity.Client.dll" />
+    <None Remove="Microsoft.IdentityModel.Abstractions.dll" />
   </ItemGroup>
 
   <ItemGroup>
@@ -124,7 +99,6 @@
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.8.2" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.15.1" />
-    <PackageReference Include="Extensions.Logit" Version="4.9.700" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
     <PackageReference Include="Microsoft.Graph" Version="4.54.0" />
@@ -133,12 +107,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Microsoft.Identity.Client.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Microsoft.IdentityModel.Abstractions.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="TenantConfig.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -146,10 +114,6 @@
 
   <ItemGroup>
     <EditorConfigFiles Remove="D:\SOURCE\Extensions\.editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Extensions.String\" />
   </ItemGroup>
 
 </Project>
