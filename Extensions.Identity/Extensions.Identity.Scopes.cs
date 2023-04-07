@@ -1,4 +1,4 @@
-﻿#pragma warning disable CS0162, CS1587, CS1998, IDE0059, IDE0028
+﻿#pragma warning disable CS0162, CS1587, CS1998, IDE0028, IDE0059
 
 /// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
@@ -8,6 +8,7 @@
 /// </summary>
 
 using System;
+using static Extensions.Core;
 
 namespace Extensions.Identity
 {
@@ -96,6 +97,40 @@ namespace Extensions.Identity
             return AuthMan.ActiveAuth.Scopes;
         }
 
+        /// <summary>
+        /// Method to convert a string array of scopes back to a ScopeType object.
+        /// </summary>
+        /// <param name="scopes">The string array of scopes.</param>
+        /// <returns>The associated ScopeType object.</returns>
+        /// <exception cref="Exception">Thrown if conversion fails.</exception>
+        public static ScopeType GetScopeType(string[] scopes)
+        {
+            switch (scopes[0].ToLower())
+            {
+                case "https://graph.microsoft.us/.default":
+                    return ScopeType.Graph;
+                    break;
+                case "https://outlook.office365.us/.default":
+                    return ScopeType.Exchange;
+                    break;
+                default:
+                    if (scopes[0].ToLower() ==
+                        $"https://{AuthMan.GetTenantString().ToLower().TrimEnd('/')}.sharepoint.us/.default")
+                    {
+                        return ScopeType.SharePoint;
+                    }
+                    break;
+            }
+            string msg = "";
+            for (int C = 0; C < scopes.Length; C++)
+            {
+                msg += scopes[C];
+            }
+            msg = $"ERROR!  Scopes [{msg} is invalid.]";
+            E(msg);
+            throw new Exception(msg);
+        }
     }
 }
-#pragma warning restore CS0162, CS1587, CS1998, IDE0059, IDE0028
+
+#pragma warning restore CS0162, CS1587, CS1998, IDE0028, IDE0059

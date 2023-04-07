@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Extensions.Logit</id>
-    <version>3.8.700</version>
+    <!--<version>3.8.700</version>-->
     <title>$title$</title>
     <authors>Cornelius J. van Dyk</authors>
     <owners>$author$</owners>

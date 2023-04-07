@@ -14,7 +14,8 @@
 using System.Diagnostics.CodeAnalysis;
 #pragma warning restore CS1587 // XML comment is not placed on a valid language element
 
-[assembly: SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "Unnecessary")]
-[assembly: SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "Unnecessary")]
-[assembly: SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "Unnecessary")]
+[assembly: SuppressMessage("Style", "IDE0035:Unreachable code detected", Justification = "CvD")]
+[assembly: SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "CvD")]
+[assembly: SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "CvD")]
+[assembly: SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "CvD")]
 [assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "Unnecessary")]

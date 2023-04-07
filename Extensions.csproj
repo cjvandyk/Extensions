@@ -1,18 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFrameworks>net7.0;net6.0;netstandard2.1;netstandard2.0;net48;net472;net471;net47;net462</TargetFrameworks>
-	<LangVersion>latest</LangVersion>
-	<ImplicitUsings>disable</ImplicitUsings>
-	<NoWarn>$(NoWarn);CS1587</NoWarn>
+    <TargetFrameworks>net7.0;net6.0;netstandard2.1;netstandard2.0;net48;net472;net471;net47</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <NoWarn>$(NoWarn);CS1587</NoWarn>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+	<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     <PackageProjectUrl>https://github.com/cjvandyk/extensions</PackageProjectUrl>
     <PackageTags>Extensions;C#;cjvandyk;Crayveon;429;Retry-After;ThrottlingHandler;TimeZone;CountWords;Trim;QueryString;MorseCode;Binary;LoremIpsum;ZipCode;Vowel;UrlRoot;Elevate;CompoundInterest;StrongPassword</PackageTags>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>Extensions.cs</PackageId>
-	<Authors>cjvandyk</Authors>
+    <Authors>cjvandyk</Authors>
     <RepositoryUrl>https://github.com/cjvandyk/Extensions</RepositoryUrl>
-	<Title>Extensions.cs</Title>
+    <Title>Extensions.cs</Title>
     <Description>Extensions.dll contains extension methods that enhance existing C# classes thus making life easier for developers.  Extensions.dll supports all versions of.NET from 4.5 through 7.0.  Highlights are methods such as:  -Use.Save() and.Load() for easy state saving of any object in C#.  -Use.Retry() to easily handle 429 throttling errors in web calls.  -Use System.Timer class to quickly add stopwatch timing functionality.  -Use.IsPrime() to determine if a number is a prime number.  -Use.GetNthPrime() and.GetNthPrimeAsync() to get the Nth prime number capable of calculating 10, 000, 000 primes / minute on an Intel Core i7 - 6700K CPU @ 4.00 GHz using 7 threads on 8 logical cores.  -Use.ReplaceTokens() to replace multiple strings in string dictionary style.  -Use.IsStrong() to validate strong passwords.  -Use.ToTimeZone() to quickly convert any given time to any given time zone.  -Use.Elevate() to restart current process in admin mode if it doesn't have admin rights.  -Use.CompoundInterest() to calculate any given interest over any given period at any given interval, and many, many more.</Description>
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
@@ -24,8 +24,57 @@
     <PackageReleaseNotes>- Updated to support .NET 7.0
 - Fixed bug #19</PackageReleaseNotes>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0|AnyCPU'">
+    <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0|AnyCPU'">
+    <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net6.0|AnyCPU'">
+    <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net6.0|AnyCPU'">
+    <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.1|AnyCPU'">
+    <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.1|AnyCPU'">
+    <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+    <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+    <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net48|AnyCPU'">
+    <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net48|AnyCPU'">
+    <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net472|AnyCPU'">
+    <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net472|AnyCPU'">
+    <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net471|AnyCPU'">
+    <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net471|AnyCPU'">
+    <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net47|AnyCPU'">
+    <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net47|AnyCPU'">
+    <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
+  </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="BuildBump\**" />
     <Compile Remove="Extensions.Azure\**" />
     <Compile Remove="Extensions.Core\**" />
     <Compile Remove="Extensions.Graph\**" />
@@ -35,10 +84,12 @@
     <Compile Remove="Extensions.State\**" />
     <Compile Remove="Extensions.String\**" />
     <Compile Remove="Extensions.Telemetry\**" />
+    <Compile Remove="Properties\**" />
     <Compile Remove="TESTING\**" />
     <Compile Remove="VSIX\**" />
     <Compile Remove="~CsVisualStudioExtensions\**" />
     <Compile Remove="~ExtensionsClass\**" />
+    <EmbeddedResource Remove="BuildBump\**" />
     <EmbeddedResource Remove="Extensions.Azure\**" />
     <EmbeddedResource Remove="Extensions.Core\**" />
     <EmbeddedResource Remove="Extensions.Graph\**" />
@@ -48,10 +99,12 @@
     <EmbeddedResource Remove="Extensions.State\**" />
     <EmbeddedResource Remove="Extensions.String\**" />
     <EmbeddedResource Remove="Extensions.Telemetry\**" />
+    <EmbeddedResource Remove="Properties\**" />
     <EmbeddedResource Remove="TESTING\**" />
     <EmbeddedResource Remove="VSIX\**" />
     <EmbeddedResource Remove="~CsVisualStudioExtensions\**" />
     <EmbeddedResource Remove="~ExtensionsClass\**" />
+    <None Remove="BuildBump\**" />
     <None Remove="Extensions.Azure\**" />
     <None Remove="Extensions.Core\**" />
     <None Remove="Extensions.Graph\**" />
@@ -61,16 +114,15 @@
     <None Remove="Extensions.State\**" />
     <None Remove="Extensions.String\**" />
     <None Remove="Extensions.Telemetry\**" />
+    <None Remove="Properties\**" />
     <None Remove="TESTING\**" />
     <None Remove="VSIX\**" />
     <None Remove="~CsVisualStudioExtensions\**" />
     <None Remove="~ExtensionsClass\**" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Remove="Classes\System.Mersenne64.cs" />
   </ItemGroup>
-
   <ItemGroup>
     <None Remove="Extensions.csproj.old" />
     <None Remove="Microsoft.Graph.Core.dll" />
@@ -78,11 +130,9 @@
     <None Remove="Microsoft.Identity.Client.dll" />
     <None Remove="Microsoft.IdentityModel.Abstractions.dll" />
   </ItemGroup>
-
   <ItemGroup>
     <Content Include="Images\Extensions-128x128.png" />
   </ItemGroup>
-
   <ItemGroup>
     <None Include="D:\SOURCE\Extensions\.editorconfig" />
     <None Include="Images\Extensions-128x128.png">
@@ -95,7 +145,6 @@
       <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.8.2" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.15.1" />
@@ -103,17 +152,15 @@
     <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
     <PackageReference Include="Microsoft.Graph" Version="4.54.0" />
     <PackageReference Include="Microsoft.Identity.Client" Version="4.51.0" />
+    <PackageReference Include="Microsoft.SharePointOnline.CSOM" Version="16.1.23508.12000" />
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.0" />
   </ItemGroup>
-
   <ItemGroup>
     <None Update="TenantConfig.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
   <ItemGroup>
     <EditorConfigFiles Remove="D:\SOURCE\Extensions\.editorconfig" />
   </ItemGroup>
-
 </Project>
