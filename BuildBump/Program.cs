@@ -49,10 +49,10 @@ namespace BuildBump
                 doc.Save($"{root}\\{project}\\{project}.csproj");
                 File.Copy(
                     $"{root}\\{project}\\bin\\debug\\{project}.{version}.nupkg", 
-                    $"{root}\\bin\\debug\\{project}.{version}.nupkg", true);
+                    $"{root}\\NuGet\\{project}.{version}.nupkg", true);
                 File.Copy(
                     $"{root}\\{project}\\bin\\debug\\{project}.{version}.snupkg",
-                    $"{root}\\bin\\debug\\{project}.{version}.snupkg", true);
+                    $"{root}\\NuGet\\{project}.{version}.snupkg", true);
             }
             foreach (var file in files)
             {
