@@ -17,6 +17,7 @@ namespace BuildBump
             files.Add(new KeyValuePair<string, string>("Extensions.Azure.Blob.cs", "Extensions.Azure"));
             files.Add(new KeyValuePair<string, string>("Extensions.Constants.cs", "Extensions.Core"));
             files.Add(new KeyValuePair<string, string>("Extensions.Core.cs", "Extensions.Core"));
+            files.Add(new KeyValuePair<string, string>("Extensions.TenantConfig.cs", "Extensions.Core"));
             files.Add(new KeyValuePair<string, string>("Extensions.Graph.cs", "Extensions.Graph"));
             files.Add(new KeyValuePair<string, string>("Microsoft.Graph.ListItem.cs", "Extensions.Graph"));
             files.Add(new KeyValuePair<string, string>("Extensions.Identity.App.cs", "Extensions.Identity"));
@@ -25,11 +26,11 @@ namespace BuildBump
             files.Add(new KeyValuePair<string, string>("Extensions.Identity.AuthMan.cs", "Extensions.Identity"));
             files.Add(new KeyValuePair<string, string>("Extensions.Identity.Cert.cs", "Extensions.Identity"));
             files.Add(new KeyValuePair<string, string>("Extensions.Identity.Scopes.cs", "Extensions.Identity"));
-            files.Add(new KeyValuePair<string, string>("Extensions.Identity.TenantConfig.cs", "Extensions.Identity"));
             files.Add(new KeyValuePair<string, string>("System.Logit.cs", "Extensions.Logit"));
             files.Add(new KeyValuePair<string, string>("Extensions.State.cs", "Extensions.State"));
             files.Add(new KeyValuePair<string, string>("System.Object.cs", "Extensions.State"));
             files.Add(new KeyValuePair<string, string>("System.String.cs", "Extensions.String"));
+            files.Add(new KeyValuePair<string, string>("System.Text.StringBuilder.cs", "Extensions.String"));
             files.Add(new KeyValuePair<string, string>("Extensions.Telemetry.cs", "Extensions.Telemetry"));
             XmlDocument doc = new XmlDocument();
             doc.Load($"{root}\\Directory.Build.props");
@@ -46,6 +47,12 @@ namespace BuildBump
                 doc.Load($"{root}\\{project}\\{project}.csproj");
                 doc.FirstChild.FirstChild.FirstChild.InnerText = targetframeworks;
                 doc.Save($"{root}\\{project}\\{project}.csproj");
+                File.Copy(
+                    $"{root}\\{project}\\bin\\debug\\{project}.{version}.nupkg", 
+                    $"{root}\\bin\\debug\\{project}.{version}.nupkg", true);
+                File.Copy(
+                    $"{root}\\{project}\\bin\\debug\\{project}.{version}.snupkg",
+                    $"{root}\\bin\\debug\\{project}.{version}.snupkg", true);
             }
             foreach (var file in files)
             {

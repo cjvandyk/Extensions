@@ -7,7 +7,6 @@
 /// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
 /// </summary>
 
-using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
 using System.IO;

@@ -9,7 +9,6 @@
 
 using System;
 using System.Collections.Generic;
-using static Extensions.Core;
 
 namespace Extensions
 {
@@ -119,7 +118,7 @@ namespace Extensions
         public static object Get(this object obj, 
                                  string key)
         {
-            ValidateNoNulls(obj, key);
+            //ValidateNoNulls(obj, key);
             return extensionProperties[key];
         }
         #endregion Get()
@@ -137,7 +136,7 @@ namespace Extensions
                                string key, 
                                object val)
         {
-            ValidateNoNulls(obj, key, val);
+            //ValidateNoNulls(obj, key, val);
             extensionProperties[key] = val;
         }
         #endregion Set()

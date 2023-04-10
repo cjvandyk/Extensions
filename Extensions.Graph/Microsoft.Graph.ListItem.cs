@@ -8,9 +8,7 @@
 /// </summary>
 
 using System;
-using System.Collections.Generic;
 using static System.Logit;
-using static Extensions.Core;  //NuGet Extensions.cs
 
 namespace Extensions
 {
