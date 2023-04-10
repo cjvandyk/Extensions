@@ -7,12 +7,9 @@
 /// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
 /// </summary>
 
-using Microsoft.Graph;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Text.Json;
-using static Extensions.Core;  //NuGet Extensions.cs
 
 namespace Extensions
 {

@@ -15,7 +15,6 @@ using System.Net.Http.Headers;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
-using static Extensions.Identity.App;
 using static Extensions.Identity.AuthMan;
 
 namespace Extensions.Identity

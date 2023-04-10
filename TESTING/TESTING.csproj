@@ -71,9 +71,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Extensions.csproj">
+    <ProjectReference Include="..\EXTENSIONS.csproj">
       <Project>{331a7c3b-45dc-4e04-85bf-de1934c6b3fa}</Project>
-      <Name>Extensions</Name>
+      <Name>EXTENSIONS</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

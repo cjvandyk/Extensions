@@ -12,9 +12,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Graph;
-using static Extensions.Core;  //NuGet Extensions.cs
-using static System.Logit;          //NuGet Extensions.Logit
-using Azure.Storage.Blobs.Models;
 
 namespace Extensions
 {
