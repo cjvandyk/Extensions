@@ -1,4 +1,4 @@
-﻿#pragma warning disable CS0162, CS1587, CS1591, CS1998, IDE0028, IDE0059
+﻿//#pragma warning disable CS0162, CS1587, CS1591, CS1998, IDE0028, IDE0059
 
 /// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
@@ -33,4 +33,4 @@ namespace $rootnamespace$
 	}
 }
 
-#pragma warning restore CS0162, CS1587, CS1591, CS1998, IDE0028, IDE0059
+//#pragma warning restore CS0162, CS1587, CS1591, CS1998, IDE0028, IDE0059

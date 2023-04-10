@@ -13,7 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
-//using static Extensions.Core;  //NuGet Extensions.cs
+using static Extensions.Core;  //NuGet Extensions.cs
 using static System.Logit;
 
 namespace Extensions

@@ -1,4 +1,4 @@
-﻿#pragma warning disable CS0162, CS0168//, CS1587, CS1998, IDE0028, IDE0059
+﻿//#pragma warning disable CS0162, CS0168//, CS1587, CS1998, IDE0028, IDE0059
 
 /// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
@@ -139,7 +139,7 @@ namespace Extensions
         /// <summary>
         /// The private object used to manage locks on file I/O.
         /// </summary>
-        private static readonly object lockManager = new object();
+        private static readonly object LockManager = new object();
         #endregion Properties
 
         #region InitializeTenant
@@ -850,4 +850,4 @@ namespace Extensions
     }
 }
 
-#pragma warning restore CS0162, CS0168//, CS1587, CS1998, IDE0028, IDE0059
+//#pragma warning restore CS0162, CS0168//, CS1587, CS1998, IDE0028, IDE0059

@@ -1,4 +1,4 @@
-﻿#pragma warning disable CA1416, CS0162, CS0168, CS1587, CS1591, CS1998, IDE0028, IDE0059
+﻿//#pragma warning disable CA1416, CS0162, CS0168, CS1587, CS1591, CS1998, IDE0028, IDE0059
 
 /// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
@@ -152,7 +152,7 @@ namespace System
                 //Configure the default ILogger instance for this session.
                 ILogger = iLogger;
                 //Update default instance to this.
-                activeLogitInstance = this;
+                ActiveLogitInstance = this;
             }
 
             /// <summary>
@@ -223,7 +223,7 @@ namespace System
                 //Configure the default log message type for this session.
                 DefaultLogMessageType = defaultLogMessageType;
                 //Update default instance to this.
-                activeLogitInstance = this;
+                ActiveLogitInstance = this;
             }
             #endregion Constructors
 
@@ -233,7 +233,7 @@ namespace System
             /// </summary>
             /// <param name="message">The string message to log.</param>
             /// <param name="eventId">The Event Log event ID to use.</param>
-            public async void Inf(
+            public void Inf(
                 string message,
                 int eventId = 0)
             {
@@ -245,7 +245,7 @@ namespace System
             /// </summary>
             /// <param name="message">The string message to log.</param>
             /// <param name="eventId">The Event Log event ID to use.</param>
-            public async void Wrn(
+            public void Wrn(
                 string message,
                 int eventId = 0)
             {
@@ -257,7 +257,7 @@ namespace System
             /// </summary>
             /// <param name="message">The string message to log.</param>
             /// <param name="eventId">The Event Log event ID to use.</param>
-            public async void Err(
+            public void Err(
                 string message,
                 int eventId = 0)
             {
@@ -269,7 +269,7 @@ namespace System
             /// </summary>
             /// <param name="message">The string message to log.</param>
             /// <param name="eventId">The Event Log event ID to use.</param>
-            public async void Vrb(
+            public void Vrb(
                 string message,
                 int eventId = 0)
             {
@@ -282,7 +282,7 @@ namespace System
         /// <summary>
         /// The lock object to prevent file I/O clashes.
         /// </summary>
-        private static ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
+        private static readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
         /// <summary>
         /// Lock object for marshalling static console location output.
         /// </summary>
@@ -292,9 +292,21 @@ namespace System
         /// </summary>
         public enum MessageType
         {
+            /// <summary>
+            /// Error message type that writes red output to console.
+            /// </summary>
             Error,
+            /// <summary>
+            /// Warning message type that writes yellow output to console.
+            /// </summary>
             Warning,
+            /// <summary>
+            /// Information message type that writes gray output to console.
+            /// </summary>
             Information,
+            /// <summary>
+            /// Verbose message type that writes cyan output to console.
+            /// </summary>
             Verbose
         }
         /// <summary>
@@ -302,18 +314,36 @@ namespace System
         /// </summary>
         public enum LogType
         {
+            /// <summary>
+            /// Write to console.
+            /// </summary>
             Console,
+            /// <summary>
+            /// Write to a logging file.
+            /// </summary>
             File,
+            /// <summary>
+            /// Write to the Event Log.
+            /// </summary>
             EventLog,
+            /// <summary>
+            /// Write to a SharePoint list.
+            /// </summary>
             SPList,
+            /// <summary>
+            /// Write to a given ILogger.
+            /// </summary>
             ILogger,
+            /// <summary>
+            /// Write to database.
+            /// </summary>
             Database
         }
         /// <summary>
         /// The currently active Logit engine instance that will handle
         /// requests.
         /// </summary>
-        public static Instance activeLogitInstance { get; set; }
+        public static Instance ActiveLogitInstance { get; set; } 
             = new Instance(IsDebug);
         #endregion Globals
 
@@ -352,7 +382,7 @@ namespace System
         /// to call to determine if debug logging should happen.</param>
         /// <param name="messageType">The type of message to write.  Default
         /// value is MessageType.Information.</param>
-        private static void writeConsoleMessage(
+        private static void WriteConsoleMessage(
             string message,
             Func<bool> isDebugValidationMethod = null,
             MessageType messageType = MessageType.Information)
@@ -410,7 +440,7 @@ namespace System
                     Console.ForegroundColor = foreground;
                     Console.BackgroundColor = background;
                 }
-                catch (Exception ex2)
+                catch
                 {
                     //Just reset the console colors.
                     Console.ForegroundColor = foreground;
@@ -430,11 +460,11 @@ namespace System
         /// <param name="message">Output to write.</param>
         /// <param name="isDebugValidationMethod">The name of the delegate method
         /// to call to determine if debug logging should happen.</param>
-        public static void writeConsoleError(
+        public static void WriteConsoleError(
             string message,
             Func<bool> isDebugValidationMethod = null)
         {
-            writeConsoleMessage(message, isDebugValidationMethod, MessageType.Error);
+            WriteConsoleMessage(message, isDebugValidationMethod, MessageType.Error);
         }
 
         /// <summary>
@@ -458,17 +488,29 @@ namespace System
             //Logging code may NEVER terminate its parent through exceptions.
             try
             {
-                return Path.GetDirectoryName(
-                    Reflection.Assembly.GetEntryAssembly().Location)
-                    .TrimEnd('\\') + "\\" + //Ensure no double trailing slash.
-                    Uri.EscapeDataString(
-                    Reflection.Assembly.GetEntryAssembly()
-                    .ManifestModule.Name.Replace(" ", "_"));
+                if (noSpacesinFileName)
+                {
+                    return Path.GetDirectoryName(
+                        Reflection.Assembly.GetEntryAssembly().Location)
+                        .TrimEnd('\\') + "\\" + //Ensure no double trailing slash.
+                        Uri.EscapeDataString(
+                        Reflection.Assembly.GetEntryAssembly()
+                        .ManifestModule.Name.Replace(" ", "_"));
+                }
+                else
+                {
+                    return Path.GetDirectoryName(
+                        Reflection.Assembly.GetEntryAssembly().Location)
+                        .TrimEnd('\\') + "\\" + //Ensure no double trailing slash.
+                        Uri.EscapeDataString(
+                        Reflection.Assembly.GetEntryAssembly()
+                        .ManifestModule.Name);
+                }
             }
             catch (Exception ex)
             {
                 //Write exception info to the console in default red.
-                writeConsoleError(ex.ToString());
+                WriteConsoleError(ex.ToString());
                 //Return empty string instead of null as null could cause an
                 //exception to be thrown by the calling code.
                 return "";
@@ -484,7 +526,7 @@ namespace System
         /// </summary>
         /// <param name="url">The URL to transform.</param>
         /// <returns>The transformed URL value.</returns>
-        public static string htmlStrip(string url)
+        public static string HtmlStrip(string url)
         {
             //Logging code may NEVER terminate its parent through exceptions.
             try
@@ -497,7 +539,7 @@ namespace System
             catch (Exception ex)
             {
                 //Write exception info to the console in default red.
-                writeConsoleError(ex.ToString());
+                WriteConsoleError(ex.ToString());
                 //Return empty string instead of null as null could cause an
                 //exception to be thrown by the calling code.
                 return "";
@@ -511,7 +553,7 @@ namespace System
         /// </summary>
         /// <returns>String stamp in the format yyyy-MM-dd@hh.mm.ss.ttt
         /// e.g. 2017-07-04@09.03.01.567Z</returns>
-        public static string timeStampZulu()
+        public static string TimeStampZulu()
         {
             //Logging code may NEVER terminate its parent through exceptions.
             try
@@ -528,7 +570,7 @@ namespace System
             catch (Exception ex)
             {
                 //Write exception info to the console in default red.
-                writeConsoleError(ex.ToString());
+                WriteConsoleError(ex.ToString());
                 //Return empty string instead of null as null could cause an
                 //exception to be thrown by the calling code.
                 return "";
@@ -559,7 +601,7 @@ namespace System
             catch (Exception ex)
             {
                 //Write exception info to the console in default red.
-                writeConsoleError(ex.ToString());
+                WriteConsoleError(ex.ToString());
                 //Return empty string instead of null as null could cause an
                 //exception to be thrown by the calling code.
                 return "";
@@ -571,7 +613,7 @@ namespace System
         /// Domain Name.
         /// </summary>
         /// <returns>FQDN</returns>
-        public static string getFQDN()
+        public static string GetFQDN()
         {
             //Logging code may NEVER terminate its parent through exceptions.
             try
@@ -589,7 +631,7 @@ namespace System
             catch (Exception ex)
             {
                 //Write exception info to the console in default red.
-                writeConsoleError(ex.ToString());
+                WriteConsoleError(ex.ToString());
                 //Return empty string instead of null as null could cause an
                 //exception to be thrown by the calling code.
                 return "";
@@ -603,7 +645,7 @@ namespace System
         /// <param name="message">The message to stamp if needed.</param>
         /// <param name="includeTimeStamp"></param>
         /// <returns></returns>
-        public static string prependTimeStamp(
+        public static string PrependTimeStamp(
             string message,
             bool includeTimeStamp = false)
         {
@@ -625,7 +667,7 @@ namespace System
             catch (Exception ex)
             {
                 //Write exception info to the console in default red.
-                writeConsoleError(ex.ToString());
+                WriteConsoleError(ex.ToString());
                 return ex.ToString();
             }
         }
@@ -640,7 +682,7 @@ namespace System
         /// for the message.</param>
         /// <param name="background">The background color of the console
         /// for the message.  Defaults to black.</param>
-        public async static void Log(
+        public static void Log(
             string message,
             ConsoleColor foreground,
             ConsoleColor background = ConsoleColor.Black)
@@ -649,7 +691,7 @@ namespace System
                 0,
                 MessageType.Information,
                 null,
-                activeLogitInstance.IsDebugMethod,
+                ActiveLogitInstance.IsDebugMethod,
                 foreground,
                 background);
         }
@@ -671,7 +713,7 @@ namespace System
         /// logging to console.  Defaults to gray.</param>
         /// <param name="background">The background color to use when
         /// logging to console.  Defaults to black.</param>
-        public async static void Log(
+        public static void Log(
             string message,
             int eventId = 0,
             MessageType messageType = MessageType.Information,
@@ -683,17 +725,6 @@ namespace System
             //Logging code may NEVER terminate its parent through exceptions.
             try
             {
-                if (isDebugValidationMethod == null)
-                {
-                    if (instance.IsDebugMethod == null)
-                    {
-                        return;
-                    }
-                    else
-                    {
-                        isDebugValidationMethod = instance.IsDebugMethod;
-                    }
-                }
                 //Check if a debug func was specified.
                 if (isDebugValidationMethod != null)
                 {
@@ -703,7 +734,7 @@ namespace System
                         //Check if a Logit instance was passed.
                         if (instance == null)
                         {
-                            instance = activeLogitInstance;
+                            instance = ActiveLogitInstance;
                         }
                         //Check if we should log to Console.
                         if (instance.LogToConsole)
@@ -755,7 +786,7 @@ namespace System
                                     //blank to clear previous output from the static
                                     //console line.
                                     Console.WriteLine(
-                                        prependTimeStamp(message)
+                                        PrependTimeStamp(message)
                                         .PadRight(120, ' '));
                                     //Reset the cursor after output.
                                     Console.CursorTop = cursorTop;
@@ -766,7 +797,7 @@ namespace System
                             else
                             {
                                 //Simply write the message to the console.
-                                Console.WriteLine(prependTimeStamp(message));
+                                Console.WriteLine(PrependTimeStamp(message));
                             }
                             //Reset console colors.
                             Console.ForegroundColor = foreColor;
@@ -776,8 +807,8 @@ namespace System
                         if (instance.LogToEventLog)
                         {
                             //Set the default EventLog type.
-                            Diagnostics.EventLogEntryType targetType =
-                                Diagnostics.EventLogEntryType.Error;
+                            System.Diagnostics.EventLogEntryType targetType =
+                                System.Diagnostics.EventLogEntryType.Error;
                             //Change the default to match the message type.
                             switch (messageType)
                             {
@@ -826,13 +857,13 @@ namespace System
                                         instance.LogFile,
                                         messageType.ToString() +
                                             ", " +
-                                            prependTimeStamp(message) + "\n");
+                                            PrependTimeStamp(message) + "\n");
                                 }
                             }
                             catch (Exception ex)
                             {
                                 //Write exception info to the console in default red.
-                                writeConsoleError(ex.ToString());
+                                WriteConsoleError(ex.ToString());
                                 System.Diagnostics.EventLog.WriteEntry(
                                     "Application",
                                     ex.ToString(),
@@ -920,14 +951,14 @@ namespace System
                 {
                     if (instance == null)
                     {
-                        instance = activeLogitInstance;
+                        instance = ActiveLogitInstance;
                     }
                     //Log exception to console and event log!
                     var fore = Console.ForegroundColor;
                     var back = Console.BackgroundColor;
                     Console.ForegroundColor = ConsoleColor.Red;
                     //Write console output, stamped if needed.
-                    Console.WriteLine(prependTimeStamp(ex.ToString()));
+                    Console.WriteLine(PrependTimeStamp(ex.ToString()));
                     //Reset the console foreground color.
                     Console.ForegroundColor = fore;
                     Console.BackgroundColor = back;
@@ -936,7 +967,7 @@ namespace System
                         ex.ToString(),
                         System.Diagnostics.EventLogEntryType.Error);
                 }
-                catch (Exception ex2)
+                catch
                 {
                     //Swallow the error.
                 }
@@ -949,14 +980,14 @@ namespace System
         /// <param name="message">The string message to log.</param>
         /// <param name="eventId">The Event Log event ID to use.</param>
         /// <param name="instance">Return value from Log() method.</param>
-        public async static void Inf(
+        public static void Inf(
             string message,
             int eventId = 0,
             Instance instance = null)
         {
             if (instance == null)
             {
-                instance = activeLogitInstance;
+                instance = ActiveLogitInstance;
             }
             Log(message, eventId, MessageType.Information, instance);
         }
@@ -967,14 +998,14 @@ namespace System
         /// <param name="message">The string message to log.</param>
         /// <param name="eventId">The Event Log event ID to use.</param>
         /// <param name="instance">Return value from Log() method.</param>
-        public async static void Wrn(
+        public static void Wrn(
             string message,
             int eventId = 0,
             Instance instance = null)
         {
             if (instance == null)
             {
-                instance = activeLogitInstance;
+                instance = ActiveLogitInstance;
             }
             Log(message, eventId, MessageType.Warning, instance);
         }
@@ -985,14 +1016,14 @@ namespace System
         /// <param name="message">The string message to log.</param>
         /// <param name="eventId">The Event Log event ID to use.</param>
         /// <param name="instance">Return value from Log() method.</param>
-        public async static void Err(
+        public static void Err(
             string message,
             int eventId = 0,
             Instance instance = null)
         {
             if (instance == null)
             {
-                instance = activeLogitInstance;
+                instance = ActiveLogitInstance;
             }
             Log(message, eventId, MessageType.Error, instance);
         }
@@ -1003,14 +1034,14 @@ namespace System
         /// <param name="message">The string message to log.</param>
         /// <param name="eventId">The Event Log event ID to use.</param>
         /// <param name="instance">Return value from Log() method.</param>
-        public async static void Vrb(
+        public static void Vrb(
             string message,
             int eventId = 0,
             Instance instance = null)
         {
             if (instance == null)
             {
-                instance = activeLogitInstance;
+                instance = ActiveLogitInstance;
             }
             Log(message, eventId, MessageType.Verbose, instance);
         }
@@ -1018,4 +1049,4 @@ namespace System
     }
 }
 
-#pragma warning restore CA1416, CS0162, CS0168, CS1587, CS1591, CS1998, IDE0028, IDE0059
+//#pragma warning restore CA1416, CS0162, CS0168, CS1587, CS1591, CS1998, IDE0028, IDE0059
