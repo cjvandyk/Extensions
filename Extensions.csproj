@@ -1,11 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net7.0;net6.0;netstandard2.1;netstandard2.0;net48;net472;net471;net47</TargetFrameworks>
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>disable</ImplicitUsings>
     <NoWarn>$(NoWarn);CS1587</NoWarn>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-	<GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
     <PackageProjectUrl>https://github.com/cjvandyk/extensions</PackageProjectUrl>
     <PackageTags>Extensions;C#;cjvandyk;Crayveon;429;Retry-After;ThrottlingHandler;TimeZone;CountWords;Trim;QueryString;MorseCode;Binary;LoremIpsum;ZipCode;Vowel;UrlRoot;Elevate;CompoundInterest;StrongPassword</PackageTags>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -72,7 +72,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net47|AnyCPU'">
     <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Remove="BuildBump\**" />
     <Compile Remove="Extensions.Azure\**" />

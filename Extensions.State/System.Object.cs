@@ -9,7 +9,7 @@
 
 using System;
 using System.Collections.Generic;
-//using static Extensions.Core;
+using static Extensions.Core;
 
 namespace Extensions
 {
@@ -105,42 +105,42 @@ namespace Extensions
         }
         #endregion T Save<T>()
 
-        //#region Get()
-        ///// <summary>
-        ///// Get the value of an extension property in the dictionary.
-        ///// </summary>
-        ///// <param name="obj">Our binding class.</param>
-        ///// <param name="key">The key for the value to be returned.
-        ///// This value is usually the name of the extension property
-        ///// who's value is being returned.</param>
-        ///// <returns>An object representing the value of the extension
-        ///// property.  You would have to manually cast the return value
-        ///// to the proper data type you know it to be.</returns>
-        //public static object Get(this object obj, 
-        //                         string key)
-        //{
-        //    ValidateNoNulls(obj, key);
-        //    return extensionProperties[key];
-        //}
-        //#endregion Get()
+        #region Get()
+        /// <summary>
+        /// Get the value of an extension property in the dictionary.
+        /// </summary>
+        /// <param name="obj">Our binding class.</param>
+        /// <param name="key">The key for the value to be returned.
+        /// This value is usually the name of the extension property
+        /// who's value is being returned.</param>
+        /// <returns>An object representing the value of the extension
+        /// property.  You would have to manually cast the return value
+        /// to the proper data type you know it to be.</returns>
+        public static object Get(this object obj, 
+                                 string key)
+        {
+            ValidateNoNulls(obj, key);
+            return extensionProperties[key];
+        }
+        #endregion Get()
 
-        //#region Set()
-        ///// <summary>
-        ///// Set the value of an extension property in the dictionary.
-        ///// </summary>
-        ///// <param name="obj">Our binding class.</param>
-        ///// <param name="key">The key for the value.  This value is usually
-        ///// the name of the extension property being stored.</param>
-        ///// <param name="val">The value to which to set the extension
-        ///// property.</param>
-        //public static void Set(this object obj, 
-        //                       string key, 
-        //                       object val)
-        //{
-        //    ValidateNoNulls(obj, key, val);
-        //    extensionProperties[key] = val;
-        //}
-        //#endregion Set()
+        #region Set()
+        /// <summary>
+        /// Set the value of an extension property in the dictionary.
+        /// </summary>
+        /// <param name="obj">Our binding class.</param>
+        /// <param name="key">The key for the value.  This value is usually
+        /// the name of the extension property being stored.</param>
+        /// <param name="val">The value to which to set the extension
+        /// property.</param>
+        public static void Set(this object obj, 
+                               string key, 
+                               object val)
+        {
+            ValidateNoNulls(obj, key, val);
+            extensionProperties[key] = val;
+        }
+        #endregion Set()
     }
 }
 #pragma warning restore CS1587, CS1998, IDE0059, IDE0028

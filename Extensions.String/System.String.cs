@@ -1300,47 +1300,47 @@ namespace Extensions
             return null;
         }
 
-        ///// <summary>
-        ///// Returns text to the left of the index string.  Use negative values
-        ///// for occurrence if the occurrence count should start from the end
-        ///// instead of its default from the beginning of the string.
-        ///// </summary>
-        ///// <param name="str">A System.Text.StringBuilder object being
-        ///// searched.</param>
-        ///// <param name="index">The System.String value used as the target
-        ///// of the search.</param>
-        ///// <param name="occurrence">The number of matches to find.</param>
-        ///// <returns>Returns text to the left of the index string.  Use
-        ///// negative values for occurrence if the occurrence count should
-        ///// start from the end instead of its default from the beginning of
-        ///// the string.</returns>
-        //public static string Left(this System.Text.StringBuilder str,
-        //                          string index,
-        //                          int occurrence)
-        //{
-        //    ValidateNoNulls(str, index, occurrence);
-        //    if (occurrence == 1)
-        //    {
-        //        return str.Substring(0, str.IndexOf(index));
-        //    }
-        //    else
-        //    {
-        //        if (occurrence == -1)
-        //        {
-        //            //return str.Substring(0, str.LastIndexOf(index));
-        //        }
-        //    }
-        //    if (occurrence > 1)
-        //    {
-        //        string remainder = str.Substring(str.IndexOf(index));
-        //        for (int C = 1; C <= occurrence; C++)
-        //        {
-        //            remainder = remainder.Substring(remainder.IndexOf(index));
-        //        }
-        //        return remainder;
-        //    }
-        //    return null;
-        //}
+        /// <summary>
+        /// Returns text to the left of the index string.  Use negative values
+        /// for occurrence if the occurrence count should start from the end
+        /// instead of its default from the beginning of the string.
+        /// </summary>
+        /// <param name="str">A System.Text.StringBuilder object being
+        /// searched.</param>
+        /// <param name="index">The System.String value used as the target
+        /// of the search.</param>
+        /// <param name="occurrence">The number of matches to find.</param>
+        /// <returns>Returns text to the left of the index string.  Use
+        /// negative values for occurrence if the occurrence count should
+        /// start from the end instead of its default from the beginning of
+        /// the string.</returns>
+        public static string Left(this System.Text.StringBuilder str,
+                                  string index,
+                                  int occurrence)
+        {
+            ValidateNoNulls(str, index, occurrence);
+            if (occurrence == 1)
+            {
+                return str.Substring(0, str.IndexOf(index));
+            }
+            else
+            {
+                if (occurrence == -1)
+                {
+                    //return str.Substring(0, str.LastIndexOf(index));
+                }
+            }
+            if (occurrence > 1)
+            {
+                string remainder = str.Substring(str.IndexOf(index));
+                for (int C = 1; C <= occurrence; C++)
+                {
+                    remainder = remainder.Substring(remainder.IndexOf(index));
+                }
+                return remainder;
+            }
+            return null;
+        }
         #endregion Left()
 
         #region Lines()
@@ -2406,25 +2406,6 @@ namespace Extensions
         //    }
         //    return false;
         //}
-
-        /// <summary>
-        /// Returns a custom GUID starting with a custom string.
-        /// </summary>
-        /// <param name="StartWith">A string containing hexadecimal
-        /// characters with which the GUID should start.</param>
-        /// <returns>A System.Guid that starts with the given characters.</returns>
-        public static System.Guid NewCustomGuid(string StartWith = "")
-        {
-            if (!StartWith.ToLower().ContainsOnly(Constants.HexChars))
-            {
-                throw new Exception(
-                    $"Value [{StartWith}] contains non-hex characters!\n" +
-                    "GUID values can only contain hexadecimal characters.");
-            }
-            System.Guid result = System.Guid.NewGuid();
-            return new System.Guid((StartWith.ToLower() +
-                result.ToString().ToLower().Substring(StartWith.Length)));
-        }
     }
 }
 #pragma warning restore CA1416, CS1587, CS0162, CS1998, IDE0059, IDE0028

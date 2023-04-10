@@ -12,7 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
-//using static Extensions.Core;  //NuGet Extensions.cs
+using static Extensions.Core;  //NuGet Extensions.cs
 
 namespace Extensions
 {
@@ -39,7 +39,7 @@ namespace Extensions
         public static string GetFileTarget(
             string listName,
             bool local = false)
-        {
+        { 
             if (local)
             {
                 return $"{listName}.state";
@@ -178,7 +178,7 @@ namespace Extensions
                     {
                         //State file exist now check age.
                         if ((maxCacheAgeInDays > 0) &&
-                            (DateTime.UtcNow <
+                            (DateTime.UtcNow < 
                             System.IO.File.GetLastWriteTimeUtc(target)
                                 .AddDays(maxCacheAgeInDays)))
                         {

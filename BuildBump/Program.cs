@@ -13,6 +13,24 @@ namespace BuildBump
             string root = @"..\..\..\..";
             string[] projects = { "Extensions.Azure", "Extensions.Core", "Extensions.Graph", "Extensions.Identity", 
                 "Extensions.Logit", "Extensions.State", "Extensions.String", "Extensions.Telemetry" };
+            List<KeyValuePair<string, string>> files = new List<KeyValuePair<string, string>>();
+            files.Add(new KeyValuePair<string, string>("Extensions.Azure.Blob.cs", "Extensions.Azure"));
+            files.Add(new KeyValuePair<string, string>("Extensions.Constants.cs", "Extensions.Core"));
+            files.Add(new KeyValuePair<string, string>("Extensions.Core.cs", "Extensions.Core"));
+            files.Add(new KeyValuePair<string, string>("Extensions.Graph.cs", "Extensions.Graph"));
+            files.Add(new KeyValuePair<string, string>("Microsoft.Graph.ListItem.cs", "Extensions.Graph"));
+            files.Add(new KeyValuePair<string, string>("Extensions.Identity.App.cs", "Extensions.Identity"));
+            files.Add(new KeyValuePair<string, string>("Extensions.Identity.Auth.ClientApplicationType.cs", "Extensions.Identity"));
+            files.Add(new KeyValuePair<string, string>("Extensions.Identity.Auth.cs", "Extensions.Identity"));
+            files.Add(new KeyValuePair<string, string>("Extensions.Identity.AuthMan.cs", "Extensions.Identity"));
+            files.Add(new KeyValuePair<string, string>("Extensions.Identity.Cert.cs", "Extensions.Identity"));
+            files.Add(new KeyValuePair<string, string>("Extensions.Identity.Scopes.cs", "Extensions.Identity"));
+            files.Add(new KeyValuePair<string, string>("Extensions.Identity.TenantConfig.cs", "Extensions.Identity"));
+            files.Add(new KeyValuePair<string, string>("System.Logit.cs", "Extensions.Logit"));
+            files.Add(new KeyValuePair<string, string>("Extensions.State.cs", "Extensions.State"));
+            files.Add(new KeyValuePair<string, string>("System.Object.cs", "Extensions.State"));
+            files.Add(new KeyValuePair<string, string>("System.String.cs", "Extensions.String"));
+            files.Add(new KeyValuePair<string, string>("Extensions.Telemetry.cs", "Extensions.Telemetry"));
             XmlDocument doc = new XmlDocument();
             doc.Load($"{root}\\Directory.Build.props");
             doc.FirstChild.FirstChild.FirstChild.InnerText = version;
@@ -28,6 +46,10 @@ namespace BuildBump
                 doc.Load($"{root}\\{project}\\{project}.csproj");
                 doc.FirstChild.FirstChild.FirstChild.InnerText = targetframeworks;
                 doc.Save($"{root}\\{project}\\{project}.csproj");
+            }
+            foreach (var file in files)
+            {
+                File.Copy($"{root}\\Classes\\{file.Key}", $"{root}\\{file.Value}\\{file.Key}", true);
             }
             Console.WriteLine("Done!");
         }
