@@ -1,4 +1,4 @@
-﻿#pragma warning disable CS0162, CS0168, CS1587, CS1998, IDE0059, IDE0028
+﻿#pragma warning disable CS0162, CS0168//, CS1587, CS1998, IDE0028, IDE0059
 
 /// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
@@ -7,24 +7,24 @@
 /// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
 /// </summary>
 
+using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using Azure.Core;
-using Extensions.Identity;
-using Microsoft.Extensions.Configuration;
 using static System.Logit;
 
 namespace Extensions
 {
     /// <summary>
-    /// Core class for constants and enums.
+    /// Core class for constants, enums and helper methods.
     /// </summary>
     [Serializable]
     public static partial class Core
     {
+        #region Enums
         /// <summary>
         /// The list of valid AzureEnvironments used.
         /// </summary>
@@ -51,26 +51,32 @@ namespace Extensions
             /// </summary>
             USGovGCCHigh
         }
+        #endregion Enums
 
+        #region Properties
         /// <summary>
         /// A dictionary of configurations for different tenants.
         /// </summary>
         public static Dictionary<string, TenantConfig> Tenants { get; private set; }
             = new Dictionary<string, TenantConfig>();
+
         /// <summary>
         /// The currently active tenant configuration in use.
         /// </summary>
         public static TenantConfig ActiveTenant { get; private set; } = null;
+
         /// <summary>
         /// The tenant name e.g. for contoso.sharepoint.us it would be "contoso".
         /// </summary>
         public static string TenantUrl { get; }
             = $"{ActiveTenant.TenantString}.sharepoint.us";
+
         /// <summary>
         /// The URI of the tenant.
         /// </summary>
         public static Uri TenantUri { get; }
             = new Uri("https://" + TenantUrl);
+
         /// <summary>
         /// Method to get the valid Authority URL given the AzureEnvironment.
         /// </summary>
@@ -92,6 +98,7 @@ namespace Extensions
                 }
             }
         }
+
         /// <summary>
         /// Method to get the valid Graph endpoint URL given the AzureEnvironment.
         /// </summary>
@@ -112,6 +119,7 @@ namespace Extensions
                 }
             }
         }
+
         /// <summary>
         /// Method to return the users endpoint for the given Graph context.
         /// </summary>
@@ -122,15 +130,19 @@ namespace Extensions
                 return $"{GraphEndPointUrl}/users";
             }
         }
+
         /// <summary>
         /// The assembly used on out calls.
         /// </summary>
         private static System.Reflection.Assembly assembly;
+
         /// <summary>
         /// The private object used to manage locks on file I/O.
         /// </summary>
         private static readonly object lockManager = new object();
+        #endregion Properties
 
+        #region InitializeTenant
         /// <summary>
         /// Initialization method for tenant configuration.
         /// </summary>
@@ -162,10 +174,8 @@ namespace Extensions
                 Err(ex.ToString());
                 throw;
             }
-            finally
-            {
-            }
         }
+        #endregion InitializeTenant
 
         #region LogitCore
         /// <summary>
@@ -423,6 +433,7 @@ namespace Extensions
         }
         #endregion GetFQDN()
 
+        #region Null
         /// <summary>
         /// Method to ensure a given object is not null.
         /// </summary>
@@ -459,81 +470,24 @@ namespace Extensions
             }
         }
 
-        //#region T Load<T>()
-        ///// <summary>
-        ///// Universal object method used to serialize ANY object from disk.
-        ///// </summary>
-        ///// <typeparam name="T">The type of the target object.</typeparam>
-        ///// <param name="obj">The triggering object.</param>
-        ///// <param name="filePath">The path on disk for the save file.</param>
-        ///// <returns>The object of type T loaded from disk.</returns>
-        //public static T Load<T>(this T obj,
-        //                           string filePath = "File.bin")
-        //{
-        //    try
-        //    {
-        //        lock (lockManager)
-        //        {
-        //            using (System.IO.Stream stream =
-        //                System.IO.File.Open(
-        //                    filePath,
-        //                    System.IO.FileMode.Open))
-        //            {
-        //                var serializer = new System.Runtime.Serialization.DataContractSerializer(typeof(T));
-        //                obj = (T)serializer.ReadObject(stream);
-        //                return obj;
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //Dump error.
-        //        ConsoleColor currentColor = Console.ForegroundColor;
-        //        Console.ForegroundColor = ConsoleColor.Red;
-        //        Console.WriteLine(ex.ToString());
-        //        Console.ForegroundColor = currentColor;
-        //        return default;
-        //    }
-        //}
-        //#endregion T Load<T>()
-
-        //#region T Save<T>()
-        ///// <summary>
-        ///// Universal object method used to serialize ANY object to disk.
-        ///// </summary>
-        ///// <typeparam name="T">The type of the target object.</typeparam>
-        ///// <param name="obj">The triggering object.</param>
-        ///// <param name="filePath">The path on disk for the save file.</param>
-        ///// <returns>True if save successful, otherwise False.</returns>
-        //public static bool Save<T>(this T obj,
-        //                           string filePath = "File.bin")
-        //{
-        //    try
-        //    {
-        //        lock (lockManager)
-        //        {
-        //            using (System.IO.Stream stream =
-        //                System.IO.File.Open(
-        //                    filePath,
-        //                    System.IO.FileMode.Create))
-        //            {
-        //                var serializer = new System.Runtime.Serialization.DataContractSerializer(typeof(T));
-        //                serializer.WriteObject(stream, obj);
-        //                return true;
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //Dump error.
-        //        ConsoleColor currentColor = Console.ForegroundColor;
-        //        Console.ForegroundColor = ConsoleColor.Red;
-        //        Console.WriteLine(ex.ToString());
-        //        Console.ForegroundColor = currentColor;
-        //        return false;
-        //    }
-        //}
-        //#endregion T Save<T>()
+        /// <summary>
+        /// Extension method for object array to validate all object are not
+        /// null.
+        /// </summary>
+        /// <param name="objects">The array of objects to check.</param>
+        /// <returns>True if any object in the array is null, else false.</returns>
+        public static bool AnyNull(this object[] objects)
+        {
+            foreach (object obj in objects)
+            {
+                if (obj == null)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        #endregion Null
 
         #region printf()
         /// <summary>
@@ -700,74 +654,9 @@ namespace Extensions
             }
             return true;
         }
-
-        /////////////////////////// Better way above ///////////////////////////
-        //public static void ValidateNoNulls(System.Reflection.ParameterInfo[] parms)
-        //{
-        //    Type t = null;
-        //    for (int C = 0; C > parms.Length; C++)
-        //    {
-        //        t = parms[C].GetType();
-        //        if (t == typeof(double?))
-        //        {
-        //            ((double?)(parms[C].GetType().GetProperties()[0].GetValue(parms[C]))).NoNull();
-        //        }
-        //    }
-        //}
         #endregion Validate()
 
-        ///// <summary>
-        ///// Relay method for Logit informational messages.
-        ///// </summary>
-        ///// <param name="message">The message being logged.</param>
-        ///// <param name="eventId">An event ID number if applicable.</param>
-        ///// <param name="instance">The Logit instance to use.</param>
-        //public static void Inf(string message,
-        //                       int eventId = 0,
-        //                       Logit.Instance instance = null)
-        //{
-        //    Logit.Inf(message, eventId, instance);
-        //}
-
-        ///// <summary>
-        ///// Relay method for Logit warning messages.
-        ///// </summary>
-        ///// <param name="message">The message being logged.</param>
-        ///// <param name="eventId">An event ID number if applicable.</param>
-        ///// <param name="instance">The Logit instance to use.</param>
-        //public static void Wrn(string message,
-        //                       int eventId = 0,
-        //                       Logit.Instance instance = null)
-        //{
-        //    Logit.Wrn(message, eventId, instance);
-        //}
-
-        ///// <summary>
-        ///// Relay method for Logit error messages.
-        ///// </summary>
-        ///// <param name="message">The message being logged.</param>
-        ///// <param name="eventId">An event ID number if applicable.</param>
-        ///// <param name="instance">The Logit instance to use.</param>
-        //public static void Err(string message,
-        //                       int eventId = 0,
-        //                       Logit.Instance instance = null)
-        //{
-        //    Logit.Err(message, eventId, instance);
-        //}
-
-        ///// <summary>
-        ///// Relay method for Logit verbose messages.
-        ///// </summary>
-        ///// <param name="message">The message being logged.</param>
-        ///// <param name="eventId">An event ID number if applicable.</param>
-        ///// <param name="instance">The Logit instance to use.</param>
-        //public static void Vrb(string message,
-        //                       int eventId = 0,
-        //                       Logit.Instance instance = null)
-        //{
-        //    Logit.Vrb(message, eventId, instance);
-        //}
-
+        #region EnvironmentVariables
         /// <summary>
         /// A method to get an EnvironmentVariable value.
         /// </summary>
@@ -787,7 +676,9 @@ namespace Extensions
         {
             Environment.SetEnvironmentVariable(target, value);
         }
+        #endregion EnvironmentVariables
 
+        #region GetAzureEnvironment
         /// <summary>
         /// Method to return the AzureEnvironment based on the given string.
         /// </summary>
@@ -817,7 +708,9 @@ namespace Extensions
             }
             return AzureEnvironment.Commercial;
         }
+        #endregion GetAzureEnvironment
 
+        #region GetUser
         /// <summary>
         /// Method to get the user given a user lookup id from SharePoint.
         /// </summary>
@@ -870,6 +763,91 @@ namespace Extensions
             {
             }
         }
+        #endregion GetUser
+
+        #region TryAdd
+        /// <summary>
+        /// Extension method for Dictionary to add an item if it doesn't
+        /// already exist in the dictionary.
+        /// </summary>
+        /// <param name="dic">The dictionary to which the instance should be
+        /// added.</param>
+        /// <param name="key">The key to use for the instance.</param>
+        /// <param name="val">The value to add to the dictionary.</param>
+        /// <returns>True if add successful, false if not.</returns>
+        public static bool TryAdd(
+            this Dictionary<object, object> dic,
+            object key,
+            object val)
+        {
+            try
+            {
+                if (!dic.Values.Contains(val))
+                {
+                    dic.Add(key, val);
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Extension method for List to add a string item if it doesn't
+        /// already exist in the list.
+        /// </summary>
+        /// <param name="lst">The list to which the object should be added.</param>
+        /// <param name="obj">The string to add to the list.</param>
+        /// <returns>True if add successful, false if not.</returns>
+        public static bool TryAdd(
+            this List<string> lst,
+            string obj)
+        {
+            try
+            {
+                if (!lst.Contains(obj))
+                {
+                    lst.Add(obj);
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Extension method for List to add an int item if it doesn't
+        /// already exist in the list.
+        /// </summary>
+        /// <param name="lst">The list to which the object should be added.</param>
+        /// <param name="obj">The int to add to the list.</param>
+        /// <returns>True if add successful, false if not.</returns>
+        public static bool TryAdd(
+            this List<int> lst,
+            int obj)
+        {
+            try
+            {
+                if (!lst.Contains(obj))
+                {
+                    lst.Add(obj);
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        #endregion TryAdd
     }
 }
-#pragma warning restore CS0162, CS0168, CS1587, CS1998, IDE0059, IDE0028
+
+#pragma warning restore CS0162, CS0168//, CS1587, CS1998, IDE0028, IDE0059

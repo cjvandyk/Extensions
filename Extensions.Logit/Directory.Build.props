@@ -1,10 +1,10 @@
-﻿<Project>
-	<PropertyGroup>
-		<VersionPrefix>4.9.700</VersionPrefix>
-		<LangVersion>latest</LangVersion>
-		<Company>Cornelius J. van Dyk</Company>
-		<Copyright>Copyright © 2020-2023</Copyright>
-	    <xDescription>Extensions.Logit contains methods to make logging to console, file, EventLog, SharePoint list, and database a breeze.</xDescription>
-		<Product>www.nuget.org/packages/Extensions.Logit</Product>
-	</PropertyGroup>
+<Project>
+  <PropertyGroup>
+    <VersionPrefix>5.0.700</VersionPrefix>
+    <LangVersion>latest</LangVersion>
+    <Company>Cornelius J. van Dyk</Company>
+    <Copyright>Copyright © 2020-2023</Copyright>
+    <xDescription>Extensions.Logit contains methods to make logging to console, file, EventLog, SharePoint list, and database a breeze.</xDescription>
+    <Product>www.nuget.org/packages/Extensions.Logit</Product>
+  </PropertyGroup>
 </Project>

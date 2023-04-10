@@ -1,4 +1,4 @@
-﻿#pragma warning disable CS0162, CS1587, CS1591, CS1998, IDE0059, IDE0028
+﻿#pragma warning disable CS0162, CS1587, CS1591, CS1998, IDE0028, IDE0059
 
 /// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
@@ -11,8 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq.Expressions;
-using static Extensions.Universal;  //NuGet Extensions.cs
-using static System.Logit;          //NuGet Extensions.Logit
+using static Extensions.Core;  //NuGet Extensions.cs
+using static System.Logit;     //NuGet Extensions.Logit
 
 namespace $rootnamespace$
 {
@@ -33,4 +33,4 @@ namespace $rootnamespace$
 	}
 }
 
-#pragma warning restore CS0162, CS1587, CS1591, CS1998, IDE0059, IDE0028
+#pragma warning restore CS0162, CS1587, CS1591, CS1998, IDE0028, IDE0059

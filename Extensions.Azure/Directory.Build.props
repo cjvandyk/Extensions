@@ -1,10 +1,10 @@
-﻿<Project>
-	<PropertyGroup>
-		<VersionPrefix>4.9.700</VersionPrefix>
-		<LangVersion>latest</LangVersion>
-		<Company>Cornelius J. van Dyk</Company>
-		<Copyright>Copyright © 2020-2023</Copyright>
-	    <xDescription>Extensions.Azure contains extension methods for Azure.</xDescription>
-		<Product>www.nuget.org/packages/Extensions.Azure</Product>
-	</PropertyGroup>
+<Project>
+  <PropertyGroup>
+    <VersionPrefix>5.0.700</VersionPrefix>
+    <LangVersion>latest</LangVersion>
+    <Company>Cornelius J. van Dyk</Company>
+    <Copyright>Copyright © 2020-2023</Copyright>
+    <xDescription>Extensions.Azure contains extension methods for Azure.</xDescription>
+    <Product>www.nuget.org/packages/Extensions.Azure</Product>
+  </PropertyGroup>
 </Project>
