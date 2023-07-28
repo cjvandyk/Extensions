@@ -152,7 +152,7 @@
     <PackageReference Include="Microsoft.Graph" Version="4.54.0" />
     <PackageReference Include="Microsoft.Identity.Client" Version="4.51.0" />
     <PackageReference Include="Microsoft.SharePointOnline.CSOM" Version="16.1.23508.12000" />
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.3" />
   </ItemGroup>
   <ItemGroup>
     <None Update="TenantConfig.json">
