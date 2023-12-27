@@ -413,7 +413,10 @@ namespace Extensions
         {
             foreach (var timer in timers.Values)
             {
-                timer.timer.Stop();
+                if (timer != null)
+                {
+                    timer.timer.Stop();
+                }
             }
         }
 

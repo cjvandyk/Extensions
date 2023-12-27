@@ -7,6 +7,7 @@
 /// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
 /// </summary>
 
+using Microsoft.Graph.Models;
 using System;
 using static System.Logit;
 
@@ -24,8 +25,9 @@ namespace Extensions
 		/// <param name="item">The item in question.</param>
 		/// <param name="fieldName">The field name to get.</param>
 		/// <returns></returns>
-        public static bool GetJsonBool(this Microsoft.Graph.ListItem item, 
-									   string fieldName)
+        public static bool GetJsonBool(
+			this ListItem item, 
+			string fieldName)
         {
             var result = false;
 
@@ -51,8 +53,9 @@ namespace Extensions
 		/// <param name="item">The item in question.</param>
 		/// <param name="fieldName">The field name to get.</param>
 		/// <returns></returns>
-		public static string GetJsonString(this Microsoft.Graph.ListItem item, 
-										   string fieldName)
+		public static string GetJsonString(
+			this ListItem item, 
+			string fieldName)
 		{
 			var result = "";
 

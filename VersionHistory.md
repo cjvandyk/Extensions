@@ -312,3 +312,13 @@
 	- Add `System.Logit` class for logging functionality.
 	- Add `~ExtensionsClass` project for new Class extension in Visual Studio.
 	- Add `~CsVisualStudioExtensions` project to house Visual Studio extensions.
+
+### **5.0.800 (2023-12-27)**<br>
+	- Add **.NET 8.0** support.<br>
+	- Add **Graph 5+** support.<br>
+	- Add `Extensions.Config` class for encapsulating tenant configuration and initialization.
+	- Add `Extensions.Tenant.OpenId` class for OpenID interoperation.
+	- Add `Extensions.Core.GetTenantId()` to support Azure environments.
+	- Add `Extensions.Core.GetAuthorityDomain()` to handle duality in Microsoft authentication endpoints between .com for commercial and .us for GCCHigh.
+	- Fixed `Extensions.Core.NoNull()` to return "" when dictionary key is not present over exception catching.
+	- Updated `Extensions.Core.GetEnv()` to allow interactive debug JSON settings to suplement environment settings.

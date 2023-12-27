@@ -7,11 +7,14 @@
 /// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
 /// </summary>
 
+using Microsoft.Graph;
+using Microsoft.Graph.Me.SendMail;
+using Microsoft.Graph.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.Graph;
+using static Extensions.Identity.AuthMan;
 
 namespace Extensions
 {
@@ -21,12 +24,13 @@ namespace Extensions
     [Serializable]
     public static partial class CMail
     {
-        public static bool Send(string from,
-                                string subject,
-                                string body,
-                                string to,
-                                string cc = null,
-                                string bcc = null)
+        public static bool Send(
+            string from,
+            string subject,
+            string body,
+            string to,
+            string cc = null,
+            string bcc = null)
         {
             Message msg = new Message();
             Dictionary<string, string> dic = new Dictionary<string, string>();
@@ -79,8 +83,7 @@ namespace Extensions
             };
             if (attachments.Count > 0)
             {
-                MessageAttachmentsCollectionPage allAttachments = 
-                    new MessageAttachmentsCollectionPage();
+                List<Attachment> allAttachments = new List<Attachment>();
                 foreach (var attachment in attachments)
                 {
                     allAttachments.Add(attachment);
@@ -102,10 +105,14 @@ namespace Extensions
                     msg.Attachments = allAttachments;
                 }
             }
-            Identity.AuthMan.ActiveAuth.GraphClient.Users[from]
-                .SendMail(msg, true)
-                .Request()
-                .PostAsync()
+            var sendMailPostRequestBody = new Microsoft.Graph.Users.Item.SendMail.SendMailPostRequestBody
+            {
+                Message = msg
+            };
+            GetAuth(Identity.ScopeType.Graph, true);
+            ActiveAuth.GraphClient.Users[from]
+                .SendMail
+                .PostAsync(sendMailPostRequestBody)
                 .GetAwaiter().GetResult();
             return true;
         }
@@ -113,7 +120,7 @@ namespace Extensions
         public static List<Recipient> GetRecipients(string to)
         {
             List<Recipient> recipients = new List<Recipient>();
-            List<string> emails = to.Replace(" ", "").Split(',').ToList();
+            List<string> emails = to.TrimEnd(',').Replace(" ", "").Split(',').ToList();
             foreach (string email in emails)
             {
                 Recipient newRecipient = new Recipient()
@@ -136,7 +143,7 @@ namespace Extensions
                 memoryStream.Position = 0;
                 byte[] fileContent = memoryStream.ToArray();
                 memoryStream.Close();
-                fileAttachment.ODataType = "#microsoft.graph.fileAttachment";
+                fileAttachment.OdataType = "#microsoft.graph.fileAttachment";
                 fileAttachment.ContentBytes = fileContent;
                 if (fileName.ToLower().EndsWith(".jpg") ||
                     fileName.ToLower().EndsWith(".jpeg"))

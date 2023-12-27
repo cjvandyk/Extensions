@@ -9,6 +9,7 @@
 
 using System;
 using System.Security.Cryptography.X509Certificates;
+using static System.Logit;
 
 namespace Extensions.Identity
 {
@@ -57,6 +58,7 @@ namespace Extensions.Identity
         {
             //Define the store with the specified StoreName and StoreLocation.
             X509Store store = new X509Store(storeName, storeLocation);
+            X509Certificate2 result = null;
             try
             {
                 //Attempt to open the store in read mode.
@@ -69,19 +71,24 @@ namespace Extensions.Identity
                                                      thumbPrint,
                                                      false);  //For self signed cert.
                 //If a valid cert was found, return it, otherwise return null.
-                return certCollection.Count == 0 ? null : certCollection[0];
+                result = certCollection.Count == 0 ? null : certCollection[0];
             }
             catch (Exception ex)
             {
-                //Something went wrong.  Write the error to console.
-                Console.WriteLine(ex.ToString());
+                Err(ex.ToString());
             }
             finally
             {
                 //Close the store before returning.
                 store.Close();
             }
-            return null;
+            //Throw exception if we fail to load the cert.
+            if ((storeLocation == StoreLocation.LocalMachine) &&
+                (result == null))
+            {
+                throw new Exception($"Unable to load certificate [{thumbPrint}]");
+            }
+            return result;
         }
     }
 }
