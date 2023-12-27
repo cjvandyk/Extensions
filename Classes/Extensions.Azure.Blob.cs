@@ -129,9 +129,9 @@ namespace Extensions.Azure
                     return ActiveContainer;
                 }
                 //If no connection string is given, get it from environment.
-                if (connectionString != null)
+                if (connectionString == null)
                 {
-                    connectionString = GetEnv("AzureWebJobsStorage");
+                    connectionString = GetEnv("ConnectionString");
                 }
                 //If no container name is given, get the default from environment.
                 if (containerName == null)

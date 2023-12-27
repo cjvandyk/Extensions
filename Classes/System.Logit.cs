@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Graph;
 
@@ -56,6 +57,9 @@ namespace System
             public GraphServiceClient GraphClient { get; private set; } = null;
             /// <summary>
             /// The base URL of the SharePoint site housing the target list.
+            /// Specify only the base URL of the site e.g. for the site
+            /// "contoso.sharepoint.us/sites/LogData" the value supplied would
+            /// be just "LogData".
             /// </summary>
             public string LogSiteUrl { get; private set; } = null;
             /// <summary>
@@ -893,19 +897,20 @@ namespace System
                                     {
                                         dic.Add("Title", message);
                                     }
-                                    var listItem = new Microsoft.Graph.ListItem
+                                    var listItem = new Microsoft.Graph.Models.ListItem
                                     {
-                                        Fields = new Microsoft.Graph.FieldValueSet
+                                        Fields = new Microsoft.Graph.Models.FieldValueSet
                                         {
                                             AdditionalData = dic
                                         }
                                     };
-                                    var result = client.Sites["root"]
-                                        .SiteWithPath($"/sites/{instance.LogSiteUrl}")
-                                        .Lists[instance.LogListName]
+                                    var result = client.Sites[Graph.GetSiteId(
+                                        $"/sites/{instance.LogSiteUrl}")]
+                                        .Lists[Graph.GetListId(
+                                            instance.LogListName,
+                                            instance.LogSiteUrl)]
                                         .Items
-                                        .Request()
-                                        .AddAsync(listItem)
+                                        .PostAsync(listItem)
                                         .GetAwaiter().GetResult();
                                 }
                                 catch (Exception ex)

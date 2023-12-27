@@ -8,7 +8,10 @@
 /// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
 /// </summary>
 
+using Azure.Core;
 using Microsoft.Graph;
+using Microsoft.Graph.Authentication;
+using Microsoft.Graph.Core;
 using Microsoft.Identity.Client;
 using Microsoft.SharePoint.Client;
 using System;
@@ -16,6 +19,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -36,61 +40,24 @@ namespace Extensions.Identity
         /// <summary>
         /// The stack of current Auth objects.
         /// </summary>
-        public static Dictionary<string, Auth> AuthStack { get; private set; }
+        public static Dictionary<string, Auth> AuthStack { get; set; }
             = new Dictionary<string, Auth>();
 
         /// <summary>
         /// The currently active Auth object from the stack.
         /// </summary>
-        public static Auth ActiveAuth { get; private set; }
-            = GetAuth(GetEnv("TenantDirectoryId"),
-                      GetEnv("ApplicationClientId"),
-                      GetEnv("CertificateThumbprint"),
-                      GetEnv("TenantString"));
-
-        /// <summary>
-        /// An empty JSON node.
-        /// </summary>
-        public static JsonNode jsonNode = JsonNode.Parse("{}");
+        public static Auth ActiveAuth { get; private set; } = new Auth();
+            //= GetAuth(GetEnv("TenantDirectoryId"),
+            //          GetEnv("ApplicationClientId"),
+            //          GetEnv("CertificateThumbprint"),
+            //          GetEnv("TenantString"));
 
         /// <summary>
         /// Constructor method.
         /// </summary>
         static AuthMan()
         {
-            try
-            {
-                //Load config from file.
-                using (StreamReader sr = new StreamReader(
-                    GetRunFolder() + "\\" + $"TenantConfig.json"))
-                {
-                    var tenantConfig =
-                        JsonSerializer.Deserialize<TenantConfig>(sr.ReadToEnd());
-                    //Initialize auth with config values.
-                    GetAuth(tenantConfig.TenantDirectoryId,
-                            tenantConfig.ApplicationClientId,
-                            tenantConfig.CertThumbprint,
-                            tenantConfig.TenantString);
-                    sr.Close();
-                }
-            }
-            catch (Exception ex) 
-            {
-                try
-                {
-                    //Default to environment variables if no JSON provided.
-                    GetAuth(GetEnv("TenantId"),
-                            GetEnv("AppClientId"),
-                            GetEnv("CertThumbPrint"),
-                            GetEnv("TenantString"));
-                }
-                catch (Exception ex2)
-                {
-                    string msg = "No config values available to GetAuth()\n\r" + 
-                        ex2.Message;
-                    throw new Exception(msg);
-                }
-            }
+            //Intentionally left empty.
         }
 
         /// <summary>
@@ -119,8 +86,9 @@ namespace Extensions.Identity
         /// <param name="authStackReset">Boolean to trigger a clearing of the 
         /// Auth stack.  Default value is false.</param>
         /// <returns>A valid Auth object from the stack.</returns>
-        public static Auth GetAuth(string[] scopes,
-                                   bool authStackReset = false)
+        public static Auth GetAuth(
+            string[] scopes,
+            bool authStackReset = false)
         {
             ScopeType scopeType = Scopes.GetScopeType(scopes);
             return GetAuth(scopeType, authStackReset);
@@ -136,39 +104,17 @@ namespace Extensions.Identity
         /// <param name="authStackReset">Boolean to trigger a clearing of the 
         /// Auth stack.  Default value is false.</param>
         /// <returns>A valid Auth object from the stack.</returns>
-        public static Auth GetAuth(ScopeType scopeType = ScopeType.Graph, 
-                                   bool authStackReset = false)
+        public static Auth GetAuth(
+            ScopeType scopeType = ScopeType.Graph, 
+            bool authStackReset = false)
         {
-            if (authStackReset)
-            {
-                AuthStack.Clear();
-            }
-            //Generate the key from the parms.
-            string key = GetKey(ActiveAuth.TenantCfg.TenantDirectoryId,
-                                ActiveAuth.TenantCfg.ApplicationClientId,
-                                ActiveAuth.TenantCfg.CertThumbprint,
-                                scopeType.ToString());
-            //Check if the key is on the stack.
-            if (AuthStack.ContainsKey(key))
-            {
-                //If it is, set the current ActiveAuth to that stack instance.
-                ActiveAuth = AuthStack[key];
-            }
-            else
-            {
-                //If it is not, generate a new Auth object.
-                var auth = new Auth(ActiveAuth.TenantCfg.TenantDirectoryId,
-                                    ActiveAuth.TenantCfg.ApplicationClientId,
-                                    ActiveAuth.TenantCfg.CertThumbprint,
-                                    ActiveAuth.TenantCfg.TenantString,
-                                    Auth.ClientApplicationType.Confidential,
-                                    scopeType);
-                //Push it to the stack.
-                AuthStack.Add(auth.Id, auth);
-                ActiveAuth = AuthStack[auth.Id];
-            }
-            //Return the ActiveAuth object.
-            return ActiveAuth;
+            return GetAuth(
+                ActiveTenant.TenantDirectoryId,
+                ActiveTenant.ApplicationClientId,
+                ActiveTenant.CertThumbprint,
+                ActiveTenant.TenantString,
+                scopeType,
+                authStackReset);
         }
 
         /// <summary>
@@ -189,13 +135,33 @@ namespace Extensions.Identity
         /// <param name="authStackReset">Boolean to trigger a clearing of the 
         /// Auth stack.</param>
         /// <returns>A valid Auth object from the stack.</returns>
-        public static Auth GetAuth(string tenantId, 
-                                   string appId,
-                                   string thumbPrint,
-                                   string tenantString,
-                                   ScopeType scopeType = ScopeType.Graph,
-                                   bool authStackReset = false)
+        public static Auth GetAuth(
+            string tenantId, 
+            string appId,
+            string thumbPrint,
+            string tenantString,
+            ScopeType scopeType = ScopeType.Graph,
+            bool authStackReset = false)
         {
+            //Check if there's an active auth that can be used to log to 
+            //SharePoint and if logging to SharePoint is enabled.
+            if ((ActiveAuth.AuthResult == null) &&
+                (ActiveLogitInstance.LogToSPList))
+            {
+                //There isn't so don't log to list an active Logit instance.
+                ActiveLogitInstance.LogToSPList = false;
+                Inf($"AuthMan.GetAuth({tenantId}, {appId}, {thumbPrint}, " +
+                    $"{tenantString}, {scopeType.ToString()}, " +
+                    $"{authStackReset.ToString()}");
+                ActiveLogitInstance.LogToSPList = true;
+            }
+            else
+            {
+                Inf($"AuthMan.GetAuth({tenantId}, {appId}, {thumbPrint}, " +
+                    $"{tenantString}, {scopeType.ToString()}, " +
+                    $"{authStackReset.ToString()}");
+            }
+            //If a reset is requested, clear the stack.
             if (authStackReset)
             {
                 AuthStack.Clear();
@@ -211,16 +177,26 @@ namespace Extensions.Identity
             else
             {
                 //If it is not, generate a new Auth object.
-                var auth = new Auth(tenantId, 
-                                    appId, 
-                                    thumbPrint, 
-                                    tenantString,
-                                    Auth.ClientApplicationType.Confidential,
-                                    scopeType);
-                //Push it to the stack.
-                AuthStack.Add(auth.Id, auth);
+                var auth = new Auth(
+                    tenantId, 
+                    appId, 
+                    thumbPrint, 
+                    tenantString,
+                    Auth.ClientApplicationType.Confidential,
+                    scopeType);
+                //Check if another thread may have added this same Auth to
+                //the stack while we were getting the Auth.
+                if (!AuthStack.ContainsKey(key))
+                {
+                    //Lock it down.
+                    lock (AuthStack)
+                    {
+                        //Push it to the stack.
+                        AuthStack.Add(key, auth);
+                    }
+                }
                 //Set the current ActiveAuth to the new stack instance.
-                ActiveAuth = AuthStack[auth.Id];
+                ActiveAuth = AuthStack[key];
             }
             //Return the ActiveAuth object.
             return ActiveAuth;
@@ -244,37 +220,19 @@ namespace Extensions.Identity
         /// <param name="authStackReset">Boolean to trigger a clearing of the 
         /// Auth stack.</param>
         /// <returns>A valid Auth object from the stack.</returns>
-        public static Auth GetAuth(string tenantId,
-                                   string appId,
-                                   X509Certificate2 cert,
-                                   string tenantString,
-                                   ScopeType scopeType = ScopeType.Graph,
-                                   bool authStackReset = false)
+        public static Auth GetAuth(
+            string tenantId,
+            string appId,
+            X509Certificate2 cert,
+            string tenantString,
+            ScopeType scopeType = ScopeType.Graph,
+            bool authStackReset = false)
         {
-            //Generate the key from the parms.
-            string key = GetKey(tenantId, appId, cert.Thumbprint, scopeType.ToString());
-            //Check if the key is on the stack.
-            if (AuthStack.ContainsKey(key))
-            {
-                //If it is, set the current ActiveAuth to that stack instance.
-                ActiveAuth = AuthStack[key];
-            }
-            else
-            {
-                //If it is not, generate a new Auth object.
-                var auth = new Auth(tenantId, 
-                                    appId, 
-                                    cert.Thumbprint, 
-                                    tenantString,
-                                    Auth.ClientApplicationType.Confidential,
-                                    scopeType);
-                //Push it to the stack.
-                AuthStack.Add(auth.Id, auth);
-                //Set the current ActiveAuth to the new stack instance.
-                ActiveAuth = AuthStack[auth.Id];
-            }
-            //Return the ActiveAuth object.
-            return ActiveAuth;
+            return GetAuth(
+                tenantId,
+                appId,
+                cert.Thumbprint,
+                tenantString);
         }
 
         /// <summary>
@@ -328,15 +286,34 @@ namespace Extensions.Identity
         /// <returns>A string consisting of the lower case version of the
         /// specified parameters in the format of
         /// {TenantID}=={AppId}=={ThumbPrint}"</returns>
-        internal static string GetKey(string tenantId, 
-                                      string appId, 
-                                      string thumbPrint,
-                                      string scopeType)
+        internal static string GetKey(
+            string tenantId, 
+            string appId, 
+            string thumbPrint,
+            string scopeType)
         {
-            return tenantId.ToLower() + "==" + 
-                   appId.ToLower() + "==" + 
-                   thumbPrint.ToLower() + "==" +
-                   scopeType.ToLower();
+            return NoNull(tenantId.ToLower()) + "==" + 
+                   NoNull(appId.ToLower()) + "==" + 
+                   NoNull(thumbPrint.ToLower()) + "==" +
+                   NoNull(scopeType.ToLower());
+        }
+
+        /// <summary>
+        /// Method to convert a string type to ClientApplicationType.
+        /// </summary>
+        /// <param name="clientApplicationType">The string to convert.</param>
+        /// <returns>A ClientApplicationType.  
+        /// Default is Confidential.</returns>
+        public static ClientApplicationType GetClientApplicationType
+            (string clientApplicationType)
+        {
+            switch (clientApplicationType.ToLower())
+            {
+                case "public":
+                    return ClientApplicationType.Public;
+                    break;
+            }
+            return ClientApplicationType.Confidential;
         }
 
         /// <summary>
@@ -421,7 +398,7 @@ namespace Extensions.Identity
             //previously retrieved AuthenticationResult.
             ActiveAuth.HttpClient.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue(
-                    "bearer", 
+                    "Bearer", 
                     ActiveAuth.AuthResult.AccessToken);
             return ActiveAuth.HttpClient;
         }
@@ -441,21 +418,37 @@ namespace Extensions.Identity
             {
                 authResult = ActiveAuth.AuthResult;
             }
-            //Build the GraphServiceClient object using the AuthenticationResult
+            if (authResult == ActiveAuth.AuthResult)
+            {
+                return ActiveAuth.GraphClient;
+            }
+
+            //Build the HttpClient object using the AuthenticationResult
             //from the previous step.
+            HttpClient httpClient = new HttpClient();
+            ProductInfoHeaderValue productInfoHeaderValue =
+                new ProductInfoHeaderValue("User-Agent", $"NONISV|Extensions");
+            httpClient.DefaultRequestHeaders.UserAgent.Add(
+                productInfoHeaderValue);
+            httpClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", authResult.AccessToken);
+            httpClient.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
+            ActiveAuth.HttpClient = httpClient;
+
+            //Build the GraphServiceClient object for the 1.0 endpoint.
             ActiveAuth.GraphClient = new GraphServiceClient(
-                "https://graph.microsoft.us/v1.0",
-                new DelegateAuthenticationProvider(
-                    (C) =>
-                    {
-                        C.Headers.Authorization = new AuthenticationHeaderValue(
-                            "bearer",
-                            ActiveAuth.AuthResult.AccessToken);
-                        return Task.FromResult(0);
-                    }));
-            //Set the GraphClient timeout.
-            ActiveAuth.GraphClient.HttpProvider.OverallTimeout = 
-                TimeSpan.FromHours(1);
+                httpClient,
+                null,
+                "https://graph.microsoft.us/v1.0");
+
+            //Build the GraphServiceClient object for the beta endpoint.
+            ActiveAuth.GraphBetaClient = new GraphServiceClient(
+                httpClient,
+                null,
+                "https://graph.microsoft.us/beta");
+
+            //Return the Graph Client object.
             return ActiveAuth.GraphClient;
         }
 
@@ -487,7 +480,7 @@ namespace Extensions.Identity
             {
                 if (!suppressErrors)
                 {
-                    E($"ERROR getting context for [{url}].\n\r" + 
+                    Err($"ERROR getting context for [{url}].\n\r" + 
                         $"Message: [{ex.Message}]\n\r" +
                         $"Stack Trace: [{ex.StackTrace}]");
                 }
@@ -512,6 +505,7 @@ namespace Extensions.Identity
             ClientApplicationType appType = ClientApplicationType.Confidential,
             string[] scopes = null)
         {
+            //Inf("AuthMan.GetAuthResult()");
             //If no scopes are specified, default to the current Scopes.
             if (scopes == null)
             {
@@ -528,12 +522,15 @@ namespace Extensions.Identity
             {
                 ActiveAuth.Scopes = scopes;
             }
+            //Reset the auth result.
+            AuthenticationResult authResult = null;
+
             //Generate the result.
             switch (appType)
             {
                 case ClientApplicationType.Confidential:
                     var appC = app as IConfidentialClientApplication;
-                    ActiveAuth.AuthResult = appC.AcquireTokenForClient(scopes)
+                    authResult = appC.AcquireTokenForClient(scopes)
                         .WithTenantId(tenantId)
                         .ExecuteAsync().GetAwaiter().GetResult();
                     break;
@@ -541,19 +538,19 @@ namespace Extensions.Identity
                     var appP = app as IPublicClientApplication;
                     var accounts = appP.GetAccountsAsync()
                         .GetAwaiter().GetResult();
-                    ActiveAuth.AuthResult = GetPublicAppAuthResult(
+                    authResult = GetPublicAppAuthResult(
                         ref appP,
                         ref accounts,
                         PublicAppAuthResultType.Silent);
-                    if (ActiveAuth.AuthResult == null)
+                    if (authResult == null)
                     {
-                        ActiveAuth.AuthResult = GetPublicAppAuthResult(
+                        authResult = GetPublicAppAuthResult(
                             ref appP,
                             ref accounts,
                             PublicAppAuthResultType.Interactive);
-                        if (ActiveAuth.AuthResult == null)
+                        if (authResult == null)
                         {
-                            ActiveAuth.AuthResult = GetPublicAppAuthResult(
+                            authResult = GetPublicAppAuthResult(
                                 ref appP,
                                 ref accounts,
                                 PublicAppAuthResultType.Prompt);
@@ -561,7 +558,7 @@ namespace Extensions.Identity
                     }
                     break;
             }
-            return ActiveAuth.AuthResult;
+            return authResult;
         }
     }
 }
