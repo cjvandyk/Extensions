@@ -9,6 +9,7 @@
 
 using System;
 using static Extensions.Core;
+using static System.Logit;
 
 namespace Extensions.Identity
 {
@@ -27,9 +28,21 @@ namespace Extensions.Identity
         /// </summary>
         Graph,
         /// <summary>
+        /// Management scope.
+        /// </summary>
+        Management,
+        /// <summary>
+        /// PowerBI scope.
+        /// </summary>
+        PowerBI,
+        /// <summary>
         /// SharePoint scope.
         /// </summary>
-        SharePoint
+        SharePoint,
+        /// <summary>
+        /// SharePoint Admin scope.
+        /// </summary>
+        SharePointAdmin
     }
 
     /// <summary>
@@ -66,11 +79,39 @@ namespace Extensions.Identity
         };
 
         /// <summary>
+        /// Access scope for M365 Management.
+        /// </summary>
+        public static string[] Management = new string[]
+        {
+            "https://manage.office365.us/.default",
+            Offline
+        };
+
+        /// <summary>
+        /// Access scope for PowerBI.
+        /// </summary>
+        public static string[] PowerBI = new string[]
+        {
+            "https://high.analysis.usgovcloudapi.net/powerbi/api/.default",
+            Offline
+        };
+        //"https://analysis.windows.net/powerbi/api/.default"
+
+        /// <summary>
         /// Access scope for SharePoint.
         /// </summary>
         public static string[] SharePoint = new string[]
         {
             $"https://{AuthMan.GetTenantString().TrimEnd('/')}.sharepoint.us/.default",
+            Offline
+        };
+
+        /// <summary>
+        /// Access scope for SharePoint Admin portal.
+        /// </summary>
+        public static string[] SharePointAdmin = new string[]
+        {
+            $"https://{CoreBase.TenantString}-admin.sharepoint.us/.default",
             Offline
         };
 
@@ -87,11 +128,23 @@ namespace Extensions.Identity
                 case ScopeType.Graph:
                     return Scopes.Graph;
                     break;
+                //For performance reasons SharePoint is listed second as its
+                //the second most common scope type in use after Graph.  This
+                //eliminates needless checks on common queries.
                 case ScopeType.SharePoint:
                     return Scopes.SharePoint;
                     break;
+                case ScopeType.Management:
+                    return Scopes.Management;
+                    break;
+                case ScopeType.PowerBI:
+                    return Scopes.PowerBI;
+                    break;
                 case ScopeType.Exchange:
                     return Scopes.Exchange;
+                    break;
+                case ScopeType.SharePointAdmin:
+                    return Scopes.SharePointAdmin;
                     break;
             }
             return AuthMan.ActiveAuth.Scopes;
@@ -113,11 +166,19 @@ namespace Extensions.Identity
                 case "https://outlook.office365.us/.default":
                     return ScopeType.Exchange;
                     break;
+                case "https://analysis.windows.net/powerbi/api/.default":
+                    return ScopeType.PowerBI;
+                    break;
                 default:
                     if (scopes[0].ToLower() ==
                         $"https://{AuthMan.GetTenantString().ToLower().TrimEnd('/')}.sharepoint.us/.default")
                     {
                         return ScopeType.SharePoint;
+                    }
+                    if (scopes[0].ToLower() ==
+                        $"https://{AuthMan.GetTenantString().ToLower().TrimEnd('/')}-admin.sharepoint.us/.default")
+                    {
+                        return ScopeType.SharePointAdmin;
                     }
                     break;
             }
@@ -127,7 +188,7 @@ namespace Extensions.Identity
                 msg += scopes[C];
             }
             msg = $"ERROR!  Scopes [{msg} is invalid.]";
-            E(msg);
+            Err(msg);
             throw new Exception(msg);
         }
     }

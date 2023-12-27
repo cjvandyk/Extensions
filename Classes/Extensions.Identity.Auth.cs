@@ -9,6 +9,7 @@
 
 using Microsoft.Graph;
 using Microsoft.Identity.Client;
+using Microsoft.SharePoint.Client;
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -16,6 +17,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 using static Extensions.Identity.AuthMan;
+using static System.Logit;
 
 namespace Extensions.Identity
 {
@@ -31,10 +33,15 @@ namespace Extensions.Identity
         public string Id { get; private set; }
 
         /// <summary>
+        /// The container to maintain the current Auth object scope type.
+        /// </summary>
+        ScopeType AuthScopeType { get; set; }
+
+        /// <summary>
         /// The container for this Auth object's associated tenant configuration.
         /// </summary>
         public TenantConfig TenantCfg { get; private set; } 
-            = new TenantConfig();
+            = new TenantConfig(CoreBase.TenantString);
 
         /// <summary>
         ///The type of ClientApplication the current Auth object is using.
@@ -69,6 +76,12 @@ namespace Extensions.Identity
         public GraphServiceClient GraphClient { get; set; }
 
         /// <summary>
+        /// The current authenticated GraphClient of the current Auth object
+        /// for the Beta endpoint.
+        /// </summary>
+        public GraphServiceClient GraphBetaClient { get; set; }
+
+        /// <summary>
         /// The current authenticated HttpClient of the current Auth object.
         /// </summary>
         public HttpClient HttpClient { get; set; }
@@ -77,6 +90,13 @@ namespace Extensions.Identity
         /// The authentication refresh timer of the current Auth object.
         /// </summary>
         public System.Threading.Timer Timer { get; private set; }
+
+        /// <summary>
+        /// Empty constructor for Auth.
+        /// </summary>
+        public Auth() 
+        {
+        }
 
         /// <summary>
         /// The constructor that populates all the member variables of this
@@ -99,8 +119,10 @@ namespace Extensions.Identity
             ClientApplicationType appType = ClientApplicationType.Confidential,
             ScopeType scopeType = ScopeType.Graph)
         {
+            Inf($"Auth.Auth({tenantId}, {appId}, {thumbprint}, {tenantString}, {appType.ToString()}, {scopeType.ToString()});");
             //Generate the unique ID.
             Id = AuthMan.GetKey(tenantId, appId, thumbprint, scopeType.ToString());
+            AuthScopeType = scopeType;
             //Save the parms.
             AppType = appType;
             //Save the tenant configuration values.
@@ -114,6 +136,8 @@ namespace Extensions.Identity
             App = Identity.App.GetApp(appId, thumbprint, tenantString);
             //Set the scopes for this Auth object.
             Scopes = Identity.Scopes.GetScopes(scopeType);
+            TenantCfg.Settings = Core.config.Settings;
+            TenantCfg.Labels = Core.config.Labels;
             //Call refresh method to populate the rest.
             RefreshAuth(null);            
         }
@@ -141,6 +165,7 @@ namespace Extensions.Identity
             Cert = cert;
             //Generate the unique ID.
             Id = AuthMan.GetKey(tenantId, appId, Cert.Thumbprint, scopeType.ToString());
+            AuthScopeType = scopeType;
             //Save the parms.
             AppType = appType;
             TenantCfg.TenantDirectoryId = tenantId;
@@ -169,7 +194,7 @@ namespace Extensions.Identity
             string tenantId,
             string appId,
             string tenantString,
-            ClientApplicationType appType = ClientApplicationType.Public)
+            ClientApplicationType appType = ClientApplicationType.Confidential)
         {
             //Generate the unique ID.
             Id = AuthMan.GetKey(tenantId, appId, "PublicClientApplication", "");
@@ -208,31 +233,11 @@ namespace Extensions.Identity
             AuthResult = GetAuthResult(
                 App, 
                 TenantCfg.TenantDirectoryId, 
-                AppType);
+                AppType,
+                Scopes);
             //Build the GraphServiceClient object using the AuthenticatedResult
             //from the previous step.
-            GraphClient = new GraphServiceClient(
-                "https://graph.microsoft.us/v1.0",
-                new DelegateAuthenticationProvider(
-                    (C) =>
-                    {
-                        C.Headers.Authorization =
-                            new AuthenticationHeaderValue(
-                                "bearer",
-                                AuthResult.AccessToken);
-                        return Task.FromResult(0);
-                    }));
-            //Set the GraphClient timeout.
-            GraphClient.HttpProvider.OverallTimeout = TimeSpan.FromHours(1);
-            //Build the HttpClient.
-            HttpClient = new HttpClient();
-            //Add the Authorization header using the AccessToken from the
-            //previously retrieved AuthenticationResult.
-            HttpClient.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("bearer", AuthResult.AccessToken);
-            //Set the client to accept JSON.
-            HttpClient.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("application/json"));
+            GraphClient = GetGraphServiceClient(AuthResult);
             //Define the refresh timer that will fire 5 minutes before the
             //expiration of the AuthenticationResult.
             Timer = new System.Threading.Timer(

@@ -7,6 +7,7 @@
 /// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
 /// </summary>
 
+using Microsoft.Graph.Models;
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
@@ -159,7 +160,7 @@ namespace Extensions
         /// list.</returns>
         public static string LoadStateListToRef(
             string listName,
-            ref List<Microsoft.Graph.ListItem> targetList,
+            ref List<ListItem> targetList,
             int maxCacheAgeInDays = 7)
         {
             try
@@ -187,10 +188,10 @@ namespace Extensions
                 if (str != null)
                 {
                     //Load was successful now reconstruct the list.
-                    targetList = (List<Microsoft.Graph.ListItem>)
+                    targetList = (List<ListItem>)
                         JsonSerializer.Deserialize(
                             str,
-                            typeof(List<Microsoft.Graph.ListItem>));
+                            typeof(List<ListItem>));
                     return "OK";
                 }
                 //All prerequisites were not met so return null;

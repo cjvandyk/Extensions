@@ -7,6 +7,7 @@
 /// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
 /// </summary>
 
+using Microsoft.Online.SharePoint.TenantAdministration;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,6 +20,40 @@ namespace Extensions
     [Serializable]
     public static partial class UniversalConfig
     {
+        public static void InitializeTenant(string tenantString)
+        {
+            try
+            {
+                string target = 
+                    $"{GetRunFolder()}\\UniversalConfig.{tenantString}.json";
+                Inf($"Initializing tenant [{tenantString}]");
+                if (!Tenants.ContainsKey(tenantString))
+                {
+                    Inf($"Loading config from [{target}]");
+                    using (StreamReader sr = new StreamReader(target))
+                    {
+                        Tenants.Add(
+                            tenantString,
+                            JsonSerializer.Deserialize<TenantConfig>(
+                                sr.ReadToEnd()));
+                        ActiveTenant = Tenants[tenantString];
+                        Inf($"Added tenant [{tenantString}] to the pool now " +
+                            $"containing [{Tenants.Count}] configs.");
+                    }
+                }
+                else
+                {
+                    Inf($"Tenant [{tenantString}] is already in the pool.  " +
+                        $"Using pool instance.");
+                    ActiveTenant = Tenants[tenantString];
+                }
+                Inf($"Done initializing tenant [{tenantString}]");
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }
 
