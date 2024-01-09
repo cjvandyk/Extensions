@@ -22,6 +22,7 @@
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <RepositoryType>git</RepositoryType>
     <PackageReleaseNotes>- Updated to support .NET 8.0 and Graph 5+</PackageReleaseNotes>
+    <PackageOutputPath>NuGet</PackageOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0|AnyCPU'">
     <GenerateAssemblyInfo>True</GenerateAssemblyInfo>

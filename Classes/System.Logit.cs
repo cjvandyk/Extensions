@@ -347,7 +347,7 @@ namespace System
         /// The currently active Logit engine instance that will handle
         /// requests.
         /// </summary>
-        public static Instance ActiveLogitInstance { get; set; } 
+        public static Instance ActiveLogitInstance { get; set; }
             = new Instance(IsDebug);
         #endregion Globals
 
@@ -733,219 +733,220 @@ namespace System
                 if (isDebugValidationMethod != null)
                 {
                     //Check if debug is enabled.
-                    if (IsDebug(isDebugValidationMethod))
+                    if (!IsDebug(isDebugValidationMethod))
                     {
-                        //Check if a Logit instance was passed.
-                        if (instance == null)
+                        return;
+                    }
+                }
+                //Check if a Logit instance was passed.
+                if (instance == null)
+                {
+                    instance = ActiveLogitInstance;
+                }
+                //Check if we should log to Console.
+                if (instance.LogToConsole)
+                {
+                    //Save the current console colors.
+                    var foreColor = Console.ForegroundColor;
+                    var backColor = Console.BackgroundColor;
+                    //Set console output to:
+                    //red for error,
+                    //yellow for warning,
+                    //gray for information,
+                    //cyan for verbose.
+                    switch (messageType)
+                    {
+                        case MessageType.Information:
+                            Console.ForegroundColor = ConsoleColor.Gray;
+                            break;
+                        case MessageType.Warning:
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            break;
+                        case MessageType.Error:
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            break;
+                        case MessageType.Verbose:
+                            Console.ForegroundColor = ConsoleColor.Cyan;
+                            break;
+                    }
+                    //Check if an override foreground color was specified.
+                    if (foreColor != foreground)
+                    {
+                        Console.ForegroundColor = foreground;
+                    }
+                    //Check if an override background color was specified.
+                    if (backColor != background)
+                    {
+                        Console.BackgroundColor = background;
+                    }
+                    //Are we keeping output in a static location?
+                    if (instance.StaticConsoleLocation)
+                    {
+                        //Leverage the lock to ensure multiple threads
+                        //don't try to write to console concurrently.
+                        lock (_lockStaticConsoleLocation)
                         {
-                            instance = ActiveLogitInstance;
-                        }
-                        //Check if we should log to Console.
-                        if (instance.LogToConsole)
-                        {
-                            //Save the current console colors.
-                            var foreColor = Console.ForegroundColor;
-                            var backColor = Console.BackgroundColor;
-                            //Set console output to:
-                            //red for error,
-                            //yellow for warning,
-                            //gray for information,
-                            //cyan for verbose.
-                            switch (messageType)
-                            {
-                                case MessageType.Information:
-                                    Console.ForegroundColor = ConsoleColor.Gray;
-                                    break;
-                                case MessageType.Warning:
-                                    Console.ForegroundColor = ConsoleColor.Yellow;
-                                    break;
-                                case MessageType.Error:
-                                    Console.ForegroundColor = ConsoleColor.Red;
-                                    break;
-                                case MessageType.Verbose:
-                                    Console.ForegroundColor = ConsoleColor.Cyan;
-                                    break;
-                            }
-                            //Check if an override foreground color was specified.
-                            if (foreColor != foreground)
-                            {
-                                Console.ForegroundColor = foreground;
-                            }
-                            //Check if an override background color was specified.
-                            if (backColor != background)
-                            {
-                                Console.BackgroundColor = background;
-                            }
-                            //Are we keeping output in a static location?
-                            if (instance.StaticConsoleLocation)
-                            {
-                                //Leverage the lock to ensure multiple threads
-                                //don't try to write to console concurrently.
-                                lock (_lockStaticConsoleLocation)
-                                {
-                                    //Grab the current cursor position.
-                                    var cursorTop = Console.CursorTop;
-                                    var cursorLeft = Console.CursorLeft;
-                                    //Output the message with a large trailing
-                                    //blank to clear previous output from the static
-                                    //console line.
-                                    Console.WriteLine(
-                                        PrependTimeStamp(message)
-                                        .PadRight(120, ' '));
-                                    //Reset the cursor after output.
-                                    Console.CursorTop = cursorTop;
-                                    Console.CursorLeft = cursorLeft;
-                                }
-                            }
-                            //No static output location is required.
-                            else
-                            {
-                                //Simply write the message to the console.
-                                Console.WriteLine(PrependTimeStamp(message));
-                            }
-                            //Reset console colors.
-                            Console.ForegroundColor = foreColor;
-                            Console.BackgroundColor = backColor;
-                        }
-                        //Check if should log to EventLog
-                        if (instance.LogToEventLog)
-                        {
-                            //Set the default EventLog type.
-                            System.Diagnostics.EventLogEntryType targetType =
-                                System.Diagnostics.EventLogEntryType.Error;
-                            //Change the default to match the message type.
-                            switch (messageType)
-                            {
-                                case MessageType.Warning:
-                                    targetType =
-                                        System.Diagnostics.EventLogEntryType.Warning;
-                                    break;
-                                case MessageType.Information:
-                                    targetType =
-                                        System.Diagnostics.EventLogEntryType.Information;
-                                    break;
-                                case MessageType.Verbose:
-                                    targetType =
-                                        System.Diagnostics.EventLogEntryType.Information;
-                                    break;
-                            }
-                            //Check if an event ID was specified.
-                            if (eventId != 0)
-                            {
-                                //Event ID specified so include it in the write.
-                                System.Diagnostics.EventLog.WriteEntry(
-                                    "Application",
-                                    message,
-                                    targetType);
-                            }
-                            else
-                            {
-                                //No event ID so write without it.
-                                System.Diagnostics.EventLog.WriteEntry(
-                                    "Application",
-                                    message,
-                                    targetType);
-                            }
-                        }
-                        //Check if we should log to file.
-                        if (instance.LogToFile)
-                        {
-                            //Extra try/catch/finally to handle file locking.
-                            try
-                            {
-                                //Obtain a lock, waiting up to 10 seconds to do so.
-                                if (_lock.TryEnterWriteLock(10000))
-                                {
-                                    //Write to the configured log file.
-                                    System.IO.File.AppendAllText(
-                                        instance.LogFile,
-                                        messageType.ToString() +
-                                            ", " +
-                                            PrependTimeStamp(message) + "\n");
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                //Write exception info to the console in default red.
-                                WriteConsoleError(ex.ToString());
-                                System.Diagnostics.EventLog.WriteEntry(
-                                    "Application",
-                                    ex.ToString(),
-                                    System.Diagnostics.EventLogEntryType.Error);
-                            }
-                            finally
-                            {
-                                _lock.ExitWriteLock();
-                            }
-                        }
-                        //Check if logging should be done to a SharePoint list.
-                        if (instance.LogToSPList)
-                        {
-                            var client = instance.GraphClient;
-                            if (client != null)
-                            {
-                                try
-                                {
-                                    var dic = new Dictionary<string, object>();
-                                    var msg = message.Split("|||".ToCharArray());
-                                    if (msg.Length == 2)
-                                    {
-                                        dic.Add("Title", msg[0]);
-                                        dic.Add("Message", msg[1]);
-                                    }
-                                    else
-                                    {
-                                        dic.Add("Title", message);
-                                    }
-                                    var listItem = new Microsoft.Graph.Models.ListItem
-                                    {
-                                        Fields = new Microsoft.Graph.Models.FieldValueSet
-                                        {
-                                            AdditionalData = dic
-                                        }
-                                    };
-                                    var result = client.Sites[Graph.GetSiteId(
-                                        $"/sites/{instance.LogSiteUrl}")]
-                                        .Lists[Graph.GetListId(
-                                            instance.LogListName,
-                                            instance.LogSiteUrl)]
-                                        .Items
-                                        .PostAsync(listItem)
-                                        .GetAwaiter().GetResult();
-                                }
-                                catch (Exception ex)
-                                {
-                                    System.Diagnostics.EventLog.WriteEntry(
-                                        "Application",
-                                        ex.ToString());
-                                }
-                            }
-                        }
-                        //Check if message should be logged to ILogger.
-                        if (instance.LogToILogger)
-                        {
-                            switch (messageType)
-                            {
-                                case MessageType.Information:
-                                    instance.ILogger.LogInformation(message);
-                                    break;
-                                case MessageType.Warning:
-                                    instance.ILogger.LogWarning(message);
-                                    break;
-                                case MessageType.Error:
-                                    instance.ILogger.LogError(message);
-                                    break;
-                                case MessageType.Verbose:
-                                    instance.ILogger.LogInformation(message);
-                                    break;
-                            }
-                        }
-                        //Check if message should be logged to database.
-                        if (instance.LogToDB)
-                        {
-                            throw new NotImplementedException("DB logging coming soon!");
+                            //Grab the current cursor position.
+                            var cursorTop = Console.CursorTop;
+                            var cursorLeft = Console.CursorLeft;
+                            //Output the message with a large trailing
+                            //blank to clear previous output from the static
+                            //console line.
+                            Console.WriteLine(
+                                PrependTimeStamp(message)
+                                .PadRight(120, ' '));
+                            //Reset the cursor after output.
+                            Console.CursorTop = cursorTop;
+                            Console.CursorLeft = cursorLeft;
                         }
                     }
+                    //No static output location is required.
+                    else
+                    {
+                        //Simply write the message to the console.
+                        Console.WriteLine(PrependTimeStamp(message));
+                    }
+                    //Reset console colors.
+                    Console.ForegroundColor = foreColor;
+                    Console.BackgroundColor = backColor;
+                }
+                //Check if should log to EventLog
+                if (instance.LogToEventLog)
+                {
+                    //Set the default EventLog type.
+                    System.Diagnostics.EventLogEntryType targetType =
+                        System.Diagnostics.EventLogEntryType.Error;
+                    //Change the default to match the message type.
+                    switch (messageType)
+                    {
+                        case MessageType.Warning:
+                            targetType =
+                                System.Diagnostics.EventLogEntryType.Warning;
+                            break;
+                        case MessageType.Information:
+                            targetType =
+                                System.Diagnostics.EventLogEntryType.Information;
+                            break;
+                        case MessageType.Verbose:
+                            targetType =
+                                System.Diagnostics.EventLogEntryType.Information;
+                            break;
+                    }
+                    //Check if an event ID was specified.
+                    if (eventId != 0)
+                    {
+                        //Event ID specified so include it in the write.
+                        System.Diagnostics.EventLog.WriteEntry(
+                            "Application",
+                            message,
+                            targetType);
+                    }
+                    else
+                    {
+                        //No event ID so write without it.
+                        System.Diagnostics.EventLog.WriteEntry(
+                            "Application",
+                            message,
+                            targetType);
+                    }
+                }
+                //Check if we should log to file.
+                if (instance.LogToFile)
+                {
+                    //Extra try/catch/finally to handle file locking.
+                    try
+                    {
+                        //Obtain a lock, waiting up to 10 seconds to do so.
+                        if (_lock.TryEnterWriteLock(10000))
+                        {
+                            //Write to the configured log file.
+                            System.IO.File.AppendAllText(
+                                instance.LogFile,
+                                messageType.ToString() +
+                                    ", " +
+                                    PrependTimeStamp(message) + "\n");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        //Write exception info to the console in default red.
+                        WriteConsoleError(ex.ToString());
+                        System.Diagnostics.EventLog.WriteEntry(
+                            "Application",
+                            ex.ToString(),
+                            System.Diagnostics.EventLogEntryType.Error);
+                    }
+                    finally
+                    {
+                        _lock.ExitWriteLock();
+                    }
+                }
+                //Check if logging should be done to a SharePoint list.
+                if (instance.LogToSPList)
+                {
+                    var client = instance.GraphClient;
+                    if (client != null)
+                    {
+                        try
+                        {
+                            var dic = new Dictionary<string, object>();
+                            var msg = message.Split("|||".ToCharArray());
+                            if (msg.Length == 2)
+                            {
+                                dic.Add("Title", msg[0]);
+                                dic.Add("Message", msg[1]);
+                            }
+                            else
+                            {
+                                dic.Add("Title", message);
+                            }
+                            var listItem = new Microsoft.Graph.Models.ListItem
+                            {
+                                Fields = new Microsoft.Graph.Models.FieldValueSet
+                                {
+                                    AdditionalData = dic
+                                }
+                            };
+                            var result = client.Sites[Graph.GetSiteId(
+                                $"/sites/{instance.LogSiteUrl}")]
+                                .Lists[Graph.GetListId(
+                                    instance.LogListName,
+                                    instance.LogSiteUrl)]
+                                .Items
+                                .PostAsync(listItem)
+                                .GetAwaiter().GetResult();
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.EventLog.WriteEntry(
+                                "Application",
+                                ex.ToString());
+                        }
+                    }
+                }
+                //Check if message should be logged to ILogger.
+                if (instance.LogToILogger)
+                {
+                    switch (messageType)
+                    {
+                        case MessageType.Information:
+                            instance.ILogger.LogInformation(message);
+                            break;
+                        case MessageType.Warning:
+                            instance.ILogger.LogWarning(message);
+                            break;
+                        case MessageType.Error:
+                            instance.ILogger.LogError(message);
+                            break;
+                        case MessageType.Verbose:
+                            instance.ILogger.LogInformation(message);
+                            break;
+                    }
+                }
+                //Check if message should be logged to database.
+                if (instance.LogToDB)
+                {
+                    throw new NotImplementedException("DB logging coming soon!");
                 }
             }
             //Something went wrong.

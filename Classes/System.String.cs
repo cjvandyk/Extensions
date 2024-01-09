@@ -1276,28 +1276,32 @@ namespace Extensions
                 }
                 if (occurrence > 1)
                 {
-                    string remainder = str.Substring(str.IndexOf(index));
+                    string remainder = str;
                     for (int C = 1; C <= occurrence; C++)
                     {
-                        remainder = remainder.Substring(remainder.IndexOf(index) + 1);
+                        if (remainder.Length < index.Length)
+                        {
+                            return "";
+                        }
+                        remainder = remainder.Substring(remainder.IndexOf(index) + index.Length);
                     }
-                    return str.Replace(index + remainder, "");
+                    return str.Substring(0, str.Length - (remainder.Length + index.Length));
                 }
                 if (occurrence < -1)
                 {
-                    string remainder = str.Substring(0, str.LastIndexOf(index));
+                    string remainder = str;
                     for (int C = -1; C > occurrence; C--)
                     {
-                        remainder = remainder.Substring(0, remainder.LastIndexOf(index));
-                        if (remainder.IndexOf(index) == -1)
+                        if (remainder.Length < index.Length)
                         {
-                            return remainder;
+                            return "";
                         }
+                        remainder = remainder.Substring(0, remainder.LastIndexOf(index));
                     }
                     return remainder;
                 }
             }
-            return null;
+            return "";
         }
 
         /// <summary>
@@ -1316,30 +1320,10 @@ namespace Extensions
         /// the string.</returns>
         public static string Left(this System.Text.StringBuilder str,
                                   string index,
-                                  int occurrence)
+                                  int occurrence = 1)
         {
             ValidateNoNulls(str, index, occurrence);
-            if (occurrence == 1)
-            {
-                return str.Substring(0, str.IndexOf(index));
-            }
-            else
-            {
-                if (occurrence == -1)
-                {
-                    //return str.Substring(0, str.LastIndexOf(index));
-                }
-            }
-            if (occurrence > 1)
-            {
-                string remainder = str.Substring(str.IndexOf(index));
-                for (int C = 1; C <= occurrence; C++)
-                {
-                    remainder = remainder.Substring(remainder.IndexOf(index));
-                }
-                return remainder;
-            }
-            return null;
+            return Left(str.ToString(), index, occurrence);
         }
         #endregion Left()
 
@@ -1727,7 +1711,7 @@ namespace Extensions
             int occurrence = 1)
         {
             ValidateNoNulls(str, index, occurrence);
-            if (str.IndexOf(index) > 0)
+            if (str.IndexOf(index) >= 0)
             {
                 if (occurrence == 1)
                 {
@@ -1739,42 +1723,64 @@ namespace Extensions
                 }
                 if (occurrence > 1)
                 {
-                    string remainder = str.Substring(0, str.IndexOf(index) + index.Length);
+                    string remainder = str;
                     for (int C = 1; C < occurrence; C++)
                     {
-                        remainder = remainder.Substring(0, str.IndexOf(index) + index.Length);
-                        if (remainder.IndexOf(index) == -1)
+                        if (remainder.Length > index.Length)
                         {
-                            return null;
+                            return "";
                         }
+                        remainder = remainder.Substring(remainder.IndexOf(index) + index.Length);
                     }
                     return remainder;
                 }
                 if (occurrence < -1)
                 {
-                    string remainder = str.Substring(0, str.LastIndexOf(index));
+                    string remainder = str;
                     for (int C = -1; C > occurrence; C--)
                     {
-                        remainder = remainder.Substring(0, remainder.LastIndexOf(index));
-                        if (remainder.IndexOf(index) == -1)
+                        if (remainder.Length > index.Length)
                         {
-                            return null;
+                            return "";
                         }
+                        remainder = remainder.Substring(0, remainder.LastIndexOf(index));
                     }
-                    return str.Replace(remainder, "").Substring(index.Length);
+                    return str.Substring(remainder.Length + index.Length);
                 }
             }
-            return null;
+            return "";
+        }
+
+        /// <summary>
+        /// Returns text to the right of the index string.  Use negative values
+        /// for occurrence if the occurrence count should start from the end
+        /// instead of its default from the beginning of the string.
+        /// </summary>
+        /// <param name="str">A System.String object being searched.</param>
+        /// <param name="index">The System.String value used as the target
+        /// of the search.</param>
+        /// <param name="occurrence">The number of matches to find.</param>
+        /// <returns>Returns text to the right of the index string.  Use
+        /// negative values for occurrence if the occurrence count should
+        /// start from the end instead of its default from the beginning of
+        /// the string.</returns>
+        public static string Right(
+            this System.Text.StringBuilder str,
+            string index,
+            int occurrence = 1)
+        {
+            ValidateNoNulls(str, index, occurrence);
+            return Right(str.ToString(), index, occurrence);
         }
         #endregion Right
 
-        #region SingleQuote()
-        /// <summary>
-        /// Return the given string encased in single quotes.
-        /// </summary>
-        /// <param name="str">The given string to be quoted.</param>
-        /// <returns>The given string encased in single quotes.</returns>
-        public static string SingleQuote(this System.String str)
+            #region SingleQuote()
+            /// <summary>
+            /// Return the given string encased in single quotes.
+            /// </summary>
+            /// <param name="str">The given string to be quoted.</param>
+            /// <returns>The given string encased in single quotes.</returns>
+            public static string SingleQuote(this System.String str)
         {
             ValidateNoNulls(str);
             return ("'" + str + "'");
