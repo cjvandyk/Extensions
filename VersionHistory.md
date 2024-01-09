@@ -322,3 +322,10 @@
 	- Add `Extensions.Core.GetAuthorityDomain()` to handle duality in Microsoft authentication endpoints between .com for commercial and .us for GCCHigh.
 	- Fixed `Extensions.Core.NoNull()` to return "" when dictionary key is not present over exception catching.
 	- Updated `Extensions.Core.GetEnv()` to allow interactive debug JSON settings to suplement environment settings.
+
+### **5.1.800 (2024-01-09)**<br>
+	- Fixed Issue #99 where Logit logging was being skipped when the isDebugValidationMethos is null.<br>
+	- Add StringBuilder support for .Left() method.
+	- Add StringBuilder support for .Right() method.
+	- Enhanced .Left() to return "" instead of null allowing for inline usage in complex concatenations.
+	- Enhanced .Right() to return "" instead of null allowing for inline usage in complex concatenations.
