@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <VersionPrefix>5.1.800</VersionPrefix>
+    <VersionPrefix>5.2.800</VersionPrefix>
     <LangVersion>latest</LangVersion>
     <Company>Cornelius J. van Dyk</Company>
     <Copyright>Copyright © 2020-2024</Copyright>
