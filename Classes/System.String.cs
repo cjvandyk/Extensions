@@ -10,6 +10,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 using static Extensions.Constants;
 using static Extensions.Core;
 
@@ -1774,13 +1776,13 @@ namespace Extensions
         }
         #endregion Right
 
-            #region SingleQuote()
-            /// <summary>
-            /// Return the given string encased in single quotes.
-            /// </summary>
-            /// <param name="str">The given string to be quoted.</param>
-            /// <returns>The given string encased in single quotes.</returns>
-            public static string SingleQuote(this System.String str)
+        #region SingleQuote()
+        /// <summary>
+        /// Return the given string encased in single quotes.
+        /// </summary>
+        /// <param name="str">The given string to be quoted.</param>
+        /// <returns>The given string encased in single quotes.</returns>
+        public static string SingleQuote(this System.String str)
         {
             ValidateNoNulls(str);
             return ("'" + str + "'");
@@ -2287,6 +2289,35 @@ namespace Extensions
                                                     assigner);
         }
         #endregion ToEnumerable
+
+        #region ToJson()
+        /// <summary>
+        /// Convert an object to a JSON string.
+        /// </summary>
+        /// <typeparam name="T">The object type being converted.</typeparam>
+        /// <param name="obj">The object being converted.</param>
+        /// <param name="jsonSerializerOptions">Options to use for 
+        /// serialization.  If none is specified defaults are used.</param>
+        /// <returns>A JSON string representing the given object.</returns>
+        public static string ToJson<T>(this T obj,
+                                       JsonSerializerOptions jsonSerializerOptions = null)
+        {
+            if (obj == null)
+            {
+                return "{}";
+            }
+            if (jsonSerializerOptions == null)
+            {
+                jsonSerializerOptions = new JsonSerializerOptions
+                {
+                    WriteIndented = true,
+                    DefaultIgnoreCondition = JsonIgnoreCondition.Never,
+                    ReferenceHandler = ReferenceHandler.Preserve
+                };
+            }
+            return JsonSerializer.Serialize(obj, jsonSerializerOptions);
+        }
+        #endregion ToJson()
 
         #region ToMorseCode()
         /// <summary>
