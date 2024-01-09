@@ -1276,28 +1276,32 @@ namespace Extensions
                 }
                 if (occurrence > 1)
                 {
-                    string remainder = str.Substring(str.IndexOf(index));
+                    string remainder = str;
                     for (int C = 1; C <= occurrence; C++)
                     {
-                        remainder = remainder.Substring(remainder.IndexOf(index) + 1);
+                        if (remainder.Length < index.Length)
+                        {
+                            return "";
+                        }
+                        remainder = remainder.Substring(remainder.IndexOf(index) + index.Length);
                     }
-                    return str.Replace(index + remainder, "");
+                    return str.Substring(0, str.Length - (remainder.Length + index.Length));
                 }
                 if (occurrence < -1)
                 {
-                    string remainder = str.Substring(0, str.LastIndexOf(index));
+                    string remainder = str;
                     for (int C = -1; C > occurrence; C--)
                     {
-                        remainder = remainder.Substring(0, remainder.LastIndexOf(index));
-                        if (remainder.IndexOf(index) == -1)
+                        if (remainder.Length < index.Length)
                         {
-                            return remainder;
+                            return "";
                         }
+                        remainder = remainder.Substring(0, remainder.LastIndexOf(index));
                     }
                     return remainder;
                 }
             }
-            return null;
+            return "";
         }
 
         /// <summary>
@@ -1316,30 +1320,10 @@ namespace Extensions
         /// the string.</returns>
         public static string Left(this System.Text.StringBuilder str,
                                   string index,
-                                  int occurrence)
+                                  int occurrence = 1)
         {
             ValidateNoNulls(str, index, occurrence);
-            if (occurrence == 1)
-            {
-                return str.Substring(0, str.IndexOf(index));
-            }
-            else
-            {
-                if (occurrence == -1)
-                {
-                    //return str.Substring(0, str.LastIndexOf(index));
-                }
-            }
-            if (occurrence > 1)
-            {
-                string remainder = str.Substring(str.IndexOf(index));
-                for (int C = 1; C <= occurrence; C++)
-                {
-                    remainder = remainder.Substring(remainder.IndexOf(index));
-                }
-                return remainder;
-            }
-            return null;
+            return Left(str.ToString(), index, occurrence);
         }
         #endregion Left()
 
