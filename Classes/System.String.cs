@@ -244,7 +244,24 @@ namespace Extensions
         }
         #endregion DoubleQuote()
 
-        #region Encrypt
+        #region EncodeAsXml()
+        /// <summary>
+        /// Encode a given string as XML.
+        /// </summary>
+        /// <param name="str">The target string to encode.</param>
+        /// <returns>The target string with ampersand, apostrophe, 
+        /// greater than, less than and double quote XML converted.</returns>
+        public static string EncodeAsXml(this string str)
+        {
+            return str.Replace("&", "&amp;")
+                      .Replace("'", "&apos;")
+                      .Replace(">", "&gt;")
+                      .Replace("<", "&lt;")
+                      .Replace("\"", "&quot;");
+        }
+        #endregion EncodeAsXml()
+
+        #region Encrypt()
 
         //public static string Encrypt(this System.String str, 
         //                             string password, 
@@ -326,7 +343,7 @@ namespace Extensions
         //    return decrypted;
         //}
 
-        #endregion Encrypt
+        #endregion Encrypt()
 
         #region ExceedsLength()
         /// <summary>
@@ -1693,7 +1710,7 @@ namespace Extensions
         }
         #endregion RemoveExtraSpace()
 
-        #region Right
+        #region Right()
         /// <summary>
         /// Returns text to the right of the index string.  Use negative values
         /// for occurrence if the occurrence count should start from the end
@@ -1774,7 +1791,7 @@ namespace Extensions
             ValidateNoNulls(str, index, occurrence);
             return Right(str.ToString(), index, occurrence);
         }
-        #endregion Right
+        #endregion Right()
 
         #region SingleQuote()
         /// <summary>
@@ -2206,7 +2223,7 @@ namespace Extensions
         }
         #endregion ToEnum()
 
-        #region ToEnumerable
+        #region ToEnumerable()
         /// <summary>
         /// Converts the given querystring to a Dictionary.
         /// </summary>
@@ -2288,7 +2305,7 @@ namespace Extensions
                                                     separator, 
                                                     assigner);
         }
-        #endregion ToEnumerable
+        #endregion ToEnumerable()
 
         #region ToJson()
         /// <summary>
