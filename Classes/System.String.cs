@@ -14,6 +14,8 @@ using System.Text.Json.Serialization;
 using System.Text.Json;
 using static Extensions.Constants;
 using static Extensions.Core;
+using System.Text;
+using System.Globalization;
 
 namespace Extensions
 {
@@ -798,6 +800,48 @@ namespace Extensions
             return IsChar(str.ToString(), Chars, Classic);
         }
         #endregion IsChar()
+
+        #region IsDateTime()
+        /// <summary>
+        /// Checks if a given string is a valid date/time given the format.
+        /// </summary>
+        /// <param name="str">The given string to check.</param>
+        /// <param name="inFormat">The string format of the date/time to
+        /// use in the object convertion e.g. "dd/MM/yyyy HH:mm:ss"  If
+        /// none is specified it defaults to "dd/MM/yyyy HH:mm:ss"</param>
+        /// <returns>True if the given string is a valid date/time in the
+        /// given format, else False.</returns>
+        public static bool IsDateTime(this string str,
+                                      string inFormat = "dd/MM/yyyy HH:mm:ss")
+        {
+            try
+            {
+                DateTime dateTime = DateTime.ParseExact(
+                    str, inFormat, CultureInfo.InvariantCulture);
+                return true;
+            }
+            catch 
+            { 
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Checks if a given StringBuilder is a valid date/time given the 
+        /// format.
+        /// </summary>
+        /// <param name="sb">The given StringBuilder to check.</param>
+        /// <param name="inFormat">The string format of the date/time to
+        /// use in the object convertion e.g. "dd/MM/yyyy HH:mm:ss"  If
+        /// none is specified it defaults to "dd/MM/yyyy HH:mm:ss"</param>
+        /// <returns>True if the given StringBuilder is a valid date/time in
+        /// the given format, else False.</returns>
+        public static bool IsDateTime(this StringBuilder sb,
+                                      string inFormat = "dd/MM/yyyy HH:mm:ss")
+        {
+            return IsDateTime(sb.ToString(), inFormat);
+        }
+        #endregion IsDateTime()
 
         #region IsEmail()
         /// <summary>
@@ -2441,6 +2485,221 @@ namespace Extensions
             return (str.ToString());
         }
         #endregion ToMorseCode()
+
+        #region ToEnglishAlphaChars()
+        /// <summary>
+        /// Convert all non-English characters in a given string to their
+        /// English equivalent characters.
+        /// </summary>
+        /// <param name="str">The target string to convert.</param>
+        /// <returns>Converted English equivalent string.</returns>
+        public static string ToEnglishAlphaChars(this string str)
+        {
+            StringBuilder sb = new StringBuilder(str);
+            return sb.ToEnglishAlphaChars().ToString();
+        }
+
+        /// <summary>
+        /// Convert all non-English characters in a given StringBuilder to 
+        /// their English equivalent characters.
+        /// </summary>
+        /// <param name="sb">The target StringBuilder to convert.</param>
+        /// <returns>Converted English equivalent StringBuilder.</returns>
+        public static StringBuilder ToEnglishAlphaChars(this StringBuilder sb)
+        {
+            sb = sb.Replace('Á', 'A');
+            sb = sb.Replace('Ă', 'A');
+            sb = sb.Replace('Â', 'A');
+            sb = sb.Replace('Ä', 'A');
+            sb = sb.Replace('À', 'A');
+            sb = sb.Replace('Ā', 'A');
+            sb = sb.Replace('Ą', 'A');
+            sb = sb.Replace('Å', 'A');
+            sb = sb.Replace('Ã', 'A');
+            sb = sb.Replace('Æ', 'A');
+            sb = sb.Replace('Ć', 'C');
+            sb = sb.Replace('Č', 'C');
+            sb = sb.Replace('Ç', 'C');
+            sb = sb.Replace('Ĉ', 'C');
+            sb = sb.Replace('Ċ', 'C');
+            sb = sb.Replace('Ď', 'D');
+            sb = sb.Replace('Đ', 'D');
+            sb = sb.Replace('É', 'E');
+            sb = sb.Replace('Ĕ', 'E');
+            sb = sb.Replace('Ě', 'E');
+            sb = sb.Replace('Ê', 'E');
+            sb = sb.Replace('Ë', 'E');
+            sb = sb.Replace('Ė', 'E');
+            sb = sb.Replace('È', 'E');
+            sb = sb.Replace('Ē', 'E');
+            sb = sb.Replace('Ę', 'E');
+            sb = sb.Replace('Ŋ', 'N');
+            sb = sb.Replace('Ð', 'E');
+            sb = sb.Replace('Ğ', 'G');
+            sb = sb.Replace('Ģ', 'G');
+            sb = sb.Replace('Ĝ', 'G');
+            sb = sb.Replace('Ġ', 'G');
+            sb = sb.Replace('Ĥ', 'H');
+            sb = sb.Replace('Ħ', 'H');
+            sb = sb.Replace('Í', 'I');
+            sb = sb.Replace('Ĭ', 'I');
+            sb = sb.Replace('Î', 'I');
+            sb = sb.Replace('Ï', 'I');
+            sb = sb.Replace('İ', 'I');
+            sb = sb.Replace('Ì', 'I');
+            sb = sb.Replace('Ī', 'I');
+            sb = sb.Replace('Į', 'I');
+            sb = sb.Replace('Ĩ', 'I');
+            sb = sb.Replace('Ĵ', 'J');
+            sb = sb.Replace('Ķ', 'K');
+            sb = sb.Replace('Ĺ', 'L');
+            sb = sb.Replace('Ľ', 'L');
+            sb = sb.Replace('Ļ', 'L');
+            sb = sb.Replace('Ŀ', 'L');
+            sb = sb.Replace('Ł', 'L');
+            sb = sb.Replace('Ĳ', 'I');
+            sb = sb.Replace('Œ', 'O');
+            sb = sb.Replace('Ń', 'N');
+            sb = sb.Replace('Ň', 'N');
+            sb = sb.Replace('Ņ', 'N');
+            sb = sb.Replace('Ñ', 'N');
+            sb = sb.Replace('Ó', 'O');
+            sb = sb.Replace('Ŏ', 'O');
+            sb = sb.Replace('Ô', 'O');
+            sb = sb.Replace('Ö', 'O');
+            sb = sb.Replace('Ò', 'O');
+            sb = sb.Replace('Ō', 'O');
+            sb = sb.Replace('Ø', 'O');
+            sb = sb.Replace('Õ', 'O');
+            sb = sb.Replace('Ő', 'O');
+            sb = sb.Replace('Ŕ', 'R');
+            sb = sb.Replace('Ř', 'R');
+            sb = sb.Replace('Ŗ', 'R');
+            sb = sb.Replace('Ś', 'S');
+            sb = sb.Replace('Š', 'S');
+            sb = sb.Replace('Ş', 'S');
+            sb = sb.Replace('Ŝ', 'S');
+            sb = sb.Replace('Ť', 'T');
+            sb = sb.Replace('Ţ', 'T');
+            sb = sb.Replace('Ŧ', 'T');
+            sb = sb.Replace('Þ', 'P');
+            sb = sb.Replace('Ů', 'U');
+            sb = sb.Replace('Ú', 'U');
+            sb = sb.Replace('Ŭ', 'U');
+            sb = sb.Replace('Û', 'U');
+            sb = sb.Replace('Ü', 'U');
+            sb = sb.Replace('Ű', 'U');
+            sb = sb.Replace('Ù', 'U');
+            sb = sb.Replace('Ū', 'U');
+            sb = sb.Replace('Ų', 'U');
+            sb = sb.Replace('Ũ', 'U');
+            sb = sb.Replace('Ŵ', 'W');
+            sb = sb.Replace('Ý', 'Y');
+            sb = sb.Replace('Ŷ', 'Y');
+            sb = sb.Replace('Ÿ', 'Y');
+            sb = sb.Replace('Ź', 'Z');
+            sb = sb.Replace('Ž', 'Z');
+            sb = sb.Replace('Ż', 'Z');
+            sb = sb.Replace('á', 'a');
+            sb = sb.Replace('ă', 'a');
+            sb = sb.Replace('â', 'a');
+            sb = sb.Replace('ä', 'a');
+            sb = sb.Replace('à', 'a');
+            sb = sb.Replace('ā', 'a');
+            sb = sb.Replace('ą', 'a');
+            sb = sb.Replace('å', 'a');
+            sb = sb.Replace('ã', 'a');
+            sb = sb.Replace('æ', 'a');
+            sb = sb.Replace('ć', 'c');
+            sb = sb.Replace('č', 'c');
+            sb = sb.Replace('ç', 'c');
+            sb = sb.Replace('ĉ', 'c');
+            sb = sb.Replace('ċ', 'c');
+            sb = sb.Replace('ď', 'd');
+            sb = sb.Replace('đ', 'd');
+            sb = sb.Replace('ı', 'i');
+            sb = sb.Replace('é', 'e');
+            sb = sb.Replace('ĕ', 'e');
+            sb = sb.Replace('ě', 'e');
+            sb = sb.Replace('ê', 'e');
+            sb = sb.Replace('ë', 'e');
+            sb = sb.Replace('ė', 'e');
+            sb = sb.Replace('è', 'e');
+            sb = sb.Replace('ē', 'e');
+            sb = sb.Replace('ę', 'e');
+            sb = sb.Replace('ŋ', 'n');
+            sb = sb.Replace('ð', 'e');
+            sb = sb.Replace('ğ', 'g');
+            sb = sb.Replace('ģ', 'g');
+            sb = sb.Replace('ĝ', 'g');
+            sb = sb.Replace('ġ', 'g');
+            sb = sb.Replace('ĥ', 'h');
+            sb = sb.Replace('ħ', 'h');
+            sb = sb.Replace('í', 'i');
+            sb = sb.Replace('ĭ', 'i');
+            sb = sb.Replace('î', 'i');
+            sb = sb.Replace('ï', 'i');
+            sb = sb.Replace('ì', 'i');
+            sb = sb.Replace('ī', 'i');
+            sb = sb.Replace('į', 'i');
+            sb = sb.Replace('ĩ', 'i');
+            sb = sb.Replace('ĵ', 'j');
+            sb = sb.Replace('ķ', 'k');
+            sb = sb.Replace('ĸ', 'k');
+            sb = sb.Replace('ĺ', 'l');
+            sb = sb.Replace('ľ', 'l');
+            sb = sb.Replace('ļ', 'l');
+            sb = sb.Replace('ŀ', 'l');
+            sb = sb.Replace('ł', 'l');
+            sb = sb.Replace('ĳ', 'i');
+            sb = sb.Replace('œ', 'o');
+            sb = sb.Replace('ſ', 's');
+            sb = sb.Replace('ń', 'n');
+            sb = sb.Replace('ň', 'n');
+            sb = sb.Replace('ņ', 'n');
+            sb = sb.Replace('ŉ', 'n');
+            sb = sb.Replace('ñ', 'n');
+            sb = sb.Replace('ó', 'o');
+            sb = sb.Replace('ŏ', 'o');
+            sb = sb.Replace('ô', 'o');
+            sb = sb.Replace('ö', 'o');
+            sb = sb.Replace('ò', 'o');
+            sb = sb.Replace('ō', 'o');
+            sb = sb.Replace('ø', 'o');
+            sb = sb.Replace('õ', 'o');
+            sb = sb.Replace('ő', 'o');
+            sb = sb.Replace('ŕ', 'r');
+            sb = sb.Replace('ř', 'r');
+            sb = sb.Replace('ŗ', 'r');
+            sb = sb.Replace('ś', 's');
+            sb = sb.Replace('š', 's');
+            sb = sb.Replace('ş', 's');
+            sb = sb.Replace('ŝ', 's');
+            sb = sb.Replace('ß', 's');
+            sb = sb.Replace('ť', 't');
+            sb = sb.Replace('ţ', 't');
+            sb = sb.Replace('ŧ', 't');
+            sb = sb.Replace('þ', 'p');
+            sb = sb.Replace('ů', 'u');
+            sb = sb.Replace('ú', 'u');
+            sb = sb.Replace('ŭ', 'u');
+            sb = sb.Replace('û', 'u');
+            sb = sb.Replace('ü', 'u');
+            sb = sb.Replace('ű', 'u');
+            sb = sb.Replace('ù', 'u');
+            sb = sb.Replace('ū', 'u');
+            sb = sb.Replace('ų', 'u');
+            sb = sb.Replace('ũ', 'u');
+            sb = sb.Replace('ŵ', 'w');
+            sb = sb.Replace('ý', 'y');
+            sb = sb.Replace('ŷ', 'y');
+            sb = sb.Replace('ÿ', 'y');
+            sb = sb.Replace('ź', 'z');
+            sb = sb.Replace('ž', 'z');
+            sb = sb.Replace('ż', 'z');
+            return sb;
+        }
+        #endregion ToEnglishAlphaChars()
 
         #region TrimLength()
         /// <summary>
