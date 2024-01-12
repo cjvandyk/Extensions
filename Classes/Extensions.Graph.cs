@@ -462,7 +462,10 @@ namespace Extensions
             List<User> users = new List<User>();
             //Get the first page of members.
             var usersPage = ActiveAuth.GraphClient.Groups[groupId]
-                .Members.GraphUser.GetAsync().GetAwaiter().GetResult();
+                .Members.GraphUser.GetAsync(C =>
+                {
+                    C.QueryParameters.Select = new string[] { "id" };
+                }).GetAwaiter().GetResult();
             if (usersPage.Value.Count == 0)
             {
                 return members;
@@ -476,8 +479,45 @@ namespace Extensions
                         members.Add(user.Id);
                         return true;
                     });
+            pageIterator.IterateAsync().GetAwaiter().GetResult();
             Inf(members.Count.ToString());
             return members;
+        }
+
+        /// <summary>
+        /// A method to retrieve a list of ID values (GUID) for all owners
+        /// of a specified Group.
+        /// </summary>
+        /// <param name="groupId">The ID (GUID) of the target group.</param>
+        /// <returns>A list of strings representing the IDs of owner 
+        /// users.</returns>
+        public static List<string> GetOwners(string groupId)
+        {
+            //Create the aggregation container.
+            List<string> owners = new List<string>();
+            List<User> users = new List<User>();
+            //Get the first page of owners.
+            var usersPage = ActiveAuth.GraphClient.Groups[groupId]
+                .Owners.GraphUser.GetAsync(C =>
+                {
+                    C.QueryParameters.Select = new string[] { "id" };
+                }).GetAwaiter().GetResult();
+            if (usersPage.Value.Count == 0)
+            {
+                return owners;
+            }
+            var pageIterator = PageIterator<User, UserCollectionResponse>
+                .CreatePageIterator(
+                    ActiveAuth.GraphClient,
+                    usersPage,
+                    (user) =>
+                    {
+                        owners.Add(user.Id);
+                        return true;
+                    });
+            pageIterator.IterateAsync().GetAwaiter().GetResult();
+            Inf(owners.Count.ToString());
+            return owners;
         }
 
         /// <summary>
