@@ -192,12 +192,13 @@ namespace Extensions
         public const double CB = ShB * 1024;
 
         /// <summary>
-        /// Number of bytes in a Koentekbyte.
+        /// Number of bytes in a Koentekbyte. *1024^81
         /// </summary>
         public const double KkB = CB * 1024;
 
         /// <summary>
-        /// Number of bytes in a CornelionByte.
+        /// Number of bytes in a CornelionByte. *1024^100000000
+        /// Cornelion = "1 x 10 ^ 100,000,000";
         /// </summary>
         public const string CornelionByte = "1 x 10 ^ 100,000,000";
         #endregion Binary Constants
@@ -206,11 +207,14 @@ namespace Extensions
         /// <summary>
         /// Enum of possible frequency in which interest compounding is done.
         /// </summary>
-        public enum CompoundFrequency { Monthly, Yearly };
+        public enum CompoundFrequency 
+        { 
+            Monthly, 
+            Yearly 
+        };
         #endregion CompoundFrequency
 
         #region Cryptography
-
         /// <summary>
         /// List of encryption providers to use.
         /// </summary>
@@ -228,21 +232,29 @@ namespace Extensions
             SHA512,
             TrippleDES
         }
-
         #endregion Cryptography
 
         #region EnumerationType
         /// <summary>
         /// Enum of possible enumerable types.
         /// </summary>
-        public enum EnumerableType { Dictionary, NameValueCollection };
+        public enum EnumerableType 
+        { 
+            Dictionary, 
+            NameValueCollection 
+        };
         #endregion EnumerationType
 
         #region ErrorType
         /// <summary>
         /// Enum of error types to validate.
         /// </summary>
-        public enum ErrorType { Null, IntNonNegative };
+        public enum ErrorType 
+        { 
+            Null, 
+            IntNonNegative 
+        };
+
         /// <summary>
         /// Array holding all error types for easier passing.
         /// </summary>
@@ -252,6 +264,18 @@ namespace Extensions
             ErrorType.IntNonNegative
         };
         #endregion ErrorType
+
+        #region Graph Constants
+        /// <summary>
+        /// The types of Graph user info to retrieve.
+        /// </summary>
+        public enum UserInfoType
+        {
+            id,
+            mail,
+            userProfileName
+        }
+        #endregion Graph Constants
 
         #region Help
         /// <summary>
@@ -318,7 +342,11 @@ namespace Extensions
         /// <summary>
         /// Enum of possible comparison types in the Mersenne type.
         /// </summary>
-        public enum MersenneComparisonType { Greater, Less };
+        public enum MersenneComparisonType 
+        { 
+            Greater, 
+            Less 
+        };
         #endregion Mersenne
 
         #region Morse
@@ -374,14 +402,25 @@ namespace Extensions
         /// <summary>
         /// Enum of possible quote types.
         /// </summary>
-        public enum QuoteType { Single, Double };
+        public enum QuoteType 
+        { 
+            Single, 
+            Double 
+        };
         #endregion Quote
 
         #region Substring
         /// <summary>
         /// List of processing options for .Substring() method.
         /// </summary>
-        public enum SubstringType { FromHead, FromTail, LeftOfIndex, RigthOfIndex, IndexValue };
+        public enum SubstringType 
+        { 
+            FromHead, 
+            FromTail, 
+            LeftOfIndex, 
+            RigthOfIndex, 
+            IndexValue 
+        };
         #endregion Substring
 
         #region TimeSpan
