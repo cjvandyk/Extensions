@@ -453,9 +453,13 @@ namespace Extensions
         /// of a specified Group.
         /// </summary>
         /// <param name="groupId">The ID (GUID) of the target group.</param>
+        /// <param name="userInfoType">The type of user info to return
+        /// i.e. "id", "mail" or "userProfileName".  Default is "id".</param>
         /// <returns>A list of strings representing the IDs of member 
         /// users.</returns>
-        public static List<string> GetMembers(string groupId)
+        public static List<string> GetMembers(
+            string groupId, 
+            Constants.UserInfoType userInfoType = Constants.UserInfoType.id)
         {
             //Create the aggregation container.
             List<string> members = new List<string>();
@@ -464,7 +468,10 @@ namespace Extensions
             var usersPage = ActiveAuth.GraphClient.Groups[groupId]
                 .Members.GraphUser.GetAsync(C =>
                 {
-                    C.QueryParameters.Select = new string[] { "id" };
+                    C.QueryParameters.Select = new string[] 
+                    { 
+                        userInfoType.ToString() 
+                    };
                 }).GetAwaiter().GetResult();
             if (usersPage.Value.Count == 0)
             {
@@ -476,7 +483,30 @@ namespace Extensions
                     usersPage,
                     (user) =>
                     {
-                        members.Add(user.Id);
+                        switch (userInfoType)
+                        {
+                            case Constants.UserInfoType.id:
+                                if (user.Id != null &&
+                                    user.Id.Trim().Length > 0)
+                                {
+                                    members.Add(user.Id.Trim());
+                                }
+                                break;
+                            case Constants.UserInfoType.mail:
+                                if (user.Mail != null &&
+                                    user.Mail.Trim().Length > 0)
+                                {
+                                    members.Add(user.Mail.Trim());
+                                }
+                                break;
+                            case Constants.UserInfoType.userProfileName:
+                                if (user.UserPrincipalName != null &&
+                                    user.UserPrincipalName.Trim().Length > 0)
+                                {
+                                    members.Add(user.UserPrincipalName.Trim());
+                                }
+                                break;
+                        }
                         return true;
                     });
             pageIterator.IterateAsync().GetAwaiter().GetResult();
@@ -489,9 +519,13 @@ namespace Extensions
         /// of a specified Group.
         /// </summary>
         /// <param name="groupId">The ID (GUID) of the target group.</param>
+        /// <param name="userInfoType">The type of user info to return
+        /// i.e. "id", "mail" or "userProfileName".  Default is "id".</param>
         /// <returns>A list of strings representing the IDs of owner 
         /// users.</returns>
-        public static List<string> GetOwners(string groupId)
+        public static List<string> GetOwners(
+            string groupId,
+            Constants.UserInfoType userInfoType = Constants.UserInfoType.id)
         {
             //Create the aggregation container.
             List<string> owners = new List<string>();
@@ -500,7 +534,10 @@ namespace Extensions
             var usersPage = ActiveAuth.GraphClient.Groups[groupId]
                 .Owners.GraphUser.GetAsync(C =>
                 {
-                    C.QueryParameters.Select = new string[] { "id" };
+                    C.QueryParameters.Select = new string[]
+                    {
+                        userInfoType.ToString()
+                    };
                 }).GetAwaiter().GetResult();
             if (usersPage.Value.Count == 0)
             {
@@ -512,7 +549,30 @@ namespace Extensions
                     usersPage,
                     (user) =>
                     {
-                        owners.Add(user.Id);
+                        switch (userInfoType)
+                        {
+                            case Constants.UserInfoType.id:
+                                if (user.Id != null &&
+                                    user.Id.Trim().Length > 0)
+                                {
+                                    owners.Add(user.Id.Trim());
+                                }
+                                break;
+                            case Constants.UserInfoType.mail:
+                                if (user.Mail != null &&
+                                    user.Mail.Trim().Length > 0)
+                                {
+                                    owners.Add(user.Mail.Trim());
+                                }
+                                break;
+                            case Constants.UserInfoType.userProfileName:
+                                if (user.UserPrincipalName != null &&
+                                    user.UserPrincipalName.Trim().Length > 0)
+                                {
+                                    owners.Add(user.UserPrincipalName.Trim());
+                                }
+                                break;
+                        }
                         return true;
                     });
             pageIterator.IterateAsync().GetAwaiter().GetResult();
