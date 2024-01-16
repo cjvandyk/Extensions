@@ -267,13 +267,27 @@ namespace Extensions
 
         #region Graph Constants
         /// <summary>
-        /// The types of Graph user info to retrieve.
+        /// The types of Graph user info to retrieve.  The id, mail and
+        /// userProfileName values use camel case to allow their .ToString()
+        /// values to be used in the query constructor.
         /// </summary>
         public enum UserInfoType
         {
+            All,
             id,
             mail,
             userProfileName
+        }
+
+        /// <summary>
+        /// The type of Group membership users to retrieve i.e. Owners of the
+        /// Group, Members of the Group or both.
+        /// </summary>
+        public enum GroupUserMembershipType
+        {
+            All,
+            Members,
+            Owners
         }
         #endregion Graph Constants
 
