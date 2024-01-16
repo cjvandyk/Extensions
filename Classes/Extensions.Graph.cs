@@ -521,14 +521,22 @@ namespace Extensions
         /// <param name="groupId">The ID (GUID) of the target group.</param>
         /// <param name="userInfoType">The type of user info to return
         /// i.e. "id", "mail" or "userProfileName".  Default is "id".</param>
-        /// <returns>A list of strings representing the IDs of owner 
-        /// users.</returns>
-        public static List<string> GetOwners(
+        /// <returns>A list of objects representing the information about the
+        /// Owners users depending on the userInfoType specified i.e.
+        /// - For Constants.UserInfoType.id a list of strings containing user ID
+        /// values is returned.
+        /// - For Constants.UserInfoType.mail a list of strings containing user
+        /// email address values is returned.
+        /// - For Constants.UserInfoType.userPrincipalName a list of strings 
+        /// containing user UPN values is returned.
+        /// - For Constants.UserInfoType.all a list of Microsoft.Graph.Models.User
+        /// objects is returned.</returns>
+        public static List<object> GetOwners(
             string groupId,
             Constants.UserInfoType userInfoType = Constants.UserInfoType.id)
         {
             //Create the aggregation container.
-            List<string> owners = new List<string>();
+            List<object> owners = new List<object>();
             List<User> users = new List<User>();
             //Get the first page of owners.
             var usersPage = ActiveAuth.GraphClient.Groups[groupId]
@@ -536,7 +544,8 @@ namespace Extensions
                 {
                     C.QueryParameters.Select = new string[]
                     {
-                        userInfoType.ToString()
+                        (userInfoType == Constants.UserInfoType.All ? "" :
+                        userInfoType.ToString())
                     };
                 }).GetAwaiter().GetResult();
             if (usersPage.Value.Count == 0)
@@ -572,12 +581,193 @@ namespace Extensions
                                     owners.Add(user.UserPrincipalName.Trim());
                                 }
                                 break;
+                            case Constants.UserInfoType.All:
+                                owners.Add(user);
+                                break;
                         }
                         return true;
                     });
             pageIterator.IterateAsync().GetAwaiter().GetResult();
             Inf(owners.Count.ToString());
             return owners;
+        }
+
+        /// <summary>
+        /// A method to retrieve a list of ID values (GUID) for all owners
+        /// of a specified Group.
+        /// </summary>
+        /// <param name="groupId">The ID (GUID) of the target group.</param>
+        /// <param name="userInfoType">The type of user info to return
+        /// i.e. "id", "mail" or "userProfileName".  Default is "id".</param>
+        /// <param name="groupUserMembershipType">The type of Group membership
+        /// users to retrieve i.e. Owners of the Group, Members of the Group 
+        /// or both.</param>
+        /// <returns>A list of objects representing the information about the
+        /// Owners users depending on the userInfoType specified i.e.
+        /// - For Constants.UserInfoType.id a list of strings containing user ID
+        /// values is returned.
+        /// - For Constants.UserInfoType.mail a list of strings containing user
+        /// email address values is returned.
+        /// - For Constants.UserInfoType.userPrincipalName a list of strings 
+        /// containing user UPN values is returned.
+        /// - For Constants.UserInfoType.all a list of Microsoft.Graph.Models.User
+        /// objects is returned.</returns>
+        public static List<object> GetGroupUsers(
+            string groupId,
+            Constants.UserInfoType userInfoType = Constants.UserInfoType.id,
+            Constants.GroupUserMembershipType groupUserMembershipType
+                = Constants.GroupUserMembershipType.All)
+        {
+            //Create the aggregation container.
+            List<object> users = new List<object>();
+            //Get the first page of users.
+            UserCollectionResponse usersPage = 
+                //If groupUserMembershipType is All or Owners, get the Owners first page.
+                ((groupUserMembershipType == Constants.GroupUserMembershipType.All ||
+                  groupUserMembershipType == Constants.GroupUserMembershipType.Owners) ?
+                    ActiveAuth.GraphClient.Groups[groupId]
+                        .Owners.GraphUser.GetAsync(C =>
+                        {
+                            C.QueryParameters.Select = new string[]
+                            {
+                                //Check if the userInfoType is All and if so,
+                                //do NOT specify any .Select parameters.
+                                (userInfoType == Constants.UserInfoType.All ? "" :
+                                    userInfoType.ToString())
+                            };
+                        }) :
+                    //If its not All or Owners, its Members so get the Members first page.
+                    ActiveAuth.GraphClient.Groups[groupId]
+                        .Members.GraphUser.GetAsync(C =>
+                        {
+                            C.QueryParameters.Select = new string[]
+                            {
+                                (userInfoType == Constants.UserInfoType.All ? "" :
+                                    userInfoType.ToString())
+                            };
+                        })
+                ).GetAwaiter().GetResult();
+            //If groupUserMembershipType is not All and there are no items, return list.
+            //If groupUserMembershipType is All, and there are no items in the Owners
+            //page then we still need to get the Members.
+            if ((groupUserMembershipType != Constants.GroupUserMembershipType.All) &&
+                (usersPage.Value.Count == 0))
+            {
+                return users;
+            }
+            //There are items so create a PageIterator.
+            var pageIterator = PageIterator<User, UserCollectionResponse>
+                .CreatePageIterator(
+                    ActiveAuth.GraphClient,
+                    usersPage,
+                    (user) =>
+                    {
+                        //Aggregate the list based on the userInfoType requested.
+                        switch (userInfoType)
+                        {
+                            //Get User ID GUID values.
+                            case Constants.UserInfoType.id:
+                                if (user.Id != null &&
+                                    user.Id.Trim().Length > 0)
+                                {
+                                    users.Add(user.Id.Trim());
+                                }
+                                break;
+                            //Get User email address values.
+                            case Constants.UserInfoType.mail:
+                                if (user.Mail != null &&
+                                    user.Mail.Trim().Length > 0)
+                                {
+                                    users.Add(user.Mail.Trim());
+                                }
+                                break;
+                            //Get User UPN values, usually the same as email
+                            //but can be different.
+                            case Constants.UserInfoType.userProfileName:
+                                if (user.UserPrincipalName != null &&
+                                    user.UserPrincipalName.Trim().Length > 0)
+                                {
+                                    users.Add(user.UserPrincipalName.Trim());
+                                }
+                                break;
+                            //Get the entire User object.
+                            case Constants.UserInfoType.All:
+                                users.Add(user);
+                                break;
+                        }
+                        return true;
+                    });
+            pageIterator.IterateAsync().GetAwaiter().GetResult();
+            //Before returning our list check if All was requested.
+            if (groupUserMembershipType == Constants.GroupUserMembershipType.All)
+            {
+                //If All was requested, the list contains Owners info.
+                //Now get the Member info as well.
+                usersPage = ActiveAuth.GraphClient.Groups[groupId]
+                    .Members.GraphUser.GetAsync(C =>
+                    {
+                        C.QueryParameters.Select = new string[]
+                        {
+                            //Check if the userInfoType is All and if so,
+                            //do NOT specify any .Select parameters.
+                            (userInfoType == Constants.UserInfoType.All ? "" :
+                                userInfoType.ToString())
+                        };
+                    }).GetAwaiter().GetResult();
+                //If there are no Members, return the aggregated list.
+                if (usersPage.Value.Count == 0)
+                {
+                    return users;
+                }
+                //If however there are Members, assign the first page to the
+                //PageIterator for processing.
+                pageIterator = PageIterator<User, UserCollectionResponse>
+                    .CreatePageIterator(
+                        ActiveAuth.GraphClient,
+                        usersPage,
+                        (user) =>
+                        {
+                            //Aggregate the list based on the userInfoType requested.
+                            switch (userInfoType)
+                            {
+                                //Get User ID GUID values.
+                                case Constants.UserInfoType.id:
+                                    if (user.Id != null &&
+                                        user.Id.Trim().Length > 0)
+                                    {
+                                        users.Add(user.Id.Trim());
+                                    }
+                                    break;
+                                //Get User email address values.
+                                case Constants.UserInfoType.mail:
+                                    if (user.Mail != null &&
+                                        user.Mail.Trim().Length > 0)
+                                    {
+                                        users.Add(user.Mail.Trim());
+                                    }
+                                    break;
+                                //Get User UPN values, usually the same as email
+                                //but can be different.
+                                case Constants.UserInfoType.userProfileName:
+                                    if (user.UserPrincipalName != null &&
+                                        user.UserPrincipalName.Trim().Length > 0)
+                                    {
+                                        users.Add(user.UserPrincipalName.Trim());
+                                    }
+                                    break;
+                                //Get the entire User object.
+                                case Constants.UserInfoType.All:
+                                    users.Add(user);
+                                    break;
+                            }
+                            return true;
+                        });
+                pageIterator.IterateAsync().GetAwaiter().GetResult();
+            }
+            //Write out the user count for debug.
+            Inf(users.Count.ToString());
+            //Return the aggregated list.
+            return users;
         }
 
         /// <summary>
