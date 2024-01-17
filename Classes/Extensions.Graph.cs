@@ -1,4 +1,4 @@
-﻿#pragma warning disable CS0168, CS1587, CS1998, IDE0059, IDE0028
+﻿//#pragma warning disable CS0168, CS1587, CS1998, IDE0059, IDE0028
 
 /// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
@@ -34,11 +34,11 @@ namespace Extensions
         /// <summary>
         /// A collection of batch requests.
         /// </summary>
-        public BatchRequestContentCollection batch { get; set;}
+        public BatchRequestContentCollection Batch { get; set;}
         /// <summary>
         /// A list of string IDs for requests contained in the batch.
         /// </summary>
-        public List<string> ids { get; set;}
+        public List<string> Ids { get; set;}
     }
 
     /// <summary>
@@ -635,6 +635,7 @@ namespace Extensions
                                 (userInfoType == Constants.UserInfoType.All ? "" :
                                     userInfoType.ToString())
                             };
+                            C.Headers.Add("ConsistencyLevel", "eventual");
                         }) :
                     //If its not All or Owners, its Members so get the Members first page.
                     ActiveAuth.GraphClient.Groups[groupId]
@@ -645,6 +646,7 @@ namespace Extensions
                                 (userInfoType == Constants.UserInfoType.All ? "" :
                                     userInfoType.ToString())
                             };
+                            C.Headers.Add("ConsistencyLevel", "eventual");
                         })
                 ).GetAwaiter().GetResult();
             //If groupUserMembershipType is not All and there are no items, return list.
@@ -713,6 +715,7 @@ namespace Extensions
                             (userInfoType == Constants.UserInfoType.All ? "" :
                                 userInfoType.ToString())
                         };
+                        C.Headers.Add("ConsistencyLevel", "eventual");
                     }).GetAwaiter().GetResult();
                 //If there are no Members, return the aggregated list.
                 if (usersPage.Value.Count == 0)
@@ -847,6 +850,7 @@ namespace Extensions
                 .Lists.GetAsync((C) =>
                 {
                     C.QueryParameters.Filter = $"displayName eq '{listName}'";
+                    C.Headers.Add("ConsistencyLevel", "eventual");
                 }).GetAwaiter().GetResult().Value[0].Id;
         }
 
@@ -908,6 +912,7 @@ namespace Extensions
                         .GetAsync((C) =>
                         {
                             C.QueryParameters.Expand = new string[] { "fields" };
+                            C.Headers.Add("ConsistencyLevel", "eventual");
                         }).GetAwaiter().GetResult();
                     //Check if the item was found.
                     if (listItem != null)
@@ -932,6 +937,7 @@ namespace Extensions
                             if (filter != null)
                             {
                                 C.QueryParameters.Filter = filter;
+                                C.Headers.Add("ConsistencyLevel", "eventual");
                             }
                             C.QueryParameters.Expand = new string[] { "fields" };
                         }).GetAwaiter().GetResult();
@@ -1119,4 +1125,4 @@ namespace Extensions
         }
     }
 }
-#pragma warning restore CS0168, CS1587, CS1998, IDE0059, IDE0028
+//#pragma warning restore CS0168, CS1587, CS1998, IDE0059, IDE0028

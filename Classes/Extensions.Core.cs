@@ -882,7 +882,7 @@ namespace Extensions
                     C.Headers.Add("ConsistencyLevel", "eventual");
                 }).GetAwaiter().GetResult().Value;
             }
-            return null;
+            return new List<Group>();
         }
 
         /// <summary>
@@ -895,8 +895,7 @@ namespace Extensions
         {
             List<DirectoryObject> members = new List<DirectoryObject>();
             var groups = GetGroupByName(groupName);
-            if ((groups != null) &&
-                groups.Count > 0)
+            if (groups.Count > 0)
             {
                 var page = ActiveAuth.GraphClient.Groups[groups[0].Id].Members
                     .GetAsync().GetAwaiter().GetResult();
@@ -926,8 +925,7 @@ namespace Extensions
         {
             List<DirectoryObject> owners = new List<DirectoryObject>();
             var groups = GetGroupByName(groupName);
-            if ((groups != null) &&
-                (groups.Count > 0))
+            if (groups.Count > 0)
             {
                 var page = ActiveAuth.GraphClient.Groups[groups[0].Id].Owners
                     .GetAsync().GetAwaiter().GetResult();
