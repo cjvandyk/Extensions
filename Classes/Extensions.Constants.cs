@@ -1,4 +1,4 @@
-﻿#pragma warning disable CS1587, CS1591
+﻿//#pragma warning disable CS1587, CS1591
 
 /// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
@@ -752,4 +752,4 @@ namespace Extensions
         #endregion TimeZone
     }
 }
-#pragma warning restore CS1587, CS1591
+//#pragma warning restore CS1587, CS1591

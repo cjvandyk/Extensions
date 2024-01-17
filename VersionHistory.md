@@ -1,119 +1,119 @@
 ﻿# Extensions.cs Version History.
 
 ### **1.0.1 (2021-01-08)**<br>
-	- Add `System.Diagnostics.Process.Elevate()`.<br>
-	- Add `System.String.GetUrlRoot()`.<br>
-	- Add `System.Text.StringBuilder.GetUrlRoot()`.<br>
-	- Add `System.String.IsAlphabetic()`.<br>
-	- Add `System.Text.StringBuilder.IsAlphabetic()`.<br>
-	- Add `System.String.IsAlphaNumeric()`.<br>
-	- Add `System.Text.StringBuilder.IsAlphaNumeric()`.<br>
-	- Add `System.String.IsChar()`.<br>
-	- Add `System.Text.StringBuilder.IsChar()`.<br>
-	- Add `System.String.IsNumeric()`.<br>
-	- Add `System.Text.StringBuilder.IsNumeric()`.<br>
-	- Add `System.String.IsUrlRoot()`.<br>
-	- Add `System.Text.StringBuilder.IsUrlRoot()`.<br>
-	- Add `System.String.Lines()`.<br>
-	- Add `System.Text.StringBuilder.Lines()`.<br>
-	- Add `System.String.LoremIpsum()`.<br>
-	- Add `System.Text.StringBuilder.LoremIpsum()`.<br>
-	- Add `System.String.ReplaceTokens()`.<br>
-	- Add `System.Text.StringBuilder.ReplaceTokens()`.<br>
-	- Add `System.String.Words()`.<br>
-	- Add `System.Text.StringBuilder.Words()`.<br>
+	- Added `System.Diagnostics.Process.Elevate()`.<br>
+	- Added `System.String.GetUrlRoot()`.<br>
+	- Added `System.Text.StringBuilder.GetUrlRoot()`.<br>
+	- Added `System.String.IsAlphabetic()`.<br>
+	- Added `System.Text.StringBuilder.IsAlphabetic()`.<br>
+	- Added `System.String.IsAlphaNumeric()`.<br>
+	- Added `System.Text.StringBuilder.IsAlphaNumeric()`.<br>
+	- Added `System.String.IsChar()`.<br>
+	- Added `System.Text.StringBuilder.IsChar()`.<br>
+	- Added `System.String.IsNumeric()`.<br>
+	- Added `System.Text.StringBuilder.IsNumeric()`.<br>
+	- Added `System.String.IsUrlRoot()`.<br>
+	- Added `System.Text.StringBuilder.IsUrlRoot()`.<br>
+	- Added `System.String.Lines()`.<br>
+	- Added `System.Text.StringBuilder.Lines()`.<br>
+	- Added `System.String.LoremIpsum()`.<br>
+	- Added `System.Text.StringBuilder.LoremIpsum()`.<br>
+	- Added `System.String.ReplaceTokens()`.<br>
+	- Added `System.Text.StringBuilder.ReplaceTokens()`.<br>
+	- Added `System.String.Words()`.<br>
+	- Added `System.Text.StringBuilder.Words()`.<br>
 
 ### **1.1.28 (2021-01-15)**<br>
-	- Add `System.String.ToBinary()`.<br>
-	- Add `System.Text.StringBuilder.ToBinary()`.<br>
-	- Add `System.Net.WebException.Retry()`.<br>
+	- Added `System.String.ToBinary()`.<br>
+	- Added `System.Text.StringBuilder.ToBinary()`.<br>
+	- Added `System.Net.WebException.Retry()`.<br>
 	*Expanded C# by adding the ability to use Extension Properties through:*<br>
-	- Add `System.Object.Get()`.<br>
-	- Add `System.Object.Set()`.<br>
+	- Added `System.Object.Get()`.<br>
+	- Added `System.Object.Set()`.<br>
 
 ### **2.0.1 (2021-01-22)**<br>
-	- Add `.Save()`.<br>
-	- Add `.Load()`.<br>
-	- Add `System.Double.ToNumberBytes()`.<br>
-	- Add `System.Double.ToKB()`.<br>
-	- Add `System.Double.ToMB()`.<br>
-	- Add `System.Double.ToGB()`.<br>
-	- Add `System.Double.ToTB()`.<br>
-	- Add `System.Double.ToPB()`.<br>
-	- Add `System.Double.ToEB()`.<br>
-	- Add `System.Double.ToZB()`.<br>
-	- Add `System.Double.ToYB()`.<br>
-	- Add `System.Double.ToBB()`.<br>
-	- Add `System.Double.ToGpB()`.<br>
-	- Add `System.Double.ToSB()`.<br>
-	- Add `System.Double.ToPaB()`.<br>
-	- Add `System.Double.ToAB()`.<br>
-	- Add `System.Double.ToPlB()`.<br>
-	- Add `System.Double.ToBrB()`.<br>
-	- Add `System.Double.ToSoB()`.<br>
-	- Add `System.Double.ToQB()`.<br>
-	- Add `System.Double.ToKaB()`.<br>
-	- Add `System.Double.ToRB()`.<br>
-	- Add `System.Double.ToDB()`.<br>
-	- Add `System.Double.ToHB()`.<br>
-	- Add `System.Double.ToMrB()`.<br>
-	- Add `System.Double.ToDdB()`.<br>
-	- Add `System.Double.ToRtB()`.<br>
-	- Add `System.Double.ToShB()`.<br>
-	- Add `System.Double.ToCB()`.<br>
-	- Add `System.Double.ToKkB()`.<br>
-	- Add `System.String.HasLower()`.<br>
-	- Add `System.Text.StringBuilder.HasLower()`.<br>
-	- Add `System.String.HasNumeric()`.<br>
-	- Add `System.Text.StringBuilder.HasNumeric()`.<br>
-	- Add `System.String.HasSymbol()`.<br>
-	- Add `System.Text.StringBuilder.HasSymbol()`.<br>
-	- Add `System.String.HasUpper()`.<br>
-	- Add `System.Text.StringBuilder.HasUpper()`.<br>
-	- Add `System.String.IsEmail()`.<br>
-	- Add `System.Text.StringBuilder.IsEmail()`.<br>
-	- Add `System.String.IsLower()`.<br>
-	- Add `System.Text.StringBuilder.IsLower()`.<br>
-	- Add `System.String.IsStrong()`.<br>
-	- Add `System.Text.StringBuilder.IsStrong()`.<br>
-	- Add `System.String.IsUpper()`.<br>
-	- Add `System.Text.StringBuilder.IsUpper()`.<br>
-	- Add `System.Char.IsVowel()`.<br>
-	- Add `System.String.IsVowel()`.<br>
-	- Add `System.Text.StringBuilder.IsVowel()`.<br>
-	- Add `System.String.IsZipCode()`.<br>
-	- Add `System.Text.StringBuilder.IsZipCode()`.<br>
-	- Add `System.String.MorseCodeBeep()`.<br>
-	- Add `System.Text.StringBuilder.MorseCodeBeep()`.<br>
-	- Add `System.String.RemoveExtraSpace()`.<br>
-	- Add `System.Text.StringBuilder.RemoveExtraSpace()`.<br>
-	- Add `System.String.ToEnum<T>()`.<br>
-	- Add `System.Text.StringBuilder.ToEnum<T>()`.<br>
-	- Add `System.String.ToMorseCode()`.<br>
-	- Add `System.Text.StringBuilder.ToMorseCode()`.<br>
-	- Add `System.String.TrimLength()`.<br>
-	- Add `System.Text.StringBuilder.TrimLength()`.<br>
-	- Add ignore white space option to `System.String.IsAlphabetic()`.<br>
-	- Add ignore white space option to `System.Text.StringBuilder.IsAlphabetic()`.<br>
-	- Add ignore white space option to `System.String.IsAlphaNumeric()`.<br>
-	- Add ignore white space option to `System.Text.StringBuilder.IsAlphaNumeric()`.<br>
-	- Add ignore white space option to `System.String.IsNumeric()`.<br>
-	- Add ignore white space option to `System.Text.StringBuilder.IsNumeric()`.<br>
+	- Added `.Save()`.<br>
+	- Added `.Load()`.<br>
+	- Added `System.Double.ToNumberBytes()`.<br>
+	- Added `System.Double.ToKB()`.<br>
+	- Added `System.Double.ToMB()`.<br>
+	- Added `System.Double.ToGB()`.<br>
+	- Added `System.Double.ToTB()`.<br>
+	- Added `System.Double.ToPB()`.<br>
+	- Added `System.Double.ToEB()`.<br>
+	- Added `System.Double.ToZB()`.<br>
+	- Added `System.Double.ToYB()`.<br>
+	- Added `System.Double.ToBB()`.<br>
+	- Added `System.Double.ToGpB()`.<br>
+	- Added `System.Double.ToSB()`.<br>
+	- Added `System.Double.ToPaB()`.<br>
+	- Added `System.Double.ToAB()`.<br>
+	- Added `System.Double.ToPlB()`.<br>
+	- Added `System.Double.ToBrB()`.<br>
+	- Added `System.Double.ToSoB()`.<br>
+	- Added `System.Double.ToQB()`.<br>
+	- Added `System.Double.ToKaB()`.<br>
+	- Added `System.Double.ToRB()`.<br>
+	- Added `System.Double.ToDB()`.<br>
+	- Added `System.Double.ToHB()`.<br>
+	- Added `System.Double.ToMrB()`.<br>
+	- Added `System.Double.ToDdB()`.<br>
+	- Added `System.Double.ToRtB()`.<br>
+	- Added `System.Double.ToShB()`.<br>
+	- Added `System.Double.ToCB()`.<br>
+	- Added `System.Double.ToKkB()`.<br>
+	- Added `System.String.HasLower()`.<br>
+	- Added `System.Text.StringBuilder.HasLower()`.<br>
+	- Added `System.String.HasNumeric()`.<br>
+	- Added `System.Text.StringBuilder.HasNumeric()`.<br>
+	- Added `System.String.HasSymbol()`.<br>
+	- Added `System.Text.StringBuilder.HasSymbol()`.<br>
+	- Added `System.String.HasUpper()`.<br>
+	- Added `System.Text.StringBuilder.HasUpper()`.<br>
+	- Added `System.String.IsEmail()`.<br>
+	- Added `System.Text.StringBuilder.IsEmail()`.<br>
+	- Added `System.String.IsLower()`.<br>
+	- Added `System.Text.StringBuilder.IsLower()`.<br>
+	- Added `System.String.IsStrong()`.<br>
+	- Added `System.Text.StringBuilder.IsStrong()`.<br>
+	- Added `System.String.IsUpper()`.<br>
+	- Added `System.Text.StringBuilder.IsUpper()`.<br>
+	- Added `System.Char.IsVowel()`.<br>
+	- Added `System.String.IsVowel()`.<br>
+	- Added `System.Text.StringBuilder.IsVowel()`.<br>
+	- Added `System.String.IsZipCode()`.<br>
+	- Added `System.Text.StringBuilder.IsZipCode()`.<br>
+	- Added `System.String.MorseCodeBeep()`.<br>
+	- Added `System.Text.StringBuilder.MorseCodeBeep()`.<br>
+	- Added `System.String.RemoveExtraSpace()`.<br>
+	- Added `System.Text.StringBuilder.RemoveExtraSpace()`.<br>
+	- Added `System.String.ToEnum<T>()`.<br>
+	- Added `System.Text.StringBuilder.ToEnum<T>()`.<br>
+	- Added `System.String.ToMorseCode()`.<br>
+	- Added `System.Text.StringBuilder.ToMorseCode()`.<br>
+	- Added `System.String.TrimLength()`.<br>
+	- Added `System.Text.StringBuilder.TrimLength()`.<br>
+	- Added ignore white space option to `System.String.IsAlphabetic()`.<br>
+	- Added ignore white space option to `System.Text.StringBuilder.IsAlphabetic()`.<br>
+	- Added ignore white space option to `System.String.IsAlphaNumeric()`.<br>
+	- Added ignore white space option to `System.Text.StringBuilder.IsAlphaNumeric()`.<br>
+	- Added ignore white space option to `System.String.IsNumeric()`.<br>
+	- Added ignore white space option to `System.Text.StringBuilder.IsNumeric()`.<br>
 
 ### **2.1.480 (2021-02-02)**<br>
-	- Add `System.Array<byte>.CopyTo(this, length, start)`.<br>
-	- Add `System.Array<byte>.Print()`.<br>
-	- Add `System.Collections.Generic.Dictionary.ToQueryString()`.<br>
-	- Add `enum Constants.TimeZone`.<br>
-	- Add `System.DateTime.ToTimeZone()`.<br>
-	- Add `Dictionary<Constants.TimeZone, string> Constants.TimeZones`.<br>
-	- Add `System.TimeZoneInfo.GetTimeZoneString()`.<br>
+	- Added `System.Array<byte>.CopyTo(this, length, start)`.<br>
+	- Added `System.Array<byte>.Print()`.<br>
+	- Added `System.Collections.Generic.Dictionary.ToQueryString()`.<br>
+	- Added `enum Constants.TimeZone`.<br>
+	- Added `System.DateTime.ToTimeZone()`.<br>
+	- Added `Dictionary<Constants.TimeZone, string> Constants.TimeZones`.<br>
+	- Added `System.TimeZoneInfo.GetTimeZoneString()`.<br>
 
 ### **2.2.480 (2021-02-05)**<br>
-	- Add `enum Constants.CompoundFrequency`.<br>
-	- Add `CompoundInterest()`.<br>
-	- Add `printf()`.<br>
-	- Add `ValidateNoNulls()`.<br>
+	- Added `enum Constants.CompoundFrequency`.<br>
+	- Added `CompoundInterest()`.<br>
+	- Added `printf()`.<br>
+	- Added `ValidateNoNulls()`.<br>
 	- Added .ValidateNoNulls() validation to all methods for error handling.<br>
 	- Fixed a logic bug in .IsStrong().<br>
 	- Refactored all classed by adding "Extensions" to the class name<br>
@@ -122,93 +122,93 @@
 
 ### **2.3.500 (2021-02-12)**<br>
 	- Made NuGet package backward compatible from .NET 3.5 to .NET 5.0<br>
-	- Add .pdb to NuGet package to allow interactive debugging by other developers.<br>
-	- Add .xml documentation to NuGet package.<br>
+	- Added .pdb to NuGet package to allow interactive debugging by other developers.<br>
+	- Added .xml documentation to NuGet package.<br>
 	- Cleaned up compiler messages.<br>
 	- Fixed the lion logo icon reference for the NuGet package.<br>
-	- Add `System.String.DoubleQuote()`.<br>
-	- Add `System.Text.StringBuilder.DoubleQuote()`.<br>
-	- Add `System.String.HtmlDecode()`.<br>
-	- Add `System.Text.StringBuilder.HtmlDecode()`.<br>
-	- Add `System.String.HtmlEncode()`.<br>
-	- Add `System.Text.StringBuilder.HtmlEncode()`.<br>
-	- Add `enum Constants.QuoteType`.<br>
-	- Add `System.String.Quote()`.<br>
-	- Add `System.Text.StringBuilder.Quote()`.<br>
-	- Add `System.String.SingleQuote()`.<br>
-	- Add `System.Text.StringBuilder.SingleQuote()`.<br>
-	- Add `enum Constants.SubstringType`.<br>
-	- Add `System.String.Substring()`.<br>
-	- Add `System.Text.StringBuilder.Substring()`.<br>
+	- Added `System.String.DoubleQuote()`.<br>
+	- Added `System.Text.StringBuilder.DoubleQuote()`.<br>
+	- Added `System.String.HtmlDecode()`.<br>
+	- Added `System.Text.StringBuilder.HtmlDecode()`.<br>
+	- Added `System.String.HtmlEncode()`.<br>
+	- Added `System.Text.StringBuilder.HtmlEncode()`.<br>
+	- Added `enum Constants.QuoteType`.<br>
+	- Added `System.String.Quote()`.<br>
+	- Added `System.Text.StringBuilder.Quote()`.<br>
+	- Added `System.String.SingleQuote()`.<br>
+	- Added `System.Text.StringBuilder.SingleQuote()`.<br>
+	- Added `enum Constants.SubstringType`.<br>
+	- Added `System.String.Substring()`.<br>
+	- Added `System.Text.StringBuilder.Substring()`.<br>
 
 ### **3.0.500 (2021-02-19)**<br>
-	- Add Prime Number calculation functionality!<br>
-	- Add `Extensions.PrimeNumbers` class<br>
-	- Add `Extensions.Universal.GetNthPrime()`.<br>
-	- Add `Extensions.Universal.GetNthPrimeAsync()`.<br>
-	- Add `System.long.IsEven()`.<br>
-	- Add `System.long.IsOdd()`.<br>
-	- Add `System.long.IsPrime()`.<br>
-	- Add `System.Double.IsEven()`.<br>
-	- Add `System.Double.IsOdd()`.<br>
-	- Add `System.Double.IsPrime()`.<br>
-	- Add `System.Int16.IsEven()`.<br>
-	- Add `System.Int16.IsOdd()`.<br>
-	- Add `System.Int16.IsPrime()`.<br>
-	- Add `System.Int32.IsEven()`.<br>
-	- Add `System.Int32.IsOdd()`.<br>
-	- Add `System.Int32.IsPrime()`.<br>
-	- Add `System.Int64.IsEven()`.<br>
-	- Add `System.Int64.IsOdd()`.<br>
-	- Add `System.Int64.IsPrime()`.<br>
-	- Add `System.short.IsEven()`.<br>
-	- Add `System.short.IsOdd()`.<br>
-	- Add `System.short.IsPrime()`.<br>
-	- Add `System.UInt16.IsEven()`.<br>
-	- Add `System.UInt16.IsOdd()`.<br>
-	- Add `System.UInt16.IsPrime()`.<br>
-	- Add `System.UInt32.IsEven()`.<br>
-	- Add `System.UInt32.IsOdd()`.<br>
-	- Add `System.UInt32.IsPrime()`.<br>
-	- Add `System.UInt64.IsEven()`.<br>
-	- Add `System.UInt64.IsOdd()`.<br>
-	- Add `System.UInt64.IsPrime()`.<br>
-	- Add `System.ULong.IsEven()`.<br>
-	- Add `System.ULong.IsOdd()`.<br>
-	- Add `System.ULong.IsPrime()`.<br>
-	- Add `enum Constants.TimeSpanSumType`.<br>
-	- Add `System.Collections.Generic.List<TimeSpan>.Sum()`.<br>
+	- Added Prime Number calculation functionality!<br>
+	- Added `Extensions.PrimeNumbers` class<br>
+	- Added `Extensions.Universal.GetNthPrime()`.<br>
+	- Added `Extensions.Universal.GetNthPrimeAsync()`.<br>
+	- Added `System.long.IsEven()`.<br>
+	- Added `System.long.IsOdd()`.<br>
+	- Added `System.long.IsPrime()`.<br>
+	- Added `System.Double.IsEven()`.<br>
+	- Added `System.Double.IsOdd()`.<br>
+	- Added `System.Double.IsPrime()`.<br>
+	- Added `System.Int16.IsEven()`.<br>
+	- Added `System.Int16.IsOdd()`.<br>
+	- Added `System.Int16.IsPrime()`.<br>
+	- Added `System.Int32.IsEven()`.<br>
+	- Added `System.Int32.IsOdd()`.<br>
+	- Added `System.Int32.IsPrime()`.<br>
+	- Added `System.Int64.IsEven()`.<br>
+	- Added `System.Int64.IsOdd()`.<br>
+	- Added `System.Int64.IsPrime()`.<br>
+	- Added `System.short.IsEven()`.<br>
+	- Added `System.short.IsOdd()`.<br>
+	- Added `System.short.IsPrime()`.<br>
+	- Added `System.UInt16.IsEven()`.<br>
+	- Added `System.UInt16.IsOdd()`.<br>
+	- Added `System.UInt16.IsPrime()`.<br>
+	- Added `System.UInt32.IsEven()`.<br>
+	- Added `System.UInt32.IsOdd()`.<br>
+	- Added `System.UInt32.IsPrime()`.<br>
+	- Added `System.UInt64.IsEven()`.<br>
+	- Added `System.UInt64.IsOdd()`.<br>
+	- Added `System.UInt64.IsPrime()`.<br>
+	- Added `System.ULong.IsEven()`.<br>
+	- Added `System.ULong.IsOdd()`.<br>
+	- Added `System.ULong.IsPrime()`.<br>
+	- Added `enum Constants.TimeSpanSumType`.<br>
+	- Added `System.Collections.Generic.List<TimeSpan>.Sum()`.<br>
 
 ### **3.1.500 (2021-02-26)**<br>
-	- Incorporate `.Save()` and `.Load()` into `.GetNthPrime()` and<br>
+	- Incorporated `.Save()` and `.Load()` into `.GetNthPrime()` and<br>
 	    `.GetNthPrimeAsync()` in order to eliminate duplicate calculation<br>
 		of prime numbers.  Use `Universal.PrimeStatePath` to override the<br>
 		path where the discovered list of prime numbers is saved.<br>
-	- Add `Universal.PrimeStatePath`.<br>
-	- Add `System.Timer` class<br>
-	- Add `System.Timer.Start()`.<br>
-	- Add `System.Timer.Stop()`.<br>
-	- Add `System.Timer.Pause()`.<br>
-	- Add `System.Timer.Resume()`.<br>
-	- Add `System.Timer.Reset()`.<br>
-	- Add `Universal.Smallest()`.<br>
-	- Add `Universal.Bigest()`.<br>
-	- Add `Constants.MersenneComparisonType`.<br>
+	- Added `Universal.PrimeStatePath`.<br>
+	- Added `System.Timer` class<br>
+	- Added `System.Timer.Start()`.<br>
+	- Added `System.Timer.Stop()`.<br>
+	- Added `System.Timer.Pause()`.<br>
+	- Added `System.Timer.Resume()`.<br>
+	- Added `System.Timer.Reset()`.<br>
+	- Added `Universal.Smallest()`.<br>
+	- Added `Universal.Bigest()`.<br>
+	- Added `Constants.MersenneComparisonType`.<br>
 
 ### **3.2.500 (2021-03-05)**<br>
-	- Add `Constants.HexChars`.<br>
-	- Add `Extensions.NewCustomGuid()`.<br>
-	- Add `System.String.ContainsAny()`.<br>
-	- Add `System.String.ContainsOnly()`.<br>
-	- Add `System.String.ExceedsLength()`.<br>
-	- Add `System.String.Match()`.<br>
-	- Add `System.String.Singularize()`.<br>
-	- Add `Universal.GetExecutingAssembly()`.<br>
-	- Add `Universal.GetExecutingAssemblyName()`.<br>
-	- Add `Universal.GetExecutingAssemblyFolder()`.<br>
-	- Add `Universal.GetExecutingAssemblyFullPath()`.<br>
-	- Add `Universal.GetFQDN()`.<br>
-	- Add `Universal.TimeStamp()`.<br>
+	- Added `Constants.HexChars`.<br>
+	- Added `Extensions.NewCustomGuid()`.<br>
+	- Added `System.String.ContainsAny()`.<br>
+	- Added `System.String.ContainsOnly()`.<br>
+	- Added `System.String.ExceedsLength()`.<br>
+	- Added `System.String.Match()`.<br>
+	- Added `System.String.Singularize()`.<br>
+	- Added `Universal.GetExecutingAssembly()`.<br>
+	- Added `Universal.GetExecutingAssemblyName()`.<br>
+	- Added `Universal.GetExecutingAssemblyFolder()`.<br>
+	- Added `Universal.GetExecutingAssemblyFullPath()`.<br>
+	- Added `Universal.GetFQDN()`.<br>
+	- Added `Universal.TimeStamp()`.<br>
 
 ### **3.3.500 (2021-03-19)**<br>
 	- Fixed https://github.com/cjvandyk/Extensions/issues/7 .<br>
@@ -219,43 +219,43 @@
 	- Improved `Universal.ValidateNoNulls()` by<br>
 		specifying the parameter number in the exception<br>
 		changing the return type to bool.<br>
-	- Improved `Extensions.PrimeNumber` class to use UInt64 instead of long.
+	- Improved `Extensions.PrimeNumber` class to use UInt64 instead of long.<br>
 	- Improved `System.String.Substring()` to handle -1 as length indicating max string length.<br>
-	- Add `Constants.ErrorType`.<br>
-	- Add `Universal.Validate()`.<br>
-	- Add error handling to `byte[].CopyTo()`.<br>
-	- Add error handling to `Universal.IsEven()`, `Universal.IsOdd()` and `Universal.IsPrime()`.<br>
-	- Add error handling to `System.Double.CompoundInterest()`.<br>
-	- Add `IndexValue` to `Constants.SubStringType`.<br>
-	- Add negative and out of bound error handling to `System.String.Substring()`.<br>
-	- Add `System.String.TrimStart()`.<br>
-	- Add `System.String.GetTenantUrl()`.<br>
-	- Add `System.String.GetSiteUrl()`.<br>
-	- Add `System.String.BeginsWith()`.<br>
-	- Add `System.Logging` class.<br>
-	- Add `System.Logging.Inf()`.<br>
-	- Add `System.Logging.Wrn()`.<br>
-	- Add `System.Logging.Err()`.<br>
-	- Add `System.Logging.ConstructMessage()`.<br>
-	- Add `System.Logging.ConsoleMessage()`.<br>
-	- Add `System.Logging.EventLogMessage()`.<br>
-	- Add `System.Logging.FileMessage()`.<br>
+	- Added `Constants.ErrorType`.<br>
+	- Added `Universal.Validate()`.<br>
+	- Added error handling to `byte[].CopyTo()`.<br>
+	- Added error handling to `Universal.IsEven()`, `Universal.IsOdd()` and `Universal.IsPrime()`.<br>
+	- Added error handling to `System.Double.CompoundInterest()`.<br>
+	- Added `IndexValue` to `Constants.SubStringType`.<br>
+	- Added negative and out of bound error handling to `System.String.Substring()`.<br>
+	- Added `System.String.TrimStart()`.<br>
+	- Added `System.String.GetTenantUrl()`.<br>
+	- Added `System.String.GetSiteUrl()`.<br>
+	- Added `System.String.BeginsWith()`.<br>
+	- Added `System.Logging` class.<br>
+	- Added `System.Logging.Inf()`.<br>
+	- Added `System.Logging.Wrn()`.<br>
+	- Added `System.Logging.Err()`.<br>
+	- Added `System.Logging.ConstructMessage()`.<br>
+	- Added `System.Logging.ConsoleMessage()`.<br>
+	- Added `System.Logging.EventLogMessage()`.<br>
+	- Added `System.Logging.FileMessage()`.<br>
 	- Fixed `System.String.SubString()` comments to clarify .FromTail value.<br>
 
 ### **3.4.600 (2022-07-15)**<br>
-	- Add **.NET 6.0** support.<br>
-	- Add `System.String.Left()`.<br>
-	- Add `System.Text.StringBuilder.IndexOf()`.<br>
+	- Added **.NET 6.0** support.<br>
+	- Added `System.String.Left()`.<br>
+	- Added `System.Text.StringBuilder.IndexOf()`.<br>
 
 ### **3.5.700 (2023-01-14)**<br>
-	- Add **.NET 7.0** support.<br>
+	- Added **.NET 7.0** support.<br>
 
 ### **4.0.700 (2023-02-01)**<br>
-	- Add `System.Identity.App` class.<br>
-	- Add `System.Identity.Auth` class.<br>
-	- Add `System.Identity.AuthMan` class.<br>
-	- Add `System.Identity.Cert` class.<br>
-	- Add `System.Identity.Scopes` class.<br>
+	- Added `System.Identity.App` class.<br>
+	- Added `System.Identity.Auth` class.<br>
+	- Added `System.Identity.AuthMan` class.<br>
+	- Added `System.Identity.Cert` class.<br>
+	- Added `System.Identity.Scopes` class.<br>
 
 ### **4.1.700 (2023-02-01)**<br>
 	- Fixed `System.Identity.Authman.GetTenantString()` method to return blank instead of null when uninitialized.<br>
@@ -266,66 +266,79 @@
 	- Moved the `System.Identity.AuthMan` class to `Extensions.Identity.AuthMan`.<br>
 	- Moved the `System.Identity.Cert` class to `Extensions.Identity.Cert`.<br>
 	- Moved the `System.Identity.Scopes` class to `Extensions.Identity.Scopes`.<br>
-	- Add `Extensions.Graph.CreateListItem()`.<br>
-	- Add `Extensions.Graph.GetListId()`.<br>
-	- Add `Extensions.Graph.GetListItem()`.<br>
-	- Add `Extensions.Graph.GetListItems()`.<br>
-	- Add `Extensions.Graph.GetSiteId()`.<br>
-	- Add `Extensions.Graph.GetSites()`.<br>
-	- Add `Extensions.Graph.UpdateListItemFields()`.<br>
+	- Added `Extensions.Graph.CreateListItem()`.<br>
+	- Added `Extensions.Graph.GetListId()`.<br>
+	- Added `Extensions.Graph.GetListItem()`.<br>
+	- Added `Extensions.Graph.GetListItems()`.<br>
+	- Added `Extensions.Graph.GetSiteId()`.<br>
+	- Added `Extensions.Graph.GetSites()`.<br>
+	- Added `Extensions.Graph.UpdateListItemFields()`.<br>
 
 ### **4.3.700 (2023-02-03)**<br>
-	- Add `Extensions.Graph.GetGroup()`.<br>
-	- Add `Extensions.Graph.DuplicateGroup()`.<br>
-	- Add `Extensions.Graph.GetMembers()`.<br>
-	- Add `Extensions.Graph.CreateMembers()`.<br>
+	- Added `Extensions.Graph.GetGroup()`.<br>
+	- Added `Extensions.Graph.DuplicateGroup()`.<br>
+	- Added `Extensions.Graph.GetMembers()`.<br>
+	- Added `Extensions.Graph.CreateMembers()`.<br>
 
 ### **4.4.700 (2023-02-07)**<br>
-	- Add `Extensions.Graph.GetGroups()`.<br>
-	- Add command line feedback to `Extensions.Graph.GetListItems()`.<br>
-	- Add command line feedback to `Extensions.Graph.GetMembers()`.<br>
-	- Add command line feedback to `Extensions.Graph.GetSites()`.<br>
-	- Add Microsoft.Graph.Core.dll, Microsoft.Graph.dll, Microsoft.Itentity.Client.dll and Microsoft.ItentityModel.Abstractions.dll dependency binaries.
+	- Added `Extensions.Graph.GetGroups()`.<br>
+	- Added command line feedback to `Extensions.Graph.GetListItems()`.<br>
+	- Added command line feedback to `Extensions.Graph.GetMembers()`.<br>
+	- Added command line feedback to `Extensions.Graph.GetSites()`.<br>
+	- Added Microsoft.Graph.Core.dll, Microsoft.Graph.dll, Microsoft.Itentity.Client.dll and Microsoft.ItentityModel.Abstractions.dll dependency binaries.<br>
 	- Improved `Extensions.Graph.GetListItems()` to use `NextPageRequest` aggregation instead of an explicit `PageIterator`.<br>
 	- Improved `Extensions.Graph.GetSites()` to use `NextPageRequest` aggregation instead of an explicit `PageIterator`.<br>
 	- Fixed `Extensions.Identity.Cert.GetCertByThumbPrint()` to support self signed certificates.<br>
 	- Fixed `Extensions.Identity.App.GetApp()` to pass a Uri instead of string for Authority.<br>
 
 ### **4.5.700 (2023-02-22)**<br>
-	- Add default tenant configuration via JSON.
-	- Add `EnvironmentVariable` based auth attempt to the ctor for cases where no JSON is provided.
-	- Add `Extensions.Graph.GetGroups()`.<br>
-	- Add `Extensions.Graph.GetGroups(string filter)` overload.<br>
-	- Add `Extensions.Identity.Auth()` class ctor overload to use a provided X509 certificate instead of a thumbprint.  This is usefull for cases where the cert is resource embedded.
-	- Add `Extensions.Identity.AuthMan.GetAuth()` method overload to support resource embedded certificates.
-	- Add `Extensions.Identity.App.GetApp()` overload to support `IPublicClientApplication`.
-	- Add `Extensions.Identity.Auth` ctor overload to support `IPublicClientApplication`.
-	- Add `Extensions.Identity.AuthMan.GetPublicAuth() method to support `IPublicClientApplication`.
-	- Updated class signatures to `[Serializable]` and `partial`.
+	- Added default tenant configuration via JSON.<br>
+	- Added `EnvironmentVariable` based auth attempt to the ctor for cases where no JSON is provided.<br>
+	- Added `Extensions.Graph.GetGroups()`.<br>
+	- Added `Extensions.Graph.GetGroups(string filter)` overload.<br>
+	- Added `Extensions.Identity.Auth()` class ctor overload to use a provided X509 certificate instead of a thumbprint.  This is usefull for cases where the cert is resource embedded.<br>
+	- Added `Extensions.Identity.AuthMan.GetAuth()` method overload to support resource embedded certificates.<br>
+	- Added `Extensions.Identity.App.GetApp()` overload to support `IPublicClientApplication`.<br>
+	- Added `Extensions.Identity.Auth` ctor overload to support `IPublicClientApplication`.<br>
+	- Added `Extensions.Identity.AuthMan.GetPublicAuth() method to support `IPublicClientApplication`.<br>
+	- Updated class signatures to `[Serializable]` and `partial`.<br>
 
 ### **4.6.700 (2023-02-22)**<br>
-	- Add `Extensions.Identity.Auth.ClientApplicationType` to differentiate between `IConfidentialClientApplication` and `IPublicClientApplication` types used in `Extensions.Identity.Auth` class.
-	- Fixed `Extensions.Identity.AuthMan` ctor bug.
-	- Merge Public and Confidential ClientApplication.
+	- Added `Extensions.Identity.Auth.ClientApplicationType` to differentiate between `IConfidentialClientApplication` and `IPublicClientApplication` types used in `Extensions.Identity.Auth` class.<br>
+	- Fixed `Extensions.Identity.AuthMan` ctor bug.<br>
+	- Merged Public and Confidential ClientApplication.<br>
 
 ### **4.7.700 (2023-02-24)**<br>
-	- Add `System.Logit` class for logging functionality.
-	- Add `~ExtensionsClass` project for new Class extension in Visual Studio.
-	- Add `~CsVisualStudioExtensions` project to house Visual Studio extensions.
+	- Added `System.Logit` class for logging functionality.<br>
+	- Added `~ExtensionsClass` project for new Class extension in Visual Studio.<br>
+	- Added `~CsVisualStudioExtensions` project to house Visual Studio extensions.<br>
 
 ### **5.0.800 (2023-12-27)**<br>
-	- Add **.NET 8.0** support.<br>
-	- Add **Graph 5+** support.<br>
-	- Add `Extensions.Config` class for encapsulating tenant configuration and initialization.
-	- Add `Extensions.Tenant.OpenId` class for OpenID interoperation.
-	- Add `Extensions.Core.GetTenantId()` to support Azure environments.
-	- Add `Extensions.Core.GetAuthorityDomain()` to handle duality in Microsoft authentication endpoints between .com for commercial and .us for GCCHigh.
-	- Fixed `Extensions.Core.NoNull()` to return "" when dictionary key is not present over exception catching.
-	- Updated `Extensions.Core.GetEnv()` to allow interactive debug JSON settings to suplement environment settings.
+	- Added **.NET 8.0** support.<br>
+	- Added **Graph 5+** support.<br>
+	- Added `Extensions.Config` class for encapsulating tenant configuration and initialization.<br>
+	- Added `Extensions.Tenant.OpenId` class for OpenID interoperation.<br>
+	- Added `Extensions.Core.GetTenantId()` to support Azure environments.<br>
+	- Added `Extensions.Core.GetAuthorityDomain()` to handle duality in Microsoft authentication endpoints between .com for commercial and .us for GCCHigh.<br>
+	- Fixed `Extensions.Core.NoNull()` to return "" when dictionary key is not present over exception catching.<br>
+	- Updated `Extensions.Core.GetEnv()` to allow interactive debug JSON settings to suplement environment settings.<br>
 
 ### **5.1.800 (2024-01-09)**<br>
 	- Fixed Issue #99 where Logit logging was being skipped when the isDebugValidationMethos is null.<br>
-	- Add StringBuilder support for .Left() method.
-	- Add StringBuilder support for .Right() method.
-	- Enhanced .Left() to return "" instead of null allowing for inline usage in complex concatenations.
-	- Enhanced .Right() to return "" instead of null allowing for inline usage in complex concatenations.
+	- Added StringBuilder support for .Left() method.<br>
+	- Added StringBuilder support for .Right() method.<br>
+	- Enhanced .Left() to return "" instead of null allowing for inline usage in complex concatenations.<br>
+	- Enhanced .Right() to return "" instead of null allowing for inline usage in complex concatenations.<br>
+
+### **5.2.800 (2024-01-xx)**<br>
+	- Security Patch for CVE-2024-21319.<br>
+	- Added Constants.UserInfoType.<br>
+	- Added Graph.GetMembers().<br>
+	- Added Graph.GetOwners().<br>
+	- Added String.EncodeAsXml().<br>
+	- Added String.IsDateTime().<br>
+	- Added String.IsHex().<br>
+	- Added String.ToEnglishAlphaChars().<br>
+	- Added Graph.GetGroupUsers().<br>
+	- Expanded Graph.GetMembers() to return more than just "id" by adding "mail" and "userPrincipalName".<br>
+	- Expanded Graph.GetOwners() to return more than just "id" by adding "mail" and "userPrincipalName".<br>
