@@ -1,24 +1,48 @@
-﻿# Extensions.dll contains extension methods that enhance existing C# classes thus making life easier for developers.
-<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-[![icon](https://github.com/cjvandyk/Quix/blob/master/Extensions/Images/Extensions-64x64.png?raw=true)](https://github.com/cjvandyk/quix/Extensions)<br>
-![GIF](https://github.com/cjvandyk/Quix/blob/master/Extensions/Images/Extensions.gif)<br><br>
-![GIF](https://github.com/cjvandyk/Extensions/blob/main/Images/Easy%20Date%20convertion%20GIF.gif)<br>
-![License](https://img.shields.io/github/license/cjvandyk/quix) [![GitHub Release](https://img.shields.io/github/release/cjvandyk/quix.svg)](https://GitHub.com/cjvandyk/quix/releases/) ![NuGet Badge](https://buildstats.info/nuget/Extensions.CS) [![Repo Size](https://img.shields.io/github/repo-size/cjvandyk/quix)](https://github.com/cjvandyk/quix/Extensions) [![Closed Issues](https://img.shields.io/github/issues-closed/cjvandyk/quix.svg)](https://GitHub.com/cjvandyk/quix/issues?q=is%3Aissue+is%3Aclosed) [![Open Issues](https://img.shields.io/github/issues/cjvandyk/quix.svg)](https://github.com/cjvandyk/quix/issues) [![Contributors](https://img.shields.io/github/contributors/cjvandyk/quix.svg)](https://GitHub.com/cjvandyk/quix/graphs/contributors/) ![Languages](https://img.shields.io/github/languages/count/cjvandyk/quix.svg) [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ExtensionsCS/Extensions?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Discord](https://github.com/cjvandyk/Quix/blob/master/Extensions/Images/Discord.png?raw=true)](https://discord.com/channels/799027565465305088/799027565993394219) [![Twitter](https://img.shields.io/twitter/follow/cjvandyk?style=social)](https://twitter.com/intent/follow?screen_name=cjvandyk)
+﻿# Extensions.cs contains extension methods that enhance existing C# classes thus making life easier for developers.
+[![icon](https://raw.githubusercontent.com/cjvandyk/Extensions/master/Images/Extensions-64x64.png)](https://github.com/cjvandyk/Extensions)
+![GIF](https://raw.githubusercontent.com/cjvandyk/Extensions/master/Images/Extensions.gif)
+![GIF](https://raw.githubusercontent.com/cjvandyk/Extensions/master/Images/Easy%20Date%20convertion%20GIF.gif)
+[![License](https://img.shields.io/github/license/cjvandyk/Extensions)](https://github.com/cjvandyk/Extensions/blob/main/LICENSE) [![Maintained](https://img.shields.io/maintenance/yes/2024)](https://github.com/cjvandyk/extensions/releases) [![GitHub Release](https://img.shields.io/github/release/cjvandyk/extensions.svg)](https://GitHub.com/cjvandyk/extensions/releases/) [![NuGet Badge](https://buildstats.info/nuget/Extensions.CS)](https://www.nuget.org/packages/Extensions.cs) [![Repo Size](https://img.shields.io/github/repo-size/cjvandyk/extensions)](https://github.com/cjvandyk/Extensions) [![Closed Issues](https://img.shields.io/github/issues-closed/cjvandyk/extensions.svg)](https://GitHub.com/cjvandyk/extensions/issues?q=is%3Aissue+is%3Aclosed) [![Open Issues](https://img.shields.io/github/issues/cjvandyk/extensions.svg)](https://github.com/cjvandyk/extensions/issues) [![Contributors](https://img.shields.io/github/contributors/cjvandyk/extensions.svg)](https://GitHub.com/cjvandyk/extensions/graphs/contributors/) [![Languages](https://img.shields.io/github/languages/count/cjvandyk/extensions.svg)](https://github.com/cjvandyk/Extensions/search?l=c%23) [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ExtensionsCS/Extensions?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Discord](https://raw.githubusercontent.com/cjvandyk/Extensions/master/Images/Discord.png?raw=true)](https://discord.com/channels/799027565465305088/799027565993394219) [![Twitter](https://img.shields.io/twitter/follow/cjvandyk?style=social)](https://twitter.com/intent/follow?screen_name=cjvandyk)
 
 The following classes have been extended:
 
     - System.Array
     - System.Collections.Generic.Dictionary
+    - System.Collections.Generic.List
     - System.DateTime
     - System.Diagnostics.Process
     - System.Double
+    - System.Int16
+    - System.Int32
+    - System.Int64
+    - System.Logging (added)
+    - System.Long
     - System.Net.WebException
     - System.Object
     - System.String
     - System.Text.StringBuilder
+    - System.Timer
     - System.TimeZoneInfo
+    - System.UInt16
+    - System.UInt32
+    - System.UInt64
+    - System.ULong
 
 with these methods:
+
+- ### **BeginsWith()**
+    > _Reduces checking if a given string starts with another given string<br>
+        from this:<br>
+            `(str.ToLower().Substring(0, target.Length) == target.ToLower())`<br>
+        to this:<br>
+            `str.BeginsWith(target, true)`_
+
+- ### **Bigest()**
+    > _Return the bigest of two given values.<br>
+        For example:<br>
+            `Bigest(23, 31)`<br>
+        will return<br>
+            `31`_
 
 - ### **CompoundInterest()**
     > _Calculate compounded interest end value given an amount, percent<br>
@@ -26,9 +50,25 @@ with these methods:
         For example:<br>
             `double val = 100.00;`<br>
             `val.CompoundInterest(5,`<br>
-                                  `10,`<br>
-                                  `Constants.CompoundFrequency.Yearly);`<br>
-        will return 162.889462677744_
+                                 `10,`<br>
+                                 `Constants.CompoundFrequency.Yearly);`<br>
+        will return 162.889462677744 _
+
+- ### **ContainsAny()**
+    > _Checks if the given string contains any of a list of characters or<br>
+        strings provided.<br>
+        For example:<br>
+            `"abcdef1234567890".ContainsAny(Constants.HexChars)`<br>
+        will return True._
+
+- ### **ContainsOnly()**
+    > _Checks if the given string contains only characters or strings<br>
+        in the list provided.<br>
+        For example:<br>
+            `"abcdef1234567890".ContainsOnly(Constants.HexChars)`<br>
+        will return True while<br>
+            `"abcdefg1234567890".ContainsOnly(Constants.HexChars)`<br>
+        will return False because of the "g"._
 
 - ### **CopyTo()**
     > _Copies a given length of bytes from a byte[] starting at a definable<br>
@@ -42,11 +82,35 @@ with these methods:
             `98  108 111 103 46  99  106 118 97  110`<br>
             `                    99  106 118 97  110 100 121 107 46  99`_
 
+- ### **DoubleQuote()**
+    > _Return the given string encased in double quotes.<br>
+        For example:<br>
+            `printf("https://blog.cjvandyk.com/sites/Rocks");`<br>
+            `printf("https://blog.cjvandyk.com/sites/Rocks".DoubleQuote());`<br>
+        will return<br>
+            `https://blog.cjvandyk.com/sites/Rocks`<br>
+            `"https://blog.cjvandyk.com/sites/Rocks"`_
+
 - ### **Elevate()**
     > _Restarts the current process with elevated permissions.<br>
         For example:<br>
             `System.Diagnostics.Process.GetCurrentProcess().Elevate(args)`<br>
         will restart the current console app in admin mode._
+
+- ### **Err()**
+    > _Write an Error message to active channels (console, event log, file)<br>
+        using the System.Logging class._
+
+- ### **ExceedsLength()**
+    > _Checks if a referenced offset exceeds the length of the string.<br>
+        Optionally increments the offset as well.<br>
+        For example:<br>
+            `"https://blog.cjvandyk.com Rocks!".ExceedsLength(30)`<br>
+        will return False while<br>
+            `"https://blog.cjvandyk.com Rocks!".ExceedsLength(31, false)`<br>
+        will also return False and<br>
+            `"https://blog.cjvandyk.com Rocks!".ExceedsLength(31)`<br>
+        will return True._
 
 - ### **Get()**
     > _Language extension for properties.  Use to set the value of the<br>
@@ -70,6 +134,55 @@ with these methods:
         you know the type to which the returned value needs to be cast.<br>
         A derived override method for Get() and Set() can be defined<br>
         using specific class objects if finer controls is needed.<br>_
+
+- ### **GetExecutingAssembly()**
+    > _Gets the current Entry or Executing assembly through reflection._
+
+- ### **GetExecutingAssemblyName()**
+    > _Gets the name of the current assembly, optionally escaped._
+
+- ### **GetExecutingAssemblyFolder()**
+    > _Gets the folder location of the current assembly, optionally escaped._
+
+- ### **GetExecutingAssemblyFullPath()**
+    > _Gets the full path and file name of the current assembly, optionally<br>
+        escaped._
+
+- ### **GetFQDN()**
+    > _Get the current computer Fully Qualified Domain Name._
+
+- ### **GetNthPrime()**
+    > _Get the Nth prime number.  It will serialize the list of discovered<br>
+        prime numbers to file in order to eliminate duplicate calculation<br>
+		of prime numbers.  Use `Universal.PrimeStatePath` to override the<br>
+		path where the discovered list of prime numbers is saved.<br>
+        For example:<br>
+            `Extensions.Universal.GetNthPrime(1000)`<br>
+        will return the 1000th prime number - 7919._
+
+- ### **GetNthPrimeAsync()**
+    > _Get the Nth prime number using multi threading and asynchronous<br>
+        processing.  It will serialize the list of discovered<br>
+        prime numbers to file in order to eliminate duplicate calculation<br>
+		of prime numbers.  Use `Universal.PrimeStatePath` to override the<br>
+		path where the discovered list of prime numbers is saved.<br>
+        For example:<br>
+            `Extensions.Universal.GetNthPrime(1000)`<br>
+        will return the 1000th prime number - 7919._
+
+- ### **GetSiteUrl()**
+    > _Given a full SharePoint Online object URL, this method will return<br>
+        the site collection part of the URL.<br>
+        For example:<br>
+            `"https://crayveon.sharepoint.com/sites/TheSite/lists/TheList".GetTenantUrl()`<br>
+        would return `https://crayveon.sharepoint.com/sites/TheSite`_
+
+- ### **GetTenantUrl()**
+    > _Given a full SharePoint Online object URL, this method will return<br>
+        only the tenant part of the URL.<br>
+        For example:<br>
+            `"https://crayveon.sharepoint.com/sites/TheSite/lists/TheList".GetTenantUrl()`<br>
+        would return `https://crayveon.sharepoint.com`_
 
 - ### **GetTimeZoneString()**
     > _Get the registry ID string that can be used with<br>
@@ -129,6 +242,25 @@ with these methods:
             `"AbC".HasUpper()`<br>
         will return True._
 
+- ### **HtmlDecode()**
+    > _Decode the HTML escaped components in a given string returning the<br>
+        given source string without HTML escaped components.<br>
+        For example:<br>
+            `"https://blog.cjvandyk.com/sites/Rocks &lt;&amp;&gt; Rolls!".HtmlDecode()`<br>
+        will return<br>
+            `https://blog.cjvandyk.com/sites/Rocks <&> Rolls!`_
+
+- ### **HtmlEncode()**
+    > _Encode the given string to be HTML safe.<br>
+        For example:<br>
+            `"https://blog.cjvandyk.com/sites/Rocks <&> Rolls!".HtmlEncode()`<br>
+        will return<br>
+            `https://blog.cjvandyk.com/sites/Rocks &lt;&amp;&gt; Rolls!`_
+
+- ### **Inf()**
+    > _Write an Information message to active channels (console, event log, file)<br>
+        using the System.Logging class._
+
 - ### **IsAlphabetic()**
     > _Validates that the given string object contains all alphabetic<br>
         characters (a-z and A-Z) returning True if it does and False if<br>
@@ -172,6 +304,14 @@ with these methods:
             `"noreplay-at-crayveon.com".IsEmail()`<br>
         will return False._
 
+- ### **IsEven()**
+    > _Checks if the given number is even.<br>
+        For example:<br>
+            `234.IsEven()`<br>
+        will return True whereas<br>
+            `339.IsEven()`<br>
+        will return False._
+
 - ### **IsLower()**
     > _Validates that the given string object contains only lower case letters.<br>
         For example:<br>
@@ -191,6 +331,22 @@ with these methods:
         will return True whereas<br>
             `"abc123".IsNumeric()`<br>
         will return False._
+
+- ### **IsOdd()**
+    > _Checks if the given number is odd.<br>
+        For example:<br>
+            `234.IsOdd()`<br>
+        will return False whereas<br>
+            `339.IsOdd()`<br>
+        will return True._
+
+- ### **IsPrime()**
+    > _Checks if the given number is a prime number.<br>
+        For example:<br>
+            `27.IsPrime()`<br>
+        will return False whereas<br>
+            `29.IsPrime()`<br>
+        will return True._
 
 - ### **IsStrong()**
     > _Validates that the given string object contains a strong password string.<br>
@@ -251,6 +407,11 @@ with these methods:
             `"1234".IsZipCode()`<br>
         will return False._
 
+- ### **Left()**
+    > _This method returns text to the left of the index string.  Use negative
+        values for occurrence if the occurrence count should start from the end
+        instead of its default from the beginning of the string._
+
 - ### **Lines()**
     > _This method returns the number of lines/sentences in the given string<br>
         object._
@@ -289,12 +450,33 @@ with these methods:
             odio. Sed pulvinar molestie justo, eu hendrerit nunc blandit eu.<br> 
             Suspendisse et sapien quis ipsum scelerisque rutrum."<br>_
 
+- ### **Match()**
+    > _Checks if the current string matches a given search mask.<br>
+        It ignores duplicate '*' in the mask.  '*' is matched against<br>
+        0 or more characters.  Duplicate '?' is treated as requiring<br>
+        the number of characters.  '?' is matched against 1 or more<br>
+        characters.<br>
+        For example:<br>
+            `"abcdefgh".Match("***a?c*")`<br>
+        will return True while<br>
+            `"abcdefgh".Match("***ac*")`<br>
+        will return False but<br>
+            `"abcdefgh".Match("?a?c*")`<br>
+        will also return False because the first '?' requires a character<br>
+        before 'a'._
+
 - ### **MorseCodeBeep()**
     > _Takes a given System.String representing Morse code and audiblize<br>
         it according to standards.<br>
         https://www.infoplease.com/encyclopedia/science/engineering/electrical/morse-code<br>
         Assumes the input value to be in Morse code format already.<br>
         Use `.ToMorseCode()` to pre-convert text if needed._
+
+- ### **NewCustomGuid()**
+    > _Returns a custom GUID starting with a custom string.<br>
+        For example:<br>
+            `Extensions.NewCustomGuid("012")`<br>
+        will return a new GUID that starts with "012"._
 
 - ### **Print()**
     > _Print the byte[] to console, separated by spaces and space padded<br>
@@ -311,6 +493,22 @@ with these methods:
             `printf("Hello World!", ConsoleColor.Red, ConsoleColor.White);`<br>
         will output the string to console in red text on a white background._
 
+- ### **Quote()**
+    > _Return the given string encased in requested quotes.<br>
+        Default is Constants.QuoteType.Double.<br>
+        For example:<br>
+            `printf("https://blog.cjvandyk.com/sites/Rocks");`<br>
+            `printf("https://blog.cjvandyk.com/sites/Rocks").Quote();`<br>
+            `printf("https://blog.cjvandyk.com/sites/Rocks".Quote(`<br>
+                `Constants.QuoteType.Single));`<br>
+            `printf("https://blog.cjvandyk.com/sites/Rocks".Quote(`<br>
+                `Constants.QuoteType.Double));`<br>
+        will return<br>
+            `https://blog.cjvandyk.com/sites/Rocks`<br>
+            `"https://blog.cjvandyk.com/sites/Rocks"`<br>
+            `'https://blog.cjvandyk.com/sites/Rocks'`<br>
+            `"https://blog.cjvandyk.com/sites/Rocks"`_
+
 - ### **RemoveExtraSpace()**
     > _Trims leading and trailing white space and then removes all extra<br>
         white space in the given string returning a single spaced result.<br>
@@ -326,7 +524,7 @@ with these methods:
 - ### **Retry()**
     > _Checks if a System.Net.WebException contains a "Retry-After" header.<br>
         If it does, it sleeps the thread for that period (+ 60 seconds)<br>
-        before reattempting to HTTP call that caused the exception in the<br>
+        before reattempting the HTTP call that caused the exception in the<br>
         first place.  If no "Retry-After" header exist, the exception is<br>
         simply rethrown.<br>
         For example:<br>
@@ -371,6 +569,119 @@ with these methods:
         you know the type to which the returned value needs to be cast.<br>
         A derived override method for Get() and Set() can be defined<br>
         using specific class objects if finer controls is needed.<br>
+
+- ### **SingleQuote()**
+    > _Return the given string encased in single quotes.<br>
+        For example:<br>
+            `printf("https://blog.cjvandyk.com/sites/Rocks");`<br>
+            `printf("https://blog.cjvandyk.com/sites/Rocks".SingleQuote());`<br>
+        will return<br>
+            `https://blog.cjvandyk.com/sites/Rocks`<br>
+            `'https://blog.cjvandyk.com/sites/Rocks'`_
+
+- ### **Singularize()**
+    > _Parses the given string removing multiples of a given character.<br>
+        For example:<br>
+            `string searchMask = "***??abc*";`<br>
+            `searchMask.Singularize('*')`<br>
+        will return<br>
+            `"*??abc*"`_
+
+- ### **Smallest()**
+    > _Return the smallest of two given values.<br>
+        For example:<br>
+            `Smallest(23, 31)`<br>
+        will return<br>
+            `23`_
+
+- ### **Substring()**
+    > _Extends the `.Substring(startIndex)` and `.Substring(startIndex, length)`<br>
+        methods to the `System.Text.StringBuilder` class.<br>
+        For example:<br>
+            `System.Text.StringBuilder sb = new System.Text.StringBuilder();`<br>
+            `sb.Append("abc1abc2abc3abc4");`<br>
+            `sb.Substring(5);`<br>
+        will return `bc2abc3abc4`<br>
+            `sb.Substring(5, 3);`<br>
+        will return `bc2`<br>
+        Adds the FromHead/FromTail overloaded methods.<br>
+        FromHead returns the "length" of characters from the head of the given<br>
+        string.<br>
+        For example:<br>
+            `sb.Substring(3, Constants.SubstringType.FromHead);`<br>
+            `sb.Substring(5, Constants.SubstringType.FromHead);`<br>
+            `sb.Substring(8, Constants.SubstringType.FromHead);`<br>
+        will return<br>
+            `abc`<br>
+            `abc1a`<br>
+            `abc1abc2`<br>
+        FromTail returns the "length" of characters from the tail of the given<br>
+        string.<br>
+        For example:<br>
+            `sb.Substring(3, Constants.SubstringType.FromTail);`<br>
+            `sb.Substring(5, Constants.SubstringType.FromTail);`<br>
+            `sb.Substring(8, Constants.SubstringType.FromTail);`<br>
+        will return<br>
+            `bc4`<br>
+            `3abc4`<br>
+            `abc3abc4`<br>
+        Adds the LeftOfIndex/RightOfIndex overloaded methods.<br>
+        LeftOfIndex returns the "length" of characters to the LEFT of the<br>
+        located index representing the "occurence"th match of the "index"<br>
+        string.<br>
+        For example:<br>
+            `sb.Substring(5, "abc", Constants.SubstringType.LeftOfIndex, 0);`<br>
+            `sb.Substring(5, "abc", Constants.SubstringType.LeftOfIndex, 1);`<br>
+            `sb.Substring(5, "abc", Constants.SubstringType.LeftOfIndex, 2);`<br>
+            `sb.Substring(5, "abc", Constants.SubstringType.LeftOfIndex, 3);`<br>
+            `sb.Substring(5, "abc", Constants.SubstringType.LeftOfIndex, 4);`<br>
+        will return<br>
+            ``<br>
+            ``<br>
+            `abc1`<br>
+            `1abc2`<br>
+            `2abc3`<br>
+        RightOfIndex returns the "length" of characters to the RIGHT of the<br>
+        located index representing the "occurence"th match of the "index"<br>
+        string.<br>
+        For example:<br>
+            `sb.Substring(5, "abc", Constants.SubstringType.RigthOfIndex, 0);`<br>
+            `sb.Substring(5, "abc", Constants.SubstringType.RigthOfIndex, 1);`<br>
+            `sb.Substring(5, "abc", Constants.SubstringType.RigthOfIndex, 2);`<br>
+            `sb.Substring(5, "abc", Constants.SubstringType.RigthOfIndex, 3);`<br>
+            `sb.Substring(5, "abc", Constants.SubstringType.RigthOfIndex, 4);`<br>
+        will return<br>
+            ``<br>
+            `1abc2`<br>
+            `2abc3`<br>
+            `3abc4`<br>
+            `4`_
+
+- ### **System.Timer class**
+	> _This class provides and easy way to time things like a stopwatch.<br>
+        `.Start()` starts the timer.<br>
+	    `.Stop()` stops the timer.<br>
+	    `.Pause()` pauses the timer.<br>
+	    `.Resume()` resumes the timer.<br>
+	    `.Reset()` resets the timer.<br>
+        For example:<br>
+            `System.Timer timer = new System.Timer();`<br>
+            `timer.Start();`<br>
+            ` <DO STUFF> `<br>
+            `System.TimeSpan howlong = timer.Stop();`_
+
+- ### **TimeStamp()**
+    > _Returns a string representing the current local date time stamp to<br>
+        either just the day or down to the millisecond.  Used for creating<br>
+        unique log file names.<br>
+        For example:<br>
+            `TimeStamp()`<br>
+        will return<br>
+            `2021-03-01@06.01.02.003`<br>
+        whereas<br>
+            `TimeStamp(true)`<br>
+        will return<br>
+            `2021-03-01`_
 
 - ### **ToBinary()**
     > _This method returns the given string represented in 1s and 0s as<br>
@@ -473,6 +784,55 @@ with these methods:
             `"The Extensions.cs NuGet package rocks!".TrimLength(20, ">>")`<br>
         will return "The Extensions.cs >>"<br>_
 
+- ### **TrimStart()**
+    > _Trims a given string rather than just a character, from the start of<br>
+        the target string.  The traditional Trim() only allowed char values<br>
+        to be trimmed.  TrimStart() solves that limitation in an easier to<br>
+        fashion that using Substring().<br>
+        For example:<br>
+            `"https://blog.cjvandyk.com".TrimStart("https://")`<br>
+            will return<br>
+            `"blog.cjvandyk.com"`_
+
+- ### **Validate()**
+    > _Makes quick work of conducting multiple types of validations on all<br>
+        parameters.  It takes a parameter array of ErrorType and conducts<br>
+        the appropriate validation such as null checking, non-zero checking<br>
+        etc. against the parameter array passed.<br>
+        For example:<br>
+            `Validate(Constants.ErrorTypeAll, amount, percent, years, frequency);`<br>
+            will perform all defined error checks against the `amount`, `percent`,<br>
+            `years` and `frequency` parameters._
+
+	
+	
+	
+
+	- Add `Logging.ConstructMessage()`.<br>
+	- Add `Logging.ConsoleMessage()`.<br>
+	- Add `Logging.EventLogMessage()`.<br>
+	- Add `Logging.FileMessage()`.<br>
+
+
+- ### **ValidateNoNulls()**
+    > _Makes quick work of null validating all parameters you pass to it.<br>
+        This method takes a variable number of parameters and validates that<br>
+        all parameters are not null.  If a parameter is found to be null, a<br>
+        ArgumentNullException is thrown.<br>
+        For example:<br>
+            `void MyMethod(string str, double dbl, MyClass cls)`<br>
+            `{`<br>
+            `    Universal.ValidateNoNulls(str, dbl, cls);<br>
+            `    ...Your code here...`<br>
+            `}`<br>
+        You do not have to pass all parameters, but can instead do this:<br>
+            `void MyMethod(string str, double dbl, MyClass cls)`<br>
+            `{`<br>
+            `    Universal.ValidateNoNulls(str, cls);<br>
+            `    ...Your code here...`<br>
+            `}`<br>
+        where we chose NOT to validate the `double dbl` in this case._
+
 - ### **Words()**
     > _This method returns the number of words used in the given string<br>
         object.
@@ -481,3 +841,9 @@ with these methods:
         will return 4 whereas<br>
             `"ThisIsMyTest".Words()`<br>
         will return 1._
+
+- ### **Wrn()**
+    > _Write a Warning message to active channels (console, event log, file)<br>
+        using the System.Logging class._
+
+![Visitor Count](https://profile-counter.glitch.me/{cjvandyk}/count.svg)
