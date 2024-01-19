@@ -1,6 +1,4 @@
-﻿#pragma warning disable CS1587, CS1998, IDE0059, IDE0028
-
-/// <summary>
+﻿/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
@@ -91,4 +89,3 @@ namespace Extensions
         #endregion IsPrime()
     }
 }
-#pragma warning restore CS1587, CS1998, IDE0059, IDE0028

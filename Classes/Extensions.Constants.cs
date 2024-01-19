@@ -265,6 +265,18 @@ namespace Extensions
         };
         #endregion ErrorType
 
+        #region DuplicateGroupReturnType
+        /// <summary>
+        /// The types of data that can be returned after the duplication of
+        /// an M365 Group i.e. the GUID ID of the Group or the Group itself.
+        /// </summary>
+        public enum DuplicateGroupReturnType
+        {
+            Group,
+            Id
+        }
+        #endregion DuplicateGroupReturnType
+
         #region Graph Constants
         /// <summary>
         /// The types of Graph user info to retrieve.  The id, mail and
@@ -288,6 +300,16 @@ namespace Extensions
             All,
             Members,
             Owners
+        }
+
+        /// <summary>
+        /// The type of string being passed to the .UpdateGroup() method i.e.
+        /// the display name of the Group or the Group's GUID ID value.
+        /// </summary>
+        public enum GroupUpdateType
+        {
+            DisplayName,
+            Guid
         }
         #endregion Graph Constants
 

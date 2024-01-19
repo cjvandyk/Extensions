@@ -1,6 +1,4 @@
-﻿#pragma warning disable CA1416, CS0162, CS0168, CS1587, CS1591, CS1998, IDE0059, IDE0028
-
-/// <summary>
+﻿/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
@@ -43,8 +41,8 @@ namespace Extensions
         /// <summary>
         /// The stack of telemetry measuring instances.
         /// </summary>
-        public static Dictionary<string, TelemetryInstance> timers
-        { get; private set; } = new();
+        public static Dictionary<string, TelemetryInstance> timers { get; private set; } = 
+            new Dictionary<string, TelemetryInstance>();
         /// <summary>
         /// The name of the active telemetry instance.
         /// </summary>
@@ -64,9 +62,10 @@ namespace Extensions
         /// <param name="timerName"></param>
         /// <param name="setAsActive"></param>
         /// <param name="startImmediately"></param>
-        public static void AddTimer(string timerName,
-                                    bool setAsActive = true,
-                                    bool startImmediately = true)
+        public static void AddTimer(
+            string timerName,
+            bool setAsActive = true,
+            bool startImmediately = true)
         {
             try
             {
@@ -460,5 +459,3 @@ namespace Extensions
         }
     }
 }
-
-#pragma warning restore CA1416, CS0162, CS0168, CS1587, CS1591, CS1998, IDE0059, IDE0028
