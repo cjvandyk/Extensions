@@ -333,12 +333,24 @@
 ### **5.2.800 (2024-01-xx)**<br>
 	- Security Patch for CVE-2024-21319.<br>
 	- Added Constants.UserInfoType.<br>
+	- Added Dictionary.TryAdd() for exception safe collection addition.<br>
 	- Added Graph.GetMembers().<br>
 	- Added Graph.GetOwners().<br>
+	- Added Graph.GetGroupUsers().<br>
+	- Added Graph.GetTeam().<br>
+	- Added Graph.HasTeam().<br>
+	- Added Graph.NewGroup().<br>
+	- Added Graph.SetGroupSensitivity().<br>
+	- Added Graph.SharePointify().<br>
+	- Added Graph.Teamify().<br>
+	- Added Graph.UpdateGroup().<br>
+	- Added Identity.AuthMan.GetGraphBetaServiceClient().<br>
+	- Added List.TryAdd() for exception safe collection addition.<br>
+	- Added object[].AnyNull() for exception safe array null validation.<br>
 	- Added String.EncodeAsXml().<br>
 	- Added String.IsDateTime().<br>
 	- Added String.IsHex().<br>
 	- Added String.ToEnglishAlphaChars().<br>
-	- Added Graph.GetGroupUsers().<br>
 	- Expanded Graph.GetMembers() to return more than just "id" by adding "mail" and "userPrincipalName".<br>
 	- Expanded Graph.GetOwners() to return more than just "id" by adding "mail" and "userPrincipalName".<br>
+	- Improved Identity.AuthMan.GetAuth() handling of the AuthStack.<br>

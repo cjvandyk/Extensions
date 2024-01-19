@@ -51,7 +51,7 @@ namespace Extensions.Identity
         /// <summary>
         /// The certificate of the current Auth object.
         /// </summary>
-        public X509Certificate2 Cert { get; private set; }
+        public X509Certificate2 Cert { get; private set; } = null;
 
         /// <summary>
         /// The current IConfidentialClientApplication of the current Auth object.
@@ -138,6 +138,11 @@ namespace Extensions.Identity
             Scopes = Identity.Scopes.GetScopes(scopeType);
             TenantCfg.Settings = Core.config.Settings;
             TenantCfg.Labels = Core.config.Labels;
+            if (!Core.Tenants.ContainsKey(tenantString))
+            {
+                Core.Tenants.Add(tenantString, TenantCfg);
+            }
+            Core.ActiveTenant = Core.Tenants[tenantString];
             //Call refresh method to populate the rest.
             RefreshAuth(null);            
         }
@@ -176,6 +181,14 @@ namespace Extensions.Identity
             App = Identity.App.GetApp(appId, Cert.Thumbprint, tenantString);
             //Set the scopes for this Auth object.
             Scopes = Identity.Scopes.GetScopes(scopeType);
+            TenantCfg.Settings = Core.config.Settings;
+            TenantCfg.Labels = Core.config.Labels;
+            if (!Core.Tenants.ContainsKey(tenantString))
+            {
+                Core.Tenants.Add(tenantString, TenantCfg);
+            }
+            Core.ActiveTenant = Core.Tenants[tenantString];
+
             //Call refresh method to populate the rest.
             RefreshAuth(null);
         }
@@ -194,7 +207,7 @@ namespace Extensions.Identity
             string tenantId,
             string appId,
             string tenantString,
-            ClientApplicationType appType = ClientApplicationType.Confidential)
+            ClientApplicationType appType = ClientApplicationType.Public)
         {
             //Generate the unique ID.
             Id = AuthMan.GetKey(tenantId, appId, "PublicClientApplication", "");
@@ -205,6 +218,11 @@ namespace Extensions.Identity
             TenantCfg.TenantString = tenantString;
             //Get the application.
             App = Identity.App.GetApp(appId, tenantString);
+            if (!Core.Tenants.ContainsKey(tenantString))
+            {
+                Core.Tenants.Add(tenantString, TenantCfg);
+            }
+            Core.ActiveTenant = Core.Tenants[tenantString];
             //Call refresh method to populate the rest.
             RefreshAuth(null);
         }
@@ -237,7 +255,26 @@ namespace Extensions.Identity
                 Scopes);
             //Build the GraphServiceClient object using the AuthenticatedResult
             //from the previous step.
-            GraphClient = GetGraphServiceClient(AuthResult);
+            HttpClient = GetHttpClient(AuthResult);
+            GraphClient = GetGraphServiceClient(HttpClient);
+            GraphBetaClient = GetGraphBetaServiceClient(HttpClient);
+            //Check if the current Auth object is in the stack.
+            if (AuthStack.ContainsKey(Id))
+            {
+                //It is, so update it.
+                lock (AuthStack)
+                {
+                    AuthStack[Id] = this;
+                }
+            }
+            else
+            {
+                //It is not, so push it to the stack.
+                lock(AuthStack)
+                {
+                    AuthStack.Add(Id, this);
+                }
+            }
             //Define the refresh timer that will fire 5 minutes before the
             //expiration of the AuthenticationResult.
             Timer = new System.Threading.Timer(

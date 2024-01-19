@@ -20,6 +20,7 @@ using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -143,23 +144,27 @@ namespace Extensions.Identity
             ScopeType scopeType = ScopeType.Graph,
             bool authStackReset = false)
         {
-            //Check if there's an active auth that can be used to log to 
-            //SharePoint and if logging to SharePoint is enabled.
-            if ((ActiveAuth.AuthResult == null) &&
-                (ActiveLogitInstance.LogToSPList))
+            //If logging location is static, don't write this output.
+            if (!ActiveLogitInstance.StaticConsoleLocation)
             {
-                //There isn't so don't log to list an active Logit instance.
-                ActiveLogitInstance.LogToSPList = false;
-                Inf($"AuthMan.GetAuth({tenantId}, {appId}, {thumbPrint}, " +
-                    $"{tenantString}, {scopeType.ToString()}, " +
-                    $"{authStackReset.ToString()}");
-                ActiveLogitInstance.LogToSPList = true;
-            }
-            else
-            {
-                Inf($"AuthMan.GetAuth({tenantId}, {appId}, {thumbPrint}, " +
-                    $"{tenantString}, {scopeType.ToString()}, " +
-                    $"{authStackReset.ToString()}");
+                //Check if there's an active auth that can be used to log to 
+                //SharePoint and if logging to SharePoint is enabled.
+                if ((ActiveAuth.AuthResult == null) &&
+                    (ActiveLogitInstance.LogToSPList))
+                {
+                    //There isn't so don't log to list an active Logit instance.
+                    ActiveLogitInstance.LogToSPList = false;
+                    Inf($"AuthMan.GetAuth({tenantId}, {appId}, {thumbPrint}, " +
+                        $"{tenantString}, {scopeType.ToString()}, " +
+                        $"{authStackReset.ToString()}");
+                    ActiveLogitInstance.LogToSPList = true;
+                }
+                else
+                {
+                    Inf($"AuthMan.GetAuth({tenantId}, {appId}, {thumbPrint}, " +
+                        $"{tenantString}, {scopeType.ToString()}, " +
+                        $"{authStackReset.ToString()}");
+                }
             }
             //If a reset is requested, clear the stack.
             if (authStackReset)
@@ -184,18 +189,8 @@ namespace Extensions.Identity
                     tenantString,
                     Auth.ClientApplicationType.Confidential,
                     scopeType);
-                //Check if another thread may have added this same Auth to
-                //the stack while we were getting the Auth.
-                if (!AuthStack.ContainsKey(key))
-                {
-                    //Lock it down.
-                    lock (AuthStack)
-                    {
-                        //Push it to the stack.
-                        AuthStack.Add(key, auth);
-                    }
-                }
-                //Set the current ActiveAuth to the new stack instance.
+                //Set the current ActiveAuth to the new stack instance
+                //that was pushed to the stack by its ctor.
                 ActiveAuth = AuthStack[key];
             }
             //Return the ActiveAuth object.
@@ -232,7 +227,9 @@ namespace Extensions.Identity
                 tenantId,
                 appId,
                 cert.Thumbprint,
-                tenantString);
+                tenantString,
+                scopeType,
+                authStackReset);
         }
 
         /// <summary>
@@ -377,52 +374,21 @@ namespace Extensions.Identity
         }
 
         /// <summary>
-        /// A method to return a valid HttpClient for the currently active Auth.
+        /// A method to return a valid HttpClient for the given 
+        /// AuthenticationResult.
         /// </summary>
-        /// <returns>A valid HttpClient for the currently active Auth.</returns>
-        public static HttpClient GetHttpClient()
-        {
-            return ActiveAuth.HttpClient;
-        }
-
-        /// <summary>
-        /// A method to return a valid HttpClient for the currently active Auth.
-        /// </summary>
-        /// <param name="scopes">A string array of scopes to use for Auth.</param>
-        /// <returns>A valid HttpClient for the currently active Auth.</returns>
-        public static HttpClient GetHttpClient(string[] scopes)
-        {
-            //Build the HttpClient.
-            ActiveAuth.HttpClient = new HttpClient();
-            //Add the Authorization header using the AccessToken from the
-            //previously retrieved AuthenticationResult.
-            ActiveAuth.HttpClient.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue(
-                    "Bearer", 
-                    ActiveAuth.AuthResult.AccessToken);
-            return ActiveAuth.HttpClient;
-        }
-
-        /// <summary>
-        /// A method to return a valid GraphServiceClient for the given
-        /// AuthenticationResult object.  If the authResult is null, the
-        /// AuthenticationResult object from the ActiveAuth is used.
-        /// </summary>
-        /// <param name="authResult">The AuthenticationResult object to use.</param>
-        /// <returns>A valid GraphService Client using the given
-        /// AuthenticationResult.</returns>
-        public static GraphServiceClient GetGraphServiceClient(
+        /// <param name="authResult">The AuthenticationResult to use during
+        /// HttpClient construction.</param>
+        /// <returns>A valid HttpClient using the given 
+        /// AuthenticationResult.  If authResult is null, it will return
+        /// the HttpClient from the ActiveAuth.</returns>
+        public static HttpClient GetHttpClient(
             AuthenticationResult authResult = null)
         {
             if (authResult == null)
             {
-                authResult = ActiveAuth.AuthResult;
+                return ActiveAuth.HttpClient;
             }
-            if (authResult == ActiveAuth.AuthResult)
-            {
-                return ActiveAuth.GraphClient;
-            }
-
             //Build the HttpClient object using the AuthenticationResult
             //from the previous step.
             HttpClient httpClient = new HttpClient();
@@ -434,22 +400,49 @@ namespace Extensions.Identity
                 new AuthenticationHeaderValue("Bearer", authResult.AccessToken);
             httpClient.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
-            ActiveAuth.HttpClient = httpClient;
+            return httpClient;
+        }
 
-            //Build the GraphServiceClient object for the 1.0 endpoint.
-            ActiveAuth.GraphClient = new GraphServiceClient(
+        /// <summary>
+        /// A method to return a valid GraphServiceClient for the given
+        /// HttpClient.
+        /// </summary>
+        /// <param name="httpClient">The HttpClient to use during construction
+        /// of the GraphServiceClient.</param>
+        /// <returns>A valid GraphServiceClient for the given 
+        /// HttpClient.</returns>
+        public static GraphServiceClient GetGraphServiceClient(
+            HttpClient httpClient = null)
+        {
+            if (httpClient == null)
+            {
+                return ActiveAuth.GraphClient;
+            }
+            return new GraphServiceClient(
                 httpClient,
                 null,
-                "https://graph.microsoft.us/v1.0");
+                $"https://graph.microsoft{GetAuthorityDomain(ActiveTenant.AzureEnvironment)}/v1.0");
+        }
 
-            //Build the GraphServiceClient object for the beta endpoint.
-            ActiveAuth.GraphBetaClient = new GraphServiceClient(
+        /// <summary>
+        /// A method to return a valid Beta endpoint GraphServiceClient for 
+        /// the given HttpClient.
+        /// </summary>
+        /// <param name="httpClient">The HttpClient to use during construction
+        /// of the GraphServiceClient.</param>
+        /// <returns>A valid Beta endpoint GraphServiceClient for the given 
+        /// HttpClient.</returns>
+        public static GraphServiceClient GetGraphBetaServiceClient(
+            HttpClient httpClient = null)
+        {
+            if (httpClient == null)
+            {
+                return ActiveAuth.GraphBetaClient;
+            }
+            return new GraphServiceClient(
                 httpClient,
                 null,
-                "https://graph.microsoft.us/beta");
-
-            //Return the Graph Client object.
-            return ActiveAuth.GraphClient;
+                $"https://graph.microsoft{GetAuthorityDomain(ActiveTenant.AzureEnvironment)}/beta");
         }
 
         /// <summary>

@@ -1,6 +1,4 @@
-﻿#pragma warning disable CS1587, CS1998, IDE0059, IDE0028
-
-/// <summary>
+﻿/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
@@ -45,6 +43,37 @@ namespace Extensions
             return result.TrimEnd(separator);
         }
         #endregion ToQueryString()
+
+        #region TryAdd()
+        /// <summary>
+        /// Checks if a given KVP is in the dictionary.  If it isn't, it will
+        /// attempt to add it.  If the addition fails, or the dictionary is
+        /// null it will return false.  If the addition succeeds or if the key
+        /// already exist in the dictionary, it will return true.
+        /// </summary>
+        /// <param name="dic">The dictionary to which to add the KVP.</param>
+        /// <param name="key">The key to use in the addition.</param>
+        /// <param name="val">The value to use in the addition.</param>
+        /// <returns>True if the KVP was successfully added or already exist
+        /// in the dictionary, else on any failure it returns false.</returns>
+        public static bool TryAdd(
+            this Dictionary<object, object> dic,
+            object key,
+            object val)
+        {
+            try
+            {
+                if (!dic.ContainsKey(key))
+                {
+                    dic.Add(key, val);
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        #endregion TryAdd()
     }
 }
-#pragma warning restore CS1587, CS1998, IDE0059, IDE0028

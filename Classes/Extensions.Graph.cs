@@ -19,6 +19,8 @@ using System.IO;
 using System.Linq;
 //using System.Management.Automation;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using static Extensions.Identity.AuthMan;
 using static System.Logit;
@@ -407,45 +409,150 @@ namespace Extensions
         /// </summary>
         /// <param name="groupName">The name of the group to duplicate.</param>
         /// <param name="newName">The name to use for the new group.</param>
-        /// <returns></returns>
-        public static string DuplicateGroup(
+        /// <param name="returnType">The type of data to return after
+        /// duplicating the Group i.e. the GUID ID of the Group or the actual
+        /// Group itself.</param>
+        /// <returns>The GUID string ID of the Group if returnType = Id and
+        /// the Group object if returnType = Group.</returns>
+        public static object DuplicateGroup(
             string groupName, 
-            string newName)
+            string newName,
+            Constants.DuplicateGroupReturnType returnType = 
+                Constants.DuplicateGroupReturnType.Id)
         {
-            //Find the target group.
-            var groups = ActiveAuth.GraphClient.Groups
-                .GetAsync((C) =>
-                {
-                    C.QueryParameters.Search = $"\"displayName:{groupName}\"";
-                    C.Headers.Add("ConsistencyLevel", "eventual");
-                }).GetAwaiter().GetResult();
+            //Find the source group.
+            Group group = GetGroup(groupName);
             //If the group is not found, return null.
-            if (groups.Value.Count != 1)
+            if (group == null)
             {
                 return null;
             }
-            //Setup group types.  Unified = M365
-            List<string> groupTypes = new List<string>()
+            Dictionary<string, object> sourceFields = new Dictionary<string, object>();
+            Group newGroupInfo = new Group();
+            System.Reflection.FieldInfo fieldInfo;
+            object fieldValue;
+            foreach (System.Reflection.FieldInfo sourceFieldInfo in typeof(Group).GetFields())
             {
-                "Unified"
-            };
-            //Duplicate group info except name.
-            var newGroupInfo = new Group
-            {
-                Description = groups.Value[0].Description,
-                DisplayName = newName,
-                GroupTypes = groupTypes,
-                MailEnabled = groups.Value[0].MailEnabled,
-                MailNickname = newName,
-                SecurityEnabled = groups.Value[0].SecurityEnabled,
-                AdditionalData = groups.Value[0].AdditionalData
-            };
+                fieldInfo = typeof(Group).GetField(sourceFieldInfo.Name);
+                fieldValue = fieldInfo.GetValue(group);
+                fieldInfo.SetValue(newGroupInfo, fieldValue);
+            }
             //Create the new group.
             var newGroup = ActiveAuth.GraphClient.Groups
                 .PostAsync(newGroupInfo)
                 .GetAwaiter().GetResult();
-            //Return the ID of the new group.
-            return newGroup.Id;
+            //Determine what to return.
+            if (returnType == Constants.DuplicateGroupReturnType.Id)
+            {
+                //Return the ID of the new group.
+                return newGroup.Id;
+            }
+            return newGroup;
+        }
+
+        /// <summary>
+        /// Create a new Group given a set of fields and values.  If values
+        /// in the dictionary are invalid for whatever reason, the exception
+        /// is allowed to bubble up.
+        /// </summary>
+        /// <param name="groupFields">The dictionary containing the fields
+        /// and values to use for Group creation.</param>
+        /// <returns>The Group after creation.</returns>
+        public static Group NewGroup(
+            Dictionary<string, object> groupFields)
+        {
+            var newGroupInfo = new Group();
+            System.Reflection.FieldInfo fieldInfo;
+            foreach (KeyValuePair<string, object> kvp in groupFields)
+            {
+                fieldInfo = typeof(Group).GetField(kvp.Key);
+                fieldInfo.SetValue(newGroupInfo, kvp.Value);
+            }
+            //Create the new group.
+            var newGroup = ActiveAuth.GraphClient.Groups
+                .PostAsync(newGroupInfo)
+                .GetAwaiter().GetResult();
+            return newGroup;
+        }
+
+        /// <summary>
+        /// Updates a given Group given its name and a set of fields and 
+        /// values.  If values in the dictionary are invalid for whatever
+        /// reason, the exception is allowed to bubble up.
+        /// </summary>
+        /// <param name="groupName">The name of the Group to update.</param>
+        /// <param name="groupFields">The dictionary containing the fields
+        /// and values to use for Group update.</param>
+        /// <param name="groupUpdateType">The type of value being passed in
+        /// the groupName parameter i.e. DisplayName or Guid.  Default is
+        /// DisplayName.</param>
+        /// <returns>The Group after update.</returns>
+        public static Group UpdateGroup(
+            string groupName,
+            Dictionary<string, object> groupFields,
+            Constants.GroupUpdateType groupUpdateType = 
+                Constants.GroupUpdateType.DisplayName)
+        {
+            string id = "";
+            if (groupUpdateType == Constants.GroupUpdateType.DisplayName)
+            {
+                var groupToUpdate = GetGroup(groupName);
+                id = groupToUpdate.Id;
+            }
+            var updatedGroupInfo = ConstructGroupObject(groupFields);
+            //Create the new group.
+            var updatedGroup = ActiveAuth.GraphClient.Groups[id]
+                .PatchAsync(updatedGroupInfo)
+                .GetAwaiter().GetResult();
+            return updatedGroup;
+        }
+
+        /// <summary>
+        /// Constructs a new in memory Group object given a set of fields 
+        /// and values.  If values in the dictionary are invalid for 
+        /// whatever reason, the exception is allowed to bubble up.
+        /// </summary>
+        /// <param name="groupFields">The dictionary containing the fields
+        /// and values to use for Group creation.</param>
+        /// <returns>The Group object after construction.</returns>
+        public static Group ConstructGroupObject(
+            Dictionary<string, object> groupFields)
+        {
+            var newGroupInfo = new Group();
+            System.Reflection.FieldInfo fieldInfo;
+            foreach (KeyValuePair<string, object> kvp in groupFields)
+            {
+                fieldInfo = typeof(Group).GetField(kvp.Key);
+                fieldInfo.SetValue(newGroupInfo, kvp.Value);
+            }
+            return newGroupInfo;
+        }
+        /// <summary>
+        /// Updates a given Group given its name and a the ID of the target
+        /// sensitivity label.  Exceptions are allowed to bubble up.
+        /// </summary>
+        /// <param name="groupName">The name of the Group to update.</param>
+        /// <param name="sensitivityGuid">The GUID string of the target
+        /// sensitivity label's ID value.</param>
+        /// <param name="groupUpdateType">The type of value being passed in
+        /// the groupName parameter i.e. DisplayName or Guid.  Default is
+        /// DisplayName.</param>
+        /// <returns>The Group after update.</returns>
+        public static Group SetGroupSensitivity(
+            string groupName,
+            string sensitivityGuid,
+            Constants.GroupUpdateType groupUpdateType =
+                Constants.GroupUpdateType.DisplayName)
+        {
+            Dictionary<string, object> dic = new Dictionary<string, object>();
+            dic.Add("AssignedLabels", new List<AssignedLabel>()
+            {
+                new AssignedLabel()
+                {
+                    LabelId = sensitivityGuid
+                }
+            });
+            return UpdateGroup(groupName, dic, groupUpdateType);
         }
 
         /// <summary>
@@ -1016,6 +1123,149 @@ namespace Extensions
         }
 
         /// <summary>
+        /// Gets the Team associated with the current Group.
+        /// </summary>
+        /// <param name="group">The Group for which to get the Team.</param>
+        /// <returns>The Team if it exist, else null.</returns>
+        public static Team GetTeam(
+            this Microsoft.Graph.Models.Group group)
+        {
+            if (group.HasTeam())
+            {
+                return GetTeam(group.Id);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the Team associated with the current Group.
+        /// </summary>
+        /// <param name="groupId">The ID of the Group for which to get 
+        /// the Team.</param>
+        /// <returns>The Team if it exist, else null.</returns>
+        public static Team GetTeam(
+            string groupId)
+        {
+            Team team = null;
+            try
+            {
+                team = ActiveAuth.GraphClient.Groups[groupId].Team
+                    .GetAsync().GetAwaiter().GetResult();
+                return team;
+            }
+            catch (Exception ex)
+            {
+                Err(ex.ToString());
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Checks if the Group has an associated Team.
+        /// </summary>
+        /// <param name="group">The Group being checked.</param>
+        /// <returns>True if the Group has an associated Team, else false.</returns>
+        public static bool HasTeam(
+            this Group group)
+        {
+            var groups = GetGroups("((id eq '" + group.Id + 
+                "') and (resourceProvisioningOptions/Any(x:x eq 'Team')))");
+            return groups.Count > 0;
+        }
+
+        /// <summary>
+        /// Add a Team to the current group.
+        /// </summary>
+        /// <param name="group">The target Group for Team addition.</param>
+        /// <param name="newTeamInfo">Optional Team options to use when 
+        /// creating the new Team.</param>
+        /// <returns>The Team after creation.  If the Team already exist, the
+        /// existing Team is returned.  If creation fails it'll retry for 30
+        /// seconds before returning null.</returns>
+        public static Team Teamify(
+            this Group group,
+            Team newTeamInfo = null)
+        {
+            return Teamify(group.Id, newTeamInfo);
+        }
+
+        /// <summary>
+        /// Add a Team to the current group.
+        /// </summary>
+        /// <param name="groupId">The ID of the target Group for Team 
+        /// addition.</param>
+        /// <param name="newTeamInfo">Optional Team options to use when 
+        /// creating the new Team.</param>
+        /// <returns>The Team after creation.  If the Team already exist, the
+        /// existing Team is returned.  If creation fails it'll retry for 30
+        /// seconds before returning null.</returns>
+        public static Team Teamify(
+            string groupId, 
+            Team newTeamInfo = null)
+        {
+            Team team = null;
+            bool done = false;
+            int count = 0;
+            while (!done)
+            {
+                count++;
+                try
+                {
+                    team = GetTeam(groupId);
+                    if (team != null)
+                    {
+                        done = true;
+                        return team;
+                    }
+                    else
+                    {
+                        if (newTeamInfo == null)
+                        {
+                            newTeamInfo = new Team
+                            {
+                                MemberSettings = new TeamMemberSettings
+                                {
+                                    AllowCreatePrivateChannels = true,
+                                    AllowCreateUpdateChannels = true
+                                },
+                                MessagingSettings = new TeamMessagingSettings
+                                {
+                                    AllowUserDeleteMessages = true,
+                                    AllowUserEditMessages = true
+                                },
+                                FunSettings = new TeamFunSettings
+                                {
+                                    AllowGiphy = true,
+                                    GiphyContentRating = GiphyRatingType.Strict
+                                }
+                            };
+                        }
+                        team = ActiveAuth.GraphClient.Groups[groupId].Team
+                            .PutAsync(newTeamInfo)
+                            .GetAwaiter().GetResult();
+                        if (team != null)
+                        {
+                            done = true;
+                            return team;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    //Azure async processes may not yet have created the Team.
+                    //Wait for a second before retrying.
+                    Thread.Sleep(1000);
+                }
+                if (count > 30)
+                {
+                    done = true;
+                    return null;
+                }
+            }
+            return team;
+        }
+
+        /// <summary>
         /// Update a specified list item with specified values.
         /// </summary>
         /// <param name="siteGuid">The site ID (GUID) value.</param>
@@ -1104,6 +1354,74 @@ namespace Extensions
             {
                 Fields = CreateFieldValueSet(newFields)
             };
+        }
+
+        /// <summary>
+        /// A method to force Azure to provision the back end SharePoint site
+        /// for a given Group or Team.  When new Teams are created via code,
+        /// Azure will not spin up the SharePoint site until a user clicks on
+        /// the Files link.  Problem is that when the user does that they get
+        /// an error message telling them to try again later.  This is a
+        /// terrible user experience so the .SharePointify() method can be
+        /// used to force the process to take place so the user never sees
+        /// that error.
+        /// </summary>
+        /// <param name="groupId">The GUID ID of the Group associated with the
+        /// Team.</param>
+        /// <returns>A reference to the Drive object if successful.  The process
+        /// will retry every second for 30 seconds afterwhich it will timeout
+        /// and simply return null.  This seldom happens.</returns>
+        public static Drive SharePointify(
+            string groupId)
+        {
+            Drive drive = null;
+            bool done = false;
+            int count = 0;
+            while (!done)
+            {
+                count++;
+                try
+                {
+                    drive = ActiveAuth.GraphClient.Groups[groupId].Drive
+                        .GetAsync().GetAwaiter().GetResult();
+                    if (drive != null)
+                    {
+                        done = true;
+                        return drive;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    //Azure async processes may not yet have created the Group.
+                    //Wait for a second before retrying.
+                    Thread.Sleep(1000);
+                }
+                if (count > 30)
+                {
+                    done = true;
+                }
+            }
+            return drive;
+        }
+
+        /// <summary>
+        /// A method to force Azure to provision the back end SharePoint site
+        /// for a given Group or Team.  When new Teams are created via code,
+        /// Azure will not spin up the SharePoint site until a user clicks on
+        /// the Files link.  Problem is that when the user does that they get
+        /// an error message telling them to try again later.  This is a
+        /// terrible user experience so the .SharePointify() method can be
+        /// used to force the process to take place so the user never sees
+        /// that error.
+        /// </summary>
+        /// <param name="group">The Group associated with the Team.</param>
+        /// <returns>A reference to the Drive object if successful.  The process
+        /// will retry every second for 30 seconds afterwhich it will timeout
+        /// and simply return null.  This seldom happens.</returns>
+        public static Drive SharePointify(
+            this Microsoft.Graph.Models.Group group)
+        {
+            return SharePointify(group.Id);
         }
 
         /// <summary>

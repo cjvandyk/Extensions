@@ -1,6 +1,4 @@
-﻿#pragma warning disable CS1587, CS1998, IDE0059, IDE0028
-
-/// <summary>
+﻿/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
@@ -140,6 +138,32 @@ namespace Extensions
             extensionProperties[key] = val;
         }
         #endregion Set()
+
+        #region AnyNull()
+        /// <summary>
+        /// Check if an array of objects contain any nulls.
+        /// </summary>
+        /// <param name="objects">The object array to check.</param>
+        /// <returns>False if all objects in the array are not null.  True
+        /// if the array is null or contains any nulls.</returns>
+        public static bool AnyNull(this object[] objects)
+        {
+            try
+            {
+                foreach (object obj in objects)
+                {
+                    if (obj == null)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return true;
+            }
+        }
+        #endregion AnyNull()
     }
 }
-#pragma warning restore CS1587, CS1998, IDE0059, IDE0028

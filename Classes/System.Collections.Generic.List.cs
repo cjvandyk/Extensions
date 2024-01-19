@@ -1,6 +1,4 @@
-﻿#pragma warning disable CS1587, CS1998, IDE0059, IDE0028
-
-/// <summary>
+﻿/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
@@ -66,7 +64,9 @@ namespace Extensions
             }
             return result;
         }
+        #endregion Sum<TimeSpan>
 
+        #region Threading
         /// <summary>
         /// Process a list of objects of type T using multiple threads.
         /// </summary>
@@ -85,7 +85,9 @@ namespace Extensions
         }
 
         /// <summary>
-        /// Process a list of objects of type T using a single thread.
+        /// Process a list of T items specifically in a single thread.  This
+        /// is helpful in debugging scenarios where multi threading can wreck
+        /// havoc on the ability to follow the code execution path.
         /// </summary>
         /// <typeparam name="T">The type of objects in the list.</typeparam>
         /// <param name="lst">The list of objects to process.</param>
@@ -100,7 +102,36 @@ namespace Extensions
                 processLoopInstanceMethod(obj);
             }
         }
-        #endregion Sum<TimeSpan>
+        #endregion Threading
+
+        #region TryAdd()
+        /// <summary>
+        /// Checks if a given key is in the list.  If it isn't, it will
+        /// attempt to add it.  If the addition fails, or the list is
+        /// null it will return false.  If the addition succeeds or if the key
+        /// already exist in the list, it will return true.
+        /// </summary>
+        /// <param name="lst">The list to which to add the key.</param>
+        /// <param name="key">The key to add to the list.</param>
+        /// <returns>True if the key was successfully added or already exist
+        /// in the list, else on any failure it returns false.</returns>
+        public static bool TryAdd(
+            this List<string> lst,
+            string key)
+        {
+            try
+            {
+                if (!lst.Contains(key))
+                {
+                    lst.Add(key);
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        #endregion TryAdd()
     }
 }
-#pragma warning restore CS1587, CS1998, IDE0059, IDE0028
