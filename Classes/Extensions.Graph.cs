@@ -9,6 +9,7 @@
 
 using Microsoft.Graph;
 using Microsoft.Graph.Groups;
+using static Microsoft.Graph.Groups.GroupsRequestBuilder;
 using Microsoft.Graph.Models;
 using Microsoft.SharePoint.News.DataModel;
 using System;
@@ -55,11 +56,17 @@ namespace Extensions
         /// </summary>
         /// <param name="name">The name of the Group to get.</param>
         /// <returns>The Group object if found, else null.</returns>
-        public static Group GetGroup(string name)
+        public static Group GetGroup(string name, string[] fields = null)
         {
+            var queryParameters = new GroupsRequestBuilderGetQueryParameters();
+            queryParameters.Filter = $"displayName eq '{name}'";
+            if (fields != null)
+            {
+                queryParameters.Select = fields;
+            }
             var groups = ActiveAuth.GraphClient.Groups.GetAsync((C) =>
             {
-                C.QueryParameters.Filter = $"displayName eq '{name}'";
+                C.QueryParameters = queryParameters;
                 C.Headers.Add("ConsistencyLevel", "eventual");
             }).GetAwaiter().GetResult().Value;
             //There should only be 1 group.  If so, return it.

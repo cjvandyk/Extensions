@@ -351,6 +351,7 @@
 	- Added String.IsDateTime().<br>
 	- Added String.IsHex().<br>
 	- Added String.ToEnglishAlphaChars().<br>
+	- Expanded Graph.GetGroup() to allow custom Select array for fields being returned.<br>
 	- Expanded Graph.GetMembers() to return more than just "id" by adding "mail" and "userPrincipalName".<br>
 	- Expanded Graph.GetOwners() to return more than just "id" by adding "mail" and "userPrincipalName".<br>
 	- Improved Identity.AuthMan.GetAuth() handling of the AuthStack.<br>
