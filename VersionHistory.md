@@ -344,6 +344,7 @@
 	- Added Graph.SharePointify().<br>
 	- Added Graph.Teamify().<br>
 	- Added Graph.UpdateGroup().<br>
+	- Added Graph.GetUser().<br>
 	- Added Identity.AuthMan.GetGraphBetaServiceClient().<br>
 	- Added List.TryAdd() for exception safe collection addition.<br>
 	- Added object[].AnyNull() for exception safe array null validation.<br>

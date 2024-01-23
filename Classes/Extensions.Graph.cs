@@ -10,6 +10,7 @@
 using Microsoft.Graph;
 using Microsoft.Graph.Groups;
 using static Microsoft.Graph.Groups.GroupsRequestBuilder;
+using static Microsoft.Graph.Users.UsersRequestBuilder;
 using Microsoft.Graph.Models;
 using Microsoft.SharePoint.News.DataModel;
 using System;
@@ -55,6 +56,8 @@ namespace Extensions
         /// A method to get a Group by name.
         /// </summary>
         /// <param name="name">The name of the Group to get.</param>
+        /// <param name="fields">An optional string array of fields to retrieve
+        /// for the target Group.</param>
         /// <returns>The Group object if found, else null.</returns>
         public static Group GetGroup(string name, string[] fields = null)
         {
@@ -409,6 +412,41 @@ namespace Extensions
             //});
             Inf(groups.Count.ToString());
             return groups;
+        }
+
+        /// <summary>
+        /// A method to get a User by email or ID.
+        /// </summary>
+        /// <param name="key">The email or ID of the user to get.</param>
+        /// <param name="fields">Optional string array of fields to retrieve
+        /// for the target User.</param>
+        /// <returns>The User object if found, else null.</returns>
+        public static User GetUser(string key, string[] fields = null)
+        {            
+            var queryParameters = new UsersRequestBuilderGetQueryParameters();
+            if (System.Guid.TryParse(key, out var id))
+            {
+                queryParameters.Filter = $"id eq '{key}'";
+            }
+            else
+            {
+                queryParameters.Filter = $"mail eq '{key}'";
+            }
+            if (fields != null)
+            {
+                queryParameters.Select = fields;
+            }
+            var users = ActiveAuth.GraphClient.Users.GetAsync((C) =>
+            {
+                C.QueryParameters = queryParameters;
+                C.Headers.Add("ConsistencyLevel", "eventual");
+            }).GetAwaiter().GetResult().Value;
+            //There should only be 1 user.  If so, return it.
+            if ((users != null) && (users.Count == 1))
+            {
+                return users[0];
+            }
+            return null;
         }
 
         /// <summary>
