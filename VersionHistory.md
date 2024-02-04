@@ -334,6 +334,8 @@
 	- Security Patch for CVE-2024-21319.<br>
 	- Added Constants.UserInfoType.<br>
 	- Added Dictionary.TryAdd() for exception safe collection addition.<br>
+	- Added Graph.GetDrives().<br>
+	- Added Graph.GetDriveItems().<br>
 	- Added Graph.GetMembers().<br>
 	- Added Graph.GetOwners().<br>
 	- Added Graph.GetGroupUsers().<br>
@@ -345,6 +347,7 @@
 	- Added Graph.Teamify().<br>
 	- Added Graph.UpdateGroup().<br>
 	- Added Graph.GetUser().<br>
+	- Added Graph.GetUsers().<br>
 	- Added Identity.AuthMan.GetGraphBetaServiceClient().<br>
 	- Added List.TryAdd() for exception safe collection addition.<br>
 	- Added object[].AnyNull() for exception safe array null validation.<br>
