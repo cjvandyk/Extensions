@@ -1391,9 +1391,9 @@ namespace Extensions
                 if (occurrence > 1)
                 {
                     string remainder = str;
-                    for (int C = 1; C <= occurrence; C++)
+                    for (int C = 0; C <= occurrence; C++)
                     {
-                        if (remainder.Length < index.Length)
+                        if (remainder.IndexOf(index) == -1)
                         {
                             return "";
                         }
@@ -1404,9 +1404,9 @@ namespace Extensions
                 if (occurrence < -1)
                 {
                     string remainder = str;
-                    for (int C = -1; C > occurrence; C--)
+                    for (int C = 0; C > occurrence; C--)
                     {
-                        if (remainder.Length < index.Length)
+                        if (remainder.LastIndexOf(index) == -1)
                         {
                             return "";
                         }
@@ -1838,9 +1838,9 @@ namespace Extensions
                 if (occurrence > 1)
                 {
                     string remainder = str;
-                    for (int C = 1; C < occurrence; C++)
+                    for (int C = 0; C < occurrence; C++)
                     {
-                        if (remainder.Length > index.Length)
+                        if (remainder.IndexOf(index) == -1)
                         {
                             return "";
                         }
@@ -1851,9 +1851,9 @@ namespace Extensions
                 if (occurrence < -1)
                 {
                     string remainder = str;
-                    for (int C = -1; C > occurrence; C--)
+                    for (int C = 0; C > occurrence; C--)
                     {
-                        if (remainder.Length > index.Length)
+                        if (remainder.LastIndexOf(index) == -1)
                         {
                             return "";
                         }

@@ -80,7 +80,18 @@ namespace Extensions
         {
             Parallel.ForEach(lst, obj =>
             {
-                processLoopInstanceMethod(obj);
+                try
+                {
+                    processLoopInstanceMethod(obj);
+                }
+                catch (System.Net.WebException wex)
+                {
+                    Logit.Err(wex.ToString());
+                }
+                catch (Exception ex)
+                {
+                    Logit.Err(ex.ToString());
+                }
             });
         }
 
@@ -99,7 +110,18 @@ namespace Extensions
         {
             foreach (T obj in lst)
             {
-                processLoopInstanceMethod(obj);
+                try
+                {
+                    processLoopInstanceMethod(obj);
+                }
+                catch (System.Net.WebException wex)
+                {
+                    Logit.Err(wex.ToString());
+                }
+                catch (Exception ex)
+                {
+                    Logit.Err(ex.ToString());
+                }
             }
         }
         #endregion Threading

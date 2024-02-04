@@ -53,6 +53,270 @@ namespace Extensions
     public static partial class Graph
     {
         /// <summary>
+        /// A method to retrieve a list containing all the 
+        /// Microsoft.Graph.Models.Drive child items for the given user filter.
+        /// </summary>
+        /// <param name="filter">An OData filter string to apply.</param>
+        /// <param name="userFilter">An OData filter string to apply to users.</param>
+        /// <returns>A list containing all the Microsoft.Graph.Models.Drive
+        /// child items for the given OData filter.</returns>
+        public static List<Drive> GetDrives(string filter = "",
+                                            string userFilter = "")
+        {
+            var drives = new List<Drive>();
+            if (filter == null)
+            {
+                var users = GetUsers(userFilter);
+                Parallel.ForEach(users, user =>
+                {
+                    try
+                    {
+                        var drive = ActiveAuth.GraphClient.Drives[user.Id]
+                            .GetAsync((C) =>
+                            {
+                                C.Headers.Add("ConsistencyLevel", "eventual");
+                            }).GetAwaiter().GetResult();
+                        if (drive != null)
+                        {
+                            lock (drive)
+                            {
+                                drives.Add(drive);
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        //Swallow the exception if OneDrive doesn't exist.
+                    }
+                });
+                return drives;
+            }
+            else
+            {
+                GetDrives(ref drives, filter);
+            }
+            return drives;
+        }
+
+        /// <summary>
+        /// A method to retrieve a list containing all the 
+        /// Microsoft.Graph.Models.Drive child items for the given filter.
+        /// </summary>
+        /// <param name="drives">A reference to the aggregation container.</param>
+        /// <param name="filter">An OData filter string to apply.</param>
+        /// <returns>A list containing all the Microsoft.Graph.Models.Drive
+        /// child items for the given OData filter.</returns>
+        internal static void GetDrives(ref List<Drive> drives, 
+                                       string filter = "")
+        {
+            //Get the first page of drives.
+            DriveCollectionResponse drivesPage = null;
+            if (filter == "")
+            {
+                //There's no filter, so get all Drives.
+                drivesPage = ActiveAuth.GraphClient.Drives
+                    .GetAsync((C) =>
+                    {
+                        C.Headers.Add("ConsistencyLevel", "eventual");
+                    }).GetAwaiter().GetResult();
+            }
+            else
+            {
+                //Apply the specified filter to the Drives request.
+                drivesPage = ActiveAuth.GraphClient.Drives
+                    .GetAsync((C) =>
+                    {
+                        C.QueryParameters.Filter = filter;
+                        C.Headers.Add("ConsistencyLevel", "eventual");
+                    }).GetAwaiter().GetResult();
+            }
+            GetDrivesPages(ref drives, ref drivesPage);
+        }
+
+        /// <summary>
+        /// A method to iterate a page collection reference and add retrieved
+        /// items to an aggregation container reference.
+        /// </summary>
+        /// <param name="drives">A reference to the aggregation container.</param>
+        /// <param name="drivesPage">A reference to the first page to iterate.</param>
+        internal static void GetDrivesPages(
+            ref List<Drive> drives,
+            ref DriveCollectionResponse drivesPage)
+        {
+            while (drivesPage.Value != null)
+            {
+                foreach (var drive in drivesPage.Value)
+                {
+                    lock (drives)
+                    {
+                        drives.Add(drive);
+                    }
+                }
+                if (!string.IsNullOrEmpty(drivesPage.OdataNextLink))
+                {
+                    drivesPage = ActiveAuth.GraphClient.Drives
+                        .WithUrl(drivesPage.OdataNextLink)
+                        .GetAsync((C) =>
+                        {
+                            C.Headers.Add("ConsistencyLevel", "eventual");
+                        }).GetAwaiter().GetResult() ;
+                }
+                else
+                {
+                    drivesPage.Value = null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// A method to retrieve a list containing all the 
+        /// Microsoft.Graph.Models.DriveItem child items for the given user.
+        /// </summary>
+        /// <param name="userGuid">The ID of the target user to iterate.</param>
+        /// <param name="filter">An OData filter string to apply.</param>
+        /// <returns>A list containing all the Microsoft.Graph.Models.DriveItem
+        /// child items for the given user.</returns>
+        public static List<DriveItem> GetDriveItems(string userGuid,
+                                                    string filter = "")
+        {
+            var driveItems = new List<DriveItem>();
+            if (userGuid == null)
+            {
+                return driveItems;
+            }
+            var user = ActiveAuth.GraphClient.Users[userGuid]
+                .GetAsync().GetAwaiter().GetResult();
+            var drive = ActiveAuth.GraphClient.Drives[user.Id]
+                .GetAsync().GetAwaiter().GetResult();
+            var driveItemRoot = ActiveAuth.GraphClient.Drives[drive.Id]
+                .Root.GetAsync().GetAwaiter().GetResult();
+            GetDriveItems(ref driveItems, ref driveItemRoot, drive.Id, filter);
+            return driveItems;
+        }
+
+        /// <summary>
+        /// A method to retrieve a list containing all the 
+        /// Microsoft.Graph.Models.DriveItem child items for the given Drive.
+        /// </summary>
+        /// <param name="drive">The target Drive to iterate.</param>
+        /// <param name="filter">An OData filter string to apply.</param>
+        /// <returns>A list containing all the Microsoft.Graph.Models.DriveItem
+        /// child items for the given Drive.</returns>
+        public static List<DriveItem> GetDriveItems(Drive drive,
+                                                    string filter = "")
+        {
+            var driveItems = new List<DriveItem>();
+            if (drive == null)
+            {
+                return driveItems;
+            }
+            var driveItemRoot = ActiveAuth.GraphClient.Drives[drive.Id]
+                .Root.GetAsync().GetAwaiter().GetResult();
+            GetDriveItems(ref driveItems, ref driveItemRoot, drive.Id, filter);
+            return driveItems;
+        }
+
+        /// <summary>
+        /// A method to retrieve a list containing all the 
+        /// Microsoft.Graph.Models.DriveItem child items for the given
+        /// DriveItem.
+        /// </summary>
+        /// <param name="driveItem">A reference to the aggregation container.</param>
+        /// <param name="driveId">The ID of the containing OneDrive.</param>
+        /// <param name="filter">An OData filter string to apply.</param>
+        /// <returns>A list containing all the Microsoft.Graph.Models.DriveItem
+        /// child items for the given DriveItem.</returns>
+        public static List<DriveItem> GetDriveItems(DriveItem driveItem,
+                                                    string driveId,
+                                                    string filter = "")
+        {
+            var driveItems = new List<DriveItem>();
+            if ((driveItem == null) ||
+                (driveId == null))
+            {
+                return driveItems;
+            }
+            GetDriveItems(ref driveItems, ref driveItem, driveId, filter);
+            return driveItems;
+        }
+
+        /// <summary>
+        /// A method to retrieve a list containing all the 
+        /// Microsoft.Graph.Models.DriveItem child items for the given 
+        /// DriveItem.
+        /// </summary>
+        /// <param name="driveItems">A reference to the aggregation container.</param>
+        /// <param name="driveItem">The parent DriveItem ID that's iterated
+        /// for children.</param>
+        /// <param name="driveId">The ID of the containing OneDrive.</param>
+        /// <param name="filter">An OData filter string to apply.</param>
+        internal static void GetDriveItems(ref List<DriveItem> driveItems,
+                                           ref DriveItem driveItem,
+                                           string driveId,
+                                           string filter = "")
+        {
+            //Get the first page of Drive items.
+            DriveItemCollectionResponse driveItemsPage = null;
+            if (filter == "")
+            {
+                //There's no filter, so get all Items.
+                driveItemsPage = ActiveAuth.GraphClient.Drives[driveId]
+                    .Items[driveItem.Id]
+                    .Children.GetAsync((C) =>
+                    {
+                        C.Headers.Add("ConsistencyLevel", "eventual");
+                    }).GetAwaiter().GetResult();
+            }
+            else
+            {
+                //Apply the specified filter to the request.
+                driveItemsPage = ActiveAuth.GraphClient.Drives[driveId]
+                    .Items[driveItem.Id]
+                    .Children.GetAsync((C) =>
+                    {
+                        C.QueryParameters.Filter = filter;
+                        C.Headers.Add("ConsistencyLevel", "eventual");
+                    }).GetAwaiter().GetResult();
+            }
+            GetDriveItemsPages(ref driveItems, ref driveItemsPage, driveId);
+        }
+
+        /// <summary>
+        /// A method to iterate a page collection reference and add retrieved
+        /// items to an aggregation container reference.
+        /// </summary>
+        /// <param name="driveItems">A reference to the aggregation container.</param>
+        /// <param name="driveItemsPage">A reference to the first page to iterate.</param>
+        /// <param name="driveId">The ID of the containing OneDrive.</param>
+        internal static void GetDriveItemsPages(
+            ref List<DriveItem> driveItems,
+            ref DriveItemCollectionResponse driveItemsPage,
+            string driveId)
+        {
+            while (driveItemsPage.Value != null)
+            {
+                foreach (var driveItem in driveItemsPage.Value)
+                {
+                    lock (driveItems)
+                    {
+                        driveItems.Add(driveItem);
+                    }
+                }
+                if (!string.IsNullOrEmpty(driveItemsPage.OdataNextLink))
+                {
+                    driveItemsPage = ActiveAuth.GraphClient.Drives[driveId]
+                        .Items
+                        .WithUrl(driveItemsPage.OdataNextLink)
+                        .GetAsync().GetAwaiter().GetResult();
+                }
+                else
+                {
+                    driveItemsPage.Value = null;
+                }
+            }
+        }
+
+        /// <summary>
         /// A method to get a Group by name.
         /// </summary>
         /// <param name="name">The name of the Group to get.</param>
@@ -447,6 +711,97 @@ namespace Extensions
                 return users[0];
             }
             return null;
+        }
+
+        /// <summary>
+        /// A method to return a list of all users using the given filter.
+        /// </summary>
+        /// <param name="filter">The OData filter to apply.</param>
+        /// <returns>A list of Microsoft.Graph.Models.User for the given
+        /// filter or all users if the filter is blank.</returns>
+        public static List<User> GetUsers(string filter = "")
+        {
+            var users = new List<User>();
+            GetUsers(ref users, filter);
+            return users;
+        }
+
+        /// <summary>
+        /// A method to populate a given reference list of Users using the
+        /// given filter.
+        /// </summary>
+        /// <param name="users">The aggregation container to use.</param>
+        /// <param name="filter">The OData filter to apply to the request.</param>
+        internal static void GetUsers(ref List<User> users, 
+                                      string filter = "")
+        {
+            //Get the first page of Users.
+            UserCollectionResponse usersPage = null;
+            if (filter == "")
+            {
+                //There's no filter, so get all Users.
+                usersPage = ActiveAuth.GraphClient.Users
+                    .GetAsync((C) =>
+                    {
+                        C.Headers.Add("ConsistencyLevel", "eventual");
+                    }).GetAwaiter().GetResult();
+            }
+            else
+            {
+                //Apply the specified filter to the Users request.
+                usersPage = ActiveAuth.GraphClient.Users
+                    .GetAsync((C) =>
+                    {
+                        C.QueryParameters.Filter = filter;
+                        //At present, Graph does not support filtering with NOT
+                        //without using setting Count = true.
+                        //It throws a 400 exception with an HResult of -2146233088.
+                        //The mssage states "Operator 'not' is not supported
+                        //because the required parameters might be missing.
+                        //Try adding $count=true query parameter and 
+                        //ConsistencyLevel:eventual header.
+                        //Refer to https://aka.ms/graph-docs/advanced-queries
+                        //for more information.
+                        C.QueryParameters.Count = true;
+                        C.Headers.Add("ConsistencyLevel", "eventual");
+                    }).GetAwaiter().GetResult();
+            }
+            GetUsersPages(ref users, ref usersPage);
+        }
+
+        /// <summary>
+        /// A method to iterate all the result pages and aggregate the values
+        /// in the given reference list of Users.
+        /// </summary>
+        /// <param name="users">The aggregation container to use.</param>
+        /// <param name="usersPage">The first page of the response.</param>
+        internal static void GetUsersPages(
+            ref List<User> users,
+            ref UserCollectionResponse usersPage)
+        {
+            while (usersPage.Value != null)
+            {
+                foreach (var user in usersPage.Value)
+                {
+                    lock (users)
+                    {
+                        users.Add(user);
+                    }
+                }
+                if (!string.IsNullOrEmpty(usersPage.OdataNextLink))
+                {
+                    usersPage = ActiveAuth.GraphClient.Users
+                        .WithUrl(usersPage.OdataNextLink)
+                        .GetAsync((C) =>
+                        {
+                            C.Headers.Add("ConsistencyLevel", "eventual");
+                        }).GetAwaiter().GetResult();
+                }
+                else
+                {
+                    usersPage.Value = null;
+                }
+            }
         }
 
         /// <summary>
