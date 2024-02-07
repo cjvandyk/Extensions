@@ -330,7 +330,7 @@
 	- Enhanced .Left() to return "" instead of null allowing for inline usage in complex concatenations.<br>
 	- Enhanced .Right() to return "" instead of null allowing for inline usage in complex concatenations.<br>
 
-### **5.2.800 (2024-01-xx)**<br>
+### **5.2.800 (2024-02-04)**<br>
 	- Security Patch for CVE-2024-21319.<br>
 	- Added Constants.UserInfoType.<br>
 	- Added Dictionary.TryAdd() for exception safe collection addition.<br>
@@ -359,3 +359,13 @@
 	- Expanded Graph.GetMembers() to return more than just "id" by adding "mail" and "userPrincipalName".<br>
 	- Expanded Graph.GetOwners() to return more than just "id" by adding "mail" and "userPrincipalName".<br>
 	- Improved Identity.AuthMan.GetAuth() handling of the AuthStack.<br>
+### **5.3.800 (2024-02-07)**<br>
+	- Added 3 retries to Identity.AuthMan.GetAuthResult().<br>
+	- Added Graph.GetDrive().<br>
+	- Added InstanceExceptionInfo class for exception capture and return during bulk operations.<br>
+	- Added List.Process() for abstraction of .MultiThread() and .SingleThread().<br>
+	- Added List.TakeAndRemove() for processing batches from a list while removing said batches from the list.<br>
+	- Added LoadSaveContainer object class as a wrapper for objects being serialized with .Load() and .Save().<br>
+	- Expanded Graph.GetDrives() to allow additional metadata retrieval via an optional select string array.<br>
+	- Incorporated the LoadSaveContainer wrapper into .Load() and .Save() object serialization methods.
+	- Improved .MultiThread() and .SingleThread() by incorporating exception aggregation.<br>

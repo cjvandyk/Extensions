@@ -26,6 +26,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using static Extensions.Identity.AuthMan;
 using static System.Logit;
+using static Microsoft.Graph.Users.Item.Drives.DrivesRequestBuilder;
 
 namespace Extensions
 {
@@ -52,69 +53,131 @@ namespace Extensions
     [Serializable]
     public static partial class Graph
     {
-        /// <summary>
-        /// A method to retrieve a list containing all the 
-        /// Microsoft.Graph.Models.Drive child items for the given user filter.
-        /// </summary>
-        /// <param name="filter">An OData filter string to apply.</param>
-        /// <param name="userFilter">An OData filter string to apply to users.</param>
-        /// <returns>A list containing all the Microsoft.Graph.Models.Drive
-        /// child items for the given OData filter.</returns>
-        public static List<Drive> GetDrives(string filter = "",
-                                            string userFilter = "")
+        public static Drive GetDrive(User user)
+        {
+            var drives = GetDrives($"id eq '{user.Id}'", "");
+            return drives.FirstOrDefault();
+        }
+
+        public static Drive GetDrive(string userId)
+        {
+            var drives = GetDrives($"id eq '{userId}'", "");
+            return drives.FirstOrDefault();
+        }
+
+        public static List<Drive> GetDrives()
+        {
+            return GetDrives("", "", null);
+        }
+
+        public static List<Drive> GetDrives(string[] select = null)
+        {
+            return GetDrives("", "", select);
+        }
+
+        public static List<Drive> GetDrives(string userFilter = "",
+                                            string[] select = null)
+        {
+            return GetDrives(userFilter, "", select);
+        }
+
+        public static List<Drive> GetDrives(string userFilter = "",
+                                            string filter = "",
+                                            string[] select = null)
         {
             var drives = new List<Drive>();
-            if (filter == null)
+            var users = GetUsers(userFilter);
+            Parallel.ForEach(users, user =>
             {
-                var users = GetUsers(userFilter);
-                Parallel.ForEach(users, user =>
-                {
-                    try
-                    {
-                        var drive = ActiveAuth.GraphClient.Drives[user.Id]
-                            .GetAsync((C) =>
-                            {
-                                C.Headers.Add("ConsistencyLevel", "eventual");
-                            }).GetAwaiter().GetResult();
-                        if (drive != null)
-                        {
-                            lock (drive)
-                            {
-                                drives.Add(drive);
-                            }
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        //Swallow the exception if OneDrive doesn't exist.
-                    }
-                });
-                return drives;
-            }
-            else
-            {
-                GetDrives(ref drives, filter);
-            }
+                GetDrives(ref drives, user, filter, select);
+            });
             return drives;
         }
 
+        ///// <summary>
+        ///// A method to retrieve a list containing all the 
+        ///// Microsoft.Graph.Models.Drive child items for the given user filter.
+        ///// </summary>
+        ///// <param name="filter">An OData filter string to apply.</param>
+        ///// <param name="userFilter">An OData filter string to apply to users.</param>
+        ///// <returns>A list containing all the Microsoft.Graph.Models.Drive
+        ///// child items for the given OData filter.</returns>
+        //public static List<Drive> GetDrives(string filter = "",
+        //                                    string userFilter = "")
+        //{
+        //    var drives = new List<Drive>();
+        //    if (filter == null)
+        //    {
+        //        var users = GetUsers(userFilter);
+        //        Parallel.ForEach(users, user =>
+        //        {
+        //            try
+        //            {
+        //                var drive = ActiveAuth.GraphClient.Drives[user.Id]
+        //                    .GetAsync((C) =>
+        //                    {
+        //                        C.Headers.Add("ConsistencyLevel", "eventual");
+        //                    }).GetAwaiter().GetResult();
+        //                if (drive != null)
+        //                {
+        //                    lock (drive)
+        //                    {
+        //                        drives.Add(drive);
+        //                    }
+        //                }
+        //            }
+        //            catch (Exception)
+        //            {
+        //                //Swallow the exception if OneDrive doesn't exist.
+        //            }
+        //        });
+        //        return drives;
+        //    }
+        //    else
+        //    {
+        //        GetDrives(ref drives, filter);
+        //    }
+        //    return drives;
+        //}
+
         /// <summary>
         /// A method to retrieve a list containing all the 
-        /// Microsoft.Graph.Models.Drive child items for the given filter.
+        /// Microsoft.Graph.Models.Drive child items for the given user and
+        /// filter.  Optionally, additional Drive metadata can be requested
+        /// through the select string array parameter.  The method will add
+        /// all discovered Drive items to the referenced drives List.
         /// </summary>
         /// <param name="drives">A reference to the aggregation container.</param>
-        /// <param name="filter">An OData filter string to apply.</param>
-        /// <returns>A list containing all the Microsoft.Graph.Models.Drive
-        /// child items for the given OData filter.</returns>
+        /// <param name="user">The Graph User for which drives are retrieved.</param>
+        /// <param name="filter">An optional OData filter string to apply.</param>
+        /// <param name="select">An optional string array of additional Drive metadata
+        /// field names to retrieve.</param>
         internal static void GetDrives(ref List<Drive> drives, 
-                                       string filter = "")
+                                       User user,
+                                       string filter = "",
+                                       string[] select = null)
         {
             //Get the first page of drives.
             DriveCollectionResponse drivesPage = null;
-            if (filter == "")
+            DrivesRequestBuilderGetQueryParameters queryParameters = null;
+            if (filter != "")
             {
-                //There's no filter, so get all Drives.
-                drivesPage = ActiveAuth.GraphClient.Drives
+                queryParameters = new DrivesRequestBuilderGetQueryParameters();
+                queryParameters.Filter = filter;
+            }
+            if (select != null)
+            {
+                if (queryParameters == null)
+                {
+                    queryParameters = new DrivesRequestBuilderGetQueryParameters();
+                }
+                queryParameters.Select = select;
+            }
+            if (queryParameters == null)
+            { 
+                //Get all Drives.
+                drivesPage = ActiveAuth.GraphClient.Users[user.Id]
+                    .Drives
                     .GetAsync((C) =>
                     {
                         C.Headers.Add("ConsistencyLevel", "eventual");
@@ -123,10 +186,21 @@ namespace Extensions
             else
             {
                 //Apply the specified filter to the Drives request.
-                drivesPage = ActiveAuth.GraphClient.Drives
+                drivesPage = ActiveAuth.GraphClient.Users[user.Id]
+                    .Drives
                     .GetAsync((C) =>
                     {
-                        C.QueryParameters.Filter = filter;
+                        C.QueryParameters = queryParameters;
+                        //At present, Graph does not support filtering with NOT
+                        //without using setting Count being equal to true.
+                        //It throws a 400 exception with an HResult of -214623388.
+                        //The message states "Operator 'not' is not supported
+                        //because the required parameters might be missing.
+                        //Try adding $count=true query parameter and
+                        //ConsistencyLevel:eventual header.
+                        //Refer to https://aka.ms/graph-docs/advanced-queries for
+                        //more information."
+                        C.QueryParameters.Count = true;
                         C.Headers.Add("ConsistencyLevel", "eventual");
                     }).GetAwaiter().GetResult();
             }
@@ -145,12 +219,9 @@ namespace Extensions
         {
             while (drivesPage.Value != null)
             {
-                foreach (var drive in drivesPage.Value)
+                lock (drives)
                 {
-                    lock (drives)
-                    {
-                        drives.Add(drive);
-                    }
+                    drives.AddRange(drivesPage.Value);
                 }
                 if (!string.IsNullOrEmpty(drivesPage.OdataNextLink))
                 {

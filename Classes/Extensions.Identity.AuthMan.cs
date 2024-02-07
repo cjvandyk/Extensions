@@ -16,6 +16,7 @@ using Microsoft.Identity.Client;
 using Microsoft.SharePoint.Client;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -154,16 +155,16 @@ namespace Extensions.Identity
                 {
                     //There isn't so don't log to list an active Logit instance.
                     ActiveLogitInstance.LogToSPList = false;
-                    Inf($"AuthMan.GetAuth({tenantId}, {appId}, {thumbPrint}, " +
-                        $"{tenantString}, {scopeType.ToString()}, " +
-                        $"{authStackReset.ToString()}");
+                    //Inf($"AuthMan.GetAuth({tenantId}, {appId}, {thumbPrint}, " +
+                    //    $"{tenantString}, {scopeType.ToString()}, " +
+                    //    $"{authStackReset.ToString()}");
                     ActiveLogitInstance.LogToSPList = true;
                 }
                 else
                 {
-                    Inf($"AuthMan.GetAuth({tenantId}, {appId}, {thumbPrint}, " +
-                        $"{tenantString}, {scopeType.ToString()}, " +
-                        $"{authStackReset.ToString()}");
+                    //Inf($"AuthMan.GetAuth({tenantId}, {appId}, {thumbPrint}, " +
+                    //    $"{tenantString}, {scopeType.ToString()}, " +
+                    //    $"{authStackReset.ToString()}");
                 }
             }
             //If a reset is requested, clear the stack.
@@ -517,36 +518,69 @@ namespace Extensions.Identity
             }
             //Reset the auth result.
             AuthenticationResult authResult = null;
+            //Configure retries.
+            int retries = 0;
 
             //Generate the result.
             switch (appType)
             {
                 case ClientApplicationType.Confidential:
                     var appC = app as IConfidentialClientApplication;
-                    authResult = appC.AcquireTokenForClient(scopes)
-                        .WithTenantId(tenantId)
-                        .ExecuteAsync().GetAwaiter().GetResult();
+                    while (retries < 3)
+                    {
+                        try
+                        {
+                            retries++;
+                            authResult = appC.AcquireTokenForClient(scopes)
+                                .WithTenantId(tenantId)
+                                .ExecuteAsync().GetAwaiter().GetResult();
+                            break;
+                        }
+                        catch (MsalServiceException msalex)
+                        {
+                            if (!msalex.IsRetryable)
+                            {
+                                throw;
+                            }
+                        }
+                    }
                     break;
                 case ClientApplicationType.Public:
                     var appP = app as IPublicClientApplication;
                     var accounts = appP.GetAccountsAsync()
                         .GetAwaiter().GetResult();
-                    authResult = GetPublicAppAuthResult(
-                        ref appP,
-                        ref accounts,
-                        PublicAppAuthResultType.Silent);
-                    if (authResult == null)
+                    while (retries < 3)
                     {
-                        authResult = GetPublicAppAuthResult(
-                            ref appP,
-                            ref accounts,
-                            PublicAppAuthResultType.Interactive);
-                        if (authResult == null)
+                        try
                         {
                             authResult = GetPublicAppAuthResult(
                                 ref appP,
                                 ref accounts,
-                                PublicAppAuthResultType.Prompt);
+                                PublicAppAuthResultType.Silent);
+                            break;
+                            if (authResult == null)
+                            {
+                                authResult = GetPublicAppAuthResult(
+                                    ref appP,
+                                    ref accounts,
+                                    PublicAppAuthResultType.Interactive);
+                                break;
+                                if (authResult == null)
+                                {
+                                    authResult = GetPublicAppAuthResult(
+                                        ref appP,
+                                        ref accounts,
+                                        PublicAppAuthResultType.Prompt);
+                                    break;
+                                }
+                            }
+                        }
+                        catch (MsalClientException msalex)
+                        {
+                            if (!msalex.IsRetryable)
+                            {
+                                throw;
+                            }
                         }
                     }
                     break;
