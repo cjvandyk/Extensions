@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Extensions
 {
@@ -35,7 +36,7 @@ namespace Extensions
         /// <param name="filePath">The path on disk for the save file.</param>
         /// <returns>The object of type T loaded from disk.</returns>
         public static T Load<T>(this T obj,
-                                   string filePath = "File.bin")
+                                string filePath = "File.bin")
         {
             try
             {
@@ -46,8 +47,9 @@ namespace Extensions
                             filePath,
                             System.IO.FileMode.Open))
                     {
-                        var serializer = new System.Runtime.Serialization.DataContractSerializer(typeof(T));
-                        obj = (T)serializer.ReadObject(stream);
+                        var serializer = new DataContractSerializer(typeof(LoadSaveContainer));
+                        var saved = (LoadSaveContainer)serializer.ReadObject(stream);
+                        obj = (T)saved.Value;
                         return obj;
                     }
                 }
@@ -77,6 +79,8 @@ namespace Extensions
         {
             try
             {
+                LoadSaveContainer loadSaveContainer = new LoadSaveContainer();
+                loadSaveContainer.Value = obj;
                 lock (lockManager)
                 {
                     using (System.IO.Stream stream =
@@ -84,8 +88,8 @@ namespace Extensions
                             filePath,
                             System.IO.FileMode.Create))
                     {
-                        var serializer = new System.Runtime.Serialization.DataContractSerializer(typeof(T));
-                        serializer.WriteObject(stream, obj);
+                        var serializer = new DataContractSerializer(typeof(LoadSaveContainer));
+                        serializer.WriteObject(stream, loadSaveContainer);
                         return true;
                     }
                 }

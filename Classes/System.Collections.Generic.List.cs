@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Extensions
@@ -68,31 +69,85 @@ namespace Extensions
 
         #region Threading
         /// <summary>
+        /// Method to process current list of type T objects in either
+        /// multi-threaded or single-threaded fashion using the 
+        /// processLoopInstanceMethod delegate method.  It also provides
+        /// potential custom exception handling through the
+        /// processLoopInstanceExceptionHandlerMethod delegate method.
+        /// </summary>
+        /// <typeparam name="T">The type of object being processed.</typeparam>
+        /// <param name="lst">The current list of objects to process.</param>
+        /// <param name="processLoopInstanceMethod">The delegate method that
+        /// is called for every instance in the list.</param>
+        /// <param name="multiThreaded">A boolean switch to force 
+        /// multi-threaded processing of the list.</param>
+        /// <param name="processLoopInstanceExceptionHandlerMethod">The
+        /// delegate method that would be called to do custom exception
+        /// processing.</param>
+        /// <returns>A list of InstanceExceptionInfo objects representing
+        /// exceptions captured during processing of the list.</returns>
+        public static List<InstanceExceptionInfo> Process<T>(
+            this List<T> lst,
+            Action<T> processLoopInstanceMethod,
+            bool multiThreaded = false,
+            Action<Exception> processLoopInstanceExceptionHandlerMethod = null)
+        {            
+            if (multiThreaded)
+            {
+                return lst.MultiThread<T>(
+                    processLoopInstanceMethod,
+                    processLoopInstanceExceptionHandlerMethod);
+            }
+            else
+            {
+                return lst.SingleThread<T>(
+                    processLoopInstanceMethod,
+                    processLoopInstanceExceptionHandlerMethod);
+            }
+        }
+
+        /// <summary>
         /// Process a list of objects of type T using multiple threads.
         /// </summary>
         /// <typeparam name="T">The type of objects in the list.</typeparam>
         /// <param name="lst">The list of objects to process.</param>
-        /// <param name="processLoopInstanceMethod">The method to process
-        /// each individual item.</param>
-        public static void MultiThread<T>(
+        /// <param name="processLoopInstanceMethod">The delegate method to 
+        /// process each individual item.</param>
+        /// <param name="processLoopInstanceExceptionHandlerMethod">The
+        /// delegate method to call for custom exception handling.</param>
+        /// <returns>A list of InstanceExceptionInfo objects containing
+        /// details about all exceptions captured while processing the
+        /// list.</returns>
+        public static List<InstanceExceptionInfo> MultiThread<T>(
             this List<T> lst,
-            Action<T> processLoopInstanceMethod)
+            Action<T> processLoopInstanceMethod,
+            Action<Exception> processLoopInstanceExceptionHandlerMethod = null)
         {
+            List<InstanceExceptionInfo> result = new List<InstanceExceptionInfo>();
             Parallel.ForEach(lst, obj =>
             {
                 try
                 {
                     processLoopInstanceMethod(obj);
                 }
-                catch (System.Net.WebException wex)
-                {
-                    Logit.Err(wex.ToString());
-                }
                 catch (Exception ex)
                 {
-                    Logit.Err(ex.ToString());
+                    InstanceExceptionInfo current = new InstanceExceptionInfo();
+                    current.Key = obj.GetHashCode().ToString();
+                    current.Exceptions.Add(ex);
+                    current.BinaryData.Add(current.Key, obj);
+                    current.MultiThreaded = true;
+                    lock (result)
+                    {
+                        result.Add(current);
+                    }
+                    if (processLoopInstanceExceptionHandlerMethod != null)
+                    {
+                        processLoopInstanceExceptionHandlerMethod(ex);
+                    }
                 }
             });
+            return result;
         }
 
         /// <summary>
@@ -104,27 +159,73 @@ namespace Extensions
         /// <param name="lst">The list of objects to process.</param>
         /// <param name="processLoopInstanceMethod">The method to process
         /// each individual item.</param>
-        public static void SingleThread<T>(
+        public static List<InstanceExceptionInfo> SingleThread<T>(
             this List<T> lst,
-            Action<T> processLoopInstanceMethod)
+            Action<T> processLoopInstanceMethod,
+            Action<Exception> processLoopInstanceExceptionHandlerMethod = null)
         {
+            List<InstanceExceptionInfo > result = new List<InstanceExceptionInfo>();
             foreach (T obj in lst)
             {
                 try
                 {
                     processLoopInstanceMethod(obj);
                 }
-                catch (System.Net.WebException wex)
-                {
-                    Logit.Err(wex.ToString());
-                }
                 catch (Exception ex)
                 {
-                    Logit.Err(ex.ToString());
+                    InstanceExceptionInfo current = new InstanceExceptionInfo();
+                    current.Key = obj.GetHashCode().ToString();
+                    current.Exceptions.Add(ex);
+                    current.BinaryData.Add(current.Key, obj);
+                    current.MultiThreaded = false;
+                    lock (result)
+                    {
+                        result.Add(current);
+                    }
+                    if (processLoopInstanceExceptionHandlerMethod != null)
+                    {  
+                        processLoopInstanceExceptionHandlerMethod(ex); 
+                    }
                 }
             }
+            return result;
         }
         #endregion Threading
+
+        #region TakeAndRemove()
+        /// <summary>
+        /// A method to take the requested number of items (or all items if
+        /// the requested number is >= lst.Count()) and return the remainder.
+        /// </summary>
+        /// <typeparam name="T">The type of objects in the list.</typeparam>
+        /// <param name="lst">The list of objects to process.</param>
+        /// <param name="count">The number of return items to take from the
+        /// head of the list before removing said items from the current
+        /// list.</param>
+        /// <returns>A list of type T objects containing the requested number
+        /// of items from the head of the current list.</returns>
+        public static List<T> TakeAndRemove<T>(
+            this List<T> lst,
+            int count)
+        {
+            List<T> lstCopy = lst.ToList();
+            if (lst.Count < count)
+            {
+                lst = new List<T>();
+                return lstCopy;
+            }
+            List<T> result = new List<T>();
+            //Use lst.Count() since the RemoveAt() method will cause the
+            //result of lstCopy.Count() to change during the loop.
+            for (int C = 0; C < count; C++)
+            { 
+                result.Add(lstCopy[0]);
+                lstCopy.RemoveAt(0);
+            }
+            lst = lstCopy;
+            return result;
+        }
+        #endregion TakeAndRemove()
 
         #region TryAdd()
         /// <summary>
