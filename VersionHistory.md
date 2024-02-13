@@ -359,6 +359,7 @@
 	- Expanded Graph.GetMembers() to return more than just "id" by adding "mail" and "userPrincipalName".<br>
 	- Expanded Graph.GetOwners() to return more than just "id" by adding "mail" and "userPrincipalName".<br>
 	- Improved Identity.AuthMan.GetAuth() handling of the AuthStack.<br>
+
 ### **5.3.800 (2024-02-07)**<br>
 	- Added 3 retries to Identity.AuthMan.GetAuthResult().<br>
 	- Added Graph.GetDrive().<br>
@@ -369,3 +370,6 @@
 	- Expanded Graph.GetDrives() to allow additional metadata retrieval via an optional select string array.<br>
 	- Incorporated the LoadSaveContainer wrapper into .Load() and .Save() object serialization methods.
 	- Improved .MultiThread() and .SingleThread() by incorporating exception aggregation.<br>
+
+### **5.4.800 (2024-02-13)**<br>
+	- Fixed bug in InitializeTenant().<br>

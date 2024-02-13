@@ -177,9 +177,6 @@ namespace Extensions
                             GetEnv("ApplicationClientId"),
                             GetEnv("CertThumbprint"),
                             tenantString);
-                    Tenants.Add(
-                        tenantString,
-                        ActiveAuth.TenantCfg);
                 }
                 else
                 {
