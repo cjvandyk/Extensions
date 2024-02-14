@@ -147,7 +147,7 @@ namespace Extensions.Identity
                     return Scopes.SharePointAdmin;
                     break;
             }
-            return AuthMan.ActiveAuth.Scopes;
+            return ActiveAuth.Scopes;
         }
 
         /// <summary>
