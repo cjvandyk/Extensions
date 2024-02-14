@@ -73,6 +73,15 @@ namespace Extensions
         public static TenantConfig ActiveTenant { get; set; } = null;
 
         /// <summary>
+        /// The currently active Auth object from the stack.
+        /// </summary>
+        public static Auth ActiveAuth { get; private set; } = new Auth();
+        //= GetAuth(GetEnv("TenantDirectoryId"),
+        //          GetEnv("ApplicationClientId"),
+        //          GetEnv("CertificateThumbprint"),
+        //          GetEnv("TenantString"));
+
+        /// <summary>
         /// TODO
         /// </summary>
         public static Config config { get; set; } = new Config();
@@ -153,6 +162,23 @@ namespace Extensions
         /// </summary>
         private static readonly object LockManager = new object();
         #endregion Properties
+
+        #region ActiveAuth
+        /// <summary>
+        /// A method to set the current ActiveAuth.
+        /// </summary>
+        /// <param name="key">The key to use against the AuthStack.</param>
+        /// <returns>True if ActiveAuth was successfully set, else False.</returns>
+        public static bool SetActiveAuth(string key)
+        {
+            if (AuthStack.ContainsKey(key))
+            {
+                ActiveAuth = AuthStack[key];
+                return true;
+            }
+            return false;
+        }
+        #endregion ActiveAuth
 
         #region InitializeTenant
         /// <summary>
