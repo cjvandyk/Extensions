@@ -24,7 +24,7 @@ using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
-using static Extensions.Identity.AuthMan;
+using static Extensions.Core;
 using static System.Logit;
 using static Microsoft.Graph.Users.Item.Drives.DrivesRequestBuilder;
 
