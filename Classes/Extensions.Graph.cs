@@ -1,6 +1,4 @@
-﻿//#pragma warning disable CS0168, CS1587, CS1998, IDE0059, IDE0028
-
-/// <summary>
+﻿/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
@@ -8,24 +6,15 @@
 /// </summary>
 
 using Microsoft.Graph;
-using Microsoft.Graph.Groups;
 using static Microsoft.Graph.Groups.GroupsRequestBuilder;
 using static Microsoft.Graph.Users.UsersRequestBuilder;
 using Microsoft.Graph.Models;
-using Microsoft.SharePoint.News.DataModel;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-//using System.Management.Automation;
-using System.Net.Http;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using static Extensions.Core;
-using static System.Logit;
 using static Microsoft.Graph.Users.Item.Drives.DrivesRequestBuilder;
 
 namespace Extensions
@@ -1914,4 +1903,3 @@ namespace Extensions
         }
     }
 }
-//#pragma warning restore CS0168, CS1587, CS1998, IDE0059, IDE0028

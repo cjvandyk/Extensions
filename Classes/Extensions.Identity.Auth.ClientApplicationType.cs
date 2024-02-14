@@ -1,7 +1,4 @@
-﻿#pragma warning disable CS1587, CS1998, IDE0059, IDE0028
-
-
-using System;
+﻿using System;
 /// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
@@ -31,4 +28,3 @@ namespace Extensions.Identity
         }
     }
 }
-#pragma warning restore CS1587, CS1998, IDE0059, IDE0028

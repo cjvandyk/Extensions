@@ -1,7 +1,4 @@
-﻿//#pragma warning disable IDE1006, IDE0017, CS0162, IDE0060, IDE0079 // Naming Styles, Simplify declaration (FQCN used), break after return, Remove unused (string[] args, Remove unnecessary suppression)
-#pragma warning disable CS1587, CS1998, IDE0059, IDE0028
-
-/// <summary>
+﻿/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
@@ -72,9 +69,8 @@ namespace Extensions
                        (b < 10 ? "   " : 
                        (b < 100 ? "  " : " ")));
             }
-            Core.printf(str);
+            Core.Printf(str);
         }
         #endregion byte[]
     }
 }
-#pragma warning restore CS1587, CS1998, IDE0059, IDE0028

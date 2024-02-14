@@ -6,7 +6,6 @@
 /// </summary>
 
 using System;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Extensions
@@ -22,9 +21,7 @@ namespace Extensions
         public class DriveItem
         {
             [DataMember]
-            public Microsoft.Graph.Models.IdentitySet CreatedBy { get; set; }
-
-        
+            public Microsoft.Graph.Models.IdentitySet CreatedBy { get; set; }        
         }
     }
 }

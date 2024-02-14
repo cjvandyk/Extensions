@@ -1,13 +1,10 @@
-﻿//#pragma warning disable CA1416, CS0162, CS0168, CS1587, CS1591, CS1998, IDE0028, IDE0059
-
-/// <summary>
+﻿/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
 /// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
 /// </summary>
 
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
@@ -1054,5 +1051,3 @@ namespace System
         #endregion Worker Methods
     }
 }
-
-//#pragma warning restore CA1416, CS0162, CS0168, CS1587, CS1591, CS1998, IDE0028, IDE0059

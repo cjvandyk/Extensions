@@ -159,6 +159,8 @@ namespace Extensions
         /// <param name="lst">The list of objects to process.</param>
         /// <param name="processLoopInstanceMethod">The method to process
         /// each individual item.</param>
+        /// <param name="processLoopInstanceExceptionHandlerMethod">The method
+        /// used in case of Exception to process said Exception.</param>
         public static List<InstanceExceptionInfo> SingleThread<T>(
             this List<T> lst,
             Action<T> processLoopInstanceMethod,

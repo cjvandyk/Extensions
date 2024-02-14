@@ -1,6 +1,4 @@
-﻿#pragma warning disable CS1587, CS1998, IDE0059, IDE0028
-
-/// <summary>
+﻿/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
@@ -9,13 +7,10 @@
 
 using Microsoft.Graph;
 using Microsoft.Identity.Client;
-using Microsoft.SharePoint.Client;
 using System;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
-using System.Threading.Tasks;
 using static Extensions.Identity.AuthMan;
 using static System.Logit;
 
@@ -136,8 +131,8 @@ namespace Extensions.Identity
             App = Identity.App.GetApp(appId, thumbprint, tenantString);
             //Set the scopes for this Auth object.
             Scopes = Identity.Scopes.GetScopes(scopeType);
-            TenantCfg.Settings = Core.config.Settings;
-            TenantCfg.Labels = Core.config.Labels;
+            TenantCfg.Settings = Core.Config.Settings;
+            TenantCfg.Labels = Core.Config.Labels;
             if (!Core.Tenants.ContainsKey(tenantString))
             {
                 Core.Tenants.Add(tenantString, TenantCfg);
@@ -181,8 +176,8 @@ namespace Extensions.Identity
             App = Identity.App.GetApp(appId, Cert.Thumbprint, tenantString);
             //Set the scopes for this Auth object.
             Scopes = Identity.Scopes.GetScopes(scopeType);
-            TenantCfg.Settings = Core.config.Settings;
-            TenantCfg.Labels = Core.config.Labels;
+            TenantCfg.Settings = Core.Config.Settings;
+            TenantCfg.Labels = Core.Config.Labels;
             if (!Core.Tenants.ContainsKey(tenantString))
             {
                 Core.Tenants.Add(tenantString, TenantCfg);
@@ -286,4 +281,3 @@ namespace Extensions.Identity
         }
     }
 }
-#pragma warning restore CS1587, CS1998, IDE0059, IDE0028

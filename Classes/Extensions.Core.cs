@@ -5,23 +5,17 @@
 /// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
 /// </summary>
 
-using Microsoft.Extensions.Logging;
 using Microsoft.Graph;
 using Microsoft.Graph.Models;
-using Microsoft.SharePoint.News.DataModel;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Extensions.Identity;
 using Extensions.Tenant;
-using static Extensions.Identity.Auth;
 using static Extensions.Identity.AuthMan;
-using static System.Logit;
 
 namespace Extensions
 {
@@ -84,7 +78,7 @@ namespace Extensions
         /// <summary>
         /// TODO
         /// </summary>
-        public static Config config { get; set; } = new Config();
+        public static Configuration Config { get; set; } = new Configuration();
 
         ///// <summary>
         ///// The tenant name e.g. for contoso.sharepoint.us it would be "contoso".
@@ -163,7 +157,30 @@ namespace Extensions
         private static readonly object LockManager = new object();
         #endregion Properties
 
-        #region ActiveAuth
+        #region Auth
+        /// <summary>
+        /// Method to get a matching Auth object from the stack or if it
+        /// doesn't exist on the stack, generate the new Auth object and
+        /// push it to the stack.
+        /// </summary>
+        /// <param name="scopeType">The scope type of the Auth.  Default value
+        /// is Graph.</param>
+        /// <param name="authStackReset">Boolean to trigger a clearing of the 
+        /// Auth stack.  Default value is false.</param>
+        /// <returns>A valid Auth object from the stack.</returns>
+        public static Auth GetAuth(
+            ScopeType scopeType = ScopeType.Graph,
+            bool authStackReset = false)
+        {
+            return AuthMan.GetAuth(
+                ActiveTenant.TenantDirectoryId,
+                ActiveTenant.ApplicationClientId,
+                ActiveTenant.CertThumbprint,
+                ActiveTenant.TenantString,
+                scopeType,
+                authStackReset);
+        }
+
         /// <summary>
         /// A method to set the current ActiveAuth.
         /// </summary>
@@ -178,7 +195,7 @@ namespace Extensions
             }
             return false;
         }
-        #endregion ActiveAuth
+        #endregion Auth
 
         #region InitializeTenant
         /// <summary>
@@ -199,10 +216,10 @@ namespace Extensions
                     string[] sp = Scopes.SharePoint;
                     sp[0] = sp[0].Replace("Contoso", CoreBase.TenantString);
                     Scopes.SharePoint = sp;
-                    GetAuth(GetEnv("TenantDirectoryId"),
-                            GetEnv("ApplicationClientId"),
-                            GetEnv("CertThumbprint"),
-                            tenantString);
+                    AuthMan.GetAuth(GetEnv("TenantDirectoryId"),
+                                    GetEnv("ApplicationClientId"),
+                                    GetEnv("CertThumbprint"),
+                                    tenantString);
                 }
                 else
                 {
@@ -228,7 +245,7 @@ namespace Extensions
         /// <param name="key">The name of the EV to add to config.</param>
         internal static void AddEnvSetting(string key)
         {
-            config.Settings.Add(key, GetEnv(key));
+            Config.Settings.Add(key, GetEnv(key));
         }
 
         /// <summary>
@@ -243,7 +260,7 @@ namespace Extensions
             {
                 try
                 {
-                    config.Settings.Add(key, GetEnv(key));
+                    Config.Settings.Add(key, GetEnv(key));
                 }
                 catch (Exception ex)
                 {
@@ -262,19 +279,19 @@ namespace Extensions
         /// <param name="tenantString">The name of the target tenant.</param>
         internal static void LoadConfig(string tenantString)
         {
-            config.Settings = new Dictionary<string, string>();
-            config.Settings.Add("TenantString", tenantString);
+            Config.Settings = new Dictionary<string, string>();
+            Config.Settings.Add("TenantString", tenantString);
             if (Environment.UserInteractive)
             {
                 Inf($"Loading config from [" +
                     $"{GetRunFolder()}]\\{GetConfigFileName(tenantString)}].");
-                config.Settings = LoadJSON(
-                    $"{Core.GetRunFolder()}" +
+                Config.Settings = LoadJSON(
+                    $"{GetRunFolder()}" +
                     $"\\{GetConfigFileName(tenantString)}");
                 Inf($"Loading sensitivity labels from [" +
                     $"{GetRunFolder()}]\\{GetLabelsFileName(tenantString)}].");
-                config.Labels = LoadJSON(
-                    $"{Core.GetRunFolder()}" +
+                Config.Labels = LoadJSON(
+                    $"{GetRunFolder()}" +
                     $"\\{GetLabelsFileName(tenantString)}");
                 Inf("Config and Labels loaded.");
             }
@@ -362,13 +379,71 @@ namespace Extensions
         /// returned else a blank string is returned.</returns>
         public static string GetSetting(string key)
         {
-            if (config.Settings.ContainsKey(key))
+            if (Config.Settings.ContainsKey(key))
             { 
-                return config.Settings[key]; 
+                return Config.Settings[key]; 
             }
             return "";
         }
         #endregion InitializeTenant
+
+        #region Logit
+        /// <summary>
+        /// Called to write "Information" entries.
+        /// </summary>
+        /// <param name="message">The string message to log.</param>
+        /// <param name="eventId">The Event Log event ID to use.</param>
+        /// <param name="instance">Return value from Log() method.</param>
+        public static void Inf(
+            string message,
+            int eventId = 0,
+            Logit.Instance instance = null)
+        {
+            Logit.Inf(message, eventId, instance);
+        }
+
+        /// <summary>
+        /// Called to write "Warning" entries.
+        /// </summary>
+        /// <param name="message">The string message to log.</param>
+        /// <param name="eventId">The Event Log event ID to use.</param>
+        /// <param name="instance">Return value from Log() method.</param>
+        public static void Wrn(
+            string message,
+            int eventId = 0,
+            Logit.Instance instance = null)
+        {
+            Logit.Wrn(message, eventId, instance);
+        }
+
+        /// <summary>
+        /// Called to write "Error" entries.
+        /// </summary>
+        /// <param name="message">The string message to log.</param>
+        /// <param name="eventId">The Event Log event ID to use.</param>
+        /// <param name="instance">Return value from Log() method.</param>
+        public static void Err(
+            string message,
+            int eventId = 0,
+            Logit.Instance instance = null)
+        {
+            Logit.Err(message, eventId, instance);
+        }
+
+        /// <summary>
+        /// Called to write "Verbose" entries.
+        /// </summary>
+        /// <param name="message">The string message to log.</param>
+        /// <param name="eventId">The Event Log event ID to use.</param>
+        /// <param name="instance">Return value from Log() method.</param>
+        public static void Vrb(
+            string message,
+            int eventId = 0,
+            Logit.Instance instance = null)
+        {
+            Logit.Vrb(message, eventId, instance);
+        }
+        #endregion Logit
 
         #region GetCVersion()
         /// <summary>
@@ -652,7 +727,7 @@ namespace Extensions
         /// <param name="foreground">Overrideable text color, default to white.</param>
         /// <param name="background">Overrideable background color, default to
         /// black.</param>
-        public static void printf(object msg, 
+        public static void Printf(object msg, 
                                   ConsoleColor foreground = ConsoleColor.White, 
                                   ConsoleColor background = ConsoleColor.Black)
         {
@@ -1001,12 +1076,12 @@ namespace Extensions
         public static string GetUserEmailUpn(
             Microsoft.Graph.Models.ListItem listItem)
         {
-            if (listItem.Fields.AdditionalData.Keys.Contains("EMail") &&
+            if (listItem.Fields.AdditionalData.ContainsKey("EMail") &&
                 listItem.Fields.AdditionalData["EMail"] != null)
             {
                 return listItem.Fields.AdditionalData["EMail"].ToString();
             }
-            if (listItem.Fields.AdditionalData.Keys.Contains("EMail") &&
+            if (listItem.Fields.AdditionalData.ContainsKey("EMail") &&
                 listItem.Fields.AdditionalData["EMail"] != null)
             {
                 return listItem.Fields.AdditionalData["UserName"].ToString();
@@ -1031,7 +1106,7 @@ namespace Extensions
                     id);
                 if ((userListItems != null) &&
                     (userListItems.Count > 0) &&
-                    (userListItems[0].Fields.AdditionalData.Keys.Contains("EMail")) &&
+                    (userListItems[0].Fields.AdditionalData.ContainsKey("EMail")) &&
                     (userListItems[0].Fields.AdditionalData["EMail"] != null))
                 {
                     return userListItems[0].Fields.AdditionalData["EMail"].ToString();
@@ -1068,7 +1143,7 @@ namespace Extensions
             }
             try
             {
-                if ((item.Fields.AdditionalData.Keys.Contains("EMail")) &&
+                if ((item.Fields.AdditionalData.ContainsKey("EMail")) &&
                     (item.Fields.AdditionalData["EMail"] != null))
                 {
                     return item.Fields.AdditionalData["EMail"].ToString();
@@ -1103,7 +1178,7 @@ namespace Extensions
         {
             try
             {
-                if (!dic.Values.Contains(val))
+                if (!dic.ContainsValue(val))
                 {
                     dic.Add(key, val);
                     return true;
@@ -1181,7 +1256,7 @@ namespace Extensions
                 Inf($"[{setting.Key}] = [{setting.Value}]");
             }
             Inf("Dumping Core settings...");
-            foreach (var setting in Extensions.Core.config.Settings)
+            foreach (var setting in Core.Config.Settings)
             {
                 Inf($"[{setting.Key}] = [{setting.Value}]");
             }

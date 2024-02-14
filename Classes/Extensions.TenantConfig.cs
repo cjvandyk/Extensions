@@ -7,9 +7,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using static System.Logit;
+using static Extensions.Core;
 
 namespace Extensions
 {
@@ -204,7 +202,7 @@ namespace Extensions
         {
             if (tenantString != null)
             {
-                string authority = Core.GetAuthorityDomain(AzureEnvironment);
+                string authority = GetAuthorityDomain(AzureEnvironment);
                 TenantString = tenantString.Trim();
                 TenantUrl = TenantString + ".sharepoint" + authority;                            
                 TenantUri = new Uri("https://" + TenantUrl);

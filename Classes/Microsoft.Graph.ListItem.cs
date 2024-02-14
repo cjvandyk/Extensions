@@ -1,6 +1,4 @@
-﻿#pragma warning disable CS0162, CS1587, CS1591, CS1998, IDE0059, IDE0028
-
-/// <summary>
+﻿/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
@@ -9,7 +7,7 @@
 
 using Microsoft.Graph.Models;
 using System;
-using static System.Logit;
+using static Extensions.Core;
 
 namespace Extensions
 {
@@ -76,5 +74,3 @@ namespace Extensions
 		}
     }
 }
-
-#pragma warning restore CS0162, CS1587, CS1591, CS1998, IDE0059, IDE0028

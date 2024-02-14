@@ -1,6 +1,4 @@
-﻿#pragma warning disable CS0162, CS1587, CS1998, IDE0028, IDE0059
-
-/// <summary>
+﻿/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
@@ -9,7 +7,6 @@
 
 using System;
 using static Extensions.Core;
-using static System.Logit;
 
 namespace Extensions.Identity
 {
@@ -193,5 +190,3 @@ namespace Extensions.Identity
         }
     }
 }
-
-#pragma warning restore CS0162, CS1587, CS1998, IDE0028, IDE0059

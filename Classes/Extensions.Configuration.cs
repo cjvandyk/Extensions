@@ -1,18 +1,15 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Graph;
-using Microsoft.Online.SharePoint.TenantAdministration;
+﻿/// <summary>
+/// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
+/// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
+/// author and contributors.  Please see:
+/// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
+/// </summary>
+
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 using static Extensions.Core;
-using static Extensions.Identity.AuthMan;
-using static System.Logit;
 
 namespace Extensions
 {
@@ -20,7 +17,7 @@ namespace Extensions
     /// Class that carries the configuration for a given tenant.
     /// </summary>
     [Serializable]
-    public partial class Config
+    public partial class Configuration
     {
         /// <summary>
         /// Settings contains the dictionary of all settings.
@@ -36,7 +33,7 @@ namespace Extensions
         /// <summary>
         /// Empty constructor.
         /// </summary>
-        public Config() 
+        public Configuration() 
         {
         }
 
@@ -47,7 +44,7 @@ namespace Extensions
         /// <param name="tenantString">The name of the tenant e.g. for 
         /// contoso.sharepoint.us it would be 'contoso'.</param>
         /// <returns>The filename of the configuration JSON file.</returns>
-        internal string GetConfigFileName(string tenantString)
+        internal static string GetConfigFileName(string tenantString)
         {
             return $"UniversalConfig.{tenantString}.json";
         }
@@ -59,7 +56,7 @@ namespace Extensions
         /// <param name="tenantString">The name of the tenant e.g. for 
         /// contoso.sharepoint.us it would be 'contoso'.</param>
         /// <returns>The filename of the label JSON file.</returns>
-        internal string GetLabelsFileName(string tenantString)
+        internal static string GetLabelsFileName(string tenantString)
         {
             return $"Labels.{tenantString}.json";
         }
@@ -85,7 +82,7 @@ namespace Extensions
         /// </summary>
         /// <param name="filePath">The name of the file to load.</param>
         /// <returns>A dictionary of strings from the JSON file.</returns>
-        internal Dictionary<string, string> LoadJSON(string filePath)
+        internal static Dictionary<string, string> LoadJSON(string filePath)
         {
             var result = new Dictionary<string, string>();
             using (StreamReader reader = new StreamReader(filePath))

@@ -374,5 +374,7 @@
 ### **5.4.800 (2024-02-13)**<br>
 	- Fixed bug in InitializeTenant().<br>
 
-### **5.5.800 (2024-02-13)**<br>
-	- Fixed bug in InitializeTenant().<br>
+### **5.5.800 (2024-02-14)**<br>
+	- Reorganized Core and Identity.AuthMan classes to eliminate the need for a using statement for Extensions.Identity.AuthMan.<br>
+	- Added Inf(), Wrn(), Err() and Vrb() to Core as transit methods to eliminate the need for a using statment for System.Logit.<br>
+	- Major code cleanup.

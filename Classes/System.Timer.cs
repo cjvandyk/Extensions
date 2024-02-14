@@ -1,4 +1,4 @@
-﻿#pragma warning disable CS1587, IDE1006, CS1998, IDE0059, IDE0028
+﻿#pragma warning disable IDE1006 // Naming Styles
 
 /// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
@@ -88,4 +88,4 @@ namespace System
         #endregion Timer
     }
 }
-#pragma warning restore CS1587, IDE1006, CS1998, IDE0059, IDE0028
+#pragma warning restore IDE1006 // Naming Styles
