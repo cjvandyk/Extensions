@@ -373,3 +373,6 @@
 
 ### **5.4.800 (2024-02-13)**<br>
 	- Fixed bug in InitializeTenant().<br>
+
+### **5.5.800 (2024-02-13)**<br>
+	- Fixed bug in InitializeTenant().<br>
