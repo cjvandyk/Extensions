@@ -46,15 +46,6 @@ namespace Extensions.Identity
             = new Dictionary<string, Auth>();
 
         /// <summary>
-        /// The currently active Auth object from the stack.
-        /// </summary>
-        public static Auth ActiveAuth { get; private set; } = new Auth();
-            //= GetAuth(GetEnv("TenantDirectoryId"),
-            //          GetEnv("ApplicationClientId"),
-            //          GetEnv("CertificateThumbprint"),
-            //          GetEnv("TenantString"));
-
-        /// <summary>
         /// Constructor method.
         /// </summary>
         static AuthMan()
@@ -178,7 +169,7 @@ namespace Extensions.Identity
             if (AuthStack.ContainsKey(key))
             {
                 //If it is, set the current ActiveAuth to that stack instance.
-                ActiveAuth = AuthStack[key];
+                SetActiveAuth(key);
             }
             else
             {
@@ -192,7 +183,7 @@ namespace Extensions.Identity
                     scopeType);
                 //Set the current ActiveAuth to the new stack instance
                 //that was pushed to the stack by its ctor.
-                ActiveAuth = AuthStack[key];
+                SetActiveAuth(key);
             }
             //Return the ActiveAuth object.
             return ActiveAuth;
@@ -256,7 +247,7 @@ namespace Extensions.Identity
             if (AuthStack.ContainsKey(key))
             {
                 //If it is, set the current ActiveAuth to that stack instance.
-                ActiveAuth = AuthStack[key];
+                SetActiveAuth(key);
             }
             else
             {
@@ -265,7 +256,7 @@ namespace Extensions.Identity
                 //Push it to the stack.
                 AuthStack.Add(auth.Id, auth);
                 //Set the current ActiveAuth to the new stack instance.
-                ActiveAuth = AuthStack[auth.Id];
+                SetActiveAuth(auth.Id);
             }
             //Return the ActiveAuth object.
             return ActiveAuth;
