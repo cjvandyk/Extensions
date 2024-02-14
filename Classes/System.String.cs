@@ -1,6 +1,4 @@
-﻿//#pragma warning disable CA1416, CS1587, CS0162, CS1998, IDE0059, IDE0028
-
-/// <summary>
+﻿/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
@@ -2833,4 +2831,3 @@ namespace Extensions
         //}
     }
 }
-//#pragma warning restore CA1416, CS1587, CS0162, CS1998, IDE0059, IDE0028

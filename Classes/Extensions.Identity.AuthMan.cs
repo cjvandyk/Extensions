@@ -1,35 +1,23 @@
-﻿#pragma warning disable IDE0079 // Remove unnecessary suppression
-#pragma warning disable CS0168, CS1587, CS1998, IDE0028, IDE0059, IDE0060
-
-/// <summary>
+﻿/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
 /// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
 /// </summary>
 
-using Azure.Core;
 using Microsoft.Graph;
-using Microsoft.Graph.Authentication;
-using Microsoft.Graph.Core;
 using Microsoft.Identity.Client;
 using Microsoft.SharePoint.Client;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
-using System.Text.Json.Nodes;
-using System.Threading.Tasks;
 using static Extensions.Core;
 using static Extensions.Identity.App;
 using static Extensions.Identity.Auth;
-using static System.Logit;
 
 namespace Extensions.Identity
 {
@@ -137,19 +125,19 @@ namespace Extensions.Identity
             bool authStackReset = false)
         {
             //If logging location is static, don't write this output.
-            if (!ActiveLogitInstance.StaticConsoleLocation)
+            if (!Logit.ActiveLogitInstance.StaticConsoleLocation)
             {
                 //Check if there's an active auth that can be used to log to 
                 //SharePoint and if logging to SharePoint is enabled.
                 if ((ActiveAuth.AuthResult == null) &&
-                    (ActiveLogitInstance.LogToSPList))
+                    (Logit.ActiveLogitInstance.LogToSPList))
                 {
                     //There isn't so don't log to list an active Logit instance.
-                    ActiveLogitInstance.LogToSPList = false;
+                    Logit.ActiveLogitInstance.LogToSPList = false;
                     //Inf($"AuthMan.GetAuth({tenantId}, {appId}, {thumbPrint}, " +
                     //    $"{tenantString}, {scopeType.ToString()}, " +
                     //    $"{authStackReset.ToString()}");
-                    ActiveLogitInstance.LogToSPList = true;
+                    Logit.ActiveLogitInstance.LogToSPList = true;
                 }
                 else
                 {
@@ -580,4 +568,3 @@ namespace Extensions.Identity
         }
     }
 }
-#pragma warning restore CS0168, CS1587, CS1998, IDE0028, IDE0059, IDE0079

@@ -1,19 +1,12 @@
-﻿#pragma warning disable IDE0079 // Remove unnecessary suppression
-#pragma warning disable CS0168, CS1587, CS1998, IDE0028, IDE0059, IDE0060
-
-/// <summary>
+﻿/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
 /// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
 /// </summary>
 
-using Extensions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Extensions
 {
@@ -76,4 +69,3 @@ namespace Extensions
         }
     }
 }
-#pragma warning restore CS0168, CS1587, CS1998, IDE0028, IDE0059, IDE0079

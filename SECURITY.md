@@ -6,7 +6,7 @@ The following is our version matrix for current security update support.
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 5.4.x   | :white_check_mark: |
+| 5.5.x   | :white_check_mark: |
 | 5.x     | :x:                |
 | 4.8.x   | :white_check_mark: |
 | < 4.8   | :x:                |
