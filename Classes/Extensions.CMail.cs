@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using static Extensions.Core;
 using static Extensions.Identity.AuthMan;
 
 namespace Extensions
