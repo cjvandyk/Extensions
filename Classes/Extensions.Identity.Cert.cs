@@ -7,7 +7,6 @@
 
 using System;
 using System.Security.Cryptography.X509Certificates;
-using static System.Logit;
 
 namespace Extensions.Identity
 {
@@ -73,7 +72,7 @@ namespace Extensions.Identity
             }
             catch (Exception ex)
             {
-                Err(ex.ToString());
+                //Err(ex.ToString());
             }
             finally
             {

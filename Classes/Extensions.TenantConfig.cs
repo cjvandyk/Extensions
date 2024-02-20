@@ -202,7 +202,7 @@ namespace Extensions
         {
             if (tenantString != null)
             {
-                string authority = GetAuthorityDomain(AzureEnvironment);
+                string authority = Identity.AuthMan.GetAuthorityDomain(AzureEnvironment);
                 TenantString = tenantString.Trim();
                 TenantUrl = TenantString + ".sharepoint" + authority;                            
                 TenantUri = new Uri("https://" + TenantUrl);

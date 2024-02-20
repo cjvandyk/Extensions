@@ -20,7 +20,6 @@ namespace Extensions
     [DataContract]
     [KnownType(typeof(object))]
     [KnownType(typeof(List<DriveItem>))]
-    [KnownType(typeof(List<GraphExtensions.DriveItem>))]
     [KnownType(typeof(System.Text.Json.JsonElement))]
     public class LoadSaveContainer
     {

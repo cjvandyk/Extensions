@@ -942,25 +942,6 @@ namespace Extensions
         }
         #endregion GetAzureEnvironment
 
-        #region GetAuthorityDomain
-        /// <summary>
-        /// A public method to get the domain extension.
-        /// </summary>
-        /// <param name="azureEnvironment">The name of the Azure environment 
-        /// type.</param>
-        /// <returns>".us" if the environment is USGovGCCHigh otherwise it
-        /// will return ".com".</returns>
-        public static string GetAuthorityDomain(
-            AzureEnvironment azureEnvironment = AzureEnvironment.USGovGCCHigh)
-        {
-            if (azureEnvironment == AzureEnvironment.USGovGCCHigh)
-            {
-                return ".us";
-            }
-            return ".com";
-        }
-        #endregion GetAuthorityDomain
-
         #region Group
         /// <summary>
         /// A private method to get a group of list of groups where the 

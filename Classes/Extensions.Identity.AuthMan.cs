@@ -11,10 +11,12 @@ using Microsoft.SharePoint.Client;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
+using System.Threading;
 using static Extensions.Core;
 using static Extensions.Identity.App;
 using static Extensions.Identity.Auth;
@@ -212,6 +214,25 @@ namespace Extensions.Identity
                 authStackReset);
         }
 
+        #region GetAuthorityDomain
+        /// <summary>
+        /// A public method to get the domain extension.
+        /// </summary>
+        /// <param name="azureEnvironment">The name of the Azure environment 
+        /// type.</param>
+        /// <returns>".us" if the environment is USGovGCCHigh otherwise it
+        /// will return ".com".</returns>
+        public static string GetAuthorityDomain(
+            AzureEnvironment azureEnvironment = AzureEnvironment.USGovGCCHigh)
+        {
+            if (azureEnvironment == AzureEnvironment.USGovGCCHigh)
+            {
+                return ".us";
+            }
+            return ".com";
+        }
+        #endregion GetAuthorityDomain
+
         /// <summary>
         /// Method to get a matching Auth object from the stack or if it
         /// doesn't exist on the stack, generate the new Auth object and
@@ -329,14 +350,14 @@ namespace Extensions.Identity
                         }
                         catch (Exception ex2)
                         {
-                            Err(ex2.ToString());
+                            //Err(ex2.ToString());
                             throw;
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    Err(ex.ToString());
+                    //Err(ex.ToString());
                     throw;
                 }
             }
@@ -369,9 +390,24 @@ namespace Extensions.Identity
             {
                 return ActiveAuth.HttpClient;
             }
+#if NET5_0_OR_GREATER
+            var socketsHandler = new SocketsHttpHandler
+            {
+                MaxConnectionsPerServer = 1000,
+                PooledConnectionIdleTimeout = TimeSpan.FromMinutes(55),
+                PooledConnectionLifetime = TimeSpan.FromMinutes(60)
+            };
             //Build the HttpClient object using the AuthenticationResult
             //from the previous step.
+            HttpClient httpClient = new HttpClient(socketsHandler);
+#endif
+#if NETFRAMEWORK || NETSTANDARD
             HttpClient httpClient = new HttpClient();
+#endif
+            httpClient.Timeout = TimeSpan.FromMinutes(1) + 
+                                 TimeSpan.FromSeconds(40);
+            ServicePointManager.DefaultConnectionLimit = int.MaxValue;
+            ThreadPool.SetMaxThreads(32767, 1000);
             ProductInfoHeaderValue productInfoHeaderValue =
                 new ProductInfoHeaderValue("User-Agent", $"NONISV|Extensions");
             httpClient.DefaultRequestHeaders.UserAgent.Add(
@@ -509,7 +545,6 @@ namespace Extensions.Identity
                     {
                         try
                         {
-                            retries++;
                             authResult = appC.AcquireTokenForClient(scopes)
                                 .WithTenantId(tenantId)
                                 .ExecuteAsync().GetAwaiter().GetResult();
@@ -521,6 +556,7 @@ namespace Extensions.Identity
                             {
                                 throw;
                             }
+                            retries++;
                         }
                     }
                     break;
@@ -560,6 +596,7 @@ namespace Extensions.Identity
                             {
                                 throw;
                             }
+                            retries++;
                         }
                     }
                     break;

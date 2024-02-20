@@ -100,7 +100,7 @@ namespace Extensions
         /// <param name="listName">The name of the list to load.  NOTE: This
         /// is the same name that was specified when the list was saved.</param>
         /// <param name="objectType">The type to which the loaded JSON will be
-        /// cast, usually something like "List<MyClass>".</param>
+        /// cast, usually something like a List of a custom Class.</param>
         /// <param name="local">Is the state file in the execution folder.</param>
         /// <param name="maxCacheAgeInDays"></param>
         /// <returns>If the state file is newer than the current date/time plus

@@ -31,3 +31,4 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Style", "IDE1005:Delegate invocation can be simplified.", Justification = "CvD")]
 [assembly: SuppressMessage("Usage", "CA2211:Non-constant fields should not be visible", Justification = "CvD")]
 [assembly: SuppressMessage("Usage", "CA2254:Template should be a static expression", Justification = "CvD")]
+[assembly: SuppressMessage("Usage", "CS8600:Converting null literal or possible null value to non-nullable type.", Justification = "CvD")]

@@ -378,3 +378,11 @@
 	- Reorganized Core and Identity.AuthMan classes to eliminate the need for a using statement for Extensions.Identity.AuthMan.<br>
 	- Added Inf(), Wrn(), Err() and Vrb() to Core as transit methods to eliminate the need for a using statment for System.Logit.<br>
 	- Major code cleanup.
+
+### **5.6.800 (2024-02-20)**<br>
+	- Cleanup root DLLs.<br>
+	- Improved robustness of string.Left() and string.Right() through try/catch additions.<br>
+	- Moved .GetAuthorityDomain() from Core to Identity.AuthMan to eliminate AuthMan dependencies.<br>
+	- Removed Logit dependencies.<br>
+	- Updated Microsoft.Graph dependency to 5.42.0.<br>
+	- Updated Microsoft.Identity.Client dependency to 4.59.0.<br>

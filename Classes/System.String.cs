@@ -1389,13 +1389,20 @@ namespace Extensions
                 if (occurrence > 1)
                 {
                     string remainder = str;
-                    for (int C = 0; C <= occurrence; C++)
+                    for (int C = 0; C < occurrence; C++)
                     {
                         if (remainder.IndexOf(index) == -1)
                         {
                             return "";
                         }
-                        remainder = remainder.Substring(remainder.IndexOf(index) + index.Length);
+                        try
+                        {
+                            remainder = remainder.Substring(remainder.IndexOf(index) + index.Length);
+                        }
+                        catch (Exception ex)
+                        {
+                            return "";
+                        }
                     }
                     return str.Substring(0, str.Length - (remainder.Length + index.Length));
                 }
@@ -1408,7 +1415,14 @@ namespace Extensions
                         {
                             return "";
                         }
-                        remainder = remainder.Substring(0, remainder.LastIndexOf(index));
+                        try
+                        {
+                            remainder = remainder.Substring(0, remainder.LastIndexOf(index));
+                        }
+                        catch (Exception ex)
+                        {
+                            return "";
+                        }
                     }
                     return remainder;
                 }
@@ -1842,7 +1856,14 @@ namespace Extensions
                         {
                             return "";
                         }
-                        remainder = remainder.Substring(remainder.IndexOf(index) + index.Length);
+                        try
+                        {
+                            remainder = remainder.Substring(remainder.IndexOf(index) + index.Length);
+                        }
+                        catch (Exception ex)
+                        {
+                            return "";
+                        }
                     }
                     return remainder;
                 }
@@ -1855,7 +1876,14 @@ namespace Extensions
                         {
                             return "";
                         }
-                        remainder = remainder.Substring(0, remainder.LastIndexOf(index));
+                        try
+                        {
+                            remainder = remainder.Substring(0, remainder.LastIndexOf(index));
+                        }
+                        catch (Exception ex)
+                        {
+                            return "";
+                        }
                     }
                     return str.Substring(remainder.Length + index.Length);
                 }

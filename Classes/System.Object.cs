@@ -20,8 +20,10 @@ namespace Extensions
         /// <summary>
         /// The private dictionary object where extension properties are stored.
         /// </summary>
-        private static Dictionary<string, object> extensionProperties = 
+#pragma warning disable IDE0044 // Add readonly modifier
+        private static Dictionary<string, object> extensionProperties =
             new Dictionary<string, object>();
+#pragma warning restore IDE0044 // Add readonly modifier
         /// <summary>
         /// The private object used to manage locks on file I/O.
         /// </summary>
@@ -34,23 +36,34 @@ namespace Extensions
         /// <typeparam name="T">The type of the target object.</typeparam>
         /// <param name="obj">The triggering object.</param>
         /// <param name="filePath">The path on disk for the save file.</param>
+        /// <param name="blackCheetah">A boolean switch determining if 
+        /// BlackCheetah was employed during .Save() or not.  Defaults to
+        /// false.</param>
         /// <returns>The object of type T loaded from disk.</returns>
         public static T Load<T>(this T obj,
-                                string filePath = "File.bin")
+                                string filePath = "File.bin",
+                                bool blackCheetah = false)
         {
             try
             {
+#if BlackCheetah
+                if (blackCheetah)
+                {
+                    return (T)BlackCheetah.ObjectExtensions.Load<T>(obj, filePath, blackCheetah);
+                }
+#endif
+                DataContractSerializer serializer = null;
+                LoadSaveContainer lsc = null;
                 lock (lockManager)
                 {
-                    using (System.IO.Stream stream =
+                    using (System.IO.Stream fileStream =
                         System.IO.File.Open(
                             filePath,
                             System.IO.FileMode.Open))
                     {
-                        var serializer = new DataContractSerializer(typeof(LoadSaveContainer));
-                        var saved = (LoadSaveContainer)serializer.ReadObject(stream);
-                        obj = (T)saved.Value;
-                        return obj;
+                        serializer = new DataContractSerializer(typeof(LoadSaveContainer));
+                        lsc = (LoadSaveContainer)serializer.ReadObject(fileStream);
+                        return (T)lsc.Value;
                     }
                 }
             }
@@ -64,7 +77,7 @@ namespace Extensions
                 return default;
             }
         }
-        #endregion T Load<T>()
+#endregion T Load<T>()
 
         #region T Save<T>()
         /// <summary>
@@ -73,24 +86,33 @@ namespace Extensions
         /// <typeparam name="T">The type of the target object.</typeparam>
         /// <param name="obj">The triggering object.</param>
         /// <param name="filePath">The path on disk for the save file.</param>
+        /// <param name="blackCheetah">A boolean switch determining if 
+        /// BlackCheetah is employed or not.  Defaults to false.</param>
         /// <returns>True if save successful, otherwise False.</returns>
         public static bool Save<T>(this T obj,
-                                   string filePath = "File.bin")
+                                   string filePath = "File.bin",
+                                   bool blackCheetah = false)
         {
             try
             {
+#if BlackCheetah
+                if (blackCheetah)
+                {
+                    return BlackCheetah.ObjectExtensions.Save(obj, filePath);
+                }
+#endif
                 LoadSaveContainer loadSaveContainer = new LoadSaveContainer();
                 loadSaveContainer.Value = obj;
                 lock (lockManager)
                 {
-                    using (System.IO.Stream stream =
+                    using (System.IO.Stream fileStream =
                         System.IO.File.Open(
                             filePath,
                             System.IO.FileMode.Create))
                     {
                         var serializer = new DataContractSerializer(typeof(LoadSaveContainer));
-                        serializer.WriteObject(stream, loadSaveContainer);
-                        return true;
+                            serializer.WriteObject(fileStream, loadSaveContainer);
+                            return true;
                     }
                 }
             }
@@ -104,7 +126,7 @@ namespace Extensions
                 return false;
             }
         }
-        #endregion T Save<T>()
+#endregion T Save<T>()
 
         #region Get()
         /// <summary>

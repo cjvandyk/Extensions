@@ -16,6 +16,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using static Extensions.Core;
 using static Microsoft.Graph.Users.Item.Drives.DrivesRequestBuilder;
+using Extensions.Identity;
+using System.IO;
+using static Microsoft.Graph.Drives.Item.Items.Item.Children.ChildrenRequestBuilder;
 
 namespace Extensions
 {
@@ -82,53 +85,7 @@ namespace Extensions
             });
             return drives;
         }
-
-        ///// <summary>
-        ///// A method to retrieve a list containing all the 
-        ///// Microsoft.Graph.Models.Drive child items for the given user filter.
-        ///// </summary>
-        ///// <param name="filter">An OData filter string to apply.</param>
-        ///// <param name="userFilter">An OData filter string to apply to users.</param>
-        ///// <returns>A list containing all the Microsoft.Graph.Models.Drive
-        ///// child items for the given OData filter.</returns>
-        //public static List<Drive> GetDrives(string filter = "",
-        //                                    string userFilter = "")
-        //{
-        //    var drives = new List<Drive>();
-        //    if (filter == null)
-        //    {
-        //        var users = GetUsers(userFilter);
-        //        Parallel.ForEach(users, user =>
-        //        {
-        //            try
-        //            {
-        //                var drive = ActiveAuth.GraphClient.Drives[user.Id]
-        //                    .GetAsync((C) =>
-        //                    {
-        //                        C.Headers.Add("ConsistencyLevel", "eventual");
-        //                    }).GetAwaiter().GetResult();
-        //                if (drive != null)
-        //                {
-        //                    lock (drive)
-        //                    {
-        //                        drives.Add(drive);
-        //                    }
-        //                }
-        //            }
-        //            catch (Exception)
-        //            {
-        //                //Swallow the exception if OneDrive doesn't exist.
-        //            }
-        //        });
-        //        return drives;
-        //    }
-        //    else
-        //    {
-        //        GetDrives(ref drives, filter);
-        //    }
-        //    return drives;
-        //}
-
+                
         /// <summary>
         /// A method to retrieve a list containing all the 
         /// Microsoft.Graph.Models.Drive child items for the given user and
@@ -162,38 +119,50 @@ namespace Extensions
                 }
                 queryParameters.Select = select;
             }
-            if (queryParameters == null)
-            { 
-                //Get all Drives.
-                drivesPage = ActiveAuth.GraphClient.Users[user.Id]
-                    .Drives
-                    .GetAsync((C) =>
-                    {
-                        C.Headers.Add("ConsistencyLevel", "eventual");
-                    }).GetAwaiter().GetResult();
-            }
-            else
+            try
             {
-                //Apply the specified filter to the Drives request.
-                drivesPage = ActiveAuth.GraphClient.Users[user.Id]
-                    .Drives
-                    .GetAsync((C) =>
-                    {
-                        C.QueryParameters = queryParameters;
-                        //At present, Graph does not support filtering with NOT
-                        //without using setting Count being equal to true.
-                        //It throws a 400 exception with an HResult of -214623388.
-                        //The message states "Operator 'not' is not supported
-                        //because the required parameters might be missing.
-                        //Try adding $count=true query parameter and
-                        //ConsistencyLevel:eventual header.
-                        //Refer to https://aka.ms/graph-docs/advanced-queries for
-                        //more information."
-                        C.QueryParameters.Count = true;
-                        C.Headers.Add("ConsistencyLevel", "eventual");
-                    }).GetAwaiter().GetResult();
+                if (queryParameters == null)
+                {
+                    //Get all Drives.
+                    drivesPage = ActiveAuth.GraphClient.Users[user.Id]
+                        .Drives
+                        .GetAsync((C) =>
+                        {
+                            C.Headers.Add("ConsistencyLevel", "eventual");
+                        }).GetAwaiter().GetResult();
+                }
+                else
+                {
+                    //Apply the specified filter to the Drives request.
+                    drivesPage = ActiveAuth.GraphClient.Users[user.Id]
+                        .Drives
+                        .GetAsync((C) =>
+                        {
+                            C.QueryParameters = queryParameters;
+                            //At present, Graph does not support filtering with NOT
+                            //without using setting Count being equal to true.
+                            //It throws a 400 exception with an HResult of -214623388.
+                            //The message states "Operator 'not' is not supported
+                            //because the required parameters might be missing.
+                            //Try adding $count=true query parameter and
+                            //ConsistencyLevel:eventual header.
+                            //Refer to https://aka.ms/graph-docs/advanced-queries for
+                            //more information."
+                            C.QueryParameters.Count = true;
+                            C.Headers.Add("ConsistencyLevel", "eventual");
+                        }).GetAwaiter().GetResult();
+                }
+                GetDrivesPages(ref drives, ref drivesPage);
             }
-            GetDrivesPages(ref drives, ref drivesPage);
+            catch (Exception ex)
+            {
+                //Ignore exceptions when the user's OneDrive is not configured.
+                if ((!ex.Message.Contains("Unable to retrieve user's mysite URL.")) &&
+                    (!ex.Message.Contains("User's mysite not found.")))
+                {
+                    throw;
+                }
+            }
         }
 
         /// <summary>
@@ -229,29 +198,150 @@ namespace Extensions
         }
 
         /// <summary>
+        /// A method to get the size of a OneDrive in bytes.
+        /// </summary>
+        /// <param name="drive">The target Drive to calculate.</param>
+        /// <param name="authStack">An optional list of Auth objects that can
+        /// be passed to be used during multi-threaded operations e.g. if the
+        /// environment is huge, 429 throttling can occur on the AppId being
+        /// used.  By spreading the load across multiple AppIds, their auth
+        /// tokens can be generated before hand and then passed to be used.</param>
+        /// <param name="blackCheetah">A boolean switch to control if
+        /// BlackCheetah is used in the operation.  Defaults to false.</param>
+        /// <returns>A long value of the number of bytes of the Drive.</returns>
+        public static long GetDriveContentSize(this Drive drive,                                                
+                                               List<Auth> authStack = null,
+                                               bool blackCheetah = false)
+        {
+            long result = 0;
+            if (drive == null)
+            { 
+                return result; 
+            }
+#if BlackCheetah
+            if (blackCheetah)
+            {
+                if (authStack == null)
+                {
+                    authStack = new List<Auth>();
+                    authStack.Add(ActiveAuth);
+                }
+                List<GraphServiceClient> graphClients =
+                    new List<GraphServiceClient>();
+                foreach (var auth in authStack)
+                {
+                    graphClients.Add(auth.GraphClient);
+                }
+                foreach (var driveItem in BlackCheetah.Graph.GetDriveItems(
+                    drive,
+                    graphClients))
+                {
+                    result += (long)driveItem.Size;
+                }
+                return result;
+            }
+#endif
+            List<DriveItem> driveItems = GetDriveItems(
+                drive, 
+                "", 
+                null, 
+                authStack, 
+                blackCheetah);
+            foreach (var driveItem in GetDriveItems(drive))
+            {
+                result += (long)driveItem.Size;
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// A method to get a specific DriveItem.
+        /// </summary>
+        /// <param name="driveId">The containing Drive ID.</param>
+        /// <param name="itemId">The target item ID.</param>
+        /// <returns>The DriveItem if found, else null.</returns>
+        public static DriveItem GetDriveItem(string driveId,
+                                             string itemId)
+        {
+            DriveItem driveItem =
+                ActiveAuth.GraphClient.Drives[driveId]
+                    .Items[itemId]
+                    .GetAsync((C) =>
+                    {
+                        C.Headers.Add("ConsistencyLevel", "eventual");
+                    }).GetAwaiter().GetResult();
+            if (driveItem != null)
+            {
+                return driveItem;
+            }
+            return null;
+        }
+
+        /// <summary>
         /// A method to retrieve a list containing all the 
         /// Microsoft.Graph.Models.DriveItem child items for the given user.
         /// </summary>
         /// <param name="userGuid">The ID of the target user to iterate.</param>
         /// <param name="filter">An OData filter string to apply.</param>
+        /// <param name="select">An optional string array of additional metadata
+        /// field names to retrieve.</param>
+        /// <param name="authStack">An optional list of Auth objects that can
+        /// be passed to be used during multi-threaded operations e.g. if the
+        /// environment is huge, 429 throttling can occur on the AppId being
+        /// used.  By spreading the load across multiple AppIds, their auth
+        /// tokens can be generated before hand and then passed to be used.</param>
+        /// <param name="blackCheetah">A boolean switch to control if
+        /// BlackCheetah is used in the operation.  Defaults to false.</param>
         /// <returns>A list containing all the Microsoft.Graph.Models.DriveItem
         /// child items for the given user.</returns>
-        public static List<DriveItem> GetDriveItems(string userGuid,
-                                                    string filter = "")
+        public static List<DriveItem> GetDriveItems(
+            string userGuid,
+            List<Auth> authStack = null,
+            string filter = null,
+            string[] select = null,
+            bool blackCheetah = false)
         {
             var driveItems = new List<DriveItem>();
             if (userGuid == null)
             {
                 return driveItems;
             }
+            if (authStack == null)
+            {
+                authStack = new List<Auth>();
+                authStack.Add(ActiveAuth);
+            }
             var user = ActiveAuth.GraphClient.Users[userGuid]
                 .GetAsync().GetAwaiter().GetResult();
             var drive = ActiveAuth.GraphClient.Drives[user.Id]
                 .GetAsync().GetAwaiter().GetResult();
-            var driveItemRoot = ActiveAuth.GraphClient.Drives[drive.Id]
-                .Root.GetAsync().GetAwaiter().GetResult();
-            GetDriveItems(ref driveItems, ref driveItemRoot, drive.Id, filter);
-            return driveItems;
+#if BlackCheetah
+                    if (blackCheetah)
+                    {
+                        if (authStack == null)
+                        {
+                            authStack = new List<Auth>();
+                            authStack.Add(ActiveAuth);
+                        }
+                        List<GraphServiceClient> graphClients =
+                            new List<GraphServiceClient>();
+                        foreach (var auth in authStack)
+                        {
+                            graphClients.Add(auth.GraphClient);
+                        }
+                        List<BlackCheetah.DriveItem> results =
+                            new List<BlackCheetah.DriveItem>();
+                        results = BlackCheetah.Graph.GetDriveItems(drive, 
+                                                                   graphClients, 
+                                                                   filter);
+                        foreach (var result in results)
+                        {
+                            driveItems.Add(BlackCheetah.Graph.ToGraphDriveItem(result));
+                        }
+                        return driveItems;
+                    }
+#endif
+            return GetDriveItems(drive, filter, select, authStack);
         }
 
         /// <summary>
@@ -260,68 +350,124 @@ namespace Extensions
         /// </summary>
         /// <param name="drive">The target Drive to iterate.</param>
         /// <param name="filter">An OData filter string to apply.</param>
+        /// <param name="select">An optional string array of additional metadata
+        /// field names to retrieve.</param>
+        /// <param name="authStack">An optional list of Auth objects that can
+        /// be passed to be used during multi-threaded operations e.g. if the
+        /// environment is huge, 429 throttling can occur on the AppId being
+        /// used.  By spreading the load across multiple AppIds, their auth
+        /// tokens can be generated before hand and then passed to be used.</param>
+        /// <param name="blackCheetah">A boolean switch to control if
+        /// BlackCheetah is used in the operation.  Defaults to false.</param>
         /// <returns>A list containing all the Microsoft.Graph.Models.DriveItem
         /// child items for the given Drive.</returns>
-        public static List<DriveItem> GetDriveItems(Drive drive,
-                                                    string filter = "")
+        public static List<DriveItem> GetDriveItems(
+            Drive drive,
+            string filter = null,
+            string[] select = null,
+            List<Auth> authStack = null,
+            bool blackCheetah = false)
         {
-            var driveItems = new List<DriveItem>();
+            //Create result container.
+            var allDriveItems = new List<DriveItem>();
+            //If we don't have a valid Drive, return empty container.
             if (drive == null)
             {
-                return driveItems;
+                return allDriveItems;
             }
+            //Get the DriveItem of the Drive root.
             var driveItemRoot = ActiveAuth.GraphClient.Drives[drive.Id]
                 .Root.GetAsync().GetAwaiter().GetResult();
-            GetDriveItems(ref driveItems, ref driveItemRoot, drive.Id, filter);
-            return driveItems;
+            GetDriveItems(ref allDriveItems, 
+                          driveItemRoot, 
+                          filter, 
+                          select, 
+                          authStack, 
+                          blackCheetah);
+            return allDriveItems;
         }
 
         /// <summary>
         /// A method to retrieve a list containing all the 
-        /// Microsoft.Graph.Models.DriveItem child items for the given
-        /// DriveItem.
-        /// </summary>
-        /// <param name="driveItem">A reference to the aggregation container.</param>
-        /// <param name="driveId">The ID of the containing OneDrive.</param>
-        /// <param name="filter">An OData filter string to apply.</param>
-        /// <returns>A list containing all the Microsoft.Graph.Models.DriveItem
-        /// child items for the given DriveItem.</returns>
-        public static List<DriveItem> GetDriveItems(DriveItem driveItem,
-                                                    string driveId,
-                                                    string filter = "")
-        {
-            var driveItems = new List<DriveItem>();
-            if ((driveItem == null) ||
-                (driveId == null))
-            {
-                return driveItems;
-            }
-            GetDriveItems(ref driveItems, ref driveItem, driveId, filter);
-            return driveItems;
-        }
-
-        /// <summary>
-        /// A method to retrieve a list containing all the 
-        /// Microsoft.Graph.Models.DriveItem child items for the given 
-        /// DriveItem.
+        /// Microsoft.Graph.Models.DriveItem child items for the given DriveItem
+        /// and filter.  Optionally, additional DriveItem metadata can be
+        /// requested through the select string array parameter.  The method 
+        /// will add all discovered DriveItems to the referenced DriveItems List.
         /// </summary>
         /// <param name="driveItems">A reference to the aggregation container.</param>
-        /// <param name="driveItem">The parent DriveItem ID that's iterated
-        /// for children.</param>
-        /// <param name="driveId">The ID of the containing OneDrive.</param>
-        /// <param name="filter">An OData filter string to apply.</param>
+        /// <param name="item">The target DriveItem to iterate.</param>
+        /// <param name="filter">An optional OData filter string to apply.</param>
+        /// <param name="select">An optional string array of additional metadata
+        /// field names to retrieve.</param>
+        /// <param name="blackCheetah">A boolean switch to control if
+        /// BlackCheetah is used in the operation.  Defaults to false.</param>
+        /// <param name="authStack">An optional list of Auth objects that can
+        /// be passed to be used during multi-threaded operations e.g. if the
+        /// environment is huge, 429 throttling can occur on the AppId being
+        /// used.  By spreading the load across multiple AppIds, their auth
+        /// tokens can be generated before hand and then passed to be used.</param>
         internal static void GetDriveItems(ref List<DriveItem> driveItems,
-                                           ref DriveItem driveItem,
-                                           string driveId,
-                                           string filter = "")
+                                           DriveItem item,
+                                           string filter = "",
+                                           string[] select = null,
+                                           List<Auth> authStack = null,
+                                           bool blackCheetah = false)
         {
-            //Get the first page of Drive items.
-            DriveItemCollectionResponse driveItemsPage = null;
-            if (filter == "")
+#if BlackCheetah
+            if (blackCheetah)
             {
-                //There's no filter, so get all Items.
-                driveItemsPage = ActiveAuth.GraphClient.Drives[driveId]
-                    .Items[driveItem.Id]
+                List<GraphServiceClient> clientStack = new List<GraphServiceClient>();
+                if (authStack == null)
+                {
+                    authStack.Add(ActiveAuth);
+                }
+                foreach (var auth in authStack)
+                {
+                    clientStack.Add(auth.GraphClient);
+                }
+                var bcItems = BlackCheetah.Graph.GetDriveItems(
+                    item, 
+                    item.ParentReference.DriveId, 
+                    filter, 
+                    select, 
+                    clientStack);
+                if ((bcItems != null) &&
+                    (bcItems.Count > 0) &&
+                    (bcItems.ContainsKey("driveItems")) &&
+                    (bcItems["driveItems"].Count > 0))
+                {
+                    lock (driveItems)
+                    {
+                        foreach (var bcDriveItem in bcItems["driveItems"])
+                        {
+                            driveItems.Add(BlackCheetah.Graph.ToGraphDriveItem(bcDriveItem));
+                        }
+                    }
+                }
+                return;
+            }
+#endif
+            //Get the first page of drive items.
+            DriveItemCollectionResponse driveItemsPage = null;
+            ChildrenRequestBuilderGetQueryParameters queryParameters = null;
+            if (filter != "")
+            {
+                queryParameters = new ChildrenRequestBuilderGetQueryParameters();
+                queryParameters.Filter = filter;
+            }
+            if (select != null)
+            {
+                if (queryParameters == null)
+                {
+                    queryParameters = new ChildrenRequestBuilderGetQueryParameters();
+                }
+                queryParameters.Select = select;
+            }
+            if (queryParameters == null)
+            {
+                //There no filter, so get all items.
+                driveItemsPage = ActiveAuth.GraphClient.Drives[item.ParentReference.DriveId]
+                    .Items[item.Id]
                     .Children.GetAsync((C) =>
                     {
                         C.Headers.Add("ConsistencyLevel", "eventual");
@@ -330,15 +476,17 @@ namespace Extensions
             else
             {
                 //Apply the specified filter to the request.
-                driveItemsPage = ActiveAuth.GraphClient.Drives[driveId]
-                    .Items[driveItem.Id]
+                driveItemsPage = ActiveAuth.GraphClient.Drives[item.ParentReference.DriveId]
+                    .Items[item.Id]
                     .Children.GetAsync((C) =>
                     {
-                        C.QueryParameters.Filter = filter;
+                        C.QueryParameters = queryParameters;
                         C.Headers.Add("ConsistencyLevel", "eventual");
                     }).GetAwaiter().GetResult();
             }
-            GetDriveItemsPages(ref driveItems, ref driveItemsPage, driveId);
+            GetDriveItemsPages(ref driveItems,
+                               ref driveItemsPage,
+                               item.ParentReference.DriveId);
         }
 
         /// <summary>
@@ -347,31 +495,36 @@ namespace Extensions
         /// </summary>
         /// <param name="driveItems">A reference to the aggregation container.</param>
         /// <param name="driveItemsPage">A reference to the first page to iterate.</param>
-        /// <param name="driveId">The ID of the containing OneDrive.</param>
+        /// <param name="driveId">The ID of the containing Drive.</param>
         internal static void GetDriveItemsPages(
             ref List<DriveItem> driveItems,
             ref DriveItemCollectionResponse driveItemsPage,
             string driveId)
         {
+            //Was anything returned.
             while (driveItemsPage.Value != null)
             {
-                foreach (var driveItem in driveItemsPage.Value)
+                //If so, lock the container and add found items.
+                lock (driveItems)
                 {
-                    lock (driveItems)
-                    {
-                        driveItems.Add(driveItem);
-                    }
+                    driveItems.AddRange(driveItemsPage.Value);
                 }
+                //Are the more pages of items?
                 if (!string.IsNullOrEmpty(driveItemsPage.OdataNextLink))
                 {
+                    //If so, get the next page of items.
                     driveItemsPage = ActiveAuth.GraphClient.Drives[driveId]
                         .Items
                         .WithUrl(driveItemsPage.OdataNextLink)
-                        .GetAsync().GetAwaiter().GetResult();
+                        .GetAsync((C) =>
+                        {
+                            C.Headers.Add("ConsistencyLevel", "eventual");
+                        }).GetAwaiter().GetResult();
                 }
                 else
                 {
-                    driveItemsPage.Value = null;
+                    //No more result pages remain.
+                    break;
                 }
             }
         }
