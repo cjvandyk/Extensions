@@ -6,7 +6,6 @@
 /// </summary>
 
 using System;
-using static Extensions.Core;
 
 namespace Extensions.Identity
 {
@@ -108,7 +107,7 @@ namespace Extensions.Identity
         /// </summary>
         public static string[] SharePointAdmin = new string[]
         {
-            $"https://{CoreBase.TenantString}-admin.sharepoint.us/.default",
+            $"https://{Extensions.CoreBase.TenantString}-admin.sharepoint.us/.default",
             Offline
         };
 
@@ -143,8 +142,10 @@ namespace Extensions.Identity
                 case ScopeType.SharePointAdmin:
                     return Scopes.SharePointAdmin;
                     break;
+                default:
+                    return Scopes.Graph;
+                    break;
             }
-            return ActiveAuth.Scopes;
         }
 
         /// <summary>
@@ -185,7 +186,6 @@ namespace Extensions.Identity
                 msg += scopes[C];
             }
             msg = $"ERROR!  Scopes [{msg} is invalid.]";
-            Err(msg);
             throw new Exception(msg);
         }
     }
