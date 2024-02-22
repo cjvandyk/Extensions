@@ -1,6 +1,4 @@
-﻿#pragma warning disable CS0162, CS1587, CS1998, IDE0028, IDE0059
-
-/// <summary>
+﻿/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
@@ -8,7 +6,7 @@
 /// </summary>
 
 using System;
-using static Extensions.Core;
+using static Extensions.Identity.AuthMan;
 
 namespace Extensions.Identity
 {
@@ -27,9 +25,21 @@ namespace Extensions.Identity
         /// </summary>
         Graph,
         /// <summary>
+        /// Management scope.
+        /// </summary>
+        Management,
+        /// <summary>
+        /// PowerBI scope.
+        /// </summary>
+        PowerBI,
+        /// <summary>
         /// SharePoint scope.
         /// </summary>
-        SharePoint
+        SharePoint,
+        /// <summary>
+        /// SharePoint Admin scope.
+        /// </summary>
+        SharePointAdmin
     }
 
     /// <summary>
@@ -53,7 +63,7 @@ namespace Extensions.Identity
         /// </summary>
         public static string[] Exchange = new string[]
         {
-            "https://outlook.office365.us/.default"
+            $"https://outlook.office365{ActiveAuth.TenantCfg.AuthorityDomain}/.default"
         };
 
         /// <summary>
@@ -61,16 +71,48 @@ namespace Extensions.Identity
         /// </summary>
         public static string[] Graph = new string[]
         {
-            "https://graph.microsoft.us/.default",
+            $"https://graph.microsoft{ActiveAuth.TenantCfg.AuthorityDomain}/.default",
             Offline
         };
+
+        /// <summary>
+        /// Access scope for M365 Management.
+        /// </summary>
+        public static string[] Management = new string[]
+        {
+            $"https://manage.office365{ActiveAuth.TenantCfg.AuthorityDomain}/.default",
+            Offline
+        };
+
+        /// <summary>
+        /// Access scope for PowerBI.
+        /// </summary>
+        public static string[] PowerBI = new string[]
+        {
+            ActiveAuth.TenantCfg.AuthorityDomain == ".us" 
+                ?  $"https://high.analysis.usgovcloudapi.net/powerbi/api/.default"
+                : "https://analysis.windows.net/powerbi/api/.default",
+            Offline
+        };
+        //"https://analysis.windows.net/powerbi/api/.default"
 
         /// <summary>
         /// Access scope for SharePoint.
         /// </summary>
         public static string[] SharePoint = new string[]
         {
-            $"https://{AuthMan.GetTenantString().TrimEnd('/')}.sharepoint.us/.default",
+            $"https://{ActiveAuth.TenantCfg.TenantString.TrimEnd('/')}" +
+                $".sharepoint{ActiveAuth.TenantCfg.AuthorityDomain}/.default",
+            Offline
+        };
+
+        /// <summary>
+        /// Access scope for SharePoint Admin portal.
+        /// </summary>
+        public static string[] SharePointAdmin = new string[]
+        {
+            $"https://{ActiveAuth.TenantCfg.TenantString.TrimEnd('/')}" +
+                $"-admin.sharepoint{ActiveAuth.TenantCfg.AuthorityDomain}/.default",
             Offline
         };
 
@@ -87,14 +129,28 @@ namespace Extensions.Identity
                 case ScopeType.Graph:
                     return Scopes.Graph;
                     break;
+                //For performance reasons SharePoint is listed second as its
+                //the second most common scope type in use after Graph.  This
+                //eliminates needless checks on common queries.
                 case ScopeType.SharePoint:
                     return Scopes.SharePoint;
+                    break;
+                case ScopeType.Management:
+                    return Scopes.Management;
+                    break;
+                case ScopeType.PowerBI:
+                    return Scopes.PowerBI;
                     break;
                 case ScopeType.Exchange:
                     return Scopes.Exchange;
                     break;
+                case ScopeType.SharePointAdmin:
+                    return Scopes.SharePointAdmin;
+                    break;
+                default:
+                    return Scopes.Graph;
+                    break;
             }
-            return AuthMan.ActiveAuth.Scopes;
         }
 
         /// <summary>
@@ -105,32 +161,33 @@ namespace Extensions.Identity
         /// <exception cref="Exception">Thrown if conversion fails.</exception>
         public static ScopeType GetScopeType(string[] scopes)
         {
-            switch (scopes[0].ToLower())
+            if (scopes[0].ToLower().Contains("graph.microsoft"))
             {
-                case "https://graph.microsoft.us/.default":
-                    return ScopeType.Graph;
-                    break;
-                case "https://outlook.office365.us/.default":
-                    return ScopeType.Exchange;
-                    break;
-                default:
-                    if (scopes[0].ToLower() ==
-                        $"https://{AuthMan.GetTenantString().ToLower().TrimEnd('/')}.sharepoint.us/.default")
-                    {
-                        return ScopeType.SharePoint;
-                    }
-                    break;
+                return ScopeType.Graph;
+            }
+            if (scopes[0].ToLower().Contains("outlook.office365"))
+            {
+                return ScopeType.Exchange;
+            }
+            if (scopes[0].ToLower().Contains("powerbi"))
+            {
+                return ScopeType.PowerBI;
+            }
+            if (scopes[0].ToLower().Contains("admin.sharepoint"))
+            {
+                return ScopeType.SharePointAdmin;
+            }
+            if (scopes[0].ToLower().Contains("sharepoint"))
+            {
+                return ScopeType.SharePoint;
             }
             string msg = "";
             for (int C = 0; C < scopes.Length; C++)
             {
-                msg += scopes[C];
+                msg += $"[{scopes[C]}],";
             }
             msg = $"ERROR!  Scopes [{msg} is invalid.]";
-            E(msg);
             throw new Exception(msg);
         }
     }
 }
-
-#pragma warning restore CS0162, CS1587, CS1998, IDE0028, IDE0059

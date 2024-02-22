@@ -1,6 +1,4 @@
-﻿#pragma warning disable CS0162, CS1587, CS1998, IDE0059, IDE0028
-
-/// <summary>
+﻿/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
@@ -11,6 +9,7 @@ using Microsoft.Identity.Client;
 using System;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using static Extensions.Constants;
 
 namespace Extensions.Identity
 {
@@ -20,33 +19,6 @@ namespace Extensions.Identity
     [Serializable]
     public static partial class App
     {
-        /// <summary>
-        /// An enum for the type of Azure environment.
-        /// </summary>
-        public enum EnvironmentName
-        {
-            /// <summary>
-            /// China national cloud.
-            /// </summary>
-            O365China,
-            /// <summary>
-            /// Default commercial cloud.
-            /// </summary>
-            O365Default,  //Commercial tenant
-            /// <summary>
-            /// Germany national cloud.
-            /// </summary>
-            O365GermanyCloud,
-            /// <summary>
-            /// US Government Department of Defense cloud.
-            /// </summary>
-            O365USGovDoD,
-            /// <summary>
-            /// US Government High Security cloud.
-            /// </summary>
-            O365USGovGCCHigh  //GCCHigh tenant
-        }
-
         /// <summary>
         /// Get a valid IConfidentialClientApplication.
         /// </summary>
@@ -62,7 +34,7 @@ namespace Extensions.Identity
             string appId,
             string thumbPrint,
             string tenantString,
-            EnvironmentName environmentName = EnvironmentName.O365USGovGCCHigh)
+            AzureEnvironmentName environmentName = AzureEnvironmentName.O365USGovGCCHigh)
         {
             //Get the target cert.
             var cert = Cert.GetCertByThumbPrint(thumbPrint);
@@ -84,7 +56,7 @@ namespace Extensions.Identity
             string appId,
             X509Certificate2 cert,
             string tenantString,
-            EnvironmentName environmentName = EnvironmentName.O365USGovGCCHigh)
+            AzureEnvironmentName environmentName = AzureEnvironmentName.O365USGovGCCHigh)
         {
             //Get the authority URL for the given environment.
             string authority = GetAuthority(environmentName, tenantString);
@@ -107,7 +79,7 @@ namespace Extensions.Identity
         public static IPublicClientApplication GetApp(
             string appId,
             string tenantString,
-            EnvironmentName environmentName = EnvironmentName.O365USGovGCCHigh)
+            AzureEnvironmentName environmentName = AzureEnvironmentName.O365USGovGCCHigh)
         {
             //Get the authority URL for the given environment.
             string authority = GetAuthority(environmentName, tenantString);
@@ -116,16 +88,6 @@ namespace Extensions.Identity
                 .WithAuthority(new Uri(authority))
                 .WithDefaultRedirectUri()
                 .Build();
-        }
-
-        /// <summary>
-        /// The different types of authentication efforts to use.
-        /// </summary>
-        internal enum PublicAppAuthResultType
-        {
-            Silent,
-            Interactive,
-            Prompt
         }
 
         /// <summary>
@@ -142,21 +104,21 @@ namespace Extensions.Identity
         internal static AuthenticationResult GetPublicAppAuthResult(
             ref IPublicClientApplication app,
             ref System.Collections.Generic.IEnumerable<IAccount> accounts,
-            PublicAppAuthResultType authType)
+            AuthPublicAppResultType authType)
         {
             switch (authType)
             {
-                case PublicAppAuthResultType.Silent:
+                case AuthPublicAppResultType.Silent:
                     return app.AcquireTokenSilent(
                         Scopes.Graph,
                         accounts.FirstOrDefault())
                         .ExecuteAsync().GetAwaiter().GetResult();
                     break;
-                case PublicAppAuthResultType.Interactive:
+                case AuthPublicAppResultType.Interactive:
                     return app.AcquireTokenInteractive(Scopes.Graph)
                         .ExecuteAsync().GetAwaiter().GetResult();
                     break;
-                case PublicAppAuthResultType.Prompt:
+                case AuthPublicAppResultType.Prompt:
                     return app.AcquireTokenInteractive(Scopes.Graph)
                         .WithAccount(accounts.FirstOrDefault())
                         .WithPrompt(Prompt.SelectAccount)
@@ -174,25 +136,25 @@ namespace Extensions.Identity
         /// <param name="tenantString">The specified tenant string.</param>
         /// <returns>The URL of the authentication authority.</returns>
         /// <exception cref="Exception">Unimplemented clouds.</exception>
-        public static string GetAuthority(EnvironmentName environmentName,
-                                          string tenantString)
+        internal static string GetAuthority(AzureEnvironmentName environmentName,
+                                            string tenantString)
         {
             string result = "https://login.microsoftonline";
             switch (environmentName)
             {
-                case EnvironmentName.O365China:
+                case AzureEnvironmentName.O365China:
                     throw new Exception("O365China is not presently supported.");
                     break;
-                case EnvironmentName.O365Default:
+                case AzureEnvironmentName.O365Default:
                     result += $".com/{tenantString}.sharepoint.com";
                     break;
-                case EnvironmentName.O365GermanyCloud:
+                case AzureEnvironmentName.O365GermanyCloud:
                     throw new Exception("O365GermanyCloud is not presently supported.");
                     break;
-                case EnvironmentName.O365USGovDoD:
+                case AzureEnvironmentName.O365USGovDoD:
                     throw new Exception("O365USGovDoD is not presently supported.");
                     break;
-                case EnvironmentName.O365USGovGCCHigh:
+                case AzureEnvironmentName.O365USGovGCCHigh:
                     result += $".us/{tenantString}.sharepoint.us";
                     break;
             }
@@ -200,4 +162,3 @@ namespace Extensions.Identity
         }
     }
 }
-#pragma warning restore CS0162, CS1587, CS1998, IDE0059, IDE0028
