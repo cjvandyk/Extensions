@@ -1,9 +1,9 @@
 <Project>
   <PropertyGroup>
-    <VersionPrefix>5.0.700</VersionPrefix>
+    <VersionPrefix>6.0.800</VersionPrefix>
     <LangVersion>latest</LangVersion>
     <Company>Cornelius J. van Dyk</Company>
-    <Copyright>Copyright © 2020-2023</Copyright>
+    <Copyright>Copyright © 2020-2024</Copyright>
     <xDescription>Extensions.Graph contains Graph extension methods.</xDescription>
     <Product>www.nuget.org/packages/Extensions.Graph</Product>
   </PropertyGroup>

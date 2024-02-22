@@ -7,11 +7,14 @@
 The following classes have been extended:
 
     - Extensions.Graph (added)
+    - Microsoft.Graph.Models.ListItem
 
 with these methods:
 
-- ### **Vrb()**
-    > _Write a Verbose message to active channels (console, event log, file),<br>
-        SharePoint list, database) using the System.Logit class._
+- ### **GetJsonBool()**
+    > _Exception proof method for returning a boolean field from JSON._
+
+- ### **GetJsonString()**
+    > _Exception proof method for returning a string field from JSON._
 
 ![Visitor Count](https://profile-counter.glitch.me/{cjvandyk}/count.svg)
