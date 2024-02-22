@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net8.0;net7.0;net6.0;netstandard2.1;netstandard2.0;net48;net472;net471;net47;net462</TargetFrameworks>
     <LangVersion>latest</LangVersion>
@@ -7,7 +7,7 @@
     <PackageProjectUrl>https://github.com/cjvandyk/extensions</PackageProjectUrl>
     <PackageTags>Extensions;C#;cjvandyk;Crayveon;String</PackageTags>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <PackageId>Extensions.String</PackageId>
+    <PackageId>Extensions.String.cs</PackageId>
     <Authors>cjvandyk</Authors>
     <RepositoryUrl>https://github.com/cjvandyk/Extensions</RepositoryUrl>
     <Title>Extensions.String</Title>
