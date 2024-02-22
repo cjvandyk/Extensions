@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Remove="BuildBump\**" />
     <Compile Remove="Extensions.Azure\**" />
+    <Compile Remove="Extensions.Constants\**" />
     <Compile Remove="Extensions.Core\**" />
     <Compile Remove="Extensions.Graph\**" />
     <Compile Remove="Extensions.Identity\**" />
@@ -90,6 +91,7 @@
     <Compile Remove="~ExtensionsClass\**" />
     <EmbeddedResource Remove="BuildBump\**" />
     <EmbeddedResource Remove="Extensions.Azure\**" />
+    <EmbeddedResource Remove="Extensions.Constants\**" />
     <EmbeddedResource Remove="Extensions.Core\**" />
     <EmbeddedResource Remove="Extensions.Graph\**" />
     <EmbeddedResource Remove="Extensions.Identity\**" />
@@ -105,6 +107,7 @@
     <EmbeddedResource Remove="~ExtensionsClass\**" />
     <None Remove="BuildBump\**" />
     <None Remove="Extensions.Azure\**" />
+    <None Remove="Extensions.Constants\**" />
     <None Remove="Extensions.Core\**" />
     <None Remove="Extensions.Graph\**" />
     <None Remove="Extensions.Identity\**" />
@@ -140,27 +143,12 @@
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.10.4" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.19.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Graph" Version="5.42.0" />
-    <PackageReference Include="Microsoft.Graph.Core" Version="3.1.7" />
-    <PackageReference Include="Microsoft.Identity.Client" Version="4.59.0" />
-    <PackageReference Include="Microsoft.SharePointOnline.CSOM" Version="16.1.24322.12000" />
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="8.0.0" />
-    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="8.0.0" />
-    <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    <PackageReference Include="Extensions.Core.cs" Version="6.0.800" />
+    <PackageReference Include="Extensions.String.cs" Version="6.0.800" />
   </ItemGroup>
   <ItemGroup>
     <None Update="TenantConfig.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <EditorConfigFiles Remove="D:\SOURCE\Extensions\.editorconfig" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
-    <PackageReference Include="System.Management.Automation">
-      <Version>7.4.0</Version>
-    </PackageReference>
   </ItemGroup>
 </Project>

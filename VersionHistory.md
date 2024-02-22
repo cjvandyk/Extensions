@@ -386,3 +386,6 @@
 	- Removed Logit dependencies.<br>
 	- Updated Microsoft.Graph dependency to 5.42.0.<br>
 	- Updated Microsoft.Identity.Client dependency to 4.59.0.<br>
+
+### **6.0.800 (2024-02-22)**<br>
+	- Rearchitected and Optimized.<br>

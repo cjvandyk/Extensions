@@ -30,8 +30,8 @@ namespace Extensions
                     "GUID values can only contain hexadecimal characters.");
             }
             System.Guid result = System.Guid.NewGuid();
-            return new System.Guid((StartWith.ToLower() +
-                result.ToString().ToLower().Substring(StartWith.Length)));
+            return new System.Guid(StartWith.ToLower() +
+                result.ToString().ToLower().Substring(StartWith.Length));
         }
     }
 }
