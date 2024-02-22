@@ -1,6 +1,4 @@
-﻿#pragma warning disable CS1587, CS0162, CS1998, IDE0059, IDE0028
-
-/// <summary>
+﻿/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
@@ -8,7 +6,6 @@
 /// </summary>
 
 using System;
-using static Extensions.Core;
 
 namespace Extensions
 {
@@ -79,6 +76,103 @@ namespace Extensions
         }
         #endregion IndexOf()
 
+        #region Validate()
+        /// <summary>
+        /// Makes quick work of null validating all parameters you pass to it.
+        /// This method takes a variable number of parameters and validates that
+        /// all parameters are not null.  If a parameter is found to be null, a
+        /// ArgumentNullException is thrown.
+        /// For example:
+        ///     void MyMethod(string str, double dbl, MyClass cls)
+        ///     {
+        ///         Universal.ValidateNoNulls(str, dbl, cls);
+        ///         ...Your code here...
+        ///     }
+        /// You do not have to pass all parameters, but can instead do this:
+        ///     void MyMethod(string str, double dbl, MyClass cls)
+        ///     {
+        ///         Universal.ValidateNoNulls(str, cls);
+        ///         ...Your code here...
+        ///     }
+        /// where we chose NOT to validate the double dbl in this case.
+        /// </summary>
+        /// <param name="parms">The variable set of parameters.</param>
+        internal static bool ValidateNoNulls(params object[] parms)
+        {
+            for (int C = 0; C < parms.Length; C++)
+            {
+                if (parms[C] == null)
+                {
+                    throw new ArgumentNullException("Parameter #" + C);
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Makes quick work of validating all parameters you pass to it.
+        /// This method takes a variable number of parameters and validates 
+        /// all parameters based on ErrorType and object type.  Null validation
+        /// is seamless.  If a parameter is found to be null, a
+        /// ArgumentNullException is thrown which notes the number of the 
+        /// parameter since parmeters are treated as objects and thus the
+        /// parameter names are inaccessible.
+        /// For example:
+        ///     void MyMethod(string str, double dbl, MyClass cls)
+        ///     {
+        ///         Universal.Validate(ErrorType.Null, str, dbl, cls);
+        ///         ...Your code here...
+        ///     }
+        /// You do not have to pass all parameters, but can instead do this:
+        ///     void MyMethod(string str, double dbl, MyClass cls)
+        ///     {
+        ///         Universal.Validate(ErrorType.Null, str, cls);
+        ///         ...Your code here...
+        ///     }
+        /// where we chose NOT to validate the double dbl in this case.
+        /// Alternatively, you can validate that dbl is a non-negative
+        /// number by doing this:
+        ///     void MyMethod(string str, double dbl, MyClass cls)
+        ///     {
+        ///         Universal.Validate(
+        ///             {ErrorType.Null, ErrorType.NonNegative}, 
+        ///             str, cls);
+        ///         ...Your code here...
+        ///     }
+        /// </summary>
+        /// <param name="errors">The array of error types to validate.</param>
+        /// <param name="parms">The variable set of parameters.</param>
+        internal static bool Validate(Constants.ErrorType[] errors,
+                                      params object[] parms)
+        {
+            foreach (Constants.ErrorType error in errors)
+            {
+                for (int C = 0; C < parms.Length; C++)
+                {
+                    switch (error)
+                    {
+                        case Constants.ErrorType.Null:
+                            if (parms[C] == null)
+                            {
+                                throw new ArgumentNullException("Parameter #" + C);
+                            }
+                            break;
+                        case Constants.ErrorType.IntNonNegative:
+                            if (parms[C].GetType() == typeof(int))
+                            {
+                                if ((int)parms[C] < 0)
+                                {
+                                    throw new ArgumentOutOfRangeException(
+                                        "Parameter #" + C,
+                                        "Value must be >= 0");
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
+            return true;
+        }
+        #endregion Validate()
     }
 }
-#pragma warning restore CS1587, CS0162, CS1998, IDE0059, IDE0028
