@@ -1,14 +1,12 @@
-﻿#pragma warning disable CS0162, CS1587, CS1591, CS1998, IDE0059, IDE0028
-
-/// <summary>
+﻿/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
 /// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
 /// </summary>
 
+using Microsoft.Graph.Models;
 using System;
-using static System.Logit;
 
 namespace Extensions
 {
@@ -24,8 +22,9 @@ namespace Extensions
 		/// <param name="item">The item in question.</param>
 		/// <param name="fieldName">The field name to get.</param>
 		/// <returns></returns>
-        public static bool GetJsonBool(this Microsoft.Graph.ListItem item, 
-									   string fieldName)
+        public static bool GetJsonBool(
+			this ListItem item, 
+			string fieldName)
         {
             var result = false;
 
@@ -36,7 +35,7 @@ namespace Extensions
 			}
 			catch (Exception ex)
 			{
-				Err(ex.ToString());
+				//Err(ex.ToString());
 				result = false;
 			}
 			finally
@@ -51,8 +50,9 @@ namespace Extensions
 		/// <param name="item">The item in question.</param>
 		/// <param name="fieldName">The field name to get.</param>
 		/// <returns></returns>
-		public static string GetJsonString(this Microsoft.Graph.ListItem item, 
-										   string fieldName)
+		public static string GetJsonString(
+			this ListItem item, 
+			string fieldName)
 		{
 			var result = "";
 
@@ -63,7 +63,7 @@ namespace Extensions
 			}
 			catch (Exception ex)
 			{
-				Err(ex.ToString());
+				//Err(ex.ToString());
 				result = "";
 			}
 			finally
@@ -73,5 +73,3 @@ namespace Extensions
 		}
     }
 }
-
-#pragma warning restore CS0162, CS1587, CS1591, CS1998, IDE0059, IDE0028
