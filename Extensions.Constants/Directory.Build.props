@@ -1,0 +1,10 @@
+<Project>
+  <PropertyGroup>
+    <VersionPrefix>6.0.800</VersionPrefix>
+    <LangVersion>latest</LangVersion>
+    <Company>Cornelius J. van Dyk</Company>
+    <Copyright>Copyright © 2020-2024</Copyright>
+    <xDescription>Extensions.Constants contains foundational constants shared across the Extensions ecosystem.</xDescription>
+    <Product>www.nuget.org/packages/Extensions.Constants</Product>
+  </PropertyGroup>
+</Project>
