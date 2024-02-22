@@ -1,19 +1,20 @@
-﻿//#pragma warning disable CS0162, CS0168//, CS1587, CS1998, IDE0028, IDE0059
-
-/// <summary>
+﻿/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
 /// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
 /// </summary>
 
+using Microsoft.Graph;
+using Microsoft.Graph.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using static System.Logit;
+using Extensions.Identity;
+using static Extensions.Constants;
 
 namespace Extensions
 {
@@ -23,35 +24,6 @@ namespace Extensions
     [Serializable]
     public static partial class Core
     {
-        #region Enums
-        /// <summary>
-        /// The list of valid AzureEnvironments used.
-        /// </summary>
-        public enum AzureEnvironment
-        {
-            /// <summary>
-            /// China
-            /// </summary>
-            China,
-            /// <summary>
-            /// Default
-            /// </summary>
-            Commercial,
-            /// <summary>
-            /// Germany
-            /// </summary>
-            Germany,
-            /// <summary>
-            /// GCC/DoD
-            /// </summary>
-            USGovGCC,
-            /// <summary>
-            /// GCCHigh
-            /// </summary>
-            USGovGCCHigh
-        }
-        #endregion Enums
-
         #region Properties
         /// <summary>
         /// A dictionary of configurations for different tenants.
@@ -62,60 +34,33 @@ namespace Extensions
         /// <summary>
         /// The currently active tenant configuration in use.
         /// </summary>
-        public static TenantConfig ActiveTenant { get; private set; } = null;
-
-        /// <summary>
-        /// The tenant name e.g. for contoso.sharepoint.us it would be "contoso".
-        /// </summary>
-        public static string TenantUrl { get; }
-            = $"{ActiveTenant.TenantString}.sharepoint.us";
-
-        /// <summary>
-        /// The URI of the tenant.
-        /// </summary>
-        public static Uri TenantUri { get; }
-            = new Uri("https://" + TenantUrl);
-
-        /// <summary>
-        /// Method to get the valid Authority URL given the AzureEnvironment.
-        /// </summary>
-        public static string Authority
+        public static TenantConfig ActiveTenant
         {
             get
             {
-                switch (GetAzureEnvironment(ActiveTenant.AzureEnvironment))
-                {
-                    case AzureEnvironment.USGovGCCHigh:
-                        return $"https://login.microsoftonline.us/{TenantUrl}";
-                        break;
-                    case AzureEnvironment.Commercial:
-                        return $"https://login.microsoftonline.com/{TenantUrl}";
-                        break;
-                    default:
-                        throw new NotImplementedException("Only GCCHigh and Commercial available.");
-                        break;
-                }
+                return ActiveAuth.TenantCfg;
             }
         }
 
         /// <summary>
-        /// Method to get the valid Graph endpoint URL given the AzureEnvironment.
+        /// The currently active Auth object from the stack.
         /// </summary>
-        public static string GraphEndPointUrl
+        public static Auth ActiveAuth
         {
             get
             {
-                switch (GetAzureEnvironment(ActiveTenant.AzureEnvironment))
-                {
-                    case AzureEnvironment.USGovGCCHigh:
-                        return $"https://graph.microsoft.us/v1.0";
-                        break;
-                    case AzureEnvironment.Commercial:
-                        return $"https://graph.microsoft.com/v1.0";
-                    default:
-                        throw new NotImplementedException("Only GCCHigh and Commercial available.");
-                        break;
-                }
+                return AuthMan.ActiveAuth;
+            }
+        }
+
+        /// <summary>
+        /// The currently active Auth's authority domain.
+        /// </summary>
+        public static string AuthorityDomain
+        {
+            get
+            {
+                return ActiveAuth.TenantCfg.AuthorityDomain;
             }
         }
 
@@ -126,7 +71,7 @@ namespace Extensions
         {
             get
             {
-                return $"{GraphEndPointUrl}/users";
+                return ActiveAuth.TenantCfg.GraphUserEndPointUrl;
             }
         }
 
@@ -141,32 +86,59 @@ namespace Extensions
         private static readonly object LockManager = new object();
         #endregion Properties
 
+        #region Auth
+        /// <summary>
+        /// Method to get a matching Auth object from the stack or if it
+        /// doesn't exist on the stack, generate the new Auth object and
+        /// push it to the stack.
+        /// </summary>
+        /// <param name="scopeType">The scope type of the Auth.  Default value
+        /// is Graph.</param>
+        /// <param name="authStackReset">Boolean to trigger a clearing of the 
+        /// Auth stack.  Default value is false.</param>
+        /// <returns>A valid Auth object from the stack.</returns>
+        public static Auth GetAuth(
+            ScopeType scopeType = ScopeType.Graph,
+            bool authStackReset = false)
+        {
+            return AuthMan.GetAuth(
+                ActiveTenant.TenantDirectoryId,
+                ActiveTenant.ApplicationClientId,
+                ActiveTenant.CertThumbprint,
+                ActiveTenant.TenantString,
+                scopeType,
+                authStackReset);
+        }
+        #endregion Auth
+
         #region InitializeTenant
         /// <summary>
         /// Initialization method for tenant configuration.
         /// </summary>
-        /// <param name="tenant">The name of the tenant to initialize.</param>
-        public static void InitializeTenant(string tenant)
+        /// <param name="tenantString">The name of the tenant to initialize.</param>
+        public static void InitializeTenant(string tenantString)
         {
             try
             {
-                Inf($"Initializing Tenant [{tenant}]");
+                Inf($"Initializing Tenant [{tenantString}]");
                 //Only initialize the tenant if it hasn't already been done.
-                if (!Tenants.ContainsKey(tenant))
+                if ((!Tenants.ContainsKey(tenantString)) ||
+                    (Tenants[tenantString].Settings == null))
                 {
-                    Inf($"Loading config from [{GetRunFolder() + "\\" +
-                        $"UniversalConfig.{tenant}.json"}].");
-                    using (StreamReader sr = new StreamReader(
-                        GetRunFolder() + "\\" + $"UniversalConfig.{tenant}.json"))
-                    {
-                        Tenants.Add(
-                            tenant,
-                            JsonSerializer.Deserialize<TenantConfig>(
-                                sr.ReadToEnd()));
-                        ActiveTenant = Tenants[tenant];
-                    }
-                    Inf($"Done initializing Tenant [{tenant}]");
+                    Tenants.Add(tenantString,
+                                AuthMan.GetAuth(GetEnv("TenantDirectoryId"),
+                                                GetEnv("ApplicationClientId"),
+                                                GetEnv("CertThumbprint"),
+                                                tenantString)
+                                    .TenantCfg);
                 }
+                else
+                {
+                    Inf($"Tenant [{tenantString}] is already in the pool.  " +
+                        $"Using pool instance.");
+                    GetAuth();
+                }
+                Inf($"Initializing Tenant [{tenantString}] complete.");
             }
             catch (Exception ex)
             {
@@ -174,75 +146,80 @@ namespace Extensions
                 throw;
             }
         }
+
+        /// <summary>
+        /// A public method to allow settings values to be retrieved.
+        /// </summary>
+        /// <param name="key">The name of the setting value to retrieve.</param>
+        /// <returns>If the requested setting exist in the config, its value is
+        /// returned else a blank string is returned.</returns>
+        public static string GetSetting(string key)
+        {
+            if (ActiveAuth.TenantCfg.Settings.ContainsKey(key))
+            {
+                return ActiveAuth.TenantCfg.Settings[key];
+            }
+            return "";
+        }
         #endregion InitializeTenant
 
-        #region LogitCore
+        #region Logit
         /// <summary>
-        /// Method to write error messages to console.
+        /// Called to write "Information" entries.
         /// </summary>
-        /// <param name="message">Message to write.</param>
-        public static void E(string message)
+        /// <param name="message">The string message to log.</param>
+        /// <param name="eventId">The Event Log event ID to use.</param>
+        /// <param name="instance">Return value from Log() method.</param>
+        public static void Inf(
+            string message,
+            int eventId = 0,
+            Logit.Instance instance = null)
         {
-            L(message, ConsoleColor.Red, ConsoleColor.Black);
+            Logit.Inf(message, eventId, instance);
         }
 
         /// <summary>
-        /// Method to write warning messages to console.
+        /// Called to write "Warning" entries.
         /// </summary>
-        /// <param name="message">Message to write.</param>
-        public static void W(string message)
+        /// <param name="message">The string message to log.</param>
+        /// <param name="eventId">The Event Log event ID to use.</param>
+        /// <param name="instance">Return value from Log() method.</param>
+        public static void Wrn(
+            string message,
+            int eventId = 0,
+            Logit.Instance instance = null)
         {
-            L(message, ConsoleColor.Yellow, ConsoleColor.Black);
+            Logit.Wrn(message, eventId, instance);
         }
 
         /// <summary>
-        /// Method to write information messages to console.
+        /// Called to write "Error" entries.
         /// </summary>
-        /// <param name="message">Message to write.</param>
-        public static void I(string message)
+        /// <param name="message">The string message to log.</param>
+        /// <param name="eventId">The Event Log event ID to use.</param>
+        /// <param name="instance">Return value from Log() method.</param>
+        public static void Err(
+            string message,
+            int eventId = 0,
+            Logit.Instance instance = null)
         {
-            L(message, ConsoleColor.Gray, ConsoleColor.Black);
+            Logit.Err(message, eventId, instance);
         }
 
         /// <summary>
-        /// Method to write verbose messages to console.
+        /// Called to write "Verbose" entries.
         /// </summary>
-        /// <param name="message">Message to write.</param>
-        public static void V(string message)
+        /// <param name="message">The string message to log.</param>
+        /// <param name="eventId">The Event Log event ID to use.</param>
+        /// <param name="instance">Return value from Log() method.</param>
+        public static void Vrb(
+            string message,
+            int eventId = 0,
+            Logit.Instance instance = null)
         {
-            L(message, ConsoleColor.Cyan, ConsoleColor.Black);
+            Logit.Vrb(message, eventId, instance);
         }
-
-        /// <summary>
-        /// Method to write a message to console in specified colors.
-        /// </summary>
-        /// <param name="message">The message to write.</param>
-        /// <param name="foreground">The foreground color to use.</param>
-        /// <param name="background">The background color to use.</param>
-        public static void L(string message,
-                             ConsoleColor foreground = ConsoleColor.Gray,
-                             ConsoleColor background = ConsoleColor.Black)
-        {
-            //Save the current console colors.
-            var foreColor = Console.ForegroundColor;
-            var backColor = Console.BackgroundColor;
-            //Check if an override foreground color was specified.
-            if (foreColor != foreground)
-            {
-                Console.ForegroundColor = foreground;
-            }
-            //Check if an override background color was specified.
-            if (backColor != background)
-            {
-                Console.BackgroundColor = background;
-            }
-            //Simply write the message to the console.
-            Console.WriteLine(message);
-            //Reset console colors.
-            Console.ForegroundColor = foreColor;
-            Console.BackgroundColor = backColor;
-        }
-        #endregion LogitCore
+        #endregion Logit
 
         #region GetCVersion()
         /// <summary>
@@ -306,7 +283,7 @@ namespace Extensions
         }
         #endregion
 
-        #region GetExecutingAssembly...()
+        #region GetExecutingAssembly()
         /// <summary>
         /// Gets the current assembly through reflection.
         /// </summary>
@@ -393,6 +370,26 @@ namespace Extensions
         }
 
         /// <summary>
+        /// A public method to retrieve the Tenant ID.
+        /// </summary>
+        /// <param name="tenantString">The Tenant name e.g. for 
+        /// "contoso.sharepoint.us" it would be "contoso".</param>
+        /// <returns>The Tenant ID.</returns>
+        public static string GetTenantId(string tenantString)
+        {
+            var http = new HttpClient();
+            var res = http.GetAsync(
+                $"https://login.microsoftonline{AuthorityDomain}/{tenantString}" +
+                $".onmicrosoft{AuthorityDomain}/v2.0/.well-known" +
+                $"/openid-configuration").GetAwaiter().GetResult();
+            var raw = res.Content.ReadAsStringAsync().Result;
+            var json = JsonSerializer.Deserialize<Tenant.OpenId>(raw);
+            return json.authorization_endpoint.ToLower()
+                .Replace($"https://login.microsoftonline{AuthorityDomain}/", "")
+                .Replace("/oauth2/v2.0/authorize", "");
+        }
+
+        /// <summary>
         /// Gets the full path and file name of the current assembly.
         /// </summary>
         /// <param name="escaped">Should the value be escaped?</param>
@@ -408,7 +405,7 @@ namespace Extensions
             }
             return result;
         }
-        #endregion GetExecutingAssembly...()
+        #endregion GetExecutingAssembly()
 
         #region GetFQDN()
         /// <summary>
@@ -458,7 +455,14 @@ namespace Extensions
         {
             try
             {
-                return dict[fieldName] as string;
+                if (dict.ContainsKey(fieldName))
+                {
+                    return dict[fieldName].ToString();
+                }
+                else
+                {
+                    return "";
+                }
             }
             catch (Exception ex)
             {
@@ -498,8 +502,8 @@ namespace Extensions
         /// <param name="foreground">Overrideable text color, default to white.</param>
         /// <param name="background">Overrideable background color, default to
         /// black.</param>
-        public static void printf(object msg, 
-                                  ConsoleColor foreground = ConsoleColor.White, 
+        public static void Printf(object msg,
+                                  ConsoleColor foreground = ConsoleColor.White,
                                   ConsoleColor background = ConsoleColor.Black)
         {
             ConsoleColor fore = Console.ForegroundColor;
@@ -663,7 +667,11 @@ namespace Extensions
         /// <returns>The value of the EnvironmentVariable or.</returns>
         public static string GetEnv(string key)
         {
-            return Environment.GetEnvironmentVariable(key);
+            if (Environment.GetEnvironmentVariable(key) != null)
+            {
+                return Environment.GetEnvironmentVariable(key);
+            }
+            return GetSetting(key);
         }
 
         /// <summary>
@@ -683,31 +691,112 @@ namespace Extensions
         /// </summary>
         /// <param name="env">The environment to get.</param>
         /// <returns>The enum value of the environment.</returns>
-        public static AzureEnvironment GetAzureEnvironment(string env)
+        public static AzureEnvironmentName GetAzureEnvironment(string env)
         {
             if (env.ToLower().Contains("gcchigh"))
             {
-                return AzureEnvironment.USGovGCCHigh;
+                return AzureEnvironmentName.O365USGovGCCHigh;
             }
             if (env.ToLower().Contains("china"))
             {
-                return AzureEnvironment.China;
+                return AzureEnvironmentName.O365China;
             }
             if (env.ToLower().Contains("germany"))
             {
-                return AzureEnvironment.Germany;
+                return AzureEnvironmentName.O365GermanyCloud;
             }
             if (env.ToLower().Contains("gcc"))
             {
-                return AzureEnvironment.USGovGCC;
+                return AzureEnvironmentName.O365Default;
             }
             if (env.ToLower().Contains("dod"))
             {
-                return AzureEnvironment.USGovGCC;
+                return AzureEnvironmentName.O365USGovDoD;
             }
-            return AzureEnvironment.Commercial;
+            return AzureEnvironmentName.O365Default;
         }
         #endregion GetAzureEnvironment
+
+        #region Group
+        /// <summary>
+        /// A private method to get a group of list of groups where the 
+        /// displayName matches the given group name.
+        /// </summary>
+        /// <param name="groupName">The displayName of the target group.</param>
+        /// <returns>A List of Group or null if none found.</returns>
+        private static List<Group> GetGroupByName(string groupName)
+        {
+            if (NoNull(groupName) != "")
+            {
+                return ActiveAuth.GraphClient.Groups.GetAsync((C) =>
+                {
+                    C.QueryParameters.Filter = $"displayName eq '{groupName}'";
+                    C.Headers.Add("ConsistencyLevel", "eventual");
+                }).GetAwaiter().GetResult().Value;
+            }
+            return new List<Group>();
+        }
+
+        /// <summary>
+        /// A private method to retrieve all the Members of a Group.
+        /// </summary>
+        /// <param name="groupName">The displayName of the target Group.</param>
+        /// <returns>A List of DirectoryObject values that represens all the 
+        /// members of the Group.</returns>
+        private static List<DirectoryObject> GetGroupMembers(string groupName)
+        {
+            List<DirectoryObject> members = new List<DirectoryObject>();
+            var groups = GetGroupByName(groupName);
+            if (groups.Count > 0)
+            {
+                var page = ActiveAuth.GraphClient.Groups[groups[0].Id].Members
+                    .GetAsync().GetAwaiter().GetResult();
+                var pageIterator =
+                    PageIterator<DirectoryObject,
+                                 DirectoryObjectCollectionResponse>
+                    .CreatePageIterator(
+                        ActiveAuth.GraphClient,
+                        page,
+                        (member) =>
+                        {
+                            members.Add(member);
+                            return true;
+                        });
+                pageIterator.IterateAsync().GetAwaiter().GetResult();
+            }
+            return members;
+        }
+
+        /// <summary>
+        /// A private method to retrieve all the Owners of a Group.
+        /// </summary>
+        /// <param name="groupName">The displayName of the target Group.</param>
+        /// <returns>A List of DirectoryObject values that represens all the 
+        /// owners of the Group.</returns>
+        private static List<DirectoryObject> GetGroupOwners(string groupName)
+        {
+            List<DirectoryObject> owners = new List<DirectoryObject>();
+            var groups = GetGroupByName(groupName);
+            if (groups.Count > 0)
+            {
+                var page = ActiveAuth.GraphClient.Groups[groups[0].Id].Owners
+                    .GetAsync().GetAwaiter().GetResult();
+                var pageIterator =
+                    PageIterator<DirectoryObject,
+                                 DirectoryObjectCollectionResponse>
+                    .CreatePageIterator(
+                        ActiveAuth.GraphClient,
+                        page,
+                        (owner) =>
+                        {
+                            owners.Add(owner);
+                            return true;
+                        });
+                pageIterator.IterateAsync().GetAwaiter().GetResult();
+            }
+            return owners;
+        }
+        #endregion Group
 
         #region GetUser
         /// <summary>
@@ -716,9 +805,9 @@ namespace Extensions
         /// <param name="id">The SharePoint list id of the user.</param>
         /// <param name="siteUsers">A reference to the list of users.</param>
         /// <returns>The user associated with the id or null.</returns>
-        public static Microsoft.Graph.ListItem GetUserFromLookupId(
+        public static Microsoft.Graph.Models.ListItem GetUserFromLookupId(
             string id,
-            ref List<Microsoft.Graph.ListItem> siteUsers)
+            ref List<Microsoft.Graph.Models.ListItem> siteUsers)
         {
             foreach (var item in siteUsers)
             {
@@ -729,16 +818,88 @@ namespace Extensions
             }
             return null;
         }
-        
+
         /// <summary>
-        /// Method to get the user's UPN given a SharePoint lookup id.
+        /// Method to get a user's EMail or UserName.  Particulary useful for
+        /// translating SharePoint UserLookupIds like LastModified or Author
+        /// from a numeric value to the UPN string.
+        /// </summary>
+        /// <param name="listItem">A ListItem instance from the site's 
+        /// UserInformation list.</param>
+        /// <returns>The EMail or UserName value from a ListItem instance 
+        /// from the UserInformation list.
+        /// </returns>
+        public static string GetUserEmailUpn(
+            Microsoft.Graph.Models.ListItem listItem)
+        {
+            if (listItem.Fields.AdditionalData.ContainsKey("EMail") &&
+                listItem.Fields.AdditionalData["EMail"] != null)
+            {
+                return listItem.Fields.AdditionalData["EMail"].ToString();
+            }
+            if (listItem.Fields.AdditionalData.ContainsKey("EMail") &&
+                listItem.Fields.AdditionalData["EMail"] != null)
+            {
+                return listItem.Fields.AdditionalData["UserName"].ToString();
+            }
+            return "";
+        }
+
+        /// <summary>
+        /// Method to get the user's UPN given a SharePoint lookup id.  
+        /// Particulary useful for translating SharePoint UserLookupIds like 
+        /// LastModified or Author from a numeric value to the UPN string.
+        /// </summary>
+        /// <param name="id">The lookup id of the user.</param>
+        /// <param name="client">An authenticated GraphServiceClient object.</param>
+        /// <returns>The EMail or UserName value from a ListItem instance 
+        /// from the UserInformation list.</returns>
+        public static string GetUserEmailUpn(
+            string id,
+            GraphServiceClient client)
+        {
+            try
+            {
+                if ((id == null) ||
+                    (id == ""))
+                {
+                    return "";
+                }
+                var userListItems = GetListItems(
+                    "User Information List",
+                    GetEnv("HomeSiteBaseUrl"),
+                    id);
+                if ((userListItems != null) &&
+                    (userListItems.Count > 0) &&
+                    (userListItems[0].Fields.AdditionalData.ContainsKey("EMail")) &&
+                    (userListItems[0].Fields.AdditionalData["EMail"] != null))
+                {
+                    return userListItems[0].Fields.AdditionalData["EMail"].ToString();
+                }
+                return userListItems[0].Fields.AdditionalData["UserName"].ToString();
+            }
+            catch (Exception ex)
+            {
+                Err(ex.ToString());
+                return "";
+            }
+            finally
+            {
+            }
+        }
+
+        /// <summary>
+        /// Method to get the user's UPN given a SharePoint lookup id.  
+        /// Particulary useful for translating SharePoint UserLookupIds like 
+        /// LastModified or Author from a numeric value to the UPN string.
         /// </summary>
         /// <param name="id">The lookup id of the user.</param>
         /// <param name="siteUsers">A reference to the list of users.</param>
-        /// <returns></returns>
-        public static string GetUserEmailUPN(
+        /// <returns>The EMail or UserName value from a ListItem instance 
+        /// from the UserInformation list.</returns>
+        public static string GetUserEmailUpn(
             string id,
-            ref List<Microsoft.Graph.ListItem> siteUsers)
+            ref List<Microsoft.Graph.Models.ListItem> siteUsers)
         {
             var item = GetUserFromLookupId(id, ref siteUsers);
             if (item == null)
@@ -747,7 +908,8 @@ namespace Extensions
             }
             try
             {
-                if (item.Fields.AdditionalData["EMail"] != null)
+                if ((item.Fields.AdditionalData.ContainsKey("EMail")) &&
+                    (item.Fields.AdditionalData["EMail"] != null))
                 {
                     return item.Fields.AdditionalData["EMail"].ToString();
                 }
@@ -781,7 +943,7 @@ namespace Extensions
         {
             try
             {
-                if (!dic.Values.Contains(val))
+                if (!dic.ContainsValue(val))
                 {
                     dic.Add(key, val);
                     return true;
@@ -846,7 +1008,61 @@ namespace Extensions
             }
         }
         #endregion TryAdd
+
+        /// <summary>
+        /// Method to write out all setting values in both the ActiveAuth's
+        /// tenant configuration as well as the Core configuration values.
+        /// </summary>
+        public static void DumpSettings()
+        {
+            Inf("Dumping ActiveAuth settings...");
+            foreach (var setting in ActiveAuth.TenantCfg.Settings)
+            {
+                Inf($"[{setting.Key}] = [{setting.Value}]");
+            }
+        }
+
+        /// <summary>
+        /// Method to get a Graph List object given the list name and the path
+        /// of the containing site."
+        /// </summary>
+        /// <param name="listName">The name of the target List.</param>
+        /// <param name="sitePath">The relative path of the site containing
+        /// the target list e.g. "/sites/Extensions".</param>
+        /// <returns>A Graph List object</returns>
+        public static Microsoft.Graph.Models.List GetList(
+            string listName,
+            string sitePath)
+        {
+            return ActiveAuth.GraphClient.Sites[Graph.GetSiteId(sitePath)]
+                .Lists[Graph.GetListId(listName, sitePath)]
+                .GetAsync().GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// A method to get all list items given a list name, the path of the
+        /// containing site and optionally a filter or ID.  If an ID value is
+        /// provided, a list containing a single item is returned.
+        /// </summary>
+        /// <param name="listName">The name of the target list.</param>
+        /// <param name="sitePath">The path to the site containing said target
+        /// list e.g. "/sites/Extensions".</param>
+        /// <param name="id">An optional ID of a specific item in the 
+        /// list.</param>
+        /// <param name="filter">An optional filter to be used during selection
+        /// of the resulting data set e.g. "name = 'Extensions'".</param>
+        /// <returns>A list of items for the target list and containing site.
+        /// If no filter or ID is provided, all items in the list is returned.
+        /// If a filter is provided, the items conforming to the filter is
+        /// returned.  If an ID is provided, the target item is returned.
+        /// </returns>
+        public static List<ListItem> GetListItems(
+            string listName,
+            string sitePath,
+            string id = null,
+            string filter = null)
+        {
+            return Graph.GetListItems(listName, sitePath, id, filter);
+        }
     }
 }
-
-//#pragma warning restore CS0162, CS0168//, CS1587, CS1998, IDE0028, IDE0059

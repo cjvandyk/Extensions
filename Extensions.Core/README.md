@@ -1,4 +1,4 @@
-﻿# Extensions.Core contains methods to make logging to console, file, EventLog, SharePoint list, and database a breeze.
+﻿# Extensions.Core contains relay and helper methods for the Extensions set of solutions.
 [![icon](https://raw.githubusercontent.com/cjvandyk/Extensions/master/Images/Extensions-64x64.png)](https://github.com/cjvandyk/Extensions)
 ![GIF](https://raw.githubusercontent.com/cjvandyk/Extensions/master/Images/Extensions.gif)
 ![GIF](https://raw.githubusercontent.com/cjvandyk/Extensions/master/Images/Easy%20Date%20convertion%20GIF.gif)
@@ -6,23 +6,19 @@
 
 The following classes have been extended:
 
-    - System.Core (added)
+    - Extensions.Core (added)
+    - Extensions.Marshall (added)
 
 with these methods:
 
-- ### **Err()**
-    > _Write an Error message to active channels (console, event log, file,<br>
-        SharePoint list, database) using the System.Logit class._
+- ### **Invoke()**
+    > _Method to invoke a member method of a loaded Assembly._
 
-- ### **GetExecutingAssembly()**
-    > _Gets the current Entry or Executing assembly through reflection._
+- ### **IsAvailable()**
+    > _Checks if a given Assembly is loaded._
 
-- ### **GetFQDN()**
-    > _Get the current computer Fully Qualified Domain Name._
-
-- ### **Inf()**
-    > _Write an Information message to active channels (console, event log, file),<br>
-        SharePoint list, database) using the System.Logit class._
+- ### **Load()**
+    > _Method to load a given Assembly to the Marshall stack for later use._
 
 - ### **TimeStamp()**
     > _Returns a string representing the current local date time stamp to<br>
@@ -39,10 +35,6 @@ with these methods:
 
 - ### **Vrb()**
     > _Write a Verbose message to active channels (console, event log, file),<br>
-        SharePoint list, database) using the System.Logit class._
-
-- ### **Wrn()**
-    > _Write a Warning message to active channels (console, event log, file),<br>
         SharePoint list, database) using the System.Logit class._
 
 ![Visitor Count](https://profile-counter.glitch.me/{cjvandyk}/count.svg)
