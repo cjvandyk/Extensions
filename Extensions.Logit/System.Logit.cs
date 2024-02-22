@@ -10,7 +10,6 @@ using System.IO;
 using System.Threading;
 using Microsoft.Extensions.Logging;
 using Microsoft.Graph;
-using Microsoft.Graph.Models;
 
 namespace System
 {
