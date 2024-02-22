@@ -1,6 +1,4 @@
-﻿#pragma warning disable CS1587, CS1998, IDE0059, IDE0028
-
-/// <summary>
+﻿/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
@@ -11,11 +9,10 @@ using Microsoft.Graph;
 using Microsoft.Identity.Client;
 using System;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
-using System.Threading.Tasks;
 using static Extensions.Identity.AuthMan;
+using static Extensions.Constants;
 
 namespace Extensions.Identity
 {
@@ -31,10 +28,14 @@ namespace Extensions.Identity
         public string Id { get; private set; }
 
         /// <summary>
+        /// The container to maintain the current Auth object scope type.
+        /// </summary>
+        public ScopeType AuthScopeType { get; set; }
+
+        /// <summary>
         /// The container for this Auth object's associated tenant configuration.
         /// </summary>
-        public TenantConfig TenantCfg { get; private set; } 
-            = new TenantConfig();
+        public TenantConfig TenantCfg { get; private set; } = new TenantConfig();
 
         /// <summary>
         ///The type of ClientApplication the current Auth object is using.
@@ -44,7 +45,7 @@ namespace Extensions.Identity
         /// <summary>
         /// The certificate of the current Auth object.
         /// </summary>
-        public X509Certificate2 Cert { get; private set; }
+        public X509Certificate2 Cert { get; private set; } = null;
 
         /// <summary>
         /// The current IConfidentialClientApplication of the current Auth object.
@@ -69,6 +70,12 @@ namespace Extensions.Identity
         public GraphServiceClient GraphClient { get; set; }
 
         /// <summary>
+        /// The current authenticated GraphClient of the current Auth object
+        /// for the Beta endpoint.
+        /// </summary>
+        public GraphServiceClient GraphBetaClient { get; set; }
+
+        /// <summary>
         /// The current authenticated HttpClient of the current Auth object.
         /// </summary>
         public HttpClient HttpClient { get; set; }
@@ -77,6 +84,13 @@ namespace Extensions.Identity
         /// The authentication refresh timer of the current Auth object.
         /// </summary>
         public System.Threading.Timer Timer { get; private set; }
+
+        /// <summary>
+        /// Empty constructor for Auth.
+        /// </summary>
+        public Auth() 
+        {
+        }
 
         /// <summary>
         /// The constructor that populates all the member variables of this
@@ -99,15 +113,28 @@ namespace Extensions.Identity
             ClientApplicationType appType = ClientApplicationType.Confidential,
             ScopeType scopeType = ScopeType.Graph)
         {
+            if (TenantCfg.TenantString != tenantString)
+            {
+                TenantCfg = new TenantConfig(tenantString);
+            }
             //Generate the unique ID.
             Id = AuthMan.GetKey(tenantId, appId, thumbprint, scopeType.ToString());
+            AuthScopeType = scopeType;
             //Save the parms.
             AppType = appType;
             //Save the tenant configuration values.
-            TenantCfg.TenantDirectoryId = tenantId;
-            TenantCfg.ApplicationClientId = appId;
-            TenantCfg.CertThumbprint = thumbprint;
-            TenantCfg.TenantString = tenantString;
+            if (TenantCfg.TenantDirectoryId != tenantId)
+            {
+                TenantCfg.TenantDirectoryId = tenantId;
+            }
+            if (TenantCfg.ApplicationClientId != appId)
+            {
+                TenantCfg.ApplicationClientId = appId;
+            }
+            if (TenantCfg.CertThumbprint != thumbprint)
+            {
+                TenantCfg.CertThumbprint = thumbprint;
+            }
             //Get the certificate.
             Cert = Identity.Cert.GetCertByThumbPrint(thumbprint);
             //Get the application.
@@ -138,15 +165,28 @@ namespace Extensions.Identity
             ClientApplicationType appType = ClientApplicationType.Confidential,
             ScopeType scopeType = ScopeType.Graph)
         {
+            if (TenantCfg.TenantString != tenantString)
+            {
+                TenantCfg = new TenantConfig(tenantString);
+            }
             Cert = cert;
             //Generate the unique ID.
             Id = AuthMan.GetKey(tenantId, appId, Cert.Thumbprint, scopeType.ToString());
+            AuthScopeType = scopeType;
             //Save the parms.
             AppType = appType;
-            TenantCfg.TenantDirectoryId = tenantId;
-            TenantCfg.ApplicationClientId = appId;
-            TenantCfg.CertThumbprint = Cert.Thumbprint;
-            TenantCfg.TenantString = tenantString;
+            if (TenantCfg.TenantDirectoryId != tenantId)
+            {
+                TenantCfg.TenantDirectoryId = tenantId;
+            }
+            if (TenantCfg.ApplicationClientId != appId)
+            {
+                TenantCfg.ApplicationClientId = appId;
+            }
+            if (TenantCfg.CertThumbprint != cert.Thumbprint)
+            {
+                TenantCfg.CertThumbprint = cert.Thumbprint;
+            }
             //Get the application.
             App = Identity.App.GetApp(appId, Cert.Thumbprint, tenantString);
             //Set the scopes for this Auth object.
@@ -171,13 +211,22 @@ namespace Extensions.Identity
             string tenantString,
             ClientApplicationType appType = ClientApplicationType.Public)
         {
+            if (TenantCfg.TenantString != tenantString)
+            {
+                TenantCfg = new TenantConfig(tenantString);
+            }
             //Generate the unique ID.
             Id = AuthMan.GetKey(tenantId, appId, "PublicClientApplication", "");
             //Save the parms.
             AppType = appType;
-            TenantCfg.TenantDirectoryId = tenantId;
-            TenantCfg.ApplicationClientId = appId;
-            TenantCfg.TenantString = tenantString;
+            if (TenantCfg.TenantDirectoryId != tenantId)
+            {
+                TenantCfg.TenantDirectoryId = tenantId;
+            }
+            if (TenantCfg.ApplicationClientId != appId)
+            {
+                TenantCfg.ApplicationClientId = appId;
+            }
             //Get the application.
             App = Identity.App.GetApp(appId, tenantString);
             //Call refresh method to populate the rest.
@@ -208,31 +257,31 @@ namespace Extensions.Identity
             AuthResult = GetAuthResult(
                 App, 
                 TenantCfg.TenantDirectoryId, 
-                AppType);
+                AppType,
+                Scopes);
             //Build the GraphServiceClient object using the AuthenticatedResult
             //from the previous step.
-            GraphClient = new GraphServiceClient(
-                "https://graph.microsoft.us/v1.0",
-                new DelegateAuthenticationProvider(
-                    (C) =>
-                    {
-                        C.Headers.Authorization =
-                            new AuthenticationHeaderValue(
-                                "bearer",
-                                AuthResult.AccessToken);
-                        return Task.FromResult(0);
-                    }));
-            //Set the GraphClient timeout.
-            GraphClient.HttpProvider.OverallTimeout = TimeSpan.FromHours(1);
-            //Build the HttpClient.
-            HttpClient = new HttpClient();
-            //Add the Authorization header using the AccessToken from the
-            //previously retrieved AuthenticationResult.
-            HttpClient.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("bearer", AuthResult.AccessToken);
-            //Set the client to accept JSON.
-            HttpClient.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("application/json"));
+            HttpClient = GetHttpClient(AuthResult);
+            GraphClient = GetGraphServiceClient(HttpClient);
+            GraphBetaClient = GetGraphBetaServiceClient(HttpClient);
+            //Check if the current Auth object is in the stack.
+            if (AuthStack.ContainsKey(Id))
+            {
+                //It is, so update it.
+                lock (AuthStack)
+                {
+                    AuthStack[Id] = this;
+                }
+            }
+            else
+            {
+                //It is not, so push it to the stack.
+                lock(AuthStack)
+                {
+                    AuthStack.Add(Id, this);
+                }
+            }
+            ActiveAuth = AuthStack[Id];
             //Define the refresh timer that will fire 5 minutes before the
             //expiration of the AuthenticationResult.
             Timer = new System.Threading.Timer(
@@ -244,4 +293,3 @@ namespace Extensions.Identity
         }
     }
 }
-#pragma warning restore CS1587, CS1998, IDE0059, IDE0028
