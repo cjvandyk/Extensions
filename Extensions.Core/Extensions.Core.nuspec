@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>Extensions.Core</id>
+    <id>Extensions.Core.cs</id>
     <!--<version>6.0.800</version>-->
     <title>$title$</title>
     <authors>Cornelius J. van Dyk</authors>

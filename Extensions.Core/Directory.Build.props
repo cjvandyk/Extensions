@@ -5,6 +5,6 @@
     <Company>Cornelius J. van Dyk</Company>
     <Copyright>Copyright © 2020-2024</Copyright>
     <xDescription>Extensions.Core contains relay and helper methods for the Extensions set of solutions.</xDescription>
-    <Product>www.nuget.org/packages/Extensions.Core</Product>
+    <Product>www.nuget.org/packages/Extensions.Core.cs</Product>
   </PropertyGroup>
 </Project>

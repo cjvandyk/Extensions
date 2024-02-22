@@ -7,7 +7,7 @@
     <PackageProjectUrl>https://github.com/cjvandyk/extensions</PackageProjectUrl>
     <PackageTags>Extensions;C#;cjvandyk;Crayveon;Core</PackageTags>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <PackageId>Extensions.Core</PackageId>
+    <PackageId>Extensions.Core.cs</PackageId>
     <Authors>cjvandyk</Authors>
     <RepositoryUrl>https://github.com/cjvandyk/Extensions</RepositoryUrl>
     <Title>Extensions.Core</Title>
