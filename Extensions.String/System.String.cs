@@ -1,6 +1,4 @@
-﻿#pragma warning disable CA1416, CS1587, CS0162, CS1998, IDE0059, IDE0028
-
-/// <summary>
+﻿/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
@@ -10,8 +8,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+#if NET6_0_OR_GREATER
+using System.Text.Json.Serialization;
+using System.Text.Json;
+#endif
 using static Extensions.Constants;
-using static Extensions.Core;
+using System.Text;
+using System.Globalization;
 
 namespace Extensions
 {
@@ -242,7 +245,24 @@ namespace Extensions
         }
         #endregion DoubleQuote()
 
-        #region Encrypt
+        #region EncodeAsXml()
+        /// <summary>
+        /// Encode a given string as XML.
+        /// </summary>
+        /// <param name="str">The target string to encode.</param>
+        /// <returns>The target string with ampersand, apostrophe, 
+        /// greater than, less than and double quote XML converted.</returns>
+        public static string EncodeAsXml(this string str)
+        {
+            return str.Replace("&", "&amp;")
+                      .Replace("'", "&apos;")
+                      .Replace(">", "&gt;")
+                      .Replace("<", "&lt;")
+                      .Replace("\"", "&quot;");
+        }
+        #endregion EncodeAsXml()
+
+        #region Encrypt()
 
         //public static string Encrypt(this System.String str, 
         //                             string password, 
@@ -324,7 +344,7 @@ namespace Extensions
         //    return decrypted;
         //}
 
-        #endregion Encrypt
+        #endregion Encrypt()
 
         #region ExceedsLength()
         /// <summary>
@@ -780,6 +800,48 @@ namespace Extensions
         }
         #endregion IsChar()
 
+        #region IsDateTime()
+        /// <summary>
+        /// Checks if a given string is a valid date/time given the format.
+        /// </summary>
+        /// <param name="str">The given string to check.</param>
+        /// <param name="inFormat">The string format of the date/time to
+        /// use in the object convertion e.g. "dd/MM/yyyy HH:mm:ss"  If
+        /// none is specified it defaults to "dd/MM/yyyy HH:mm:ss"</param>
+        /// <returns>True if the given string is a valid date/time in the
+        /// given format, else False.</returns>
+        public static bool IsDateTime(this string str,
+                                      string inFormat = "dd/MM/yyyy HH:mm:ss")
+        {
+            try
+            {
+                DateTime dateTime = DateTime.ParseExact(
+                    str, inFormat, CultureInfo.InvariantCulture);
+                return true;
+            }
+            catch 
+            { 
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Checks if a given StringBuilder is a valid date/time given the 
+        /// format.
+        /// </summary>
+        /// <param name="sb">The given StringBuilder to check.</param>
+        /// <param name="inFormat">The string format of the date/time to
+        /// use in the object convertion e.g. "dd/MM/yyyy HH:mm:ss"  If
+        /// none is specified it defaults to "dd/MM/yyyy HH:mm:ss"</param>
+        /// <returns>True if the given StringBuilder is a valid date/time in
+        /// the given format, else False.</returns>
+        public static bool IsDateTime(this StringBuilder sb,
+                                      string inFormat = "dd/MM/yyyy HH:mm:ss")
+        {
+            return IsDateTime(sb.ToString(), inFormat);
+        }
+        #endregion IsDateTime()
+
         #region IsEmail()
         /// <summary>
         /// Checks if a given System.String object is an email address.
@@ -813,6 +875,57 @@ namespace Extensions
             return IsEmail(str.ToString());
         }
         #endregion IsEmail()
+
+        #region IsHex()
+        /// <summary>
+        /// Checks if the given string contains all hex characters.
+        /// </summary>
+        /// <param name="str">The given string object to check.</param>
+        /// <param name="Classic">Switch to force RegEx comparison instead
+        /// of Linq.</param>
+        /// <param name="ignoreSpaces">Remove spaces before compare?</param>
+        /// <returns>True if all characters in the given string are hex,
+        /// else False.</returns>
+        public static bool IsHex(this System.String str,
+                                     bool Classic = false,
+                                     bool ignoreSpaces = true)
+        {
+            ValidateNoNulls(str, Classic, ignoreSpaces);
+            if (Classic)  //No LINQ available e.g. .NET 2.0
+            {
+                return System.Text.RegularExpressions.Regex.IsMatch(
+                    (ignoreSpaces ? str.Replace(" ", "") : str),
+                    @"\A\b[0-9a-fA-F]+\b\Z");
+            }
+            else  //This method is on average 670% faster than RegEx method.
+            {
+                return (ignoreSpaces ? str.Replace(" ", "") : str)
+                        .ToCharArray()
+                        .All(C => (C >= 0 && C <= 9) || 
+                                  (C >= 'a' && C <= 'f') || 
+                                  (C >= 'A' && C <= 'F'));
+            }
+        }
+
+        /// <summary>
+        /// Checks if the given string contains all hex characters.
+        /// </summary>
+        /// <param name="str">The given string builder object to check.</param>
+        /// <param name="Classic">Switch to force RegEx comparison instead of 
+        /// Linq.</param>
+        /// <param name="ignoreSpaces">Remove spaces before compare?</param>
+        /// <returns>True if all characters in the given string are hex,
+        /// else False.</returns>
+        public static bool IsHex(this System.Text.StringBuilder str,
+                                 bool Classic = false,
+                                 bool ignoreSpaces = true)
+        {
+            ValidateNoNulls(str, Classic, ignoreSpaces);
+            return IsHex(str.ToString(),
+                         Classic,
+                         ignoreSpaces);
+        }
+        #endregion IsHex()
 
         #region IsLower()
         /// <summary>
@@ -1276,28 +1389,46 @@ namespace Extensions
                 }
                 if (occurrence > 1)
                 {
-                    string remainder = str.Substring(str.IndexOf(index));
-                    for (int C = 1; C <= occurrence; C++)
+                    string remainder = str;
+                    for (int C = 0; C < occurrence; C++)
                     {
-                        remainder = remainder.Substring(remainder.IndexOf(index) + 1);
+                        if (remainder.IndexOf(index) == -1)
+                        {
+                            return "";
+                        }
+                        try
+                        {
+                            remainder = remainder.Substring(remainder.IndexOf(index) + index.Length);
+                        }
+                        catch (Exception ex)
+                        {
+                            return "";
+                        }
                     }
-                    return str.Replace(index + remainder, "");
+                    return str.Substring(0, str.Length - (remainder.Length + index.Length));
                 }
                 if (occurrence < -1)
                 {
-                    string remainder = str.Substring(0, str.LastIndexOf(index));
-                    for (int C = -1; C > occurrence; C--)
+                    string remainder = str;
+                    for (int C = 0; C > occurrence; C--)
                     {
-                        remainder = remainder.Substring(0, remainder.LastIndexOf(index));
-                        if (remainder.IndexOf(index) == -1)
+                        if (remainder.LastIndexOf(index) == -1)
                         {
-                            return remainder;
+                            return "";
+                        }
+                        try
+                        {
+                            remainder = remainder.Substring(0, remainder.LastIndexOf(index));
+                        }
+                        catch (Exception ex)
+                        {
+                            return "";
                         }
                     }
                     return remainder;
                 }
             }
-            return null;
+            return "";
         }
 
         /// <summary>
@@ -1316,30 +1447,10 @@ namespace Extensions
         /// the string.</returns>
         public static string Left(this System.Text.StringBuilder str,
                                   string index,
-                                  int occurrence)
+                                  int occurrence = 1)
         {
             ValidateNoNulls(str, index, occurrence);
-            if (occurrence == 1)
-            {
-                return str.Substring(0, str.IndexOf(index));
-            }
-            else
-            {
-                if (occurrence == -1)
-                {
-                    //return str.Substring(0, str.LastIndexOf(index));
-                }
-            }
-            if (occurrence > 1)
-            {
-                string remainder = str.Substring(str.IndexOf(index));
-                for (int C = 1; C <= occurrence; C++)
-                {
-                    remainder = remainder.Substring(remainder.IndexOf(index));
-                }
-                return remainder;
-            }
-            return null;
+            return Left(str.ToString(), index, occurrence);
         }
         #endregion Left()
 
@@ -1706,6 +1817,103 @@ namespace Extensions
             return RemoveExtraSpace(str.ToString());
         }
         #endregion RemoveExtraSpace()
+
+        #region Right()
+        /// <summary>
+        /// Returns text to the right of the index string.  Use negative values
+        /// for occurrence if the occurrence count should start from the end
+        /// instead of its default from the beginning of the string.
+        /// </summary>
+        /// <param name="str">A System.String object being searched.</param>
+        /// <param name="index">The System.String value used as the target
+        /// of the search.</param>
+        /// <param name="occurrence">The number of matches to find.</param>
+        /// <returns>Returns text to the right of the index string.  Use
+        /// negative values for occurrence if the occurrence count should
+        /// start from the end instead of its default from the beginning of
+        /// the string.</returns>
+        public static string Right(
+            this System.String str,
+            string index,
+            int occurrence = 1)
+        {
+            ValidateNoNulls(str, index, occurrence);
+            if (str.IndexOf(index) >= 0)
+            {
+                if (occurrence == 1)
+                {
+                    return str.Substring(str.IndexOf(index) + index.Length);
+                }
+                if (occurrence == -1)
+                {
+                    return str.Substring(str.LastIndexOf(index) + index.Length);
+                }
+                if (occurrence > 1)
+                {
+                    string remainder = str;
+                    for (int C = 0; C < occurrence; C++)
+                    {
+                        if (remainder.IndexOf(index) == -1)
+                        {
+                            return "";
+                        }
+                        try
+                        {
+                            remainder = remainder.Substring(remainder.IndexOf(index) + index.Length);
+                        }
+                        catch (Exception ex)
+                        {
+                            return "";
+                        }
+                    }
+                    return remainder;
+                }
+                if (occurrence < -1)
+                {
+                    string remainder = str;
+                    for (int C = 0; C > occurrence; C--)
+                    {
+                        if (remainder.LastIndexOf(index) == -1)
+                        {
+                            return "";
+                        }
+                        try
+                        {
+                            remainder = remainder.Substring(0, remainder.LastIndexOf(index));
+                        }
+                        catch (Exception ex)
+                        {
+                            return "";
+                        }
+                    }
+                    return str.Substring(remainder.Length + index.Length);
+                }
+            }
+            return "";
+        }
+
+        /// <summary>
+        /// Returns text to the right of the index string.  Use negative values
+        /// for occurrence if the occurrence count should start from the end
+        /// instead of its default from the beginning of the string.
+        /// </summary>
+        /// <param name="str">A System.String object being searched.</param>
+        /// <param name="index">The System.String value used as the target
+        /// of the search.</param>
+        /// <param name="occurrence">The number of matches to find.</param>
+        /// <returns>Returns text to the right of the index string.  Use
+        /// negative values for occurrence if the occurrence count should
+        /// start from the end instead of its default from the beginning of
+        /// the string.</returns>
+        public static string Right(
+            this System.Text.StringBuilder str,
+            string index,
+            int occurrence = 1)
+        {
+            ValidateNoNulls(str, index, occurrence);
+            return Right(str.ToString(), index, occurrence);
+        }
+        #endregion Right()
 
         #region SingleQuote()
         /// <summary>
@@ -2137,7 +2345,7 @@ namespace Extensions
         }
         #endregion ToEnum()
 
-        #region ToEnumerable
+        #region ToEnumerable()
         /// <summary>
         /// Converts the given querystring to a Dictionary.
         /// </summary>
@@ -2219,7 +2427,38 @@ namespace Extensions
                                                     separator, 
                                                     assigner);
         }
-        #endregion ToEnumerable
+        #endregion ToEnumerable()
+
+#if NET6_0_OR_GREATER
+        #region ToJson()
+        /// <summary>
+        /// Convert an object to a JSON string.
+        /// </summary>
+        /// <typeparam name="T">The object type being converted.</typeparam>
+        /// <param name="obj">The object being converted.</param>
+        /// <param name="jsonSerializerOptions">Options to use for 
+        /// serialization.  If none is specified defaults are used.</param>
+        /// <returns>A JSON string representing the given object.</returns>
+        public static string ToJson<T>(this T obj,
+                                       JsonSerializerOptions jsonSerializerOptions = null)
+        {
+            if (obj == null)
+            {
+                return "{}";
+            }
+            if (jsonSerializerOptions == null)
+            {
+                jsonSerializerOptions = new JsonSerializerOptions
+                {
+                    WriteIndented = true,
+                    DefaultIgnoreCondition = JsonIgnoreCondition.Never,
+                    ReferenceHandler = ReferenceHandler.Preserve
+                };
+            }
+            return JsonSerializer.Serialize(obj, jsonSerializerOptions);
+        }
+        #endregion ToJson()
+#endif
 
         #region ToMorseCode()
         /// <summary>
@@ -2275,6 +2514,221 @@ namespace Extensions
             return (str.ToString());
         }
         #endregion ToMorseCode()
+
+        #region ToEnglishAlphaChars()
+        /// <summary>
+        /// Convert all non-English characters in a given string to their
+        /// English equivalent characters.
+        /// </summary>
+        /// <param name="str">The target string to convert.</param>
+        /// <returns>Converted English equivalent string.</returns>
+        public static string ToEnglishAlphaChars(this string str)
+        {
+            StringBuilder sb = new StringBuilder(str);
+            return sb.ToEnglishAlphaChars().ToString();
+        }
+
+        /// <summary>
+        /// Convert all non-English characters in a given StringBuilder to 
+        /// their English equivalent characters.
+        /// </summary>
+        /// <param name="sb">The target StringBuilder to convert.</param>
+        /// <returns>Converted English equivalent StringBuilder.</returns>
+        public static StringBuilder ToEnglishAlphaChars(this StringBuilder sb)
+        {
+            sb = sb.Replace('Á', 'A');
+            sb = sb.Replace('Ă', 'A');
+            sb = sb.Replace('Â', 'A');
+            sb = sb.Replace('Ä', 'A');
+            sb = sb.Replace('À', 'A');
+            sb = sb.Replace('Ā', 'A');
+            sb = sb.Replace('Ą', 'A');
+            sb = sb.Replace('Å', 'A');
+            sb = sb.Replace('Ã', 'A');
+            sb = sb.Replace('Æ', 'A');
+            sb = sb.Replace('Ć', 'C');
+            sb = sb.Replace('Č', 'C');
+            sb = sb.Replace('Ç', 'C');
+            sb = sb.Replace('Ĉ', 'C');
+            sb = sb.Replace('Ċ', 'C');
+            sb = sb.Replace('Ď', 'D');
+            sb = sb.Replace('Đ', 'D');
+            sb = sb.Replace('É', 'E');
+            sb = sb.Replace('Ĕ', 'E');
+            sb = sb.Replace('Ě', 'E');
+            sb = sb.Replace('Ê', 'E');
+            sb = sb.Replace('Ë', 'E');
+            sb = sb.Replace('Ė', 'E');
+            sb = sb.Replace('È', 'E');
+            sb = sb.Replace('Ē', 'E');
+            sb = sb.Replace('Ę', 'E');
+            sb = sb.Replace('Ŋ', 'N');
+            sb = sb.Replace('Ð', 'E');
+            sb = sb.Replace('Ğ', 'G');
+            sb = sb.Replace('Ģ', 'G');
+            sb = sb.Replace('Ĝ', 'G');
+            sb = sb.Replace('Ġ', 'G');
+            sb = sb.Replace('Ĥ', 'H');
+            sb = sb.Replace('Ħ', 'H');
+            sb = sb.Replace('Í', 'I');
+            sb = sb.Replace('Ĭ', 'I');
+            sb = sb.Replace('Î', 'I');
+            sb = sb.Replace('Ï', 'I');
+            sb = sb.Replace('İ', 'I');
+            sb = sb.Replace('Ì', 'I');
+            sb = sb.Replace('Ī', 'I');
+            sb = sb.Replace('Į', 'I');
+            sb = sb.Replace('Ĩ', 'I');
+            sb = sb.Replace('Ĵ', 'J');
+            sb = sb.Replace('Ķ', 'K');
+            sb = sb.Replace('Ĺ', 'L');
+            sb = sb.Replace('Ľ', 'L');
+            sb = sb.Replace('Ļ', 'L');
+            sb = sb.Replace('Ŀ', 'L');
+            sb = sb.Replace('Ł', 'L');
+            sb = sb.Replace('Ĳ', 'I');
+            sb = sb.Replace('Œ', 'O');
+            sb = sb.Replace('Ń', 'N');
+            sb = sb.Replace('Ň', 'N');
+            sb = sb.Replace('Ņ', 'N');
+            sb = sb.Replace('Ñ', 'N');
+            sb = sb.Replace('Ó', 'O');
+            sb = sb.Replace('Ŏ', 'O');
+            sb = sb.Replace('Ô', 'O');
+            sb = sb.Replace('Ö', 'O');
+            sb = sb.Replace('Ò', 'O');
+            sb = sb.Replace('Ō', 'O');
+            sb = sb.Replace('Ø', 'O');
+            sb = sb.Replace('Õ', 'O');
+            sb = sb.Replace('Ő', 'O');
+            sb = sb.Replace('Ŕ', 'R');
+            sb = sb.Replace('Ř', 'R');
+            sb = sb.Replace('Ŗ', 'R');
+            sb = sb.Replace('Ś', 'S');
+            sb = sb.Replace('Š', 'S');
+            sb = sb.Replace('Ş', 'S');
+            sb = sb.Replace('Ŝ', 'S');
+            sb = sb.Replace('Ť', 'T');
+            sb = sb.Replace('Ţ', 'T');
+            sb = sb.Replace('Ŧ', 'T');
+            sb = sb.Replace('Þ', 'P');
+            sb = sb.Replace('Ů', 'U');
+            sb = sb.Replace('Ú', 'U');
+            sb = sb.Replace('Ŭ', 'U');
+            sb = sb.Replace('Û', 'U');
+            sb = sb.Replace('Ü', 'U');
+            sb = sb.Replace('Ű', 'U');
+            sb = sb.Replace('Ù', 'U');
+            sb = sb.Replace('Ū', 'U');
+            sb = sb.Replace('Ų', 'U');
+            sb = sb.Replace('Ũ', 'U');
+            sb = sb.Replace('Ŵ', 'W');
+            sb = sb.Replace('Ý', 'Y');
+            sb = sb.Replace('Ŷ', 'Y');
+            sb = sb.Replace('Ÿ', 'Y');
+            sb = sb.Replace('Ź', 'Z');
+            sb = sb.Replace('Ž', 'Z');
+            sb = sb.Replace('Ż', 'Z');
+            sb = sb.Replace('á', 'a');
+            sb = sb.Replace('ă', 'a');
+            sb = sb.Replace('â', 'a');
+            sb = sb.Replace('ä', 'a');
+            sb = sb.Replace('à', 'a');
+            sb = sb.Replace('ā', 'a');
+            sb = sb.Replace('ą', 'a');
+            sb = sb.Replace('å', 'a');
+            sb = sb.Replace('ã', 'a');
+            sb = sb.Replace('æ', 'a');
+            sb = sb.Replace('ć', 'c');
+            sb = sb.Replace('č', 'c');
+            sb = sb.Replace('ç', 'c');
+            sb = sb.Replace('ĉ', 'c');
+            sb = sb.Replace('ċ', 'c');
+            sb = sb.Replace('ď', 'd');
+            sb = sb.Replace('đ', 'd');
+            sb = sb.Replace('ı', 'i');
+            sb = sb.Replace('é', 'e');
+            sb = sb.Replace('ĕ', 'e');
+            sb = sb.Replace('ě', 'e');
+            sb = sb.Replace('ê', 'e');
+            sb = sb.Replace('ë', 'e');
+            sb = sb.Replace('ė', 'e');
+            sb = sb.Replace('è', 'e');
+            sb = sb.Replace('ē', 'e');
+            sb = sb.Replace('ę', 'e');
+            sb = sb.Replace('ŋ', 'n');
+            sb = sb.Replace('ð', 'e');
+            sb = sb.Replace('ğ', 'g');
+            sb = sb.Replace('ģ', 'g');
+            sb = sb.Replace('ĝ', 'g');
+            sb = sb.Replace('ġ', 'g');
+            sb = sb.Replace('ĥ', 'h');
+            sb = sb.Replace('ħ', 'h');
+            sb = sb.Replace('í', 'i');
+            sb = sb.Replace('ĭ', 'i');
+            sb = sb.Replace('î', 'i');
+            sb = sb.Replace('ï', 'i');
+            sb = sb.Replace('ì', 'i');
+            sb = sb.Replace('ī', 'i');
+            sb = sb.Replace('į', 'i');
+            sb = sb.Replace('ĩ', 'i');
+            sb = sb.Replace('ĵ', 'j');
+            sb = sb.Replace('ķ', 'k');
+            sb = sb.Replace('ĸ', 'k');
+            sb = sb.Replace('ĺ', 'l');
+            sb = sb.Replace('ľ', 'l');
+            sb = sb.Replace('ļ', 'l');
+            sb = sb.Replace('ŀ', 'l');
+            sb = sb.Replace('ł', 'l');
+            sb = sb.Replace('ĳ', 'i');
+            sb = sb.Replace('œ', 'o');
+            sb = sb.Replace('ſ', 's');
+            sb = sb.Replace('ń', 'n');
+            sb = sb.Replace('ň', 'n');
+            sb = sb.Replace('ņ', 'n');
+            sb = sb.Replace('ŉ', 'n');
+            sb = sb.Replace('ñ', 'n');
+            sb = sb.Replace('ó', 'o');
+            sb = sb.Replace('ŏ', 'o');
+            sb = sb.Replace('ô', 'o');
+            sb = sb.Replace('ö', 'o');
+            sb = sb.Replace('ò', 'o');
+            sb = sb.Replace('ō', 'o');
+            sb = sb.Replace('ø', 'o');
+            sb = sb.Replace('õ', 'o');
+            sb = sb.Replace('ő', 'o');
+            sb = sb.Replace('ŕ', 'r');
+            sb = sb.Replace('ř', 'r');
+            sb = sb.Replace('ŗ', 'r');
+            sb = sb.Replace('ś', 's');
+            sb = sb.Replace('š', 's');
+            sb = sb.Replace('ş', 's');
+            sb = sb.Replace('ŝ', 's');
+            sb = sb.Replace('ß', 's');
+            sb = sb.Replace('ť', 't');
+            sb = sb.Replace('ţ', 't');
+            sb = sb.Replace('ŧ', 't');
+            sb = sb.Replace('þ', 'p');
+            sb = sb.Replace('ů', 'u');
+            sb = sb.Replace('ú', 'u');
+            sb = sb.Replace('ŭ', 'u');
+            sb = sb.Replace('û', 'u');
+            sb = sb.Replace('ü', 'u');
+            sb = sb.Replace('ű', 'u');
+            sb = sb.Replace('ù', 'u');
+            sb = sb.Replace('ū', 'u');
+            sb = sb.Replace('ų', 'u');
+            sb = sb.Replace('ũ', 'u');
+            sb = sb.Replace('ŵ', 'w');
+            sb = sb.Replace('ý', 'y');
+            sb = sb.Replace('ŷ', 'y');
+            sb = sb.Replace('ÿ', 'y');
+            sb = sb.Replace('ź', 'z');
+            sb = sb.Replace('ž', 'z');
+            sb = sb.Replace('ż', 'z');
+            return sb;
+        }
+        #endregion ToEnglishAlphaChars()
 
         #region TrimLength()
         /// <summary>
@@ -2376,6 +2830,105 @@ namespace Extensions
         }
         #endregion Words()
 
+        #region Validate()
+        /// <summary>
+        /// Makes quick work of null validating all parameters you pass to it.
+        /// This method takes a variable number of parameters and validates that
+        /// all parameters are not null.  If a parameter is found to be null, a
+        /// ArgumentNullException is thrown.
+        /// For example:
+        ///     void MyMethod(string str, double dbl, MyClass cls)
+        ///     {
+        ///         Universal.ValidateNoNulls(str, dbl, cls);
+        ///         ...Your code here...
+        ///     }
+        /// You do not have to pass all parameters, but can instead do this:
+        ///     void MyMethod(string str, double dbl, MyClass cls)
+        ///     {
+        ///         Universal.ValidateNoNulls(str, cls);
+        ///         ...Your code here...
+        ///     }
+        /// where we chose NOT to validate the double dbl in this case.
+        /// </summary>
+        /// <param name="parms">The variable set of parameters.</param>
+        internal static bool ValidateNoNulls(params object[] parms)
+        {
+            for (int C = 0; C < parms.Length; C++)
+            {
+                if (parms[C] == null)
+                {
+                    throw new ArgumentNullException("Parameter #" + C);
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Makes quick work of validating all parameters you pass to it.
+        /// This method takes a variable number of parameters and validates 
+        /// all parameters based on ErrorType and object type.  Null validation
+        /// is seamless.  If a parameter is found to be null, a
+        /// ArgumentNullException is thrown which notes the number of the 
+        /// parameter since parmeters are treated as objects and thus the
+        /// parameter names are inaccessible.
+        /// For example:
+        ///     void MyMethod(string str, double dbl, MyClass cls)
+        ///     {
+        ///         Universal.Validate(ErrorType.Null, str, dbl, cls);
+        ///         ...Your code here...
+        ///     }
+        /// You do not have to pass all parameters, but can instead do this:
+        ///     void MyMethod(string str, double dbl, MyClass cls)
+        ///     {
+        ///         Universal.Validate(ErrorType.Null, str, cls);
+        ///         ...Your code here...
+        ///     }
+        /// where we chose NOT to validate the double dbl in this case.
+        /// Alternatively, you can validate that dbl is a non-negative
+        /// number by doing this:
+        ///     void MyMethod(string str, double dbl, MyClass cls)
+        ///     {
+        ///         Universal.Validate(
+        ///             {ErrorType.Null, ErrorType.NonNegative}, 
+        ///             str, cls);
+        ///         ...Your code here...
+        ///     }
+        /// </summary>
+        /// <param name="errors">The array of error types to validate.</param>
+        /// <param name="parms">The variable set of parameters.</param>
+        internal static bool Validate(Constants.ErrorType[] errors,
+                                      params object[] parms)
+        {
+            foreach (Constants.ErrorType error in errors)
+            {
+                for (int C = 0; C < parms.Length; C++)
+                {
+                    switch (error)
+                    {
+                        case Constants.ErrorType.Null:
+                            if (parms[C] == null)
+                            {
+                                throw new ArgumentNullException("Parameter #" + C);
+                            }
+                            break;
+                        case Constants.ErrorType.IntNonNegative:
+                            if (parms[C].GetType() == typeof(int))
+                            {
+                                if ((int)parms[C] < 0)
+                                {
+                                    throw new ArgumentOutOfRangeException(
+                                        "Parameter #" + C,
+                                        "Value must be >= 0");
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
+            return true;
+        }
+        #endregion Validate()
+
         //public static bool ToEmailSafeTextFile(this System.String filePath)
         //{
         //    if (System.IO.File.Exists(filePath))
@@ -2408,4 +2961,3 @@ namespace Extensions
         //}
     }
 }
-#pragma warning restore CA1416, CS1587, CS0162, CS1998, IDE0059, IDE0028
