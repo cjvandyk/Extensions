@@ -1,6 +1,6 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net7.0;net6.0;netstandard2.1;netstandard2.0;net48;net472;net471;net47</TargetFrameworks>
+    <TargetFrameworks>net8.0;net7.0;net6.0;netstandard2.1;netstandard2.0;net48;net472;net471;net47;net462</TargetFrameworks>
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>disable</ImplicitUsings>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
@@ -18,7 +18,8 @@
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>- Updated to support .NET 7.0</PackageReleaseNotes>
+    <PackageReleaseNotes>- Updated to support .NET 8.0+ and Graph 5.0+</PackageReleaseNotes>
+	<PackageOutputPath>..\NuGet</PackageOutputPath>
   </PropertyGroup>
   <ItemGroup>
     <None Include="README.md">
@@ -27,13 +28,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Extensions.Logit" Version="4.9.700" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Graph" Version="4.54.0" />
-    <PackageReference Include="Microsoft.Net.Compilers.Toolset" Version="4.5.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="Extensions.Graph" Version="6.0.800" />
+    <PackageReference Include="Extensions.Identity" Version="6.0.800" />
+    <PackageReference Include="Extensions.Logit" Version="6.0.800" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Images\Extensions-128x128.png">
