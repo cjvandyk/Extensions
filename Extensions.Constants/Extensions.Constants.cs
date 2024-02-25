@@ -22,9 +22,20 @@ namespace Extensions
         /// </summary>
         public enum AuthPublicAppResultType
         {
-            Silent,
+            /// <summary>
+            /// Interactively attempt to obtain authentication.
+            /// </summary>
             Interactive,
-            Prompt
+
+            /// <summary>
+            /// Prompt the user for authentication.
+            /// </summary>
+            Prompt,
+
+            /// <summary>
+            /// Silently attempt to obtain authentication.
+            /// </summary>
+            Silent
         }
 
         /// <summary>
@@ -36,18 +47,22 @@ namespace Extensions
             /// China national cloud.
             /// </summary>
             O365China,
+
             /// <summary>
             /// Default commercial cloud.
             /// </summary>
             O365Default,  //Commercial tenant
+
             /// <summary>
             /// Germany national cloud.
             /// </summary>
             O365GermanyCloud,
+
             /// <summary>
             /// US Government Department of Defense cloud.
             /// </summary>
             O365USGovDoD,
+
             /// <summary>
             /// US Government High Security cloud.
             /// </summary>
@@ -63,6 +78,7 @@ namespace Extensions
             /// Confidential
             /// </summary>
             Confidential,
+
             /// <summary>
             /// Public
             /// </summary>
@@ -113,134 +129,134 @@ namespace Extensions
         public const double BitsPerByte = 8;
 
         /// <summary>
-        /// Number of bytes in a Kilobyte.
+        /// Number of bytes in a Kilobyte. *1024^3
         /// </summary>
         public const double KB = 1024;
 
         /// <summary>
-        /// Number of bytes in a Megabyte.
+        /// Number of bytes in a Megabyte. *1024^6
         /// </summary>
         public const double MB = KB * 1024;
 
         /// <summary>
-        /// Number of bytes in a Gigabyte.
+        /// Number of bytes in a Gigabyte. *1024^9
         /// </summary>
         public const double GB = MB * 1024;
 
         /// <summary>
-        /// Number of bytes in a Terabyte.
+        /// Number of bytes in a Terabyte. *1024^12
         /// </summary>
         public const double TB = GB * 1024;
 
         /// <summary>
-        /// Number of bytes in a Petabyte.
+        /// Number of bytes in a Petabyte. *1024^15
         /// </summary>
         public const double PB = TB * 1024;
 
         /// <summary>
-        /// Number of bytes in a Exabyte.
+        /// Number of bytes in a Exabyte. *1024^18
         /// </summary>
         public const double EB = PB * 1024;
 
         /// <summary>
-        /// Number of bytes in a Zettabyte.
+        /// Number of bytes in a Zettabyte. *1024^21
         /// </summary>
         public const double ZB = EB * 1024;
 
         /// <summary>
-        /// Number of bytes in a Yottabyte.
+        /// Number of bytes in a Yottabyte. *1024^24
         /// </summary>
         public const double YB = ZB * 1024;
 
         /// <summary>
-        /// Number of bytes in a Brontobyte.
+        /// Number of bytes in a Brontobyte. *1024^27
         /// </summary>
         public const double BB = YB * 1024;
 
         /// <summary>
-        /// Number of bytes in a Geopbyte.
+        /// Number of bytes in a Geopbyte. *1024^30
         /// </summary>
         public const double GpB = BB * 1024;
 
         /// <summary>
-        /// Number of bytes in a Saganbyte.
+        /// Number of bytes in a Saganbyte. *1024^33
         /// </summary>
         public const double SB = GpB * 1024;
 
         /// <summary>
-        /// Number of bytes in a Pijabyte.
+        /// Number of bytes in a Pijabyte. *1024^36
         /// </summary>
         public const double PaB = SB * 1024;
 
         /// <summary>
-        /// Number of bytes in a Alphabyte.
+        /// Number of bytes in a Alphabyte. *1024^39
         /// </summary>
         public const double AB = PaB * 1024;
 
         /// <summary>
-        /// Number of bytes in a Pectrolbyte.
+        /// Number of bytes in a Pectrolbyte. *1024^42
         /// </summary>
         public const double PlB = AB * 1024;
 
         /// <summary>
-        /// Number of bytes in a Bolgerbyte.
+        /// Number of bytes in a Bolgerbyte. *1024^45
         /// </summary>
         public const double BrB = PlB * 1024;
 
         /// <summary>
-        /// Number of bytes in a Sambobyte.
+        /// Number of bytes in a Sambobyte. *1024^48
         /// </summary>
         public const double SoB = BrB * 1024;
 
         /// <summary>
-        /// Number of bytes in a Quesabyte.
+        /// Number of bytes in a Quesabyte. *1024^51
         /// </summary>
         public const double QB = SoB * 1024;
 
         /// <summary>
-        /// Number of bytes in a Kinsabyte.
+        /// Number of bytes in a Kinsabyte. *1024^54
         /// </summary>
         public const double KaB = QB * 1024;
 
         /// <summary>
-        /// Number of bytes in a Rutherbyte.
+        /// Number of bytes in a Rutherbyte. *1024^57
         /// </summary>
         public const double RB = KaB * 1024;
 
         /// <summary>
-        /// Number of bytes in a Dubnibyte.
+        /// Number of bytes in a Dubnibyte. *1024^60
         /// </summary>
         public const double DB = RB * 1024;
 
         /// <summary>
-        /// Number of bytes in a Hassiubyte.
+        /// Number of bytes in a Hassiubyte. *1024^63
         /// </summary>
         public const double HB = DB * 1024;
 
         /// <summary>
-        /// Number of bytes in a Meitnerbyte.
+        /// Number of bytes in a Meitnerbyte. *1024^66
         /// </summary>
         public const double MrB = HB * 1024;
 
         /// <summary>
-        /// Number of bytes in a Darmstadbyte.
+        /// Number of bytes in a Darmstadbyte. *1024^69
         /// </summary>
         public const double DdB = MrB * 1024;
 
         /// <summary>
-        /// Number of bytes in a Roentbyte.
+        /// Number of bytes in a Roentbyte. *1024^72
         /// </summary>
         public const double RtB = DdB * 1024;
 
         /// <summary>
-        /// Number of bytes in a Sophobyte.
+        /// Number of bytes in a Sophobyte. *1024^75
         /// </summary>
         public const double ShB = RtB * 1024;
 
         /// <summary>
-        /// Number of bytes in a Coperbyte.
+        /// Number of bytes in a Coperbyte. *1024^78
         /// </summary>
-        public const double CB = ShB * 1024;
+        public const double CB = ShB * 1024; 
 
         /// <summary>
         /// Number of bytes in a Koentekbyte. *1024^81
@@ -260,7 +276,19 @@ namespace Extensions
         /// </summary>
         public enum CompoundFrequency 
         { 
+            /// <summary>
+            /// Frequency 12 time per year.
+            /// </summary>
             Monthly, 
+
+            /// <summary>
+            /// Frequency 4 times per year.
+            /// </summary>
+            Quarterly,
+
+            /// <summary>
+            /// Frequency once per year.
+            /// </summary>
             Yearly 
         };
         #endregion CompoundFrequency
@@ -285,16 +313,17 @@ namespace Extensions
         }
         #endregion Cryptography
 
-        #region EnumerationType
+        #region Enumeration
         /// <summary>
         /// Enum of possible enumerable types.
         /// </summary>
         public enum EnumerableType 
         { 
-            Dictionary, 
-            NameValueCollection 
-        };
-        #endregion EnumerationType
+            Array,
+            List,
+            Dictionary
+        }
+        #endregion Enumeration
 
         #region ErrorType
         /// <summary>
@@ -316,30 +345,22 @@ namespace Extensions
         };
         #endregion ErrorType
 
-        #region DuplicateGroupReturnType
+        #region Graph Constants
         /// <summary>
         /// The types of data that can be returned after the duplication of
         /// an M365 Group i.e. the GUID ID of the Group or the Group itself.
         /// </summary>
         public enum DuplicateGroupReturnType
         {
+            /// <summary>
+            /// Return the Microsoft.Graph.Models.Group value.
+            /// </summary>
             Group,
-            Id
-        }
-        #endregion DuplicateGroupReturnType
 
-        #region Graph Constants
-        /// <summary>
-        /// The types of Graph user info to retrieve.  The id, mail and
-        /// userProfileName values use camel case to allow their .ToString()
-        /// values to be used in the query constructor.
-        /// </summary>
-        public enum UserInfoType
-        {
-            All,
-            id,
-            mail,
-            userProfileName
+            /// <summary>
+            /// Return just the GUID ID value of the Group.
+            /// </summary>
+            Id
         }
 
         /// <summary>
@@ -348,8 +369,19 @@ namespace Extensions
         /// </summary>
         public enum GroupUserMembershipType
         {
+            /// <summary>
+            /// Return both Members and Owners of the Group.
+            /// </summary>
             All,
+
+            /// <summary>
+            /// Return only Members of the Group.
+            /// </summary>
             Members,
+
+            /// <summary>
+            /// Return only Owners of the Group.
+            /// </summary>
             Owners
         }
 
@@ -359,8 +391,43 @@ namespace Extensions
         /// </summary>
         public enum GroupUpdateType
         {
+            /// <summary>
+            /// String value being passed to .UpdateGroup() represents the Display Name of the Group.
+            /// </summary>
             DisplayName,
+
+            /// <summary>
+            /// /// String value being passed to .UpdateGroup() represents the GUID ID value of the Group.
+            /// </summary>
             Guid
+        }
+
+        /// <summary>
+        /// The types of Graph user info to retrieve.  The id, mail and
+        /// userProfileName values use camel case to allow their .ToString()
+        /// values to be used in the query constructor.
+        /// </summary>
+        public enum UserInfoType
+        {
+            /// <summary>
+            /// Return all the entire Microsoft.Graph.Models.User object.
+            /// </summary>
+            All,
+
+            /// <summary>
+            /// Return just the ID value of the User object.
+            /// </summary>
+            id,
+
+            /// <summary>
+            /// Return just the Email value of the User object.
+            /// </summary>
+            mail,
+
+            /// <summary>
+            /// Return just the User Principal Name (UPN) of the User object.
+            /// </summary>
+            userProfileName
         }
         #endregion Graph Constants
 
@@ -402,9 +469,79 @@ namespace Extensions
             'c',
             'd',
             'e',
-            'f'
+            'f',
+            'A',
+            'B',
+            'C',
+            'D',
+            'E',
+            'F'
         };
         #endregion Hexadecimal
+
+        #region Logging
+        /// <summary>
+        /// Define the type of messages that can be written.
+        /// </summary>
+        public enum MessageType
+        {
+            /// <summary>
+            /// Error message type that writes red output to console.
+            /// </summary>
+            Error,
+
+            /// <summary>
+            /// Warning message type that writes yellow output to console.
+            /// </summary>
+            Warning,
+
+            /// <summary>
+            /// Information message type that writes gray output to console.
+            /// </summary>
+            Information,
+
+            /// <summary>
+            /// Verbose message type that writes cyan output to console.
+            /// </summary>
+            Verbose
+        }
+
+        /// <summary>
+        /// Define the types of logs that can be written.
+        /// </summary>
+        public enum LogType
+        {
+            /// <summary>
+            /// Write to console.
+            /// </summary>
+            Console,
+
+            /// <summary>
+            /// Write to a logging file.
+            /// </summary>
+            File,
+
+            /// <summary>
+            /// Write to the Event Log.
+            /// </summary>
+            EventLog,
+
+            /// <summary>
+            /// Write to a SharePoint list.
+            /// </summary>
+            SPList,
+
+            /// <summary>
+            /// Write to a given ILogger.
+            /// </summary>
+            ILogger,
+
+            /// <summary>
+            /// Write to database.
+            /// </summary>
+            Database
+        }
+        #endregion Logging
 
         #region LoremIpsum
         /// <summary>
@@ -431,7 +568,14 @@ namespace Extensions
         /// </summary>
         public enum MersenneComparisonType 
         { 
+            /// <summary>
+            /// Use a greater than comparrison.
+            /// </summary>
             Greater, 
+
+            /// <summary>
+            /// Use a less than comparrison.
+            /// </summary>
             Less 
         };
         #endregion Mersenne
@@ -491,7 +635,14 @@ namespace Extensions
         /// </summary>
         public enum QuoteType 
         { 
+            /// <summary>
+            /// Single quotes i.e. 'C'.
+            /// </summary>
             Single, 
+
+            /// <summary>
+            /// Double quotes i.e. "C".
+            /// </summary>
             Double 
         };
         #endregion Quote
@@ -502,10 +653,29 @@ namespace Extensions
         /// </summary>
         public enum SubstringType 
         { 
+            /// <summary>
+            /// The substring is calculated from the front of the string.
+            /// </summary>
             FromHead, 
+
+            /// <summary>
+            /// The substring is calculated from the back of the string.
+            /// </summary>
             FromTail, 
+
+            /// <summary>
+            /// The substring saught is to the left of the matching index location.
+            /// </summary>
             LeftOfIndex, 
+
+            /// <summary>
+            /// The substring saught is to the right of the matching index location.
+            /// </summary>
             RigthOfIndex, 
+
+            /// <summary>
+            /// The substring is the value of the index.
+            /// </summary>
             IndexValue 
         };
         #endregion Substring
@@ -516,14 +686,49 @@ namespace Extensions
         /// </summary>
         public enum TimeSpanSumType 
         { 
+            /// <summary>
+            /// Number of seconds.
+            /// </summary>
             Seconds, 
+
+            /// <summary>
+            /// Number of minutes.
+            /// </summary>
             Minutes, 
+
+            /// <summary>
+            /// Number of hours.
+            /// </summary>
             Hours, 
+
+            /// <summary>
+            /// Number of days.
+            /// </summary>
             Days, 
+
+            /// <summary>
+            /// Number of weeks.
+            /// </summary>
             Weeks, 
+
+            /// <summary>
+            /// Number of years.
+            /// </summary>
             Years, 
+
+            /// <summary>
+            /// Number of decades.
+            /// </summary>
             Decades, 
+
+            /// <summary>
+            /// Number of centuries.
+            /// </summary>
             Centuries, 
+
+            /// <summary>
+            /// Number of mellinnia.
+            /// </summary>
             Mellinnia
         };
         #endregion TimeSpan
