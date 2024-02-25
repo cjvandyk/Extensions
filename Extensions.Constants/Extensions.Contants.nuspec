@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>Extensions.Constants</id>
+    <id>CsExtensions.Constants</id>
     <!--<version>6.0.800</version>-->
     <title>$title$</title>
     <authors>Cornelius J. van Dyk</authors>
@@ -9,19 +9,19 @@
     <license type="expression">GPL-3.0-or-later</license>
     <projectUrl>https://github.com/cjvandyk/Extensions</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/cjvandyk/Extensions/master/Images/Extensions-64x64.png</iconUrl>
-    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <requireLicenseAcceptance>True</requireLicenseAcceptance>
     <description>
-		Extensions.Constants contains foundational constants shared across the Extensions ecosystem.
-		Extensions.Constants supports all these .NET versions:
+		CsExtensions.Constants contains foundational constants shared across the CsExtensions ecosystem.
+		CsExtensions.Constants supports all these .NET versions:
 		- .NET 8, 7, 6
 		- .NET Framework versions 4.8, 4.7.2, 4.7.1, 4.7, 4.6.2.
 		- .NET Standard 2.1 and 2.0.
 	</description>
     <summary>
-		Extensions.Constants contains foundational constants shared across the Extensions ecosystem.
+		CsExtensions.Constants contains foundational constants shared across the CsExtensions ecosystem.
 	</summary>
     <releaseNotes>
-		Extensions.Constants contains foundational constants shared across the Extensions ecosystem.
+		CsExtensions.Constants contains foundational constants shared across the CsExtensions ecosystem.
 	</releaseNotes>
     <copyright>$copyright$</copyright>
     <tags>Extensions C# cjvandyk Crayveon Constants</tags>
