@@ -6,7 +6,7 @@
 
 The following classes have been extended:
 
-    - System.Logit (added)
+    - System.Logit
 
 with these methods:
 
