@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>Extensions.Logit</id>
+    <id>CsExtensions.Logit</id>
     <!--<version>6.0.800</version>-->
     <title>$title$</title>
     <authors>Cornelius J. van Dyk</authors>
@@ -9,8 +9,9 @@
     <license type="expression">GPL-3.0-or-later</license>
     <projectUrl>https://github.com/cjvandyk/Extensions</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/cjvandyk/Extensions/master/Images/Extensions-64x64.png</iconUrl>
-    <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <description>Extensions.Logit contains methods to make logging to console, file, EventLog, SharePoint list, and database a breeze.
+    <requireLicenseAcceptance>True</requireLicenseAcceptance>
+    <description>
+		CsExtensions.Logit contains methods to make logging to console, file, iLogger, EventLog, SharePoint list, and database a breeze.
 		Extensions.Logit supports all these .NET versions:
 		- .NET 8, 7, 6
 		- .NET Framework versions 4.8, 4.7.2, 4.7.1, 4.7, 4.6.2.
@@ -19,9 +20,10 @@
 		Use .Inf() to write Information messages.
 		Use .Wrn() to write Warning messages.
 		Use .Err() to write Error messages.
-		Use .Vrb() to write Verbose messages.</description>
+		Use .Vrb() to write Verbose messages.
+	</description>
     <summary>
-		Extensions.Logit contains methods to make logging to console, file, EventLog, SharePoint list, and database a breeze.
+		CsExtensions.Logit contains methods to make logging to console, file, iLogger, EventLog, SharePoint list, and database a breeze.
 		These methods are included:
 		Err()
 		GetExecutingAssembly()
@@ -68,7 +70,7 @@
 		SharePoint list, database) using the System.Logit class.
 	</releaseNotes>
     <copyright>$copyright$</copyright>
-    <tags>Extensions C# cjvandyk Crayveon Logit Logging Logger</tags>
+    <tags>Extensions C# cjvandyk Crayveon Logit Logging Logger iLogger EventLog</tags>
   </metadata>
   <files>
     <file src="**" target="lib" />

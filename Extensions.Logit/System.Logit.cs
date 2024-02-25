@@ -5,11 +5,12 @@
 /// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
 /// </summary>
 
+using Microsoft.Extensions.Logging;
+using Microsoft.Graph;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
-using Microsoft.Extensions.Logging;
-using Microsoft.Graph;
+using static Extensions.Constants;
 
 namespace System
 {
@@ -20,325 +21,17 @@ namespace System
     [Serializable]
     public static partial class Logit
     {
-        /// <summary>
-        /// Class containing the instance of the Logit engine.
-        /// </summary>
-        [Serializable]
-        public partial class Instance
-        {
-            #region Globals
-            /// <summary>
-            /// The delegate method to call in order to determine if debug
-            /// logging should take place.
-            /// </summary>
-            public Func<bool> IsDebugMethod { get; private set; }
-            /// <summary>
-            /// The file to which logging will be done if the logToFile
-            /// switch is set to true.
-            /// </summary>
-            public string LogFile { get; private set; } =
-                GetExecutingAssemblyFileName() + TimeStamp() + ".log";
-            /// <summary>
-            /// The default message type if none is specified.
-            /// </summary>
-            public MessageType DefaultLogMessageType { get; private set; }
-                = MessageType.Information;
-            /// <summary>
-            /// The ILogger instance to use for logging.
-            /// </summary>
-            public ILogger ILogger { get; private set; } = null;
-            /// <summary>
-            /// A Graph client for logging to SharePoint.
-            /// </summary>
-            public GraphServiceClient GraphClient { get; private set; } = null;
-            /// <summary>
-            /// The base URL of the SharePoint site housing the target list.
-            /// Specify only the base URL of the site e.g. for the site
-            /// "contoso.sharepoint.us/sites/LogData" the value supplied would
-            /// be just "LogData".
-            /// </summary>
-            public string LogSiteUrl { get; private set; } = null;
-            /// <summary>
-            /// The list name for the target list when logging to SharePoint.
-            /// </summary>
-            public string LogListName { get; private set; } = null;
-            #endregion Globals
-
-            #region Switches
-            /// <summary>
-            /// When set to true, will output logging content to the console.
-            /// Default = true;
-            /// </summary>
-            public bool LogToConsole { get; set; } = true;
-            /// <summary>
-            /// When set to true, will output logging content to the log file.
-            /// Default = false;
-            /// </summary>
-            public bool LogToFile { get; set; } = false;
-            /// <summary>
-            /// When set to true, will output logging content to the Event Log.
-            /// Default = false;
-            /// </summary>
-            public bool LogToEventLog { get; set; } = false;
-            /// <summary>
-            /// When set to true, will output logging content to a provided
-            /// ILogger client.
-            /// </summary>
-            public bool LogToILogger { get; set; } = false;
-            /// <summary>
-            /// When set to true, will output logging content to a SharePoint list.
-            /// Default = false;
-            /// </summary>
-            public bool LogToSPList { get; set; } = false;
-            /// <summary>
-            /// When set to true, will output logging content to a database.
-            /// Default = false;
-            /// </summary>
-            public bool LogToDB { get; set; } = false;
-            /// <summary>
-            /// Define if timestamps should be prepended to messages.
-            /// Default = true;
-            /// </summary>
-            public bool IncludeTimeStamp { get; set; } = true;
-            /// <summary>
-            /// Define if console output should be in a static location thus
-            /// constantly overwriting the previous output.  This is useful in
-            /// status updates like % complete etc.
-            /// Default = false;
-            /// </summary>
-            public bool StaticConsoleLocation { get; set; } = false;
-            #endregion Switches
-
-            #region Constructors
-            /// <summary>
-            /// Default constructor that logs only to the console.
-            /// </summary>
-            /// <param name="isDebugMethod">A delegate method called to determine
-            /// if debug logging should happen.</param>
-            /// <param name="defaultLogMessageType">The default message type to
-            /// use in logging if type isn't specified.</param>
-            /// <param name="logToConsole">Bool determining if logging is done to
-            /// the console.</param>
-            /// <param name="logToFile">Bool determining if logging is done to
-            /// a file.</param>
-            /// <param name="logToEventLog">Bool determining if logging is done to
-            /// the Event Log.</param>
-            /// <param name="logToILogger">Bool determining if logging is done to
-            /// the provided ILogger.</param>
-            /// <param name="iLogger">The ILogger instance to use for logging.</param>
-            public Instance(
-                Func<bool> isDebugMethod,
-                MessageType defaultLogMessageType = MessageType.Information,
-                bool logToConsole = true,
-                bool logToFile = false,
-                bool logToEventLog = false,
-                bool logToILogger = false,
-                ILogger iLogger = null)
-            {
-                //Capture the delegate method.
-                IsDebugMethod = isDebugMethod;
-                //Configure if logging should take place to the console.
-                LogToConsole = logToConsole;
-                //Configure if logging should take place to file.
-                LogToFile = logToFile;
-                //Configure the default log file for this session.
-                LogFile = GetExecutingAssemblyFileName() + TimeStamp() + ".log";
-                //Configure if logging should take place to the Event Log.
-                LogToEventLog = logToEventLog;
-                //Configure the default log message type for this session.
-                DefaultLogMessageType = defaultLogMessageType;
-                //Configure if logging should take place to ILogger.
-                LogToILogger = logToILogger;
-                //Configure the default ILogger instance for this session.
-                ILogger = iLogger;
-                //Update default instance to this.
-                ActiveLogitInstance = this;
-            }
-
-            /// <summary>
-            /// Default constructor that logs only to the console.
-            /// </summary>
-            /// <param name="isDebugMethod">A delegate method called to determine
-            /// if debug logging should happen.</param>
-            /// <param name="graphClient">The GraphServiceClient to use for
-            /// writing SharePoint list entries.</param>
-            /// <param name="spSiteUrl">The base URL of the SharePoint site
-            /// that houses the target list.</param>
-            /// <param name="spListName">The GUID of the target SharePoint list
-            /// to which logging will be done.</param>
-            /// <param name="defaultLogMessageType">The default message type to
-            /// use in logging if type isn't specified.</param>
-            /// <param name="logToConsole">Bool determining if logging is done to
-            /// the console.</param>
-            /// <param name="logToFile">Bool determining if logging is done to
-            /// a file.</param>
-            /// <param name="logToEventLog">Bool determining if logging is done to
-            /// the Event Log.</param>
-            /// <param name="logToSPList">Bool determining if logging is done to
-            /// a SharePoint list.</param>
-            /// <param name="logToDatabase">Bool determining if logging is done to
-            /// a database.</param>
-            /// <param name="logToILogger">Bool determining if logging is done to
-            /// the provided ILogger.</param>
-            /// <param name="iLogger">The ILogger instance to use for logging.</param>
-            public Instance(
-                Func<bool> isDebugMethod,
-                GraphServiceClient graphClient,
-                string spSiteUrl,
-                string spListName,
-                MessageType defaultLogMessageType =
-                    MessageType.Information,
-                bool logToConsole = true,
-                bool logToFile = false,
-                bool logToEventLog = false,
-                bool logToSPList = false,
-                bool logToDatabase = false,
-                bool logToILogger = false,
-                ILogger iLogger = null)
-            {
-                //Capture the delegate method.
-                IsDebugMethod = isDebugMethod;
-                //Configure if logging should take place to the console.
-                LogToConsole = logToConsole;
-                //Configure if logging should take place to file.
-                LogToFile = logToFile;
-                //Configure the default log file for this session.
-                LogFile = GetExecutingAssemblyFileName() + TimeStamp() + ".log";
-                //Configure if logging should take place to the Event Log.
-                LogToEventLog = logToEventLog;
-                //Configure if logging should take place to ILogger.
-                LogToILogger = logToILogger;
-                //Configure the default ILogger instance for this session.
-                ILogger = iLogger;
-                //Configure if logging should take place to a SharePoint list.
-                LogToSPList = logToSPList;
-                //Configure the default GraphServiceClient to use for logging.
-                GraphClient = graphClient;
-                //Configure the default SharePoint site for this session.
-                LogSiteUrl = spSiteUrl;
-                //Configure the default SharePoint list for this session.
-                LogListName = spListName;
-                //Configure if logging should take place to a database.
-                LogToDB = logToDatabase;
-                //Configure the default log message type for this session.
-                DefaultLogMessageType = defaultLogMessageType;
-                //Update default instance to this.
-                ActiveLogitInstance = this;
-            }
-            #endregion Constructors
-
-            #region Worker Methods
-            /// <summary>
-            /// Called to write "Information" entries.
-            /// </summary>
-            /// <param name="message">The string message to log.</param>
-            /// <param name="eventId">The Event Log event ID to use.</param>
-            public void Inf(
-                string message,
-                int eventId = 0)
-            {
-                System.Logit.Inf(message, eventId, this);
-            }
-
-            /// <summary>
-            /// Called to write "Warning" entries.
-            /// </summary>
-            /// <param name="message">The string message to log.</param>
-            /// <param name="eventId">The Event Log event ID to use.</param>
-            public void Wrn(
-                string message,
-                int eventId = 0)
-            {
-                System.Logit.Wrn(message, eventId, this);
-            }
-
-            /// <summary>
-            /// Called to write "Error" entries.
-            /// </summary>
-            /// <param name="message">The string message to log.</param>
-            /// <param name="eventId">The Event Log event ID to use.</param>
-            public void Err(
-                string message,
-                int eventId = 0)
-            {
-                System.Logit.Err(message, eventId, this);
-            }
-
-            /// <summary>
-            /// Called to write "Verbose" entries.
-            /// </summary>
-            /// <param name="message">The string message to log.</param>
-            /// <param name="eventId">The Event Log event ID to use.</param>
-            public void Vrb(
-                string message,
-                int eventId = 0)
-            {
-                System.Logit.Vrb(message, eventId, this);
-            }
-            #endregion Worker Methods
-        }
-
         #region Globals
         /// <summary>
         /// The lock object to prevent file I/O clashes.
         /// </summary>
         private static readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
+
         /// <summary>
         /// Lock object for marshalling static console location output.
         /// </summary>
         private static readonly object _lockStaticConsoleLocation = new object();
-        /// <summary>
-        /// Define the type of messages that can be written.
-        /// </summary>
-        public enum MessageType
-        {
-            /// <summary>
-            /// Error message type that writes red output to console.
-            /// </summary>
-            Error,
-            /// <summary>
-            /// Warning message type that writes yellow output to console.
-            /// </summary>
-            Warning,
-            /// <summary>
-            /// Information message type that writes gray output to console.
-            /// </summary>
-            Information,
-            /// <summary>
-            /// Verbose message type that writes cyan output to console.
-            /// </summary>
-            Verbose
-        }
-        /// <summary>
-        /// Define the types of logs that can be written.
-        /// </summary>
-        public enum LogType
-        {
-            /// <summary>
-            /// Write to console.
-            /// </summary>
-            Console,
-            /// <summary>
-            /// Write to a logging file.
-            /// </summary>
-            File,
-            /// <summary>
-            /// Write to the Event Log.
-            /// </summary>
-            EventLog,
-            /// <summary>
-            /// Write to a SharePoint list.
-            /// </summary>
-            SPList,
-            /// <summary>
-            /// Write to a given ILogger.
-            /// </summary>
-            ILogger,
-            /// <summary>
-            /// Write to database.
-            /// </summary>
-            Database
-        }
+
         /// <summary>
         /// The currently active Logit engine instance that will handle
         /// requests.
@@ -1050,6 +743,7 @@ namespace System
         }
         #endregion Worker Methods
 
+        #region Internal
         /// <summary>
         /// Get the site ID (GUID) of the specified site.
         /// </summary>
@@ -1084,5 +778,6 @@ namespace System
                     C.Headers.Add("ConsistencyLevel", "eventual");
                 }).GetAwaiter().GetResult().Value[0].Id;
         }
+        #endregion
     }
 }
