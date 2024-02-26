@@ -5,6 +5,7 @@
 /// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
 /// </summary>
 
+using Microsoft.Graph;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -166,6 +167,18 @@ namespace Extensions
         /// </summary>
         public TenantConfig()
         {
+            if (Environment.GetEnvironmentVariable("TenantString") == null)
+            {
+                throw new Exception("Environment variable for TenantString not found.");
+            }
+            TenantString = Environment.GetEnvironmentVariable("TenantString").Trim();
+            LoadConfig();
+            TenantDirectoryId = Settings["TenantDirectoryId"];
+            ApplicationClientId = Settings["ApplicationClientId"];
+            CertStoreLocation = Settings["CertStoreLocation"];
+            CertThumbprint = Settings["CertThumbprint"];
+            DebugEnabled = Convert.ToBoolean(Settings["DebugEnabled"]);
+            MultiThreaded = Convert.ToBoolean(Settings["MultiThreaded"]);
         }
 
         /// <summary>
@@ -175,6 +188,10 @@ namespace Extensions
         /// contoso.sharepoint.us it would be 'contoso'.</param>
         public TenantConfig(string tenantString)
         {
+            if (tenantString == null)
+            {
+                throw new ArgumentNullException("tenantString cannot be null.");
+            }
             TenantString = tenantString.Trim();
             LoadConfig();
             TenantDirectoryId = Settings["TenantDirectoryId"];
@@ -238,11 +255,23 @@ namespace Extensions
         }
 
         /// <summary>
-        /// An internal method for loading environment variables from JSON
+        /// A method for loading environment variables from JSON
         /// config files when interactively debugging.
         /// </summary>
-        internal void LoadConfig()
+        public void LoadConfig()
         {
+            if ((TenantString == null) ||
+                (TenantString == "Contoso"))
+            {
+                if (Environment.GetEnvironmentVariable("TenantString") != null)
+                {
+                    TenantString = Environment.GetEnvironmentVariable("TenantString");
+                }
+                else
+                {
+                    throw new Exception("ERROR!!!  No TenantString environment variable defined.");
+                }
+            }
             Settings = new Dictionary<string, string>();
             Settings.Add("TenantString", TenantString);
             Settings = LoadJSON($"{GetRunFolder()}" +
@@ -262,19 +291,14 @@ namespace Extensions
         internal static Dictionary<string, string> LoadJSON(string filePath)
         {
             var result = new Dictionary<string, string>();
-            try
+            if (!File.Exists(filePath))
             {
-                using (StreamReader sr = new StreamReader(filePath))
-                {
-                    result = JsonSerializer.Deserialize<
-                        Dictionary<string, string>>(sr.ReadToEnd());
-                }
+                throw new Exception($"{filePath} does not exist.");
             }
-            catch (Exception ex)
+            using (StreamReader sr = new StreamReader(filePath))
             {
-                //If something goes wrong while reading the file, we simply
-                //return a blank dictionary by swallowing the error and logging
-                //the exception.
+                result = JsonSerializer.Deserialize<
+                    Dictionary<string, string>>(sr.ReadToEnd());
             }
             return result;
         }

@@ -61,60 +61,150 @@ namespace Extensions.Identity
         /// <summary>
         /// Access scope for Exchange.
         /// </summary>
-        public static string[] Exchange = new string[]
+        public static string[] Exchange
         {
-            $"https://outlook.office365{ActiveAuth.TenantCfg.AuthorityDomain}/.default"
-        };
+            get
+            {
+                if (ActiveAuth == null)
+                {
+                    TenantConfig tenantConfig = new TenantConfig();
+                    tenantConfig.LoadConfig();
+                    AuthMan.GetAuth(tenantConfig.TenantDirectoryId,
+                                    tenantConfig.ApplicationClientId,
+                                    tenantConfig.CertThumbprint,
+                                    tenantConfig.TenantString);
+                }
+                return new string[]
+                {
+                    $"https://outlook.office365{ActiveAuth.TenantCfg.AuthorityDomain}/.default"
+                };
+            }
+        }
 
         /// <summary>
         /// Access scope for Graph.
         /// </summary>
-        public static string[] Graph = new string[]
+        public static string[] Graph
         {
-            $"https://graph.microsoft{ActiveAuth.TenantCfg.AuthorityDomain}/.default",
-            Offline
-        };
+            get
+            {
+                if (ActiveAuth == null)
+                {
+                    TenantConfig tenantConfig = new TenantConfig();
+                    tenantConfig.LoadConfig();
+                    AuthMan.GetAuth(tenantConfig.TenantDirectoryId,
+                                    tenantConfig.ApplicationClientId,
+                                    tenantConfig.CertThumbprint,
+                                    tenantConfig.TenantString);
+                }
+                return new string[]
+                {
+                    $"https://graph.microsoft{ActiveAuth.TenantCfg.AuthorityDomain}/.default",
+                    Offline
+                };
+            }
+        }
 
         /// <summary>
         /// Access scope for M365 Management.
         /// </summary>
-        public static string[] Management = new string[]
+        public static string[] Management
         {
-            $"https://manage.office365{ActiveAuth.TenantCfg.AuthorityDomain}/.default",
-            Offline
-        };
+            get
+            {
+                if (ActiveAuth == null)
+                {
+                    TenantConfig tenantConfig = new TenantConfig();
+                    tenantConfig.LoadConfig();
+                    AuthMan.GetAuth(tenantConfig.TenantDirectoryId,
+                                    tenantConfig.ApplicationClientId,
+                                    tenantConfig.CertThumbprint,
+                                    tenantConfig.TenantString);
+                }
+                return new string[]
+                {
+                    $"https://manage.office365{ActiveAuth.TenantCfg.AuthorityDomain}/.default",
+                    Offline
+                };
+            }
+        }
 
         /// <summary>
         /// Access scope for PowerBI.
         /// </summary>
-        public static string[] PowerBI = new string[]
+        public static string[] PowerBI
         {
-            ActiveAuth.TenantCfg.AuthorityDomain == ".us" 
-                ?  $"https://high.analysis.usgovcloudapi.net/powerbi/api/.default"
-                : "https://analysis.windows.net/powerbi/api/.default",
-            Offline
-        };
+            get
+            {
+                if (ActiveAuth == null)
+                {
+                    TenantConfig tenantConfig = new TenantConfig();
+                    tenantConfig.LoadConfig();
+                    AuthMan.GetAuth(tenantConfig.TenantDirectoryId,
+                                    tenantConfig.ApplicationClientId,
+                                    tenantConfig.CertThumbprint,
+                                    tenantConfig.TenantString);
+                }
+                return new string[]
+                {
+                        ActiveAuth.TenantCfg.AuthorityDomain == ".us"
+                            ? "https://high.analysis.usgovcloudapi.net/powerbi/api/.default"
+                            : "https://analysis.windows.net/powerbi/api/.default",
+                        Offline
+                };
+            }
+        }
         //"https://analysis.windows.net/powerbi/api/.default"
 
         /// <summary>
         /// Access scope for SharePoint.
         /// </summary>
-        public static string[] SharePoint = new string[]
+        public static string[] SharePoint
         {
-            $"https://{ActiveAuth.TenantCfg.TenantString.TrimEnd('/')}" +
-                $".sharepoint{ActiveAuth.TenantCfg.AuthorityDomain}/.default",
-            Offline
-        };
+            get
+            {
+                if (ActiveAuth == null)
+                {
+                    TenantConfig tenantConfig = new TenantConfig();
+                    tenantConfig.LoadConfig();
+                    AuthMan.GetAuth(tenantConfig.TenantDirectoryId,
+                                    tenantConfig.ApplicationClientId,
+                                    tenantConfig.CertThumbprint,
+                                    tenantConfig.TenantString);
+                }
+                return new string[]
+                {
+                    $"https://{ActiveAuth.TenantCfg.TenantString.TrimEnd('/')}" +
+                        $".sharepoint{ActiveAuth.TenantCfg.AuthorityDomain}/.default",
+                    Offline
+                };
+            }
+        }
 
         /// <summary>
         /// Access scope for SharePoint Admin portal.
         /// </summary>
-        public static string[] SharePointAdmin = new string[]
+        public static string[] SharePointAdmin
         {
-            $"https://{ActiveAuth.TenantCfg.TenantString.TrimEnd('/')}" +
-                $"-admin.sharepoint{ActiveAuth.TenantCfg.AuthorityDomain}/.default",
-            Offline
-        };
+            get
+            {
+                if (ActiveAuth == null)
+                {
+                    TenantConfig tenantConfig = new TenantConfig();
+                    tenantConfig.LoadConfig();
+                    AuthMan.GetAuth(tenantConfig.TenantDirectoryId,
+                                    tenantConfig.ApplicationClientId,
+                                    tenantConfig.CertThumbprint,
+                                    tenantConfig.TenantString);
+                }
+                return new string[]
+                {
+                    $"https://{ActiveAuth.TenantCfg.TenantString.TrimEnd('/')}" +
+                        $"-admin.sharepoint{ActiveAuth.TenantCfg.AuthorityDomain}/.default",
+                    Offline
+                };
+            }
+        }
 
         /// <summary>
         /// Return the scopes array based on the type of scope being
