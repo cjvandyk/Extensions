@@ -1,24 +1,28 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net7.0;net6.0;netstandard2.1;netstandard2.0;net48;net472;net471;net47</TargetFrameworks>
+    <TargetFrameworks>net8.0;net7.0;net6.0;netstandard2.1;netstandard2.0;net48;net472;net471;net47;net462</TargetFrameworks>
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>disable</ImplicitUsings>
+    <NoWarn>$(NoWarn);CS1587</NoWarn>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <GenerateTargetFrameworkAttribute>False</GenerateTargetFrameworkAttribute>
     <PackageProjectUrl>https://github.com/cjvandyk/extensions</PackageProjectUrl>
-    <PackageTags>Extensions;C#;cjvandyk;Crayveon;State</PackageTags>
+    <PackageTags>GCCHigh;Extensions;C#;cjvandyk;Crayveon;State;GCCH;CSharp</PackageTags>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <PackageId>Extensions.State</PackageId>
+    <PackageId>GCCHigh.Extensions.State</PackageId>
     <Authors>cjvandyk</Authors>
     <RepositoryUrl>https://github.com/cjvandyk/Extensions</RepositoryUrl>
-    <Title>Extensions.State</Title>
-    <Description>Extensions.State contains methods to make managing state saving and loading a breeze.</Description>
+    <Title>GCCHigh.Extensions.State</Title>
+    <Description>GCCHigh.Extensions.State contains State extension methods for C# specifically targeted to the GCCHigh M365 environment, to make managing state saving and loading a breeze..  GCCHigh.Extensions supports all versions of.NET from 4.6.2 through 8.0.</Description>
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>Extensions-128x128.png</PackageIcon>
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
-    <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>- Updated to support .NET 7.0</PackageReleaseNotes>
+    <PackageReleaseNotes>Rebranded Extensions.State as GCCHigh.Extensions.State.</PackageReleaseNotes>
+	<PackageOutputPath>..\NuGet</PackageOutputPath>
   </PropertyGroup>
   <ItemGroup>
     <None Include="README.md">
@@ -27,12 +31,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Graph" Version="4.54.0" />
+    <PackageReference Include="Microsoft.Graph" Version="5.43.0" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="Images\Extensions-128x128.png">
+    <None Include="Images\Extensions-128x128.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 </Project>
