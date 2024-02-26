@@ -3,22 +3,25 @@
     <TargetFrameworks>net8.0;net7.0;net6.0;netstandard2.1;netstandard2.0;net48;net472;net471;net47;net462</TargetFrameworks>
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>disable</ImplicitUsings>
+    <NoWarn>$(NoWarn);CS1587</NoWarn>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <GenerateTargetFrameworkAttribute>False</GenerateTargetFrameworkAttribute>
     <PackageProjectUrl>https://github.com/cjvandyk/extensions</PackageProjectUrl>
-    <PackageTags>Extensions;C#;cjvandyk;Crayveon;Core</PackageTags>
+    <PackageTags>GCCHigh;Extensions;C#;cjvandyk;Crayveon;Core;GCCH;CSharp</PackageTags>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <PackageId>Extensions.Core.cs</PackageId>
+    <PackageId>GCCHigh.Extensions.Core</PackageId>
     <Authors>cjvandyk</Authors>
     <RepositoryUrl>https://github.com/cjvandyk/Extensions</RepositoryUrl>
-    <Title>Extensions.Core</Title>
-    <Description>Extensions.Core contains relay and helper methods for the Extensions set of solutions.</Description>
+    <Title>GCCHigh.Extensions.Core</Title>
+    <Description>GCCHigh.Extensions.Core contains relay and helper methods for the GCCHigh.Extensions set of solutions.</Description>
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>Extensions-128x128.png</PackageIcon>
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>- Updated to support .NET 8.0+ and Graph 5.0+</PackageReleaseNotes>
+    <PackageReleaseNotes>Rebranded Extensions.Core as GCCHigh.Extensions.Core.</PackageReleaseNotes>
 	<PackageOutputPath>..\NuGet</PackageOutputPath>
   </PropertyGroup>
   <ItemGroup>
@@ -28,15 +31,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Extensions.Graph" Version="6.0.800" />
-    <PackageReference Include="Extensions.Identity" Version="6.0.800" />
-    <PackageReference Include="Extensions.Logit" Version="6.0.800" />
+    <PackageReference Include="GCCHigh.Extensions.Graph" Version="6.0.800" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="Images\Extensions-128x128.png">
+    <None Include="Images\Extensions-128x128.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 </Project>

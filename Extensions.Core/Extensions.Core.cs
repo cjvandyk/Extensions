@@ -38,6 +38,10 @@ namespace Extensions
         {
             get
             {
+                if (ActiveAuth == null)
+                {
+                    AuthMan.GetAuth();
+                }
                 return ActiveAuth.TenantCfg;
             }
         }
@@ -120,23 +124,34 @@ namespace Extensions
         {
             try
             {
+                if (tenantString == null)
+                {
+                    tenantString = GetEnv("TenantString");
+                    if (tenantString == "")
+                    {
+                        throw new Exception("There is no valid Environment " +
+                            "Variable for TenantString.");
+                    }
+                }
                 Inf($"Initializing Tenant [{tenantString}]");
                 //Only initialize the tenant if it hasn't already been done.
-                if ((!Tenants.ContainsKey(tenantString)) ||
-                    (Tenants[tenantString].Settings == null))
+                if ((ActiveAuth != null) &&
+                    (Tenants != null) &&
+                    (Tenants.ContainsKey(tenantString)) &&
+                    (Tenants[tenantString].Settings != null))
                 {
+                    Inf($"Tenant [{tenantString}] is already in the pool.  " +
+                        $"Using pool instance.");
+                    GetAuth();
+                }
+                else
+                { 
                     Tenants.Add(tenantString,
                                 AuthMan.GetAuth(GetEnv("TenantDirectoryId"),
                                                 GetEnv("ApplicationClientId"),
                                                 GetEnv("CertThumbprint"),
                                                 tenantString)
                                     .TenantCfg);
-                }
-                else
-                {
-                    Inf($"Tenant [{tenantString}] is already in the pool.  " +
-                        $"Using pool instance.");
-                    GetAuth();
                 }
                 Inf($"Initializing Tenant [{tenantString}] complete.");
             }
