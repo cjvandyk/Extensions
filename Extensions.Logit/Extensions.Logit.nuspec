@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>CsExtensions.Logit</id>
+    <id>GCCHigh.Extensions.Logit</id>
     <!--<version>6.0.800</version>-->
     <title>$title$</title>
     <authors>Cornelius J. van Dyk</authors>
@@ -11,11 +11,8 @@
     <iconUrl>https://raw.githubusercontent.com/cjvandyk/Extensions/master/Images/Extensions-64x64.png</iconUrl>
     <requireLicenseAcceptance>True</requireLicenseAcceptance>
     <description>
-		CsExtensions.Logit contains methods to make logging to console, file, iLogger, EventLog, SharePoint list, and database a breeze.
-		Extensions.Logit supports all these .NET versions:
-		- .NET 8, 7, 6
-		- .NET Framework versions 4.8, 4.7.2, 4.7.1, 4.7, 4.6.2.
-		- .NET Standard 2.1 and 2.0.
+		GCCHigh.Extensions contains extension methods to make logging to console, file, iLogger, EventLog, SharePoint list, and database a breeze, specifically targeted to the GCCHigh M365 environment.
+		GCCHigh.Extensions supports all versions of.NET from 4.6.2 through 8.0.
 		Highlights are methods such as:
 		Use .Inf() to write Information messages.
 		Use .Wrn() to write Warning messages.
@@ -23,17 +20,18 @@
 		Use .Vrb() to write Verbose messages.
 	</description>
     <summary>
-		CsExtensions.Logit contains methods to make logging to console, file, iLogger, EventLog, SharePoint list, and database a breeze.
-		These methods are included:
-		Err()
-		GetExecutingAssembly()
-		GetFQDN()
-		Inf()
-		TimeStamp()
-		Vrb()
-		Wrn()
+		GCCHigh.Extensions contains extension methods to make logging to console, file, iLogger, EventLog, SharePoint list, and database a breeze, specifically targeted to the GCCHigh M365 environment.
+		GCCHigh.Extensions supports all versions of.NET from 4.6.2 through 8.0.
+		Highlights are methods such as:
+		Use .Inf() to write Information messages.
+		Use .Wrn() to write Warning messages.
+		Use .Err() to write Error messages.
+		Use .Vrb() to write Verbose messages.
 	</summary>
     <releaseNotes>
+		GCCHigh.Extensions contains extension methods to make logging to console, file, iLogger, EventLog, SharePoint list, and database a breeze, specifically targeted to the GCCHigh M365 environment.
+		GCCHigh.Extensions supports all versions of.NET from 4.6.2 through 8.0.
+		
 		Err()
 		Write an Error message to active channels (console, event log, file,
 		SharePoint list, database) using the System.Logit class.
@@ -70,7 +68,7 @@
 		SharePoint list, database) using the System.Logit class.
 	</releaseNotes>
     <copyright>$copyright$</copyright>
-    <tags>Extensions C# cjvandyk Crayveon Logit Logging Logger iLogger EventLog</tags>
+    <tags>GCCHigh Extensions C# cjvandyk Crayveon  GCCH CSharp Logit Logging Logger iLogger EventLog</tags>
   </metadata>
   <files>
     <file src="**" target="lib" />
