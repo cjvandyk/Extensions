@@ -1,4 +1,4 @@
-﻿# Extensions.Identity contains methods to make modern OAuth2 authentication in Azure a breeze.
+﻿# GCCHigh.Extensions.Identity contains methods to make modern OAuth2 authentication in Azure a breeze.
 [![icon](https://raw.githubusercontent.com/cjvandyk/Extensions/master/Images/Extensions-64x64.png)](https://github.com/cjvandyk/Extensions)
 ![GIF](https://raw.githubusercontent.com/cjvandyk/Extensions/master/Images/Extensions.gif)
 ![GIF](https://raw.githubusercontent.com/cjvandyk/Extensions/master/Images/Easy%20Date%20convertion%20GIF.gif)

@@ -1,29 +1,29 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>Extensions.Identity</id>
-    <!--<version>4.9.700</version>-->
+    <id>GCCHigh.Extensions.Identity</id>
+    <!--<version>6.0.800</version>-->
     <title>$title$</title>
     <authors>Cornelius J. van Dyk</authors>
     <owners>$author$</owners>
     <license type="expression">GPL-3.0-or-later</license>
     <projectUrl>https://github.com/cjvandyk/Extensions</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/cjvandyk/Extensions/master/Images/Extensions-64x64.png</iconUrl>
-    <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <description>Extensions.Identity contains methods to make working with OAuth2 a breeze.
-		Extensions.Identity supports all these .NET versions:
-		- .NET 8, 7, 6
-		- .NET Framework versions 4.8, 4.7.2, 4.7.1, 4.7, 4.6.2.
-		- .NET Standard 2.1 and 2.0.
+    <requireLicenseAcceptance>True</requireLicenseAcceptance>
+    <description>
+		GCCHigh.Extensions.Identity contains modern OAuth2 extension methods for C# specifically targeted to the GCCHigh M365 environment.
+		GCCHigh.Extensions.Identity supports all versions of.NET from 4.6.2 through 8.0.
 	</description>
     <summary>
-		Extensions.Identity contains methods to make working with OAuth2 a breeze.
+		GCCHigh.Extensions.Identity contains modern OAuth2 extension methods for C# specifically targeted to the GCCHigh M365 environment.
+		GCCHigh.Extensions.Identity supports all versions of.NET from 4.6.2 through 8.0.
 	</summary>
     <releaseNotes>
-		Updated to support .NET 8.0.
+		GCCHigh.Extensions.Identity contains modern OAuth2 extension methods for C# specifically targeted to the GCCHigh M365 environment.
+		GCCHigh.Extensions.Identity supports all versions of.NET from 4.6.2 through 8.0.
 	</releaseNotes>
     <copyright>$copyright$</copyright>
-    <tags>Extensions C# cjvandyk Crayveon ModernAuth Identity MSAL</tags>
+    <tags>GCCHigh Extensions C# cjvandyk Crayveon  GCCH CSharp ModernAuth Identity MSAL OAuth2</tags>
   </metadata>
   <files>
     <file src="**" target="lib" />

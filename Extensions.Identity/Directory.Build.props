@@ -3,8 +3,7 @@
     <VersionPrefix>6.0.800</VersionPrefix>
     <LangVersion>latest</LangVersion>
     <Company>Cornelius J. van Dyk</Company>
-    <Copyright>Copyright © 2020-2023</Copyright>
-    <xDescription>Extensions.Identity contains methods to make working with OAuth2 a breeze.</xDescription>
-    <Product>www.nuget.org/packages/Extensions.Identity</Product>
+    <Copyright>Copyright © 2009-2024</Copyright>
+    <Product>www.nuget.org/packages/GCCHigh.Extensions.Identity</Product>
   </PropertyGroup>
 </Project>
