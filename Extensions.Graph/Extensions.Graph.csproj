@@ -19,7 +19,7 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>Extensions-128x128.png</PackageIcon>
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
-    <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <RepositoryType>git</RepositoryType>
     <PackageReleaseNotes>Rebranded Extensions.Graph as GCCHigh.Extensions.Graph.</PackageReleaseNotes>
 	<PackageOutputPath>..\NuGet</PackageOutputPath>

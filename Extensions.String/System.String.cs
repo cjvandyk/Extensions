@@ -356,8 +356,8 @@ namespace Extensions
         /// the length comparison takes place.</param>
         /// <returns></returns>
         public static bool ExceedsLength(this System.String str, 
-                                        ref int offset, 
-                                        bool increment = true)
+                                         ref int offset, 
+                                         bool increment = true)
         {
             if (increment)
             {
@@ -379,8 +379,8 @@ namespace Extensions
         /// the length comparison takes place.</param>
         /// <returns></returns>
         public static bool ExceedsLength(this System.Text.StringBuilder str, 
-                                        ref int offset, 
-                                        bool increment = true)
+                                         ref int offset, 
+                                         bool increment = true)
         {
             return ExceedsLength(str.ToString(), ref offset, increment);
         }

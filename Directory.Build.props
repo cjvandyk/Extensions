@@ -3,8 +3,7 @@
     <VersionPrefix>6.0.800</VersionPrefix>
     <LangVersion>latest</LangVersion>
     <Company>Cornelius J. van Dyk</Company>
-    <Copyright>Copyright © 2020-2024</Copyright>
-    <xDescription>Extensions.dll contains extension methods that enhance existing C# classes thus making life easier for developers.  Extensions.dll supports all versions of.NET from 4.6.2 through 8.0.  Highlights are methods such as:  Use.Save() and.Load() for easy state saving of any object in C#.  Use.Retry() to easily handle 429 throttling errors in web calls.  Use System.Timer class to quickly add stopwatch timing functionality.  Use.IsPrime() to determine if a number is a prime number.  Use.GetNthPrime() and.GetNthPrimeAsync() to get the Nth prime number capable of calculating 10,000,000 primes/minute on an Intel Core i7 - 6700K CPU @ 4.00 GHz using 7 threads on 8 logical cores.  Use.ReplaceTokens() to replace multiple strings in string dictionary style.  Use.IsStrong() to validate strong passwords.  Use.ToTimeZone() to quickly convert any given time to any given time zone.  Use.Elevate() to restart current process in admin mode if it doesn't have admin rights.  Use.CompoundInterest() to calculate any given interest over any given period at any given interval.  and many, many more.</xDescription>
-    <Product>www.nuget.org/packages/Extensions.cs</Product>
+    <Copyright>Copyright © 2009-2024</Copyright>
+    <Product>www.nuget.org/packages/GCCHigh.Extensions</Product>
   </PropertyGroup>
 </Project>

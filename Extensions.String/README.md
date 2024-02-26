@@ -10,17 +10,42 @@ The following classes have been extended:
 
 with these methods:
 
-- ### **TimeStamp()**
-    > _Returns a string representing the current local date time stamp to<br>
-        either just the day or down to the millisecond.  Used for creating<br>
-        unique log file names.<br>
+- ### **BeginsWith()**
+    > _Checks if the current string begins with the given target string.<br>
         For example:<br>
-            `TimeStamp()`<br>
+            `"GCCHigh.Extensions rock!".BeginsWith("GCCHigh")`<br>
         will return<br>
-            `2021-03-01@06.01.02.003`<br>
+            `true`<br>
         whereas<br>
-            `TimeStamp(true)`<br>
+            `"GCCHigh.Extensions rock!".BeginsWith("gcchigh")`<br>
+        will also return<br>
+            `true`<br>
+        because the ignorecase switch defaults to true.  Using the <br>
+        ignorecase switch like this<br>
+            `"GCCHigh.Extensions rock!".BeginsWith("gcchigh", false)`<br>
         will return<br>
-            `2021-03-01`_
+            `false`<br>_
+
+- ### **ContainsAny()**
+    > _Checks if the given string contains any of the characters or strings<br>
+        provided in the IEnumerable.<br>
+        This is useful for validating a given set of characters, like<br>
+        special characters, or a given set of string, like bad words, is<br>
+        not present in the target string.<br>_
+
+- ### **ContainsOnly()**
+    > _Checks if the given string contains only the characters or strings<br>
+        provided in the IEnumerable.<br>
+        This is useful for validating a string contains only hex chars etc.<br>_
+
+- ### **DoubleQuote()**
+    > _Return the given string encased in double quotes.  This is useful<br>
+        when working with multi-layer quotes and strings where strings<br>
+        contain quoted strings.<br>_
+
+- ### **EncodeAsXml()**
+    > _Encode a given string as XML by encoding all ampersand, single <br>
+        quote, greater than, less than and double quote characters into<br>
+        their proper XML equivalent.<br>_
 
 ![Visitor Count](https://profile-counter.glitch.me/{cjvandyk}/count.svg)

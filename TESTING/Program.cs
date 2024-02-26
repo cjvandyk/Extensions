@@ -6,7 +6,6 @@
 /// author and contributors.  Please see:
 /// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
 /// </summary>
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
