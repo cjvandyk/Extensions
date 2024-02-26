@@ -1,6 +1,4 @@
-﻿#pragma warning disable CA1416, CS0162, CS0168, CS1587, CS1591, CS1998, IDE0059, IDE0028
-
-/// <summary>
+﻿/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
@@ -9,31 +7,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using static Extensions.Constants;
 using static System.Logit;
 
 namespace Extensions
 {
-    /// <summary>
-    /// The instance class for telemetry.
-    /// </summary>
-    [Serializable]
-    public class TelemetryInstance
-    {
-        /// <summary>
-        /// The stopwatch of the instance.
-        /// </summary>
-        public Stopwatch timer { get; set; } = new Stopwatch();
-        /// <summary>
-        /// The number of threads used by the instance.
-        /// </summary>
-        public List<int> threads { get; set; } = new List<int>();
-        /// <summary>
-        /// The counter of the instance.
-        /// </summary>
-        public int counter { get; set; } = 0;
-    }
-
     /// <summary>
     /// A class to measure telemetry in code.
     /// </summary>
@@ -43,20 +21,23 @@ namespace Extensions
         /// <summary>
         /// The stack of telemetry measuring instances.
         /// </summary>
-        public static Dictionary<string, TelemetryInstance> timers
-        { get; private set; } = new();
+        public static Dictionary<string, TelemetryInstance> Timers 
+            { get; private set; } = new Dictionary<string, TelemetryInstance>();
+
         /// <summary>
         /// The name of the active telemetry instance.
         /// </summary>
-        public static string activeTimer { get; set; } = "default";
+        public static string ActiveTimer { get; set; } = "default";
+
         /// <summary>
         /// The delegate method for stopping telemetry on the instance.
         /// </summary>
-        public static Action<object> stopTelemetryMethod { get; set; }
+        public static Action<object> StopTelemetryMethod { get; set; }
+
         /// <summary>
         /// The delegate method for starting telemetry on the instance.
         /// </summary>
-        public static Action<object> startTelemetryMethod { get; set; }
+        public static Action<object> StartTelemetryMethod { get; set; }
 
         /// <summary>
         /// Method to add a new instance to the stack.
@@ -71,9 +52,9 @@ namespace Extensions
             try
             {
                 //If timer doesn't already exist, add it.
-                if (!timers.ContainsKey(timerName))
+                if (!Timers.ContainsKey(timerName))
                 {
-                    timers.Add(timerName, new TelemetryInstance());
+                    Timers.Add(timerName, new TelemetryInstance());
                 }
             }
             catch (Exception ex)
@@ -88,7 +69,7 @@ namespace Extensions
             //Set the activeTimer to the new timer if requested.
             if (setAsActive)
             {
-                activeTimer = timerName;
+                ActiveTimer = timerName;
             }
             //Start the new timer if requested.
             if (startImmediately)
@@ -102,7 +83,7 @@ namespace Extensions
         /// </summary>
         public static void ClearEverything()
         {
-            timers.Clear();
+            Timers.Clear();
         }
 
         /// <summary>
@@ -112,7 +93,7 @@ namespace Extensions
         public static int Count()
         {
             Initialize();
-            return timers[activeTimer].counter;
+            return Timers[ActiveTimer].Counter;
         }
 
         /// <summary>
@@ -123,7 +104,7 @@ namespace Extensions
         public static int Count(string timerName)
         {
             Initialize();
-            return timers[timerName].counter;
+            return Timers[timerName].Counter;
         }
 
         /// <summary>
@@ -132,7 +113,7 @@ namespace Extensions
         /// <returns>The activeTimer.threads.Count value.</returns>
         public static int ThreadCount()
         {
-            return ThreadCount(activeTimer);
+            return ThreadCount(ActiveTimer);
         }
 
         /// <summary>
@@ -143,7 +124,7 @@ namespace Extensions
         public static int ThreadCount(string timerName)
         {
             Initialize();
-            return timers[timerName].threads.Count;
+            return Timers[timerName].Threads.Count;
         }
 
         /// <summary>
@@ -154,7 +135,7 @@ namespace Extensions
         /// the current CPU used.</returns>
         public static string TelemetryStatus()
         {
-            return TelemetryStatus(activeTimer);
+            return TelemetryStatus(ActiveTimer);
         }
 
         /// <summary>
@@ -185,7 +166,7 @@ namespace Extensions
         /// <returns>The activeTimer.timer.Elapsed value.</returns>
         public static TimeSpan Elapsed()
         {
-            return Elapsed(activeTimer);
+            return Elapsed(ActiveTimer);
         }
 
         /// <summary>
@@ -196,7 +177,7 @@ namespace Extensions
         public static TimeSpan Elapsed(string timerName)
         {
             Initialize(timerName);
-            return timers[timerName].timer.Elapsed;
+            return Timers[timerName].Timer.Elapsed;
         }
 
         /// <summary>
@@ -206,7 +187,7 @@ namespace Extensions
         /// <returns>The activeTimer.timer.ElapsedMilliseconds value.</returns>
         public static long ElapsedMilliseconds()
         {
-            return ElapsedMilliseconds(activeTimer);
+            return ElapsedMilliseconds(ActiveTimer);
         }
 
         /// <summary>
@@ -219,7 +200,7 @@ namespace Extensions
         public static long ElapsedMilliseconds(string timerName)
         {
             Initialize(timerName);
-            return timers[timerName].timer.ElapsedMilliseconds;
+            return Timers[timerName].Timer.ElapsedMilliseconds;
         }
 
         /// <summary>
@@ -228,7 +209,7 @@ namespace Extensions
         /// <returns>The activeTimer.timer.ElapsedTicks value.</returns>
         public static long ElapsedTicks()
         {
-            return ElapsedTicks(activeTimer);
+            return ElapsedTicks(ActiveTimer);
         }
 
         /// <summary>
@@ -239,7 +220,7 @@ namespace Extensions
         public static long ElapsedTicks(string timerName)
         {
             Initialize(timerName);
-            return timers[timerName].timer.ElapsedTicks;
+            return Timers[timerName].Timer.ElapsedTicks;
         }
 
         /// <summary>
@@ -248,7 +229,7 @@ namespace Extensions
         /// <param name="timerName">The name of the timer to use.</param>
         public static void Initialize(string timerName = "default")
         {
-            if (!timers.ContainsKey(timerName))
+            if (!Timers.ContainsKey(timerName))
             {
                 AddTimer(timerName);
             }
@@ -260,7 +241,7 @@ namespace Extensions
         /// <returns>The value of activeTimer.timer.IsRunning</returns>
         public static bool IsRunning()
         {
-            return IsRunning(activeTimer);
+            return IsRunning(ActiveTimer);
         }
 
         /// <summary>
@@ -271,7 +252,7 @@ namespace Extensions
         public static bool IsRunning(string timerName)
         {
             Initialize(timerName);
-            return timers[timerName].timer.IsRunning;
+            return Timers[timerName].Timer.IsRunning;
         }
 
         /// <summary>
@@ -281,7 +262,7 @@ namespace Extensions
         {
             try
             {
-                timers = (Dictionary<string, TelemetryInstance>)
+                Timers = (Dictionary<string, TelemetryInstance>)
                            State.LoadStateList(
                                "Telemetry",
                                typeof(Dictionary<string, TelemetryInstance>),
@@ -291,7 +272,7 @@ namespace Extensions
             catch (Exception ex)
             {
                 //If timers fail to load, initialize a new set.
-                timers = new Dictionary<string, TelemetryInstance>();
+                Timers = new Dictionary<string, TelemetryInstance>();
             }
         }
 
@@ -303,7 +284,7 @@ namespace Extensions
         {
             if (savedTimers != null)
             {
-                timers = savedTimers;
+                Timers = savedTimers;
             }
         }
 
@@ -312,7 +293,7 @@ namespace Extensions
         /// </summary>
         public static void Reset()
         {
-            Reset(activeTimer);
+            Reset(ActiveTimer);
         }
 
         /// <summary>
@@ -322,7 +303,7 @@ namespace Extensions
         public static void Reset(string timerName)
         {
             Initialize(timerName);
-            timers[timerName].timer.Reset();
+            Timers[timerName].Timer.Reset();
         }
 
         /// <summary>
@@ -330,7 +311,7 @@ namespace Extensions
         /// </summary>
         public static void Restart()
         {
-            Restart(activeTimer);
+            Restart(ActiveTimer);
         }
 
         /// <summary>
@@ -340,7 +321,7 @@ namespace Extensions
         public static void Restart(string timerName)
         {
             Initialize(timerName);
-            timers[timerName].timer.Restart();
+            Timers[timerName].Timer.Restart();
         }
 
         /// <summary>
@@ -349,7 +330,7 @@ namespace Extensions
         public static void Save()
         {
             StopAllTimers();
-            State.SaveStateList("Telemetry", timers);
+            State.SaveStateList("Telemetry", Timers);
         }
 
         /// <summary>
@@ -357,7 +338,7 @@ namespace Extensions
         /// </summary>
         public static void Start()
         {
-            Start((new StackTrace()).GetFrame(1).GetMethod().Name);
+            Start((new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod().Name);
         }
 
         /// <summary>
@@ -366,7 +347,7 @@ namespace Extensions
         /// <param name="active">Not used.</param>
         public static void Start(bool active = true)
         {
-            Start(activeTimer);
+            Start(ActiveTimer);
         }
 
         /// <summary>
@@ -376,7 +357,7 @@ namespace Extensions
         public static void Start(string timerName)
         {
             Initialize(timerName);
-            timers[timerName].timer.Start();
+            Timers[timerName].Timer.Start();
         }
 
         /// <summary>
@@ -384,7 +365,7 @@ namespace Extensions
         /// </summary>
         public static void Stop()
         {
-            Stop((new StackTrace()).GetFrame(1).GetMethod().Name);
+            Stop((new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod().Name);
         }
 
         /// <summary>
@@ -393,7 +374,7 @@ namespace Extensions
         /// <param name="active">Not used.</param>
         public static void Stop(bool active = true)
         {
-            Stop(activeTimer);
+            Stop(ActiveTimer);
         }
 
         /// <summary>
@@ -403,7 +384,7 @@ namespace Extensions
         public static void Stop(string timerName)
         {
             Initialize(timerName);
-            timers[timerName].timer.Stop();
+            Timers[timerName].Timer.Stop();
         }
 
         /// <summary>
@@ -411,9 +392,9 @@ namespace Extensions
         /// </summary>
         public static void StopAllTimers()
         {
-            foreach (var timer in timers.Values)
+            foreach (var timer in Timers.Values)
             {
-                timer.timer.Stop();
+                timer.Timer.Stop();
             }
         }
 
@@ -423,7 +404,7 @@ namespace Extensions
         /// <param name="parms"></param>
         public static void StopTelemetry(object parms)
         {
-            stopTelemetryMethod(parms);
+            StopTelemetryMethod(parms);
         }
 
         /// <summary>
@@ -432,7 +413,7 @@ namespace Extensions
         /// <returns>The amount of RAM used in MB.</returns>
         public static string RAM()
         {
-            return $"{(Process.GetCurrentProcess().PrivateMemorySize64 / 1024 / 1024)} MB";
+            return $"{(System.Diagnostics.Process.GetCurrentProcess().PrivateMemorySize64 / 1024 / 1024)} MB";
         }
 
         /// <summary>
@@ -443,7 +424,7 @@ namespace Extensions
         {
             try
             {
-                var proc = Process.GetCurrentProcess();
+                var proc = System.Diagnostics.Process.GetCurrentProcess();
                 var cpu = new System.Diagnostics.PerformanceCounter
                     ("Process", "% Processor Time", proc.ProcessName);
                 cpu.NextValue();
@@ -457,5 +438,3 @@ namespace Extensions
         }
     }
 }
-
-#pragma warning restore CA1416, CS0162, CS0168, CS1587, CS1591, CS1998, IDE0059, IDE0028

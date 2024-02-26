@@ -6,44 +6,12 @@
 
 The following classes have been extended:
 
-    - System.Logit (added)
+    - Extensions.Telemetry
 
 with these methods:
 
-- ### **Err()**
-    > _Write an Error message to active channels (console, event log, file,<br>
-        SharePoint list, database) using the System.Logit class._
-
-- ### **GetExecutingAssembly()**
-    > _Gets the current Entry or Executing assembly through reflection._
-
-- ### **GetFQDN()**
-    > _Get the current computer Fully Qualified Domain Name._
-
-- ### **Inf()**
-    > _Write an Information message to active channels (console, event log, file),<br>
-        SharePoint list, database) using the System.Logit class._
-
-- ### **TimeStamp()**
-    > _Returns a string representing the current local date time stamp to<br>
-        either just the day or down to the millisecond.  Used for creating<br>
-        unique log file names.<br>
-        For example:<br>
-            `TimeStamp()`<br>
-        will return<br>
-            `2021-03-01@06.01.02.003`<br>
-        whereas<br>
-            `TimeStamp(true)`<br>
-        will return<br>
-            `2021-03-01`_
-
-- ### **Vrb()**
-    > _Write a Verbose message to active channels (console, event log, file),<br>
-        SharePoint list, database) using the System.Logit class._
-
-- ### **Wrn()**
-    > _Write a Warning message to active channels (console, event log, file),<br>
-        SharePoint list, database) using the System.Logit class._
+- ### **()**
+    > _._
 
 ![Visitor Count](https://profile-counter.glitch.me/{cjvandyk}/count.svg)
  

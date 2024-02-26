@@ -1,10 +1,9 @@
 <Project>
   <PropertyGroup>
-    <VersionPrefix>5.0.700</VersionPrefix>
+    <VersionPrefix>6.0.800</VersionPrefix>
     <LangVersion>latest</LangVersion>
     <Company>Cornelius J. van Dyk</Company>
-    <Copyright>Copyright © 2020-2023</Copyright>
-    <xDescription>Extensions.Telemetry contains methods to make instrumenting and telemetry a breeze.</xDescription>
-    <Product>www.nuget.org/packages/Extensions.Telemetry</Product>
+    <Copyright>Copyright © 2009-2024</Copyright>
+    <Product>www.nuget.org/packages/GCCHigh.Extensions.Telemetry</Product>
   </PropertyGroup>
 </Project>
