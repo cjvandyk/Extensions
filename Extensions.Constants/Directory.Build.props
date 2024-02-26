@@ -1,10 +1,9 @@
 <Project>
   <PropertyGroup>
-    <VersionPrefix>6.1.801</VersionPrefix>
+    <VersionPrefix>6.0.800</VersionPrefix>
     <LangVersion>latest</LangVersion>
     <Company>Cornelius J. van Dyk</Company>
     <Copyright>Copyright © 2009-2024</Copyright>
-    <xDescription>CsExtensions.Constants contains foundational constants shared across the CsExtensions ecosystem.</xDescription>
-    <Product>www.nuget.org/packages/CsExtensions.Constants</Product>
+    <Product>www.nuget.org/packages/GCCHigh.Extensions.Constants</Product>
   </PropertyGroup>
 </Project>

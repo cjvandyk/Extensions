@@ -1,4 +1,4 @@
-﻿# Extensions.Constants contains foundational constants shared across the Extensions ecosystem.
+﻿# GCCHigh.Extensions.Constants contains foundational constants shared across the GCCHigh.Extensions ecosystem.
 [![icon](https://raw.githubusercontent.com/cjvandyk/Extensions/master/Images/Extensions-64x64.png)](https://github.com/cjvandyk/Extensions)
 ![GIF](https://raw.githubusercontent.com/cjvandyk/Extensions/master/Images/Extensions.gif)
 ![GIF](https://raw.githubusercontent.com/cjvandyk/Extensions/master/Images/Easy%20Date%20convertion%20GIF.gif)

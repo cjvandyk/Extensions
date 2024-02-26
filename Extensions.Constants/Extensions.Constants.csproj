@@ -7,13 +7,13 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <GenerateTargetFrameworkAttribute>False</GenerateTargetFrameworkAttribute>
     <PackageProjectUrl>https://github.com/cjvandyk/extensions</PackageProjectUrl>
-    <PackageTags>Extensions;C#;cjvandyk;Crayveon;Constants;CsExtensions</PackageTags>
+    <PackageTags>GCCHigh;Extensions;C#;cjvandyk;Crayveon;Constants;GCCH;CSharp</PackageTags>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <PackageId>CsExtensions.Constants</PackageId>
+    <PackageId>GCCHigh.Extensions.Constants</PackageId>
     <Authors>cjvandyk</Authors>
     <RepositoryUrl>https://github.com/cjvandyk/Extensions</RepositoryUrl>
-    <Title>CsExtensions.Constants</Title>
-    <Description>CsExtensions.Constants contains foundational constants shared across the CsExtensions ecosystem.</Description>
+    <Title>GCCHigh.Extensions.Constants</Title>
+    <Description>GCCHigh.Extensions.Constants contains foundational constants shared across the GCCHigh.Extensions ecosystem.</Description>
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -21,7 +21,7 @@
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>Rebranded CsExtensions.Constants as CsExtensions.Constants.</PackageReleaseNotes>
+    <PackageReleaseNotes>Rebranded Extensions.Constants as GCCHigh.Extensions.Constants.</PackageReleaseNotes>
 	<PackageOutputPath>..\NuGet</PackageOutputPath>
   </PropertyGroup>
   <ItemGroup>
