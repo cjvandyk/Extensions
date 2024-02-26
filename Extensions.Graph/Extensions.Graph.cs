@@ -17,6 +17,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Extensions.Identity;
+using static Extensions.Constants;
 using static System.Logit;
 
 namespace Extensions
@@ -798,8 +799,8 @@ namespace Extensions
         public static object DuplicateGroup(
             string groupName, 
             string newName,
-            Constants.DuplicateGroupReturnType returnType = 
-                Constants.DuplicateGroupReturnType.Id)
+            DuplicateGroupReturnType returnType = 
+                DuplicateGroupReturnType.Id)
         {
             //Find the source group.
             Group group = GetGroup(groupName);
@@ -823,7 +824,7 @@ namespace Extensions
                 .PostAsync(newGroupInfo)
                 .GetAwaiter().GetResult();
             //Determine what to return.
-            if (returnType == Constants.DuplicateGroupReturnType.Id)
+            if (returnType == DuplicateGroupReturnType.Id)
             {
                 //Return the ID of the new group.
                 return newGroup.Id;
@@ -871,11 +872,11 @@ namespace Extensions
         public static Group UpdateGroup(
             string groupName,
             Dictionary<string, object> groupFields,
-            Constants.GroupUpdateType groupUpdateType = 
-                Constants.GroupUpdateType.DisplayName)
+            GroupUpdateType groupUpdateType = 
+                GroupUpdateType.DisplayName)
         {
             string id = "";
-            if (groupUpdateType == Constants.GroupUpdateType.DisplayName)
+            if (groupUpdateType == GroupUpdateType.DisplayName)
             {
                 var groupToUpdate = GetGroup(groupName);
                 id = groupToUpdate.Id;
@@ -922,8 +923,8 @@ namespace Extensions
         public static Group SetGroupSensitivity(
             string groupName,
             string sensitivityGuid,
-            Constants.GroupUpdateType groupUpdateType =
-                Constants.GroupUpdateType.DisplayName)
+            GroupUpdateType groupUpdateType =
+                GroupUpdateType.DisplayName)
         {
             Dictionary<string, object> dic = new Dictionary<string, object>();
             dic.Add("AssignedLabels", new List<AssignedLabel>()
@@ -947,7 +948,7 @@ namespace Extensions
         /// users.</returns>
         public static List<string> GetMembers(
             string groupId, 
-            Constants.UserInfoType userInfoType = Constants.UserInfoType.id)
+            UserInfoType userInfoType = UserInfoType.id)
         {
             //Create the aggregation container.
             List<string> members = new List<string>();
@@ -973,21 +974,21 @@ namespace Extensions
                     {
                         switch (userInfoType)
                         {
-                            case Constants.UserInfoType.id:
+                            case UserInfoType.id:
                                 if (user.Id != null &&
                                     user.Id.Trim().Length > 0)
                                 {
                                     members.Add(user.Id.Trim());
                                 }
                                 break;
-                            case Constants.UserInfoType.mail:
+                            case UserInfoType.mail:
                                 if (user.Mail != null &&
                                     user.Mail.Trim().Length > 0)
                                 {
                                     members.Add(user.Mail.Trim());
                                 }
                                 break;
-                            case Constants.UserInfoType.userProfileName:
+                            case UserInfoType.userProfileName:
                                 if (user.UserPrincipalName != null &&
                                     user.UserPrincipalName.Trim().Length > 0)
                                 {
@@ -1011,17 +1012,17 @@ namespace Extensions
         /// i.e. "id", "mail" or "userProfileName".  Default is "id".</param>
         /// <returns>A list of objects representing the information about the
         /// Owners users depending on the userInfoType specified i.e.
-        /// - For Constants.UserInfoType.id a list of strings containing user ID
+        /// - For UserInfoType.id a list of strings containing user ID
         /// values is returned.
-        /// - For Constants.UserInfoType.mail a list of strings containing user
+        /// - For UserInfoType.mail a list of strings containing user
         /// email address values is returned.
-        /// - For Constants.UserInfoType.userPrincipalName a list of strings 
+        /// - For UserInfoType.userPrincipalName a list of strings 
         /// containing user UPN values is returned.
-        /// - For Constants.UserInfoType.all a list of Microsoft.Graph.Models.User
+        /// - For UserInfoType.all a list of Microsoft.Graph.Models.User
         /// objects is returned.</returns>
         public static List<object> GetOwners(
             string groupId,
-            Constants.UserInfoType userInfoType = Constants.UserInfoType.id)
+            UserInfoType userInfoType = UserInfoType.id)
         {
             //Create the aggregation container.
             List<object> owners = new List<object>();
@@ -1032,7 +1033,7 @@ namespace Extensions
                 {
                     C.QueryParameters.Select = new string[]
                     {
-                        (userInfoType == Constants.UserInfoType.All ? "" :
+                        (userInfoType == UserInfoType.All ? "" :
                         userInfoType.ToString())
                     };
                 }).GetAwaiter().GetResult();
@@ -1048,28 +1049,28 @@ namespace Extensions
                     {
                         switch (userInfoType)
                         {
-                            case Constants.UserInfoType.id:
+                            case UserInfoType.id:
                                 if (user.Id != null &&
                                     user.Id.Trim().Length > 0)
                                 {
                                     owners.Add(user.Id.Trim());
                                 }
                                 break;
-                            case Constants.UserInfoType.mail:
+                            case UserInfoType.mail:
                                 if (user.Mail != null &&
                                     user.Mail.Trim().Length > 0)
                                 {
                                     owners.Add(user.Mail.Trim());
                                 }
                                 break;
-                            case Constants.UserInfoType.userProfileName:
+                            case UserInfoType.userProfileName:
                                 if (user.UserPrincipalName != null &&
                                     user.UserPrincipalName.Trim().Length > 0)
                                 {
                                     owners.Add(user.UserPrincipalName.Trim());
                                 }
                                 break;
-                            case Constants.UserInfoType.All:
+                            case UserInfoType.All:
                                 owners.Add(user);
                                 break;
                         }
@@ -1092,27 +1093,27 @@ namespace Extensions
         /// or both.</param>
         /// <returns>A list of objects representing the information about the
         /// Owners users depending on the userInfoType specified i.e.
-        /// - For Constants.UserInfoType.id a list of strings containing user ID
+        /// - For UserInfoType.id a list of strings containing user ID
         /// values is returned.
-        /// - For Constants.UserInfoType.mail a list of strings containing user
+        /// - For UserInfoType.mail a list of strings containing user
         /// email address values is returned.
-        /// - For Constants.UserInfoType.userPrincipalName a list of strings 
+        /// - For UserInfoType.userPrincipalName a list of strings 
         /// containing user UPN values is returned.
-        /// - For Constants.UserInfoType.all a list of Microsoft.Graph.Models.User
+        /// - For UserInfoType.all a list of Microsoft.Graph.Models.User
         /// objects is returned.</returns>
         public static List<object> GetGroupUsers(
             string groupId,
-            Constants.UserInfoType userInfoType = Constants.UserInfoType.id,
-            Constants.GroupUserMembershipType groupUserMembershipType
-                = Constants.GroupUserMembershipType.All)
+            UserInfoType userInfoType = UserInfoType.id,
+            GroupUserMembershipType groupUserMembershipType
+                = GroupUserMembershipType.All)
         {
             //Create the aggregation container.
             List<object> users = new List<object>();
             //Get the first page of users.
             UserCollectionResponse usersPage = 
                 //If groupUserMembershipType is All or Owners, get the Owners first page.
-                ((groupUserMembershipType == Constants.GroupUserMembershipType.All ||
-                  groupUserMembershipType == Constants.GroupUserMembershipType.Owners) ?
+                ((groupUserMembershipType == GroupUserMembershipType.All ||
+                  groupUserMembershipType == GroupUserMembershipType.Owners) ?
                     AuthMan.ActiveAuth.GraphClient.Groups[groupId]
                         .Owners.GraphUser.GetAsync(C =>
                         {
@@ -1120,7 +1121,7 @@ namespace Extensions
                             {
                                 //Check if the userInfoType is All and if so,
                                 //do NOT specify any .Select parameters.
-                                (userInfoType == Constants.UserInfoType.All ? "" :
+                                (userInfoType == UserInfoType.All ? "" :
                                     userInfoType.ToString())
                             };
                             C.Headers.Add("ConsistencyLevel", "eventual");
@@ -1131,7 +1132,7 @@ namespace Extensions
                         {
                             C.QueryParameters.Select = new string[]
                             {
-                                (userInfoType == Constants.UserInfoType.All ? "" :
+                                (userInfoType == UserInfoType.All ? "" :
                                     userInfoType.ToString())
                             };
                             C.Headers.Add("ConsistencyLevel", "eventual");
@@ -1140,7 +1141,7 @@ namespace Extensions
             //If groupUserMembershipType is not All and there are no items, return list.
             //If groupUserMembershipType is All, and there are no items in the Owners
             //page then we still need to get the Members.
-            if ((groupUserMembershipType != Constants.GroupUserMembershipType.All) &&
+            if ((groupUserMembershipType != GroupUserMembershipType.All) &&
                 (usersPage.Value.Count == 0))
             {
                 return users;
@@ -1156,7 +1157,7 @@ namespace Extensions
                         switch (userInfoType)
                         {
                             //Get User ID GUID values.
-                            case Constants.UserInfoType.id:
+                            case UserInfoType.id:
                                 if (user.Id != null &&
                                     user.Id.Trim().Length > 0)
                                 {
@@ -1164,7 +1165,7 @@ namespace Extensions
                                 }
                                 break;
                             //Get User email address values.
-                            case Constants.UserInfoType.mail:
+                            case UserInfoType.mail:
                                 if (user.Mail != null &&
                                     user.Mail.Trim().Length > 0)
                                 {
@@ -1173,7 +1174,7 @@ namespace Extensions
                                 break;
                             //Get User UPN values, usually the same as email
                             //but can be different.
-                            case Constants.UserInfoType.userProfileName:
+                            case UserInfoType.userProfileName:
                                 if (user.UserPrincipalName != null &&
                                     user.UserPrincipalName.Trim().Length > 0)
                                 {
@@ -1181,7 +1182,7 @@ namespace Extensions
                                 }
                                 break;
                             //Get the entire User object.
-                            case Constants.UserInfoType.All:
+                            case UserInfoType.All:
                                 users.Add(user);
                                 break;
                         }
@@ -1189,7 +1190,7 @@ namespace Extensions
                     });
             pageIterator.IterateAsync().GetAwaiter().GetResult();
             //Before returning our list check if All was requested.
-            if (groupUserMembershipType == Constants.GroupUserMembershipType.All)
+            if (groupUserMembershipType == GroupUserMembershipType.All)
             {
                 //If All was requested, the list contains Owners info.
                 //Now get the Member info as well.
@@ -1200,7 +1201,7 @@ namespace Extensions
                         {
                             //Check if the userInfoType is All and if so,
                             //do NOT specify any .Select parameters.
-                            (userInfoType == Constants.UserInfoType.All ? "" :
+                            (userInfoType == UserInfoType.All ? "" :
                                 userInfoType.ToString())
                         };
                         C.Headers.Add("ConsistencyLevel", "eventual");
@@ -1222,7 +1223,7 @@ namespace Extensions
                             switch (userInfoType)
                             {
                                 //Get User ID GUID values.
-                                case Constants.UserInfoType.id:
+                                case UserInfoType.id:
                                     if (user.Id != null &&
                                         user.Id.Trim().Length > 0)
                                     {
@@ -1230,7 +1231,7 @@ namespace Extensions
                                     }
                                     break;
                                 //Get User email address values.
-                                case Constants.UserInfoType.mail:
+                                case UserInfoType.mail:
                                     if (user.Mail != null &&
                                         user.Mail.Trim().Length > 0)
                                     {
@@ -1239,7 +1240,7 @@ namespace Extensions
                                     break;
                                 //Get User UPN values, usually the same as email
                                 //but can be different.
-                                case Constants.UserInfoType.userProfileName:
+                                case UserInfoType.userProfileName:
                                     if (user.UserPrincipalName != null &&
                                         user.UserPrincipalName.Trim().Length > 0)
                                     {
@@ -1247,7 +1248,7 @@ namespace Extensions
                                     }
                                     break;
                                 //Get the entire User object.
-                                case Constants.UserInfoType.All:
+                                case UserInfoType.All:
                                     users.Add(user);
                                     break;
                             }
