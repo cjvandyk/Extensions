@@ -6,44 +6,32 @@
 
 The following classes have been extended:
 
-    - System.Logit (added)
+    - GCCHigh.Extensions.State
 
 with these methods:
 
-- ### **Err()**
-    > _Write an Error message to active channels (console, event log, file,<br>
-        SharePoint list, database) using the System.Logit class._
+- ### **LoadState()**
+    > _A delegate method for loading state._
 
-- ### **GetExecutingAssembly()**
-    > _Gets the current Entry or Executing assembly through reflection._
+- ### **SaveState()**
+    > _A delegate method for saving state._
 
-- ### **GetFQDN()**
-    > _Get the current computer Fully Qualified Domain Name._
+- ### **LoadStateList()**
+    > _The basic method to load a list from disk.  It only requires one<br>
+        parameter which is the name of the list to load._
 
-- ### **Inf()**
-    > _Write an Information message to active channels (console, event log, file),<br>
-        SharePoint list, database) using the System.Logit class._
+- ### **SaveStateList()**
+    > _Save a given list state to disk._
 
-- ### **TimeStamp()**
-    > _Returns a string representing the current local date time stamp to<br>
-        either just the day or down to the millisecond.  Used for creating<br>
-        unique log file names.<br>
-        For example:<br>
-            `TimeStamp()`<br>
-        will return<br>
-            `2021-03-01@06.01.02.003`<br>
-        whereas<br>
-            `TimeStamp(true)`<br>
-        will return<br>
-            `2021-03-01`_
+- ### **LoadStateListToRef()**
+    > _Method to load a very large list of Graph ListItems from disk.  It<br>
+        requires all three parameters in order to load the list.  In order<br>
+        to minimize RAM usage, the list is loaded directly to the eventual<br>
+        target container list thus eliminating in-memory duplication of<br>
+        the large list._
 
-- ### **Vrb()**
-    > _Write a Verbose message to active channels (console, event log, file),<br>
-        SharePoint list, database) using the System.Logit class._
-
-- ### **Wrn()**
-    > _Write a Warning message to active channels (console, event log, file),<br>
-        SharePoint list, database) using the System.Logit class._
+- ### **SaveStateListFromRef()**
+    > _Save a given referenced list state to disk._
 
 ![Visitor Count](https://profile-counter.glitch.me/{cjvandyk}/count.svg)
  

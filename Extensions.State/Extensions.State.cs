@@ -1,12 +1,11 @@
-﻿#pragma warning disable CS0162, CS1570, CS1587, CS1591, CS1998, IDE0059, IDE0028
-
-/// <summary>
+﻿/// <summary>
 /// Author: Cornelius J. van Dyk blog.cjvandyk.com @cjvandyk
 /// This code is provided under GNU GPL 3.0 and is a copyrighted work of the
 /// author and contributors.  Please see:
 /// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
 /// </summary>
 
+using Microsoft.Graph.Models;
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
@@ -33,7 +32,7 @@ namespace Extensions
         /// name need to be used to later reload the list.</param>
         /// <param name="local">Save state file in the current folder.</param>
         /// <returns>A string of the full UNC path of the target.</returns>
-        public static string GetFileTarget(
+        internal static string GetFileTarget(
             string listName,
             bool local = false)
         { 
@@ -101,7 +100,7 @@ namespace Extensions
         /// <param name="listName">The name of the list to load.  NOTE: This
         /// is the same name that was specified when the list was saved.</param>
         /// <param name="objectType">The type to which the loaded JSON will be
-        /// cast, usually something like "List<MyClass>".</param>
+        /// cast, usually something like a List of a custom Class.</param>
         /// <param name="local">Is the state file in the execution folder.</param>
         /// <param name="maxCacheAgeInDays"></param>
         /// <returns>If the state file is newer than the current date/time plus
@@ -159,7 +158,7 @@ namespace Extensions
         /// list.</returns>
         public static string LoadStateListToRef(
             string listName,
-            ref List<Microsoft.Graph.ListItem> targetList,
+            ref List<ListItem> targetList,
             int maxCacheAgeInDays = 7)
         {
             try
@@ -187,10 +186,10 @@ namespace Extensions
                 if (str != null)
                 {
                     //Load was successful now reconstruct the list.
-                    targetList = (List<Microsoft.Graph.ListItem>)
+                    targetList = (List<ListItem>)
                         JsonSerializer.Deserialize(
                             str,
-                            typeof(List<Microsoft.Graph.ListItem>));
+                            typeof(List<ListItem>));
                     return "OK";
                 }
                 //All prerequisites were not met so return null;
@@ -228,8 +227,29 @@ namespace Extensions
                 ((object)str).Save(target);
             }
         }
+
+        /// <summary>
+        /// Save a given referenced list state to disk.
+        /// </summary>
+        /// <param name="listName">The name of the list to use in the Save
+        /// operation.  The same name will be needed to reload the object
+        /// state later.</param>
+        /// <param name="list">The object to be saved.  NOTE: The object must
+        /// be defined as [Serializable].</param>
+        public static void SaveStateListFromRef(string listName,
+                                                ref object list)
+        {
+            string str = "";
+            //Get the target filename for saving the object.
+            string target = GetFileTarget(listName);
+            //Serialize the object string.
+            str = JsonSerializer.Serialize(list);
+            //Lock the target.
+            lock (_lock)
+            {
+                ((object)str).Save(target);
+            }
+        }
         #endregion Save
     }
 }
-
-#pragma warning restore CS0162, CS1570, CS1587, CS1591, CS1998, IDE0059, IDE0028

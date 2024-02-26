@@ -1,75 +1,29 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>Extensions.State</id>
-    <!--<version>4.9.700</version>-->
+    <id>GCCHigh.Extensions.State</id>
+    <!--<version>6.0.800</version>-->
     <title>$title$</title>
     <authors>Cornelius J. van Dyk</authors>
     <owners>$author$</owners>
     <license type="expression">GPL-3.0-or-later</license>
     <projectUrl>https://github.com/cjvandyk/Extensions</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/cjvandyk/Extensions/master/Images/Extensions-64x64.png</iconUrl>
-    <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <description>Extensions.State contains methods to make managing state saving and loading a breeze.
-		Extensions.State supports all these .NET versions:
-		- .NET 7, 6, 5
-		- .NET Framework versions 4.8, 4.7.2, 4.7.1, 4.7, 4.6.2, 4.6.1, 4.5.2, 4.5.1 and 4.5.
-		- .NET Core 3.1, 3.0, 2.2, 2.1 and 2.0.
-		- .NET Standard 2.1 and 2.0.
-		Highlights are methods such as:
-		Use .Inf() to write Information messages.
-		Use .Wrn() to write Warning messages.
-		Use .Err() to write Error messages.
-		Use .Vrb() to write Verbose messages.</description>
+    <requireLicenseAcceptance>True</requireLicenseAcceptance>
+    <description>
+		GCCHigh.Extensions contains State extension methods to make managing state saving and loading a breeze, specifically targeted to the GCCHigh M365 environment.
+		GCCHigh.Extensions supports all versions of.NET from 4.6.2 through 8.0.
+	</description>
     <summary>
-		Extensions.State contains methods to make managing state saving and loading a breeze.
-		These methods are included:
-		Err()
-		GetExecutingAssembly()
-		GetFQDN()
-		Inf()
-		TimeStamp()
-		Vrb()
-		Wrn()
+		GCCHigh.Extensions contains State extension methods to make managing state saving and loading a breeze, specifically targeted to the GCCHigh M365 environment.
+		GCCHigh.Extensions supports all versions of.NET from 4.6.2 through 8.0.
 	</summary>
     <releaseNotes>
-		Err()
-		Write an Error message to active channels (console, event log, file,
-		SharePoint list, database) using the System.State class.
-
-		GetExecutingAssembly()
-		Gets the current Entry or Executing assembly through reflection.
-
-		GetFQDN()
-		Get the current computer Fully Qualified Domain Name.
-
-		Inf()
-		Write an Information message to active channels (console, event log, file,
-		SharePoint list, database) using the System.Logit class.
-
-		TimeStamp()
-		Returns a string representing the current local date time stamp to
-		either just the day or down to the millisecond.  Used for creating
-		unique log file names.
-		For example:
-		TimeStamp()
-		will return
-		2021-03-01@06.01.02.003
-		whereas
-		TimeStamp(true)
-		will return
-		2021-03-01
-
-		Vrb()
-		Write a Verbose message to active channels (console, event log, file,
-		SharePoint list, database) using the System.Logit class.
-
-		Wrn()
-		Write a Warning message to active channels (console, event log, file,
-		SharePoint list, database) using the System.Logit class.
+		GCCHigh.Extensions contains State extension methods to make managing state saving and loading a breeze, specifically targeted to the GCCHigh M365 environment.
+		GCCHigh.Extensions supports all versions of.NET from 4.6.2 through 8.0.
 	</releaseNotes>
     <copyright>$copyright$</copyright>
-    <tags>Extensions C# cjvandyk Crayveon State</tags>
+    <tags>GCCHigh Extensions C# cjvandyk Crayveon  GCCHigh GCCH CSharp State</tags>
   </metadata>
   <files>
     <file src="**" target="lib" />
