@@ -1,4 +1,4 @@
-﻿# Extensions.cs Version History.
+﻿# GCCHigh.Extensions Version History.
 
 ### **1.0.1 (2021-01-08)**<br>
 	- Added `System.Diagnostics.Process.Elevate()`.<br>
@@ -387,5 +387,6 @@
 	- Updated Microsoft.Graph dependency to 5.42.0.<br>
 	- Updated Microsoft.Identity.Client dependency to 4.59.0.<br>
 
-### **6.0.800 (2024-02-22)**<br>
+### **6.0.800 (2024-02-27)**<br>
 	- Rearchitected and Optimized.<br>
+	- Rebranded the `Extensions` set of NuGet packages as `GCCHigh.Extensions`.
