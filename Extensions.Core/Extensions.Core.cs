@@ -40,7 +40,12 @@ namespace Extensions
             {
                 if (ActiveAuth == null)
                 {
-                    AuthMan.GetAuth();
+                    TenantConfig tenantConfig = new TenantConfig();
+                    tenantConfig.LoadConfig();
+                    AuthMan.GetAuth(tenantConfig.TenantDirectoryId,
+                                    tenantConfig.ApplicationClientId,
+                                    tenantConfig.CertThumbprint,
+                                    tenantConfig.TenantString);
                 }
                 return ActiveAuth.TenantCfg;
             }
@@ -53,6 +58,15 @@ namespace Extensions
         {
             get
             {
+                if (AuthMan.ActiveAuth == null)
+                {
+                    TenantConfig tenantConfig = new TenantConfig();
+                    tenantConfig.LoadConfig();
+                    AuthMan.GetAuth(tenantConfig.TenantDirectoryId,
+                                    tenantConfig.ApplicationClientId,
+                                    tenantConfig.CertThumbprint,
+                                    tenantConfig.TenantString);
+                }
                 return AuthMan.ActiveAuth;
             }
         }
@@ -64,6 +78,15 @@ namespace Extensions
         {
             get
             {
+                if (ActiveAuth == null)
+                {
+                    TenantConfig tenantConfig = new TenantConfig();
+                    tenantConfig.LoadConfig();
+                    AuthMan.GetAuth(tenantConfig.TenantDirectoryId,
+                                    tenantConfig.ApplicationClientId,
+                                    tenantConfig.CertThumbprint,
+                                    tenantConfig.TenantString);
+                }
                 return ActiveAuth.TenantCfg.AuthorityDomain;
             }
         }
@@ -75,6 +98,15 @@ namespace Extensions
         {
             get
             {
+                if (ActiveAuth == null)
+                {
+                    TenantConfig tenantConfig = new TenantConfig();
+                    tenantConfig.LoadConfig();
+                    AuthMan.GetAuth(tenantConfig.TenantDirectoryId,
+                                    tenantConfig.ApplicationClientId,
+                                    tenantConfig.CertThumbprint,
+                                    tenantConfig.TenantString);
+                }
                 return ActiveAuth.TenantCfg.GraphUserEndPointUrl;
             }
         }
@@ -105,6 +137,15 @@ namespace Extensions
             ScopeType scopeType = ScopeType.Graph,
             bool authStackReset = false)
         {
+            if (ActiveAuth == null)
+            {
+                TenantConfig tenantConfig = new TenantConfig();
+                tenantConfig.LoadConfig();
+                AuthMan.GetAuth(tenantConfig.TenantDirectoryId,
+                                tenantConfig.ApplicationClientId,
+                                tenantConfig.CertThumbprint,
+                                tenantConfig.TenantString);
+            }
             return AuthMan.GetAuth(
                 ActiveTenant.TenantDirectoryId,
                 ActiveTenant.ApplicationClientId,
@@ -126,12 +167,11 @@ namespace Extensions
             {
                 if (tenantString == null)
                 {
-                    tenantString = GetEnv("TenantString");
-                    if (tenantString == "")
-                    {
-                        throw new Exception("There is no valid Environment " +
-                            "Variable for TenantString.");
-                    }
+                    throw new Exception("TenantString cannot be null.");
+                }
+                else
+                {
+                    SetEnv("TenantString", tenantString);
                 }
                 Inf($"Initializing Tenant [{tenantString}]");
                 //Only initialize the tenant if it hasn't already been done.
@@ -170,6 +210,15 @@ namespace Extensions
         /// returned else a blank string is returned.</returns>
         public static string GetSetting(string key)
         {
+            if (ActiveAuth == null)
+            {
+                TenantConfig tenantConfig = new TenantConfig();
+                tenantConfig.LoadConfig();
+                AuthMan.GetAuth(tenantConfig.TenantDirectoryId,
+                                tenantConfig.ApplicationClientId,
+                                tenantConfig.CertThumbprint,
+                                tenantConfig.TenantString);
+            }
             if (ActiveAuth.TenantCfg.Settings.ContainsKey(key))
             {
                 return ActiveAuth.TenantCfg.Settings[key];

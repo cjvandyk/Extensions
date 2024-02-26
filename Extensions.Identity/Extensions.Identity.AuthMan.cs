@@ -92,6 +92,15 @@ namespace Extensions.Identity
             ScopeType scopeType = ScopeType.Graph, 
             bool authStackReset = false)
         {
+            if (ActiveAuth == null)
+            {
+                TenantConfig tenantConfig = new TenantConfig();
+                tenantConfig.LoadConfig();
+                AuthMan.GetAuth(tenantConfig.TenantDirectoryId,
+                                tenantConfig.ApplicationClientId,
+                                tenantConfig.CertThumbprint,
+                                tenantConfig.TenantString);
+            }
             return GetAuth(
                 ActiveAuth.TenantCfg.TenantDirectoryId,
                 ActiveAuth.TenantCfg.ApplicationClientId,
@@ -381,6 +390,15 @@ namespace Extensions.Identity
         {
             if (authResult == null)
             {
+                if (ActiveAuth == null)
+                {
+                    TenantConfig tenantConfig = new TenantConfig();
+                    tenantConfig.LoadConfig();
+                    AuthMan.GetAuth(tenantConfig.TenantDirectoryId,
+                                    tenantConfig.ApplicationClientId,
+                                    tenantConfig.CertThumbprint,
+                                    tenantConfig.TenantString);
+                }
                 return ActiveAuth.HttpClient;
             }
 #if NET5_0_OR_GREATER
@@ -423,6 +441,15 @@ namespace Extensions.Identity
         internal static GraphServiceClient GetGraphServiceClient(
             HttpClient httpClient = null)
         {
+            if (ActiveAuth == null)
+            {
+                TenantConfig tenantConfig = new TenantConfig();
+                tenantConfig.LoadConfig();
+                AuthMan.GetAuth(tenantConfig.TenantDirectoryId,
+                                tenantConfig.ApplicationClientId,
+                                tenantConfig.CertThumbprint,
+                                tenantConfig.TenantString);
+            }
             if (httpClient == null)
             {
                 return ActiveAuth.GraphClient;
@@ -444,6 +471,15 @@ namespace Extensions.Identity
         internal static GraphServiceClient GetGraphBetaServiceClient(
             HttpClient httpClient = null)
         {
+            if (ActiveAuth == null)
+            {
+                TenantConfig tenantConfig = new TenantConfig();
+                tenantConfig.LoadConfig();
+                AuthMan.GetAuth(tenantConfig.TenantDirectoryId,
+                                tenantConfig.ApplicationClientId,
+                                tenantConfig.CertThumbprint,
+                                tenantConfig.TenantString);
+            }
             if (httpClient == null)
             {
                 return ActiveAuth.GraphBetaClient;

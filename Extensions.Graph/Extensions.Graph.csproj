@@ -38,8 +38,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="GCCHigh.Extensions.Constants" Version="6.0.800" />
-    <PackageReference Include="GCCHigh.Extensions.Identity" Version="6.0.800" />
-    <PackageReference Include="GCCHigh.Extensions.Logit" Version="6.0.800" />
+    <ProjectReference Include="..\Extensions.Identity\Extensions.Identity.csproj" />
+    <ProjectReference Include="..\Extensions.Logit\Extensions.Logit.csproj" />
   </ItemGroup>
 </Project>

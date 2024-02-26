@@ -32,9 +32,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="GCCHigh.Extensions.Constants" Version="6.0.800" />
-    <PackageReference Include="GCCHigh.Extensions.Logit" Version="6.0.800" />
-    <PackageReference Include="GCCHigh.Extensions.State" Version="6.0.800" />
     <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup>
@@ -43,5 +40,9 @@
       <PackagePath>\</PackagePath>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Extensions.Logit\Extensions.Logit.csproj" />
+    <ProjectReference Include="..\Extensions.State\Extensions.State.csproj" />
   </ItemGroup>
 </Project>
