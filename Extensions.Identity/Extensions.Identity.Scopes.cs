@@ -69,10 +69,7 @@ namespace Extensions.Identity
                 {
                     TenantConfig tenantConfig = new TenantConfig();
                     tenantConfig.LoadConfig();
-                    AuthMan.GetAuth(tenantConfig.TenantDirectoryId,
-                                    tenantConfig.ApplicationClientId,
-                                    tenantConfig.CertThumbprint,
-                                    tenantConfig.TenantString);
+                    TargetTenantConfig = tenantConfig;
                 }
                 return new string[]
                 {
@@ -92,10 +89,7 @@ namespace Extensions.Identity
                 {
                     TenantConfig tenantConfig = new TenantConfig();
                     tenantConfig.LoadConfig();
-                    AuthMan.GetAuth(tenantConfig.TenantDirectoryId,
-                                    tenantConfig.ApplicationClientId,
-                                    tenantConfig.CertThumbprint,
-                                    tenantConfig.TenantString);
+                    TargetTenantConfig = tenantConfig;
                 }
                 return new string[]
                 {
@@ -116,10 +110,7 @@ namespace Extensions.Identity
                 {
                     TenantConfig tenantConfig = new TenantConfig();
                     tenantConfig.LoadConfig();
-                    AuthMan.GetAuth(tenantConfig.TenantDirectoryId,
-                                    tenantConfig.ApplicationClientId,
-                                    tenantConfig.CertThumbprint,
-                                    tenantConfig.TenantString);
+                    TargetTenantConfig = tenantConfig;
                 }
                 return new string[]
                 {
@@ -140,10 +131,7 @@ namespace Extensions.Identity
                 {
                     TenantConfig tenantConfig = new TenantConfig();
                     tenantConfig.LoadConfig();
-                    AuthMan.GetAuth(tenantConfig.TenantDirectoryId,
-                                    tenantConfig.ApplicationClientId,
-                                    tenantConfig.CertThumbprint,
-                                    tenantConfig.TenantString);
+                    TargetTenantConfig = tenantConfig;
                 }
                 return new string[]
                 {
@@ -167,10 +155,7 @@ namespace Extensions.Identity
                 {
                     TenantConfig tenantConfig = new TenantConfig();
                     tenantConfig.LoadConfig();
-                    AuthMan.GetAuth(tenantConfig.TenantDirectoryId,
-                                    tenantConfig.ApplicationClientId,
-                                    tenantConfig.CertThumbprint,
-                                    tenantConfig.TenantString);
+                    TargetTenantConfig = tenantConfig;
                 }
                 return new string[]
                 {
@@ -192,10 +177,7 @@ namespace Extensions.Identity
                 {
                     TenantConfig tenantConfig = new TenantConfig();
                     tenantConfig.LoadConfig();
-                    AuthMan.GetAuth(tenantConfig.TenantDirectoryId,
-                                    tenantConfig.ApplicationClientId,
-                                    tenantConfig.CertThumbprint,
-                                    tenantConfig.TenantString);
+                    TargetTenantConfig = tenantConfig;
                 }
                 return new string[]
                 {

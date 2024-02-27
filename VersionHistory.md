@@ -395,3 +395,16 @@
 	- Optimized tenant initialization logic in Core.
 	- Added the `getFile` option to `Graph.GetDriveItem()` to allow for retrieval of the underlying binary file.
 	- Added the `TargetTenantConfig` to Identity for initialization optimization.
+
+### **6.2.800 (2024-02-27)**<br>
+	- Optimized logic.
+
+### **6.3.800 (2024-02-27)**<br>
+	- Added CSOM compatibility.
+
+### **6.4.800 (2024-02-27)**<br>
+	- Added `UserMembershipType` type to Constants.
+	- Added `.GetSiteOwners()` to Graph.
+	- Added `.GetSiteMemers()` to Graph.
+	- Added `.GetSiteUsers()` to Graph.
+	- Fixed `Scopes` in Identity.

@@ -9,3 +9,8 @@
 
 ### **6.1.800 (2024-02-27)**<br>
 	- Added the `getFile` option to `.GetDriveItem()` to allow for retrieval of the underlying binary file.
+
+### **6.2.800 (2024-02-27)**<br>
+	- Added `.GetSiteOwners()` to Graph.
+	- Added `.GetSiteMemers()` to Graph.
+	- Added `.GetSiteUsers()` to Graph.

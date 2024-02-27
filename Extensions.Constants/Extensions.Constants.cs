@@ -367,6 +367,7 @@ namespace Extensions
         /// The type of Group membership users to retrieve i.e. Owners of the
         /// Group, Members of the Group or both.
         /// </summary>
+        [Obsolete("GroupUserMembershipType is deprecated.  Please use UserMembershipType instead.")]
         public enum GroupUserMembershipType
         {
             /// <summary>
@@ -416,18 +417,46 @@ namespace Extensions
 
             /// <summary>
             /// Return just the ID value of the User object.
+            /// Intentionally lower case as the value string is used in Graph
+            /// data field selection queries.
             /// </summary>
             id,
 
             /// <summary>
             /// Return just the Email value of the User object.
+            /// Intentionally lower case as the value string is used in Graph
+            /// data field selection queries.
             /// </summary>
             mail,
 
             /// <summary>
             /// Return just the User Principal Name (UPN) of the User object.
+            /// Intentionally lower case as the value string is used in Graph
+            /// data field selection queries.
             /// </summary>
             userProfileName
+        }
+
+        /// <summary>
+        /// The type of membership of users to retrieve i.e. Owners, Members 
+        /// or both.
+        /// </summary>
+        public enum UserMembershipType
+        {
+            /// <summary>
+            /// Return both Members and Owners.
+            /// </summary>
+            All,
+
+            /// <summary>
+            /// Return only Members.
+            /// </summary>
+            Members,
+
+            /// <summary>
+            /// Return only Owners.
+            /// </summary>
+            Owners
         }
         #endregion Graph Constants
 

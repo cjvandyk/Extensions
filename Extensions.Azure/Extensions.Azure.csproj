@@ -33,6 +33,7 @@
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.10.4" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.19.1" />
+    <PackageReference Include="GCCHigh.Extensions.Core" Version="6.6.800" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Images\Extensions-128x128.png">
@@ -40,8 +41,5 @@
       <PackagePath>\</PackagePath>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Extensions.Core\Extensions.Core.csproj" />
   </ItemGroup>
 </Project>

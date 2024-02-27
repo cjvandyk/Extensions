@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>GCCHigh.Extensions</id>
+    <id>GCCHigh</id>
     <!--<version>6.0.800</version>-->
     <title>$title$</title>
     <authors>Cornelius J. van Dyk</authors>
@@ -11,16 +11,16 @@
     <iconUrl>https://raw.githubusercontent.com/cjvandyk/Extensions/master/Images/Extensions-64x64.png</iconUrl>
     <requireLicenseAcceptance>True</requireLicenseAcceptance>
     <description>
-		GCCHigh.Extensions contains extension methods for C# specifically targeted to the GCCHigh M365 environment.
-		GCCHigh.Extensions supports all versions of.NET from 4.6.2 through 8.0.
+		GCCHigh Extensions contains extension methods for C# specifically targeted to the GCCHigh M365 environment.
+		GCCHigh Extensions supports all versions of.NET from 4.6.2 through 8.0.
     </description>
     <summary>
-		GCCHigh.Extensions contains extension methods for C# specifically targeted to the GCCHigh M365 environment.
-		GCCHigh.Extensions supports all versions of.NET from 4.6.2 through 8.0.
+		GCCHigh Extensions contains extension methods for C# specifically targeted to the GCCHigh M365 environment.
+		GCCHigh Extensions supports all versions of.NET from 4.6.2 through 8.0.
 	</summary>
     <releaseNotes>
-		GCCHigh.Extensions contains extension methods for C# specifically targeted to the GCCHigh M365 environment.
-		GCCHigh.Extensions supports all versions of.NET from 4.6.2 through 8.0.
+		GCCHigh Extensions contains extension methods for C# specifically targeted to the GCCHigh M365 environment.
+		GCCHigh Extensions supports all versions of.NET from 4.6.2 through 8.0.
 	</releaseNotes>
     <copyright>$copyright$</copyright>
     <tags>GCCHigh Extensions C# cjvandyk Crayveon  GCCH CSharp 429 Retry-After ThrottlingHandler TimeZone CountWords Trim QueryString MorseCode Binary LoremIpsum ZipCode Vowel UrlRoot Elevate CompoundInterest StrongPassword</tags>

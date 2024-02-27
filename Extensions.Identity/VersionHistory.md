@@ -21,3 +21,6 @@
 
 ### **6.4.800 (2024-02-27)**<br>
 	- Added the `TargetTenantConfig` to AuthMan for initialization optimization.
+
+### **6.5.800 (2024-02-27)**<br>
+	- Fixed `Scopes` in Identity.
