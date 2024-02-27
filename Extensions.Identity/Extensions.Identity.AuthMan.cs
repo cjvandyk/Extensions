@@ -7,6 +7,7 @@
 
 using Microsoft.Graph;
 using Microsoft.Identity.Client;
+using Microsoft.SharePoint.Client;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -104,7 +105,9 @@ namespace Extensions.Identity
                 AuthMan.GetAuth(tenantConfig.TenantDirectoryId,
                                 tenantConfig.ApplicationClientId,
                                 tenantConfig.CertThumbprint,
-                                tenantConfig.TenantString);
+                                tenantConfig.TenantString,
+                                scopeType,
+                                authStackReset);
             }
             return GetAuth(
                 ActiveAuth.TenantCfg.TenantDirectoryId,
@@ -446,23 +449,20 @@ namespace Extensions.Identity
         internal static GraphServiceClient GetGraphServiceClient(
             HttpClient httpClient = null)
         {
-            if (ActiveAuth == null)
+            if (TargetTenantConfig == null)
             {
                 TenantConfig tenantConfig = new TenantConfig();
                 tenantConfig.LoadConfig();
-                AuthMan.GetAuth(tenantConfig.TenantDirectoryId,
-                                tenantConfig.ApplicationClientId,
-                                tenantConfig.CertThumbprint,
-                                tenantConfig.TenantString);
+                TargetTenantConfig = tenantConfig;
             }
-            if (httpClient == null)
+            if (httpClient != null)
             {
-                return ActiveAuth.GraphClient;
+                return new GraphServiceClient(
+                    httpClient,
+                    null,
+                    $"https://graph.microsoft{TargetTenantConfig.AuthorityDomain}/v1.0");
             }
-            return new GraphServiceClient(
-                httpClient,
-                null,
-                $"https://graph.microsoft{ActiveAuth.TenantCfg.AuthorityDomain}/v1.0");
+            return ActiveAuth.GraphClient;
         }
 
         /// <summary>
@@ -476,60 +476,58 @@ namespace Extensions.Identity
         internal static GraphServiceClient GetGraphBetaServiceClient(
             HttpClient httpClient = null)
         {
-            if (ActiveAuth == null)
+            if (TargetTenantConfig == null)
             {
                 TenantConfig tenantConfig = new TenantConfig();
                 tenantConfig.LoadConfig();
-                AuthMan.GetAuth(tenantConfig.TenantDirectoryId,
-                                tenantConfig.ApplicationClientId,
-                                tenantConfig.CertThumbprint,
-                                tenantConfig.TenantString);
+                TargetTenantConfig = tenantConfig;
             }
-            if (httpClient == null)
+            if (httpClient != null)
             {
-                return ActiveAuth.GraphBetaClient;
+                return new GraphServiceClient(
+                    httpClient,
+                    null,
+                    $"https://graph.microsoft{TargetTenantConfig.AuthorityDomain}/beta");
             }
-            return new GraphServiceClient(
-                httpClient,
-                null,
-                $"https://graph.microsoft{ActiveAuth.TenantCfg.AuthorityDomain}/beta");
+            return ActiveAuth.GraphBetaClient;
         }
 
-        ///// <summary>
-        ///// Get a CSOM ClientContent for the given URL.
-        ///// </summary>
-        ///// <param name="url">The URL for which to get the Context.</param>
-        ///// <param name="accessToken">The token to use for the bearer.</param>
-        ///// <param name="suppressErrors">Should errors be suppressed?  Default
-        ///// is false.</param>
-        ///// <returns>A valid ClientContext for the site or null if an exception
-        ///// occurred.</returns>
-        //public static ClientContext GetClientContext(
-        //    string url,
-        //    string accessToken,
-        //    bool suppressErrors = false)
-        //{
-        //    try
-        //    {
-        //        var clientContext = new ClientContext(url);
-        //        clientContext.ExecutingWebRequest += (sender, args) =>
-        //        {
-        //            args.WebRequestExecutor.RequestHeaders["Authorization"] =
-        //                "Bearer " + accessToken;
-        //        };
-        //        return clientContext;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        if (!suppressErrors)
-        //        {
-        //            Err($"ERROR getting context for [{url}].\n\r" + 
-        //                $"Message: [{ex.Message}]\n\r" +
-        //                $"Stack Trace: [{ex.StackTrace}]");
-        //        }
-        //        return null;
-        //    }
-        //}
+        /// <summary>
+        /// Get a CSOM ClientContent for the given URL.
+        /// </summary>
+        /// <param name="url">The URL for which to get the Context.</param>
+        /// <param name="accessToken">The token to use for the bearer.</param>
+        /// <param name="suppressErrors">Should errors be suppressed?  Default
+        /// is false.</param>
+        /// <returns>A valid ClientContext for the site or null if an exception
+        /// occurred.</returns>
+        public static ClientContext GetClientContext(
+            string url,
+            string accessToken,
+            bool suppressErrors = false)
+        {
+            try
+            {
+                var clientContext = new ClientContext(url);
+                clientContext.ExecutingWebRequest += (sender, args) =>
+                {
+                    args.WebRequestExecutor.RequestHeaders["Authorization"] =
+                        "Bearer " + accessToken;
+                };
+                return clientContext;
+            }
+            catch (Exception ex)
+            {
+                if (!suppressErrors)
+                {
+                    throw;
+                    //Err($"ERROR getting context for [{url}].\n\r" +
+                    //    $"Message: [{ex.Message}]\n\r" +
+                    //    $"Stack Trace: [{ex.StackTrace}]");
+                }
+                return null;
+            }
+        }
 
         /// <summary>
         /// Method to get a valid AuthenticationResult for the current 

@@ -286,6 +286,7 @@ namespace Extensions
                     $"\\{$"UniversalConfig.{TenantString}.json"}");
                 Labels = LoadJSON($"{GetRunFolder()}" +
                     $"\\{$"Labels.{TenantString}.json"}");
+                AuthMan.TargetTenantConfig = this;
             }
         }
 

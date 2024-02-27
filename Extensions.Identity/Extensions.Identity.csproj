@@ -19,7 +19,7 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>Extensions-128x128.png</PackageIcon>
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
-    <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <RepositoryType>git</RepositoryType>
     <PackageReleaseNotes>Rebranded Extensions.Identity as GCCHigh.Extensions.Identity.</PackageReleaseNotes>
 	<PackageOutputPath>..\NuGet</PackageOutputPath>
@@ -31,8 +31,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="GCCHigh.Extensions.Constants" Version="6.1.800" />
     <PackageReference Include="Microsoft.Graph" Version="5.43.0" />
     <PackageReference Include="Microsoft.Identity.Client" Version="4.59.0" />
+    <PackageReference Include="Microsoft.SharePointOnline.CSOM" Version="16.1.24614.12000" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Images\Extensions-128x128.png">
@@ -40,8 +42,5 @@
       <PackagePath>\</PackagePath>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Extensions.Constants\Extensions.Constants.csproj" />
   </ItemGroup>
 </Project>

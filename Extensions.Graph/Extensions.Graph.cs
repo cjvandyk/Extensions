@@ -18,8 +18,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Extensions.Identity;
 using static Extensions.Constants;
+using static Extensions.Identity.AuthMan;
 using static System.Logit;
-using System.IO;
 
 namespace Extensions
 {
@@ -1122,13 +1122,140 @@ namespace Extensions
         }
 
         /// <summary>
+        /// A method to get all users in the Site's Owner group.
+        /// </summary>
+        /// <param name="siteUrl">The URL of the target SharePoint site.</param>
+        /// <param name="userInfoType">The type of user information to return
+        /// i.e. Ids, Email Adresses, User Principal Name or the actual
+        /// Microsoft.SharePoint.Client.User objects.</param>
+        /// <returns>A list of objects that is either a list of strings
+        /// containing the Ids or the Email Adresses or the User Principal 
+        /// Names (depending on the userInfoType specified) or a list of
+        /// Microsoft.SharePoint.Client.User objects.</returns>
+        public static List<object> GetSiteOwners(
+            string siteUrl,
+            UserInfoType userInfoType = UserInfoType.id)
+        {
+            return GetSiteUsers(siteUrl, 
+                                userInfoType, 
+                                UserMembershipType.Owners);
+        }
+
+        /// <summary>
+        /// A method to get all users in the Site's Members group.
+        /// </summary>
+        /// <param name="siteUrl">The URL of the target SharePoint site.</param>
+        /// <param name="userInfoType">The type of user information to return
+        /// i.e. Ids, Email Adresses, User Principal Name or the actual
+        /// Microsoft.SharePoint.Client.User objects.</param>
+        /// <returns>A list of objects that is either a list of strings
+        /// containing the Ids or the Email Adresses or the User Principal 
+        /// Names (depending on the userInfoType specified) or a list of
+        /// Microsoft.SharePoint.Client.User objects.</returns>
+        public static List<object> GetSiteMembers(
+            string siteUrl,
+            UserInfoType userInfoType = UserInfoType.id)
+        {
+            return GetSiteUsers(siteUrl,
+                                userInfoType,
+                                UserMembershipType.Members);
+        }
+
+        /// <summary>
+        /// A method to get all users in the Site's Owners, Members or both group.
+        /// </summary>
+        /// <param name="siteUrl">The URL of the target SharePoint site.</param>
+        /// <param name="userInfoType">The type of user information to return
+        /// i.e. Ids, Email Adresses, User Principal Name or the actual
+        /// Microsoft.SharePoint.Client.User objects.</param>
+        /// <param name="userMembershipType">The type of users to return i.e.
+        /// Owners, Members or both.</param>
+        /// <returns>A list of objects that is either a list of strings
+        /// containing the Ids or the Email Adresses or the User Principal 
+        /// Names (depending on the userInfoType specified) or a list of
+        /// Microsoft.SharePoint.Client.User objects.</returns>
+        public static List<object> GetSiteUsers(
+            string siteUrl,
+            UserInfoType userInfoType = UserInfoType.id,
+            UserMembershipType userMembershipType = UserMembershipType.All)
+        {
+            List<object> users = new List<object>();
+            GetAuth(ScopeType.SharePoint);
+            var context = GetClientContext(siteUrl,
+                                           ActiveAuth.AuthResult.AccessToken,
+                                           true);
+            Microsoft.SharePoint.Client.Group spGroup = null;
+            switch (userMembershipType)
+            {
+                case UserMembershipType.Members:
+                    spGroup = context.Web.AssociatedMemberGroup;                    
+                    break;
+                default:
+                    spGroup = context.Web.AssociatedOwnerGroup;
+                    break;
+            }
+            context.Load(spGroup);
+            var spUsers = spGroup.Users;
+            context.Load(spUsers);
+            context.ExecuteQuery();
+            foreach (var spUser in spUsers)
+            {
+                switch (userInfoType)
+                {
+                    case UserInfoType.id:
+                        users.Add(spUser.Id);
+                        break;
+                    case UserInfoType.mail:
+                        users.Add(spUser.Email.ToLower());
+                        break;
+                    case UserInfoType.userProfileName:
+                        users.Add(spUser.UserPrincipalName);
+                        break;
+                    case UserInfoType.All:
+                        users.Add(spUser);
+                        break;
+                }
+            }
+            //If all users were requested, get the Members to add to the
+            //Owners above.
+            if (userMembershipType == UserMembershipType.All)
+            {
+                spGroup = context.Web.AssociatedMemberGroup;
+                context.Load(spGroup);
+                spUsers = spGroup.Users;
+                context.Load(spUsers);
+                context.ExecuteQuery();
+                foreach (var spUser in spUsers)
+                {
+                    switch (userInfoType)
+                    {
+                        case UserInfoType.id:
+                            users.Add(spUser.Id);
+                            break;
+                        case UserInfoType.mail:
+                            users.Add(spUser.Email.ToLower());
+                            break;
+                        case UserInfoType.userProfileName:
+                            users.Add(spUser.UserPrincipalName);
+                            break;
+                        case UserInfoType.All:
+                            users.Add(spUser);
+                            break;
+                    }
+                }
+            }
+            GetAuth();
+            return users;
+        }
+
+        /// <summary>
         /// A method to retrieve a list of ID values (GUID) for all owners
         /// of a specified Group.
         /// </summary>
         /// <param name="groupId">The ID (GUID) of the target group.</param>
         /// <param name="userInfoType">The type of user info to return
         /// i.e. "id", "mail" or "userProfileName".  Default is "id".</param>
-        /// <param name="groupUserMembershipType">The type of Group membership
+        /// <param name="userMembershipType">The type of Group membership
         /// users to retrieve i.e. Owners of the Group, Members of the Group 
         /// or both.</param>
         /// <returns>A list of objects representing the information about the
@@ -1144,16 +1271,16 @@ namespace Extensions
         public static List<object> GetGroupUsers(
             string groupId,
             UserInfoType userInfoType = UserInfoType.id,
-            GroupUserMembershipType groupUserMembershipType
-                = GroupUserMembershipType.All)
+            UserMembershipType userMembershipType
+                = UserMembershipType.All)
         {
             //Create the aggregation container.
             List<object> users = new List<object>();
             //Get the first page of users.
             UserCollectionResponse usersPage = 
                 //If groupUserMembershipType is All or Owners, get the Owners first page.
-                ((groupUserMembershipType == GroupUserMembershipType.All ||
-                  groupUserMembershipType == GroupUserMembershipType.Owners) ?
+                ((userMembershipType == UserMembershipType.All ||
+                  userMembershipType == UserMembershipType.Owners) ?
                     AuthMan.ActiveAuth.GraphClient.Groups[groupId]
                         .Owners.GraphUser.GetAsync(C =>
                         {
@@ -1181,7 +1308,7 @@ namespace Extensions
             //If groupUserMembershipType is not All and there are no items, return list.
             //If groupUserMembershipType is All, and there are no items in the Owners
             //page then we still need to get the Members.
-            if ((groupUserMembershipType != GroupUserMembershipType.All) &&
+            if ((userMembershipType != UserMembershipType.All) &&
                 (usersPage.Value.Count == 0))
             {
                 return users;
@@ -1230,7 +1357,7 @@ namespace Extensions
                     });
             pageIterator.IterateAsync().GetAwaiter().GetResult();
             //Before returning our list check if All was requested.
-            if (groupUserMembershipType == GroupUserMembershipType.All)
+            if (userMembershipType == UserMembershipType.All)
             {
                 //If All was requested, the list contains Owners info.
                 //Now get the Member info as well.
