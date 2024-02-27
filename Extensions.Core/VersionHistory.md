@@ -18,3 +18,6 @@
 		
 ### **6.4.800 (2024-02-27)**<br>
 	- Optimized tenant initialization.
+		
+### **6.5.800 (2024-02-27)**<br>
+	- Optimized tenant initialization.
