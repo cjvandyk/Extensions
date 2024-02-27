@@ -24,3 +24,6 @@
 
 ### **6.5.800 (2024-02-27)**<br>
 	- Fixed `Scopes` in Identity.
+
+### **6.6.800 (2024-02-27)**<br>
+	- Changed `.GetHttpClient()` from internal to public.

@@ -24,3 +24,6 @@
 		
 ### **6.6.800 (2024-02-27)**<br>
 	- Optimized tenant initialization.
+		
+### **6.7.800 (2024-02-27)**<br>
+	- Made `TryAdd()` on `List<>` and `Dictionary<>` in core internal.

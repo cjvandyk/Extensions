@@ -402,9 +402,13 @@
 ### **6.3.800 (2024-02-27)**<br>
 	- Added CSOM compatibility.
 
-### **6.4.800 (2024-02-27)**<br>
+### **6.5.800 (2024-02-27)**<br>
 	- Added `UserMembershipType` type to Constants.
 	- Added `.GetSiteOwners()` to Graph.
 	- Added `.GetSiteMemers()` to Graph.
 	- Added `.GetSiteUsers()` to Graph.
 	- Fixed `Scopes` in Identity.
+
+### **6.6.800 (2024-02-27)**<br>
+	- Changed `.GetHttpClient()` from internal to public.
+	- Made `TryAdd()` on `List<>` and `Dictionary<>` in core internal.
