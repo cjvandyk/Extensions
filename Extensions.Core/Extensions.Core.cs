@@ -199,18 +199,15 @@ namespace Extensions
         /// returned else a blank string is returned.</returns>
         public static string GetSetting(string key)
         {
-            if (ActiveAuth == null)
+            if (AuthMan.TargetTenantConfig == null)
             {
                 TenantConfig tenantConfig = new TenantConfig();
                 tenantConfig.LoadConfig();
-                AuthMan.GetAuth(tenantConfig.TenantDirectoryId,
-                                tenantConfig.ApplicationClientId,
-                                tenantConfig.CertThumbprint,
-                                tenantConfig.TenantString);
+                AuthMan.TargetTenantConfig = tenantConfig;
             }
-            if (ActiveAuth.TenantCfg.Settings.ContainsKey(key))
+            if (AuthMan.TargetTenantConfig.Settings.ContainsKey(key))
             {
-                return ActiveAuth.TenantCfg.Settings[key];
+                return AuthMan.TargetTenantConfig.Settings[key];
             }
             return "";
         }
