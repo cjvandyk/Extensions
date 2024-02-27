@@ -5,7 +5,7 @@
 /// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
 /// </summary>
 
-using Microsoft.Graph;
+using Extensions.Identity;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -272,12 +272,21 @@ namespace Extensions
                     throw new Exception("ERROR!!!  No TenantString environment variable defined.");
                 }
             }
-            Settings = new Dictionary<string, string>();
-            Settings.Add("TenantString", TenantString);
-            Settings = LoadJSON($"{GetRunFolder()}" +
-                $"\\{$"UniversalConfig.{TenantString}.json"}");
-            Labels = LoadJSON($"{GetRunFolder()}" +
-                $"\\{$"Labels.{TenantString}.json"}");
+            if ((AuthMan.TargetTenantConfig != null) &&
+                (AuthMan.TargetTenantConfig.TenantString == TenantString))
+            {
+                Settings = AuthMan.TargetTenantConfig.Settings;
+                Labels = AuthMan.TargetTenantConfig.Labels;
+            }
+            else
+            {
+                Settings = new Dictionary<string, string>();
+                Settings.Add("TenantString", TenantString);
+                Settings = LoadJSON($"{GetRunFolder()}" +
+                    $"\\{$"UniversalConfig.{TenantString}.json"}");
+                Labels = LoadJSON($"{GetRunFolder()}" +
+                    $"\\{$"Labels.{TenantString}.json"}");
+            }
         }
 
         /// <summary>
