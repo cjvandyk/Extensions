@@ -65,7 +65,7 @@ namespace Extensions.Identity
         {
             get
             {
-                if (ActiveAuth == null)
+                if (TargetTenantConfig == null)
                 {
                     TenantConfig tenantConfig = new TenantConfig();
                     tenantConfig.LoadConfig();
@@ -76,7 +76,7 @@ namespace Extensions.Identity
                 }
                 return new string[]
                 {
-                    $"https://outlook.office365{ActiveAuth.TenantCfg.AuthorityDomain}/.default"
+                    $"https://outlook.office365{TargetTenantConfig.AuthorityDomain}/.default"
                 };
             }
         }
@@ -88,7 +88,7 @@ namespace Extensions.Identity
         {
             get
             {
-                if (ActiveAuth == null)
+                if (TargetTenantConfig == null)
                 {
                     TenantConfig tenantConfig = new TenantConfig();
                     tenantConfig.LoadConfig();
@@ -99,7 +99,7 @@ namespace Extensions.Identity
                 }
                 return new string[]
                 {
-                    $"https://graph.microsoft{ActiveAuth.TenantCfg.AuthorityDomain}/.default",
+                    $"https://graph.microsoft{TargetTenantConfig.AuthorityDomain}/.default",
                     Offline
                 };
             }
@@ -112,7 +112,7 @@ namespace Extensions.Identity
         {
             get
             {
-                if (ActiveAuth == null)
+                if (TargetTenantConfig == null)
                 {
                     TenantConfig tenantConfig = new TenantConfig();
                     tenantConfig.LoadConfig();
@@ -123,7 +123,7 @@ namespace Extensions.Identity
                 }
                 return new string[]
                 {
-                    $"https://manage.office365{ActiveAuth.TenantCfg.AuthorityDomain}/.default",
+                    $"https://manage.office365{TargetTenantConfig.AuthorityDomain}/.default",
                     Offline
                 };
             }
@@ -136,7 +136,7 @@ namespace Extensions.Identity
         {
             get
             {
-                if (ActiveAuth == null)
+                if (TargetTenantConfig == null)
                 {
                     TenantConfig tenantConfig = new TenantConfig();
                     tenantConfig.LoadConfig();
@@ -147,7 +147,7 @@ namespace Extensions.Identity
                 }
                 return new string[]
                 {
-                        ActiveAuth.TenantCfg.AuthorityDomain == ".us"
+                        TargetTenantConfig.AuthorityDomain == ".us"
                             ? "https://high.analysis.usgovcloudapi.net/powerbi/api/.default"
                             : "https://analysis.windows.net/powerbi/api/.default",
                         Offline
@@ -163,7 +163,7 @@ namespace Extensions.Identity
         {
             get
             {
-                if (ActiveAuth == null)
+                if (TargetTenantConfig == null)
                 {
                     TenantConfig tenantConfig = new TenantConfig();
                     tenantConfig.LoadConfig();
@@ -174,8 +174,8 @@ namespace Extensions.Identity
                 }
                 return new string[]
                 {
-                    $"https://{ActiveAuth.TenantCfg.TenantString.TrimEnd('/')}" +
-                        $".sharepoint{ActiveAuth.TenantCfg.AuthorityDomain}/.default",
+                    $"https://{TargetTenantConfig.TenantString.TrimEnd('/')}" +
+                        $".sharepoint{TargetTenantConfig.AuthorityDomain}/.default",
                     Offline
                 };
             }
@@ -188,7 +188,7 @@ namespace Extensions.Identity
         {
             get
             {
-                if (ActiveAuth == null)
+                if (TargetTenantConfig == null)
                 {
                     TenantConfig tenantConfig = new TenantConfig();
                     tenantConfig.LoadConfig();
@@ -199,8 +199,8 @@ namespace Extensions.Identity
                 }
                 return new string[]
                 {
-                    $"https://{ActiveAuth.TenantCfg.TenantString.TrimEnd('/')}" +
-                        $"-admin.sharepoint{ActiveAuth.TenantCfg.AuthorityDomain}/.default",
+                    $"https://{TargetTenantConfig.TenantString.TrimEnd('/')}" +
+                        $"-admin.sharepoint{TargetTenantConfig.AuthorityDomain}/.default",
                     Offline
                 };
             }

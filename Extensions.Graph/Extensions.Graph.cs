@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using Extensions.Identity;
 using static Extensions.Constants;
 using static System.Logit;
+using System.IO;
 
 namespace Extensions
 {
@@ -259,20 +260,59 @@ namespace Extensions
         /// </summary>
         /// <param name="driveId">The containing Drive ID.</param>
         /// <param name="itemId">The target item ID.</param>
-        /// <returns>The DriveItem if found, else null.</returns>
-        public static DriveItem GetDriveItem(string driveId,
-                                             string itemId)
+        /// <param name="getFile">A boolean switch to indicate if the original
+        /// Microsoft.Graph.Models.DriveItem is to be returned or the actual
+        /// underlying file.  Defaults to false i.e. the DriveItem is returned
+        /// and not the file.</param>
+        /// <returns>The DriveItem if found and getFile is false, else null.
+        /// If getFile is true the underlying file is returned as a byte array
+        /// of if not found, null is returned.</returns>
+        public static object GetDriveItem(string driveId,
+                                          string itemId,
+                                          bool getFile = false)
         {
-            DriveItem driveItem =
-                AuthMan.ActiveAuth.GraphClient.Drives[driveId]
+            var driveItem = AuthMan.ActiveAuth.GraphClient.Drives[driveId]
                     .Items[itemId]
                     .GetAsync((C) =>
                     {
                         C.Headers.Add("ConsistencyLevel", "eventual");
                     }).GetAwaiter().GetResult();
-            if (driveItem != null)
+            if (!getFile)
             {
-                return driveItem;
+                if (driveItem != null)
+                {
+                    return driveItem;
+                }
+            }
+            else
+            {
+                if (driveItem.Size == null)
+                {
+                    throw new Exception("DriveItem.Size is null.");
+                }
+                var bytes = new byte[(int)driveItem.Size];
+                using (var stream = AuthMan.ActiveAuth.GraphClient.Drives[driveId]
+                           .Items[itemId]
+                           .Content
+                           .GetAsync((C) =>
+                           {
+                               C.Headers.Add("ConsistencyLevel", "eventual");
+                           }).GetAwaiter().GetResult())
+                {
+                    if (stream == null)
+                    {
+                        throw new Exception("DriveItem Content stream is empty.");
+                    }
+                    stream.Position = 0;
+                    int read = stream.Read(bytes, 0, (int)driveItem.Size);
+                    if (read != (int)driveItem.Size)
+                    {
+                        throw new Exception(
+                            $"Expected bytes [{(int)driveItem.Size}]" +
+                            $"Received bytes [{read}]");
+                    }
+                    return bytes;
+                }
             }
             return null;
         }

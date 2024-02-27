@@ -7,8 +7,11 @@
 	- Rearchitected and Optimized.<br>
 	- Rebranded the `Extensions` set of NuGet packages as `GCCHigh.Extensions`.
 
-### **6.1.800 (2024-02-27)**<br>
+### **6.1.800 (2024-02-26)**<br>
 	- Added `ActiveAuth` validation to the `.GetSetting()` method.
 
-### **6.2.800 (2024-02-27)**<br>
+### **6.2.800 (2024-02-26)**<br>
 	- Added `TenantString` capture to the `.InitializeTenant()` method.
+		
+### **6.3.800 (2024-02-27)**<br>
+	- Optimized tenant initialization.

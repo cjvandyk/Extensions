@@ -21,7 +21,7 @@
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>Rebranded Extensions.cs as CsExtensions.</PackageReleaseNotes>
+    <PackageReleaseNotes>Rebranded Extensions.cs as GCCHigh.Extensions.</PackageReleaseNotes>
     <PackageOutputPath>NuGet</PackageOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0|AnyCPU'">
@@ -141,17 +141,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Azure.Identity" Version="1.10.4" />
-    <PackageReference Include="Azure.Storage.Blobs" Version="12.19.1" />
-    <PackageReference Include="GCCHigh.Extensions.Azure" Version="6.0.800" />
-    <PackageReference Include="GCCHigh.Extensions.Constants" Version="6.0.800" />
-    <PackageReference Include="GCCHigh.Extensions.Core" Version="6.0.800" />
-    <PackageReference Include="GCCHigh.Extensions.Graph" Version="6.0.800" />
-    <PackageReference Include="GCCHigh.Extensions.Identity" Version="6.0.800" />
-    <PackageReference Include="GCCHigh.Extensions.Logit" Version="6.0.800" />
-    <PackageReference Include="GCCHigh.Extensions.State" Version="6.0.800" />
-    <PackageReference Include="GCCHigh.Extensions.String" Version="6.0.800" />
-    <PackageReference Include="GCCHigh.Extensions.Telemetry" Version="6.0.800" />
+    <ProjectReference Include="Extensions.Azure\Extensions.Azure.csproj" />
+    <ProjectReference Include="Extensions.State\Extensions.State.csproj" />
+    <ProjectReference Include="Extensions.String\Extensions.String.csproj" />
+    <ProjectReference Include="Extensions.Telemetry\Extensions.Telemetry.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="TenantConfig.json">

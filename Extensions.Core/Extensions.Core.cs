@@ -49,6 +49,7 @@ namespace Extensions
                 }
                 return ActiveAuth.TenantCfg;
             }
+            set { }
         }
 
         /// <summary>
@@ -171,27 +172,15 @@ namespace Extensions
                 }
                 else
                 {
+                    Inf($"Initializing Tenant [{tenantString}]");
                     SetEnv("TenantString", tenantString);
-                }
-                Inf($"Initializing Tenant [{tenantString}]");
-                //Only initialize the tenant if it hasn't already been done.
-                if ((ActiveAuth != null) &&
-                    (Tenants != null) &&
-                    (Tenants.ContainsKey(tenantString)) &&
-                    (Tenants[tenantString].Settings != null))
-                {
-                    Inf($"Tenant [{tenantString}] is already in the pool.  " +
-                        $"Using pool instance.");
-                    GetAuth();
-                }
-                else
-                { 
-                    Tenants.Add(tenantString,
-                                AuthMan.GetAuth(GetEnv("TenantDirectoryId"),
-                                                GetEnv("ApplicationClientId"),
-                                                GetEnv("CertThumbprint"),
-                                                tenantString)
-                                    .TenantCfg);
+                    TenantConfig tenantConfig = new TenantConfig(tenantString);
+                    AuthMan.TargetTenantConfig = tenantConfig;
+                    AuthMan.GetAuth(GetEnv("TenantDirectoryId"),
+                                    GetEnv("ApplicationClientId"),
+                                    GetEnv("CertThumbprint"),
+                                    tenantString,
+                                    ScopeType.Graph);
                 }
                 Inf($"Initializing Tenant [{tenantString}] complete.");
             }

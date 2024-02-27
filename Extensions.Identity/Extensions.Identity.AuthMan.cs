@@ -32,6 +32,11 @@ namespace Extensions.Identity
             = new Dictionary<string, Auth>();
 
         /// <summary>
+        /// The target tenant configuration set.
+        /// </summary>
+        public static TenantConfig TargetTenantConfig { get; set; } = null;
+
+        /// <summary>
         /// The current active Auth object.
         /// </summary>
         public static Auth ActiveAuth { get; set; } = null;
@@ -555,10 +560,6 @@ namespace Extensions.Identity
                 {
                     scopes = ActiveAuth.Scopes;
                 }
-            }
-            else
-            {
-                ActiveAuth.Scopes = scopes;
             }
             //Reset the auth result.
             AuthenticationResult authResult = null;
