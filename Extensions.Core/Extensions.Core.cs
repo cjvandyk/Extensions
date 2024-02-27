@@ -986,7 +986,7 @@ namespace Extensions
         /// <param name="key">The key to use for the instance.</param>
         /// <param name="val">The value to add to the dictionary.</param>
         /// <returns>True if add successful, false if not.</returns>
-        public static bool TryAdd(
+        internal static bool TryAdd(
             this Dictionary<object, object> dic,
             object key,
             object val)
@@ -1013,7 +1013,7 @@ namespace Extensions
         /// <param name="lst">The list to which the object should be added.</param>
         /// <param name="obj">The string to add to the list.</param>
         /// <returns>True if add successful, false if not.</returns>
-        public static bool TryAdd(
+        internal static bool TryAdd(
             this List<string> lst,
             string obj)
         {
@@ -1039,7 +1039,7 @@ namespace Extensions
         /// <param name="lst">The list to which the object should be added.</param>
         /// <param name="obj">The int to add to the list.</param>
         /// <returns>True if add successful, false if not.</returns>
-        public static bool TryAdd(
+        internal static bool TryAdd(
             this List<int> lst,
             int obj)
         {

@@ -393,7 +393,7 @@ namespace Extensions.Identity
         /// <returns>A valid HttpClient using the given 
         /// AuthenticationResult.  If authResult is null, it will return
         /// the HttpClient from the ActiveAuth.</returns>
-        internal static HttpClient GetHttpClient(
+        public static HttpClient GetHttpClient(
             AuthenticationResult authResult = null)
         {
             if (authResult == null)
