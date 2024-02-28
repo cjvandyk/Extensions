@@ -1460,11 +1460,29 @@ namespace Extensions
         /// </summary>
         /// <param name="sitePath">The path to the site 
         /// e.g. "/sites/Research"</param>
-        /// <returns>A GUID value representing the ID of the site.</returns>
-        public static string GetSiteId(string sitePath)
+        /// <param name="throwExceptionIfSiteNotExist">A boolean switch to
+        /// force an exception to be throw if the site in question does not
+        /// exist.  Default is false i.e. no exception is thrown and and empty
+        /// string is simply returned.</param>
+        /// <returns>A GUID value representing the ID of the site, if it 
+        /// exists.  If the site does not exist, either and empty string is
+        /// returned or an exception is thrown, depending on the value of the
+        /// throwExceptionIfSiteNotExist boolean switch.</returns>
+        public static string GetSiteId(
+            string sitePath,
+            bool throwExceptionIfSiteNotExist = false)
         {
-            return (AuthMan.ActiveAuth.GraphClient.Sites[$"root:{sitePath}"]
-                .GetAsync().GetAwaiter().GetResult()).Id;
+            var site = AuthMan.ActiveAuth.GraphClient.Sites[$"root:{sitePath}"]
+                .GetAsync().GetAwaiter().GetResult();
+            if (site != null)
+            {
+                return site.Id;
+            }
+            if (throwExceptionIfSiteNotExist)
+            {
+                throw new Exception($"Site [{sitePath}] does not exist.");
+            }
+            return "";
         }
 
         /// <summary>
