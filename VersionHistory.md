@@ -413,5 +413,14 @@
 	- Changed `.GetHttpClient()` from internal to public.
 	- Made `TryAdd()` on `List<>` and `Dictionary<>` in core internal.
 
-### **6.7.800 (2024-02-27)**<br>
-	- .
+### **6.7.800 (2024-02-28)**<br>
+	- Added handler for sites that don't exist to `.GetSiteId()` in Graph.
+
+### **6.8.800 (2024-02-28)**<br>
+	- Add generic object to `DataContractSerializer` in `State.Load()` and `State.Save()`.<br>
+
+### **6.9.800 (2024-02-28)**<br>
+	- Add generic object to `DataContractSerializer` in `State.Load()` and `State.Save()`.<br>
+
+### **6.10.800 (2024-02-29)**<br>
+	- Added the `Core.GetHttpClient()` relay method.

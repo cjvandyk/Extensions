@@ -61,7 +61,7 @@ namespace Extensions
                             filePath,
                             System.IO.FileMode.Open))
                     {
-                        serializer = new DataContractSerializer(typeof(LoadSaveContainer));
+                        serializer = new DataContractSerializer(typeof(object));
                         lsc = (LoadSaveContainer)serializer.ReadObject(fileStream);
                         return (T)lsc.Value;
                     }
@@ -110,7 +110,7 @@ namespace Extensions
                             filePath,
                             System.IO.FileMode.Create))
                     {
-                        var serializer = new DataContractSerializer(typeof(LoadSaveContainer));
+                        var serializer = new DataContractSerializer(typeof(object));
                             serializer.WriteObject(fileStream, loadSaveContainer);
                             return true;
                     }

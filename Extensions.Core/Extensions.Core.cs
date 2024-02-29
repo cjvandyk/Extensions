@@ -15,6 +15,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using Extensions.Identity;
 using static Extensions.Constants;
+using Microsoft.Identity.Client;
 
 namespace Extensions
 {
@@ -847,6 +848,21 @@ namespace Extensions
             return owners;
         }
         #endregion Group
+
+        #region GetHttpClient
+        /// <summary>
+        /// A method to return a valid HttpClient for the given 
+        /// AuthenticationResult.
+        /// </summary>
+        /// <param name="authResult">The AuthenticationResult to use during
+        /// HttpClient construction.</param>
+        /// <returns>A valid HttpClient using the given 
+        /// AuthenticationResult.</returns>
+        public static HttpClient GetHttpClient(AuthenticationResult authResult)
+        {
+            return AuthMan.GetHttpClient(authResult);
+        }
+        #endregion GetHttpClient
 
         #region GetUser
         /// <summary>
