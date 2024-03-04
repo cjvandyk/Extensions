@@ -389,32 +389,32 @@
 
 ### **6.0.800 (2024-02-26)**<br>
 	- Rearchitected and Optimized.<br>
-	- Rebranded the `Extensions` set of NuGet packages as `GCCHigh.Extensions`.
+	- Rebranded the `Extensions` set of NuGet packages as `GCCHigh.Extensions`.<br>
 
 ### **6.1.800 (2024-02-27)**<br>
-	- Optimized tenant initialization logic in Core.
-	- Added the `getFile` option to `Graph.GetDriveItem()` to allow for retrieval of the underlying binary file.
-	- Added the `TargetTenantConfig` to Identity for initialization optimization.
+	- Optimized tenant initialization logic in Core.<br>
+	- Added the `getFile` option to `Graph.GetDriveItem()` to allow for retrieval of the underlying binary file.<br>
+	- Added the `TargetTenantConfig` to Identity for initialization optimization.<br>
 
 ### **6.2.800 (2024-02-27)**<br>
-	- Optimized logic.
+	- Optimized logic.<br>
 
 ### **6.3.800 (2024-02-27)**<br>
-	- Added CSOM compatibility.
+	- Added CSOM compatibility.<br>
 
 ### **6.5.800 (2024-02-27)**<br>
-	- Added `UserMembershipType` type to Constants.
-	- Added `.GetSiteOwners()` to Graph.
-	- Added `.GetSiteMemers()` to Graph.
-	- Added `.GetSiteUsers()` to Graph.
-	- Fixed `Scopes` in Identity.
+	- Added `UserMembershipType` type to Constants.<br>
+	- Added `.GetSiteOwners()` to Graph.<br>
+	- Added `.GetSiteMemers()` to Graph.<br>
+	- Added `.GetSiteUsers()` to Graph.<br>
+	- Fixed `Scopes` in Identity.<br>
 
 ### **6.6.800 (2024-02-27)**<br>
-	- Changed `.GetHttpClient()` from internal to public.
-	- Made `TryAdd()` on `List<>` and `Dictionary<>` in core internal.
+	- Changed `.GetHttpClient()` from internal to public.<br>
+	- Made `TryAdd()` on `List<>` and `Dictionary<>` in core internal.<br>
 
 ### **6.7.800 (2024-02-28)**<br>
-	- Added handler for sites that don't exist to `.GetSiteId()` in Graph.
+	- Added handler for sites that don't exist to `.GetSiteId()` in Graph.<br>
 
 ### **6.8.800 (2024-02-28)**<br>
 	- Add generic object to `DataContractSerializer` in `State.Load()` and `State.Save()`.<br>
@@ -423,4 +423,13 @@
 	- Add generic object to `DataContractSerializer` in `State.Load()` and `State.Save()`.<br>
 
 ### **6.10.800 (2024-02-29)**<br>
-	- Added the `Core.GetHttpClient()` relay method.
+	- Added the `Core.GetHttpClient()` relay method.<br>
+
+### **6.11.800 (2024-03-02)**<br>
+	- Added a `RUNNING_IN_AZURE` switch to `.GetRunFolder()` method.<br>
+	- Added calling method appendage to `Logit.Log()` to append the name of<br>
+	  the method from which the logging statement was made, to the back of<br>
+	  the message being logged to allow for better trace debugging.<br>
+	- Added the `StackTraceExtensions` class which adds the `.Parent()`,<br>
+	  `.GrandParent()` and `.GreatGrandParent()` methods for getting<br>
+	  parentage method names up the calling stack.<br>
