@@ -9,3 +9,6 @@
 
 ### **6.1.800 (2024-02-27)**<br>
 	- Dependency updates.<br>
+
+### **6.2.800 (2024-02-28)**<br>
+	- Add generic object to `DataContractSerializer` in `State.Load()` and `State.Save()`.<br>
