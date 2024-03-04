@@ -14,3 +14,6 @@
 	- Added `.GetSiteOwners()` to Graph.
 	- Added `.GetSiteMemers()` to Graph.
 	- Added `.GetSiteUsers()` to Graph.
+
+### **6.3.800 (2024-02-28)**<br>
+	- Added handler for sites that don't exist to `.GetSiteId()` in Graph.
