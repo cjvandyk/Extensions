@@ -7,7 +7,7 @@
 The following classes have been extended:
 
     - Extensions.Graph (added)
-    - Microsoft.Graph.Models.ListItem
+    - Microsoft.Graph.Models.ListItem (extended)
 
 with these methods:
 
@@ -17,4 +17,18 @@ with these methods:
 - ### **GetJsonString()**
     > _Exception proof method for returning a string field from JSON._
 
-![Visitor Count](https://profile-counter.glitch.me/{cjvandyk}/count.svg)
+- ### **GetDriveContentSize()**
+    > _Calculates the number of **bytes** contained within a Drive and returns
+       the value as a double._
+
+- ### **GetDriveItem()**
+    > _Gets the Microsoft.Graph.Models.DriveItem object for the given ids.
+       If the boolean switch getFile is set to true, it will instead return
+       the underlying binary file as a byte array._
+
+- ### **GetDriveItems()**
+    > _Gets all the child DriveItem objects of either the Drive or the User.
+       If the boolean switch getFile is set to true, it will instead return
+       the underlying binary file as a byte array._
+
+- ![Visitor Count](https://profile-counter.glitch.me/{cjvandyk}/count.svg)

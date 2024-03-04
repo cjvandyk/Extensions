@@ -38,8 +38,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="GCCHigh.Extensions.Identity" Version="6.5.800" />
-    <PackageReference Include="GCCHigh.Extensions.Logit" Version="6.1.800" />
+    <PackageReference Include="GCCHigh.Extensions.Identity" Version="6.7.800" />
+    <PackageReference Include="GCCHigh.Extensions.Logit" Version="6.2.800" />
     <PackageReference Include="Microsoft.SharePointOnline.CSOM" Version="16.1.24614.12000" />
   </ItemGroup>
 </Project>
