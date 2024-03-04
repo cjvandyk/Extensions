@@ -418,6 +418,27 @@ namespace System
             //Logging code may NEVER terminate its parent through exceptions.
             try
             {
+                //Append the caller method to the back of the message.
+                var stackTrace = new System.Diagnostics.StackTrace();
+                //Iterate the stack trace frames.
+                for (int C = 0; C < stackTrace.FrameCount; C++)
+                {
+                    //Get the method name.
+                    var method = stackTrace.GetFrame(C).GetMethod();
+                    var name = method.DeclaringType.FullName + "." + method.Name;
+                    //Keep traversing up the stack if the method name is any
+                    //of the Extensions logging methods in order to get from
+                    //where logging was actually called.
+                    if ((name != "System.Logit.Log") &&
+                        (name != "System.Logit.Inf") &&
+                        (name != "Extensions.Core.Inf") &&
+                        (name != "Extensions.StackTraceExtensions.Parent"))
+                    {
+                        message += $">>>in>>>[{name}]";
+                        //Found it, now abort traversion.
+                        break;
+                    }
+                }
                 //Check if a debug func was specified.
                 if (isDebugValidationMethod != null)
                 {

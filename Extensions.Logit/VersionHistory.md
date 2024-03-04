@@ -9,3 +9,9 @@
 
 ### **6.1.800 (2024-02-27)**<br>
 	- NuGet dependencies.<br>
+
+### **6.2.800 (2024-03-02)**<br>
+	- NuGet dependencies.<br>
+	- Added calling method appendage to `Logit.Log()` to append the name of<br>
+	  the method from which the logging statement was made, to the back of<br>
+	  the message being logged to allow for better trace debugging.
