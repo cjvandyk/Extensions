@@ -32,6 +32,7 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Style", "IDE0300:Simplify collection initialization", Justification = "CvD")]
 [assembly: SuppressMessage("Style", "IDE0305:Simplify collection initialization", Justification = "CvD")]
 [assembly: SuppressMessage("Style", "IDE1005:Delegate invocation can be simplified.", Justification = "CvD")]
+[assembly: SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "CvD")]
 [assembly: SuppressMessage("Usage", "CA2211:Non-constant fields should not be visible", Justification = "CvD")]
 [assembly: SuppressMessage("Usage", "CA2249:Consider using 'string.Contains' instead of 'string.IndexOf'", Justification = "CvD")]
 [assembly: SuppressMessage("Usage", "CA2254:Template should be a static expression", Justification = "CvD")]

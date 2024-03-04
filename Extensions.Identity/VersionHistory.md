@@ -27,3 +27,6 @@
 
 ### **6.6.800 (2024-02-27)**<br>
 	- Changed `.GetHttpClient()` from internal to public.
+
+### **6.7.800 (2024-03-02)**<br>
+	- Added a `RUNNING_IN_AZURE` switch to `.GetRunFolder()` method.

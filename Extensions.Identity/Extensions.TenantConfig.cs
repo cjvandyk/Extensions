@@ -319,9 +319,27 @@ namespace Extensions
         /// <returns>The folder path.</returns>
         internal static string GetRunFolder()
         {
+            if (GetEnv("RUNNING_IN_AZURE") == "True")
+            {
+                return @"C:\home\site\wwwroot";
+            }
             return System.IO.Path.GetDirectoryName(
                 System.Reflection.Assembly.GetEntryAssembly()
                 .Location.TrimEnd('\\'));  //Ensure no trailing slash.
+        }
+
+        /// <summary>
+        /// A method to get an EnvironmentVariable value.
+        /// </summary>
+        /// <param name="key">The target variable name.</param>
+        /// <returns>The value of the EnvironmentVariable or.</returns>
+        internal static string GetEnv(string key)
+        {
+            if (Environment.GetEnvironmentVariable(key) != null)
+            {
+                return Environment.GetEnvironmentVariable(key);
+            }
+            return null;
         }
     }
 }
