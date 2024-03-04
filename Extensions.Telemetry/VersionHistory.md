@@ -9,3 +9,6 @@
 
 ### **6.1.800 (2024-02-27)**<br>
 	- Dependency updates.<br>
+
+### **6.2.800 (2024-03-03)**<br>
+	- Dependency updates.<br>
