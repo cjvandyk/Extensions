@@ -31,8 +31,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="GCCHigh.Extensions.Graph" Version="6.2.800" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+    <PackageReference Include="GCCHigh.Extensions.Graph" Version="6.3.800" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Images\Extensions-128x128.png">

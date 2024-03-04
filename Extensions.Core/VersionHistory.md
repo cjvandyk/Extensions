@@ -27,3 +27,6 @@
 		
 ### **6.7.800 (2024-02-27)**<br>
 	- Made `TryAdd()` on `List<>` and `Dictionary<>` in core internal.
+		
+### **6.8.800 (2024-02-29)**<br>
+	- Added the `Core.GetHttpClient()` relay method.
