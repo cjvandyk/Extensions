@@ -441,3 +441,6 @@
 	- Drop Microsoft.Extensions dependencies down from version 8 to 6 for Azure<br>
 	  Function compatibility.<br>
 	- Made Logit.Instance.ILogger setter public.<br>
+
+### **6.11.802 (2024-03-05)**<br>
+	- Added `.GetDriveItemVersions()` and `.DownloadVersions()` to `Microsoft.Graph.Models.DriveItem`.<br>
