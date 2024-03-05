@@ -415,6 +415,10 @@ namespace Extensions
         /// <returns>The folder path.</returns>
         public static string GetRunFolder()
         {
+            if (GetEnv("RUNNING_IN_AZURE") == "True")
+            {
+                return @"C:\home\site\wwwroot";
+            }
             return System.IO.Path.GetDirectoryName(
                 System.Reflection.Assembly.GetEntryAssembly()
                 .Location.TrimEnd('\\'));  //Ensure no trailing slash.

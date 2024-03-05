@@ -433,3 +433,11 @@
 	- Added the `StackTraceExtensions` class which adds the `.Parent()`,<br>
 	  `.GrandParent()` and `.GreatGrandParent()` methods for getting<br>
 	  parentage method names up the calling stack.<br>
+
+### **6.11.801 (2024-03-05)**<br>
+	- Added `Identity.Cert.NewSelfSigned()` method to cenerate on demand<br>
+	  self signed certificates that are RSA/SHA512 based.<br>
+	- Added the `RUNNING_IN_AZURE` check to `Core.GetRunFolder()`.
+	- Drop Microsoft.Extensions dependencies down from version 8 to 6 for Azure<br>
+	  Function compatibility.<br>
+	- Made Logit.Instance.ILogger setter public.<br>

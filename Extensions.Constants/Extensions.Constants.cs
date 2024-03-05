@@ -710,6 +710,7 @@ namespace Extensions
         #endregion Substring
 
         #region TimeSpan
+        [Obsolete("Use TimeSpanType instead.")]
         /// <summary>
         /// Enum for the timespan type returned from .Sum()
         /// </summary>
@@ -754,6 +755,62 @@ namespace Extensions
             /// Number of centuries.
             /// </summary>
             Centuries, 
+
+            /// <summary>
+            /// Number of mellinnia.
+            /// </summary>
+            Mellinnia
+        };
+
+        /// <summary>
+        /// The type of timespan.
+        /// </summary>
+        public enum TimeSpanType
+        {
+            /// <summary>
+            /// Number of seconds.
+            /// </summary>
+            Seconds,
+
+            /// <summary>
+            /// Number of minutes.
+            /// </summary>
+            Minutes,
+
+            /// <summary>
+            /// Number of hours.
+            /// </summary>
+            Hours,
+
+            /// <summary>
+            /// Number of days.
+            /// </summary>
+            Days,
+
+            /// <summary>
+            /// Number of weeks.
+            /// </summary>
+            Weeks,
+
+            /// <summary>
+            /// Number of months.
+            /// </summary>
+            Months,
+
+            /// <summary>
+            /// Number of years.
+            /// </summary>
+            Years,
+
+            /// <summary>
+            /// Number of decades.
+            /// </summary>
+            Decades,
+
+            /// <summary>
+            /// Number of centuries.
+            /// </summary>
+            Centuries,
 
             /// <summary>
             /// Number of mellinnia.
