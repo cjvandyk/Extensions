@@ -46,7 +46,7 @@ namespace System
             /// <summary>
             /// The ILogger instance to use for logging.
             /// </summary>
-            public ILogger ILogger { get; private set; } = null;
+            public ILogger ILogger { get; set; } = null;
 
             /// <summary>
             /// A Graph client for logging to SharePoint.

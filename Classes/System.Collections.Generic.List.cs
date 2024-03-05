@@ -28,38 +28,38 @@ namespace Extensions
         /// Contants.TimeSpanSumType enum.</param>
         /// <returns>The Sum of all the TimeSpans in the list, in the
         /// requested format.</returns>
-        public static double Sum(this List<TimeSpan> lst, Constants.TimeSpanSumType type)
+        public static double Sum(this List<TimeSpan> lst, Constants.TimeSpanType type)
         {
             double result = 0;
             foreach (TimeSpan ts in lst)
             {
                 switch (type)
                 {
-                    case Constants.TimeSpanSumType.Seconds:
+                    case Constants.TimeSpanType.Seconds:
                         result += ts.TotalSeconds;
                         break;
-                    case Constants.TimeSpanSumType.Minutes:
+                    case Constants.TimeSpanType.Minutes:
                         result += (ts.TotalSeconds / 60);
                         break;
-                    case Constants.TimeSpanSumType.Hours:
+                    case Constants.TimeSpanType.Hours:
                         result += (ts.TotalSeconds / 60 / 60);
                         break;
-                    case Constants.TimeSpanSumType.Days:
+                    case Constants.TimeSpanType.Days:
                         result += (ts.TotalSeconds / 60 / 60 / 24);
                         break;
-                    case Constants.TimeSpanSumType.Weeks:
+                    case Constants.TimeSpanType.Weeks:
                         result += (ts.TotalSeconds / 60 / 60 / 24 / 7);
                         break;
-                    case Constants.TimeSpanSumType.Years:
+                    case Constants.TimeSpanType.Years:
                         result += (ts.TotalSeconds / 60 / 60 / 24 / 365.25);
                         break;
-                    case Constants.TimeSpanSumType.Decades:
+                    case Constants.TimeSpanType.Decades:
                         result += (ts.TotalSeconds / 60 / 60 / 24 / 365.25 / 10);
                         break;
-                    case Constants.TimeSpanSumType.Centuries:
+                    case Constants.TimeSpanType.Centuries:
                         result += (ts.TotalSeconds / 60 / 60 / 24 / 365.25 / 100);
                         break;
-                    case Constants.TimeSpanSumType.Mellinnia:
+                    case Constants.TimeSpanType.Mellinnia:
                         result += (ts.TotalSeconds / 60 / 60 / 24 / 365.25 / 1000);
                         break;
                 }
