@@ -445,7 +445,15 @@
 ### **6.11.802 (2024-03-05)**<br>
 	- Added `.GetDriveItemVersions()` and `.DownloadVersions()` to `Microsoft.Graph.Models.DriveItem`.<br>
 
-### **6.11.803 (2024-03-05)**<br>
+### **6.11.803 (2024-03-06)**<br>
 	- Added `.GetVersions()` to `Microsoft.Graph.Models.DriveItem`.<br>
 	- Added `Graph.GetSite()` method.<br>
 	- Fixed `Graph.GetSites()` method that never implemented the iterator.<br>
+
+### **6.11.804 (2024-03-06)**<br>
+	- Added `Constants.GraphObjectType`.<br>
+	- Added `consoleFeedback` and `feedbackEvery` parameters to `Graph.GetListItems()`.<br>
+	- Added public `Graph.Get()` generic method for handling multiple kinds of Graph object aggregation.<br>
+	- Added internal `Graph.AddFilterSelect()` method for applying filter and select parameters to dynamic `QueryParameters`.<br>
+	- Added internal `Graph.GetPages()` method for retrieving all pages of a given dynamic `CollectionResponse`.<br>
+

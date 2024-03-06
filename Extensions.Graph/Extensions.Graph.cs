@@ -6,11 +6,16 @@
 /// </summary>
 
 using Microsoft.Graph;
+using Microsoft.Graph.Models;
+using static Microsoft.Graph.Drives.Item.Items.ItemsRequestBuilder;
 using static Microsoft.Graph.Drives.Item.Items.Item.Children.ChildrenRequestBuilder;
 using static Microsoft.Graph.Groups.GroupsRequestBuilder;
-using Microsoft.Graph.Models;
-using static Microsoft.Graph.Users.Item.Drives.DrivesRequestBuilder;
+using static Microsoft.Graph.Sites.Item.Lists.Item.ListItemRequestBuilder;
+using static Microsoft.Graph.Sites.Item.Lists.ListsRequestBuilder;
+using static Microsoft.Graph.Sites.SitesRequestBuilder;
+using static Microsoft.Graph.Teams.TeamsRequestBuilder;
 using static Microsoft.Graph.Users.UsersRequestBuilder;
+using static Microsoft.Graph.Users.Item.Drives.DrivesRequestBuilder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +25,6 @@ using Extensions.Identity;
 using static Extensions.Constants;
 using static Extensions.Identity.AuthMan;
 using static System.Logit;
-using Microsoft.Graph.Models.Security;
 
 namespace Extensions
 {
@@ -1457,6 +1461,313 @@ namespace Extensions
         }
 
         /// <summary>
+        /// A generic async method to retrieve a list of Microsoft.Graph.Models
+        /// objects with optional filter and select parameters applied.  If a
+        /// filter is provided and the filter contains the 'not' clause, this
+        /// method will automatically add the Count = true QueryParameter
+        /// because...
+        /// At present, Graph does not support filtering with NOT
+        /// without using setting Count being equal to true.
+        /// It throws a 400 exception with an HResult of -214623388.
+        /// The message states "Operator 'not' is not supported
+        /// because the required parameters might be missing.
+        /// Try adding $count=true query parameter and
+        /// ConsistencyLevel:eventual header.
+        /// Refer to https://aka.ms/graph-docs/advanced-queries for
+        /// more information."
+        /// </summary>
+        /// <param name="graphObjectType">The type of Microsoft.Graph.Models
+        /// objects to get.</param>
+        /// <param name="optionalParentContainerItem">An optional parameter
+        /// in most cases except when child items are requested e.g. DriveItem
+        /// or ListItem.  In these cases, the parent container object should be
+        /// passed here e.g. a Drive object when DriveItem is targeted and a
+        /// List object when ListItem is targeted.</param>
+        /// <param name="graphClient">An optional authenticated 
+        /// GraphServiceClient to use in the retrieval operation.  If not
+        /// specified, the current active client is used.</param>
+        /// <param name="filter">An optional filter to apply.</param>
+        /// <param name="select">An optional string array of fields to apply
+        /// for selection.</param>
+        /// <returns>Returns a list of Microsoft.Graph.Models objects as
+        /// requested.  The returned object can then be cast by the caller
+        /// for futher processing e.g.
+        /// var sites = Extensions.Graph.Get(GraphObjectType.Site);
+        /// List&lt;Microsoft.Graph.Models.Site&gt; graphSites = 
+        ///     (List&lt;Microsoft.Graph.Models.Site&gt;)sites;
+        /// foreach (Microsoft.Graph.Models.Site site in sites)
+        /// {
+        ///     //Process site here.
+        /// }</returns>
+        public static async Task<object> Get(
+            GraphObjectType graphObjectType,
+            object optionalParentContainerItem = null,
+            GraphServiceClient graphClient = null,
+            string filter = null,
+            string[] select = null)
+        {
+            //Define the aggregation container.
+            List<object> results = new List<object>();
+            //If no GraphServiceClient was provided, default to the active one.
+            if (graphClient == null)
+            {
+                graphClient = ActiveAuth.GraphClient;
+            }
+            dynamic queryParameters = null;
+            dynamic collectionResponse = null;
+            //Process the types.
+            switch (graphObjectType)
+            {
+                case GraphObjectType.Drive:
+                    queryParameters = new DrivesRequestBuilderGetQueryParameters();
+                    //Add the filter and select values.
+                    AddFilterSelect(ref queryParameters, ref filter, ref select);
+                    //Get the first page of the collectionResponse.
+                    collectionResponse = graphClient.Drives
+                        .GetAsync((C) =>
+                        {
+                            C.QueryParameters = queryParameters;
+                            C.Headers.Add("ConsistencyLevel", "eventual");
+                        }).GetAwaiter().GetResult();
+                    break;
+                case GraphObjectType.DriveItem:
+                    queryParameters = new ItemsRequestBuilderGetQueryParameters();
+                    //Add the filter and select values.
+                    AddFilterSelect(ref queryParameters, ref filter, ref select);
+                    //Get the first page of the collectionResponse.
+                    collectionResponse = graphClient.Drives[((Drive)optionalParentContainerItem).Id]
+                        .Items
+                        .GetAsync((C) =>
+                        {
+                            C.QueryParameters = queryParameters;
+                            C.Headers.Add("ConsistencyLevel", "eventual");
+                        }).GetAwaiter().GetResult();
+                    break;
+                case GraphObjectType.Group:
+                    queryParameters = new GroupsRequestBuilderGetQueryParameters();
+                    //Add the filter and select values.
+                    AddFilterSelect(ref queryParameters, ref filter, ref select);
+                    //Get the first page of the collectionResponse.
+                    collectionResponse = graphClient.Groups
+                        .GetAsync((C) =>
+                        {
+                            C.QueryParameters = queryParameters;
+                            C.Headers.Add("ConsistencyLevel", "eventual");
+                        }).GetAwaiter().GetResult();
+                    break;
+                case GraphObjectType.List:
+                    queryParameters = new ListsRequestBuilderGetQueryParameters();
+                    //Add the filter and select values.
+                    AddFilterSelect(ref queryParameters, ref filter, ref select);
+                    //Get the first page of the collectionResponse.
+                    collectionResponse = graphClient.Sites[((Site)optionalParentContainerItem).Id]
+                        .Lists
+                        .GetAsync((C) =>
+                        {
+                            C.QueryParameters = queryParameters;
+                            C.Headers.Add("ConsistencyLevel", "eventual");
+                        }).GetAwaiter().GetResult();
+                    break;
+                case GraphObjectType.ListItem:
+                    queryParameters = new ListItemRequestBuilderGetQueryParameters();
+                    //Add the filter and select values.
+                    AddFilterSelect(ref queryParameters, ref filter, ref select);
+                    //Get the first page of the collectionResponse.
+                    collectionResponse = graphClient.Sites[((List)optionalParentContainerItem).ParentReference.SiteId]
+                        .Lists[((List)optionalParentContainerItem).Id]
+                        .Items
+                        .GetAsync((C) =>
+                        {
+                            C.QueryParameters = queryParameters;
+                            C.Headers.Add("ConsistencyLevel", "eventual");
+                        }).GetAwaiter().GetResult();
+                    break;
+                case GraphObjectType.Site:
+                    queryParameters = new SitesRequestBuilderGetQueryParameters();
+                    //Add the filter and select values.
+                    AddFilterSelect(ref queryParameters, ref filter, ref select);
+                    //Get the first page of the collectionResponse.
+                    collectionResponse = graphClient.Sites
+                        .GetAsync((C) =>
+                        {
+                            C.QueryParameters = queryParameters;
+                            C.Headers.Add("ConsistencyLevel", "eventual");
+                        }).GetAwaiter().GetResult();
+                    break;
+                case GraphObjectType.Team:
+                    queryParameters = new TeamsRequestBuilderGetQueryParameters();
+                    //Add the filter and select values.
+                    AddFilterSelect(ref queryParameters, ref filter, ref select);
+                    //Get the first page of the collectionResponse.
+                    collectionResponse = graphClient.Teams
+                        .GetAsync((C) =>
+                        {
+                            C.QueryParameters = queryParameters;
+                            C.Headers.Add("ConsistencyLevel", "eventual");
+                        }).GetAwaiter().GetResult();
+                    break;
+                case GraphObjectType.User:
+                    queryParameters = new UsersRequestBuilderGetQueryParameters();
+                    //Add the filter and select values.
+                    AddFilterSelect(ref queryParameters, ref filter, ref select);
+                    //Get the first page of the collectionResponse.
+                    collectionResponse = graphClient.Users
+                        .GetAsync((C) =>
+                        {
+                            C.QueryParameters = queryParameters;
+                            C.Headers.Add("ConsistencyLevel", "eventual");
+                        }).GetAwaiter().GetResult();
+                    break;
+            }
+            //Aggregate all subsequent pages.
+            GetPages(ref results, collectionResponse, graphObjectType, graphClient);
+            return results;
+        }
+
+        /// <summary>
+        /// Internal method to process optional filter and select values
+        /// with the given queryParameters.
+        /// </summary>
+        /// <param name="queryParameters">A reference to a dynamic 
+        /// QueryParameters value that varies based on the type of objects
+        /// being processed.</param>
+        /// <param name="filter">An optional filter to apply.</param>
+        /// <param name="select">An optional string array of fields to apply
+        /// for selection.</param>
+        internal static void AddFilterSelect(ref dynamic queryParameters,
+                                             ref string filter,
+                                             ref string[] select)
+        {
+            //If there is a filter value.
+            if (filter != null)
+            {
+                //Apply the filter value.
+                queryParameters.Filter = filter;
+                //Check if the filter contains the word 'not'.
+                if (filter.ToLower().Contains("not"))
+                {
+                    //If it does, set the Count parameter to true.
+                    queryParameters.Count = true;
+                }
+            }
+            //If there is a select value.
+            if (select != null)
+            {
+                //Apply the select value.
+                queryParameters.Select = select;
+            }
+        }
+
+        /// <summary>
+        /// Internal method to aggregate the paged responses for the given
+        /// Microsoft.Graph.Models object's CollectionResponse to the 
+        /// referenced list.
+        /// </summary>
+        /// <param name="list">A reference to the aggregation container.</param>
+        /// <param name="collectionResponse">A CollectionResponse type of
+        /// object.</param>
+        /// <param name="graphObjectType">The type of object represented by
+        /// the collectionResponse.</param>
+        /// <param name="graphClient">An authenticated GraphServiceClient to
+        /// use in the retrieval operation.</param>
+        internal static void GetPages(ref List<object> list,
+                                      dynamic collectionResponse,
+                                      GraphObjectType graphObjectType,
+                                      GraphServiceClient graphClient)
+        {
+            //If there is data.
+            while (collectionResponse.Value != null)
+            {
+                //Lock the aggregation container and add it.
+                lock (list)
+                {
+                    list.AddRange(collectionResponse.Value);
+                }
+                //If there are more pages to query.
+                if (!string.IsNullOrEmpty(collectionResponse.OdataNextLink))
+                {
+                    //Process subsequent pages based on the type.
+                    switch (graphObjectType)
+                    {
+                        case GraphObjectType.Drive:
+                            collectionResponse = graphClient.Drives
+                                .WithUrl(((DriveCollectionResponse)collectionResponse).OdataNextLink)
+                                .GetAsync((C) =>
+                                {
+                                    C.Headers.Add("ConsistencyLevel", "eventual");
+                                }).GetAwaiter().GetResult();
+                            break;
+                        case GraphObjectType.DriveItem:
+                            collectionResponse = graphClient.Drives[((DriveItem)list[0]).ParentReference.DriveId]
+                                .Items
+                                .WithUrl(((DriveItemCollectionResponse)collectionResponse).OdataNextLink)
+                                .GetAsync((C) =>
+                                {
+                                    C.Headers.Add("ConsistencyLevel", "eventual");
+                                }).GetAwaiter().GetResult();
+                            break;
+                        case GraphObjectType.Group:
+                            collectionResponse = graphClient.Groups
+                                .WithUrl(((GroupCollectionResponse)collectionResponse).OdataNextLink)
+                                .GetAsync((C) =>
+                                {
+                                    C.Headers.Add("ConsistencyLevel", "eventual");
+                                }).GetAwaiter().GetResult();
+                            break;
+                        case GraphObjectType.List:
+                            collectionResponse = graphClient.Sites[((List)list[0]).ParentReference.SiteId]
+                                .Lists
+                                .WithUrl(((ListCollectionResponse)collectionResponse).OdataNextLink)
+                                .GetAsync((C) =>
+                                {
+                                    C.Headers.Add("ConsistencyLevel", "eventual");
+                                }).GetAwaiter().GetResult();
+                            break;
+                        case GraphObjectType.ListItem:
+                            collectionResponse = graphClient.Sites[((ListItem)list[0]).ParentReference.SiteId]
+                                .Lists[((ListItem)list[0]).ParentReference.Id]
+                                .Items
+                                .WithUrl(((ListItemCollectionResponse)collectionResponse).OdataNextLink)
+                                .GetAsync((C) =>
+                                {
+                                    C.Headers.Add("ConsistencyLevel", "eventual");
+                                }).GetAwaiter().GetResult();
+                            break;
+                        case GraphObjectType.Site:
+                            collectionResponse = graphClient.Sites
+                                .WithUrl(((SiteCollectionResponse)collectionResponse).OdataNextLink)
+                                .GetAsync((C) =>
+                                {
+                                    C.Headers.Add("ConsistencyLevel", "eventual");
+                                }).GetAwaiter().GetResult();
+                            break;
+                        case GraphObjectType.Team:
+                            collectionResponse = graphClient.Teams
+                                .WithUrl(((TeamCollectionResponse)collectionResponse).OdataNextLink)
+                                .GetAsync((C) =>
+                                {
+                                    C.Headers.Add("ConsistencyLevel", "eventual");
+                                }).GetAwaiter().GetResult();
+                            break;
+                        case GraphObjectType.User:
+                            collectionResponse = graphClient.Users
+                                .WithUrl(((UserCollectionResponse)collectionResponse).OdataNextLink)
+                                .GetAsync((C) =>
+                                {
+                                    C.Headers.Add("ConsistencyLevel", "eventual");
+                                }).GetAwaiter().GetResult();
+                            break;
+                    }
+                }
+                else
+                {
+                    //No more pages so break out.
+                    break;
+                }
+            }
+        }
+
+        /// <summary>
         /// Get the site ID (GUID) of the specified site.
         /// </summary>
         /// <param name="sitePath">The path to the site 
@@ -1590,12 +1901,23 @@ namespace Extensions
         /// defaults to null and in such case, will result in all items being
         /// returned.</param>
         /// <param name="filter">The filter syntax to use.</param>
+        /// <param name="consoleFeedback">An optional boolean parameter that
+        /// controls if console feedback is provided as list item aggregation
+        /// it taking place.</param>
+        /// <param name="feedbackEvery">An optional integer that is used in
+        /// conjunction with consoleFeedback to provide the mod value for
+        /// controlling the console feedback frequency.  Defaults to 1000 i.e.
+        /// console feedback is only done every 1000 items.  Increase this
+        /// value for less frequent console feedback or decreate it for more
+        /// frequent and chatty console feedback.</param>
         /// <returns>A list of ListItem containing the item(s).</returns>
         public static List<ListItem> GetListItems(
             string listName,
             string sitePath,
             string id = null,
-            string filter = null)
+            string filter = null,
+            bool consoleFeedback = true,
+            int feedbackEvery = 1000)
         {
             //Create the aggregation container.
             List<ListItem> listItems = new List<ListItem>();
@@ -1651,6 +1973,11 @@ namespace Extensions
                             (listItem) =>
                             {
                                 listItems.Add(listItem);
+                                if ((consoleFeedback) &&
+                                    (listItems.Count % feedbackEvery == 0))
+                                {
+                                    Inf($"Retrieved [{listItems.Count}] items - {listItem.WebUrl}");
+                                }
                                 return true;
                             });
                     pageIterator.IterateAsync().GetAwaiter().GetResult();
