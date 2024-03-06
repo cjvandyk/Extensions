@@ -19,6 +19,45 @@ namespace Extensions
     {
         /// <summary>
         /// A method to download all the historical binary versions of a
+        /// Microsoft.Graph.Models.DriveItem object to a specified folder or
+        /// if no folder is specified, to the current user's Downloads folder.
+        /// </summary>
+        /// <param name="driveItem">The target DriveItem to use for getting 
+        /// versions.</param>
+        /// <param name="graphClient">An authenticated GraphServiceClient to
+        /// use in the retrieval operation.</param>
+        /// <param name="downloadPath">An optional string parameter to specify
+        /// the target download folder.  NOTE: The folder must already exist
+        /// and the current user must have write permissions to it.</param>
+        /// <returns>An integer representing the number of files that was
+        /// downloaded.</returns>
+        public static int DownloadVersions(this DriveItem driveItem,
+                                           GraphServiceClient graphClient,
+                                           string downloadPath = "")
+        {
+            //If no downloadPath was specified, default to the user's Downloads.
+            if (downloadPath == "")
+            {
+                downloadPath = "%appdata%\\..\\..\\Downloads\\";
+            }
+            else
+            {
+                //If specified, ensure the downloadPath ends in a backslash.
+                downloadPath = downloadPath.TrimEnd('\\') + "\\";
+            }
+            //Get the versions.
+            var versions = driveItem.GetVersions(graphClient);
+            //Iterate the versions and write to file.
+            foreach (var version in versions)
+            {
+                System.IO.File.WriteAllBytes(downloadPath + version.Key, 
+                                             version.Value);
+            }
+            return versions.Count;
+        }
+
+        /// <summary>
+        /// A method to get all the historical binary versions of a
         /// Microsoft.Graph.Models.DriveItem object.
         /// </summary>
         /// <param name="driveItem">The target DriveItem to use for getting 
@@ -29,7 +68,7 @@ namespace Extensions
         /// DriveItem.</returns>
         /// <exception cref="Exception">Exceptions are thrown if version
         /// information is corrupted.</exception>
-        public static System.Collections.Generic.Dictionary<string, byte[]> DownloadVersions(
+        public static System.Collections.Generic.Dictionary<string, byte[]> GetVersions(
             this DriveItem driveItem,
             GraphServiceClient graphClient)
         {
@@ -39,6 +78,8 @@ namespace Extensions
             //Get the list of DriveItemVersion objects.
             var driveItemVersions = driveItem.GetDriveItemVersions(ref graphClient);
             //Iterate each version in the list and process.
+            bool currentVersion = true;
+            int versionNumber = driveItemVersions.Count;
             foreach (var driveItemVersion in driveItemVersions)
             {
                 //Ensure the version has a valid size.
@@ -50,31 +91,42 @@ namespace Extensions
                 //Define the receiving buffer for the version file.
                 var bytes = new byte[(int)driveItemVersion.Size];
                 //Open a stream to the version file.
-                using (var stream = graphClient
-                    .Drives[driveItem.ParentReference.DriveId]
-                    .Items[driveItemVersion.Id]
-                    .Content
-                    .GetAsync((C) =>
-                    {
-                        C.Headers.Add("ConsistencyLevel", "eventual");
-                    }).GetAwaiter().GetResult())
+                System.IO.Stream stream = null;
+                if (currentVersion)
                 {
-                    //Ensure the stream is valid.
-                    if (stream == null)
-                    {
-                        throw new Exception("DriveItem Content stream is empty.");
-                    }
-                    //Ensure stream is at the beginning.
-                    stream.Position = 0;
-                    //Read the stream to the buffer.
-                    int read = stream.Read(bytes, 0, (int)driveItemVersion.Size);
-                    //Ensure the bytes read match the size reported.
-                    if (read != (int)driveItemVersion.Size)
-                    {
-                        throw new Exception(
-                            $"Expected bytes [{(int)driveItemVersion.Size}] " +
-                            $"Received bytes [{read}]");
-                    }
+                    stream = graphClient
+                        .Drives[driveItem.ParentReference.DriveId]
+                        .Items[driveItem.Id]
+                        .Content
+                        .GetAsync((C) =>
+                        {
+                            C.Headers.Add("ConsistencyLevel", "eventual");
+                        }).GetAwaiter().GetResult();
+                    currentVersion = false;
+                }
+                else
+                {
+                    stream = graphClient
+                        .Drives[driveItem.ParentReference.DriveId]
+                        .Items[driveItem.Id]
+                        .Versions[driveItemVersion.Id]
+                        .Content
+                        .GetAsync((C) =>
+                        {
+                            C.Headers.Add("ConsistencyLevel", "eventual");
+                        }).GetAwaiter().GetResult();
+                }
+                //Ensure the stream is valid.
+                if (stream == null)
+                {
+                    throw new Exception("DriveItem Content stream is empty.");
+                }
+                //Read the stream to the buffer.
+                int read = stream.Read(bytes, 0, (int)driveItemVersion.Size);
+                //Ensure the bytes read match the size reported.
+                if (read != (int)driveItemVersion.Size)
+                {
+                    byte[] file = bytes.CopyTo(read);
                     //Lock the aggregation container before aggregating results.
                     lock (driveItemVersionsBytes)
                     {
@@ -82,9 +134,27 @@ namespace Extensions
                         //DriveItem as well as the modification date/time of
                         //the DriveItemVersion in string format.
                         driveItemVersionsBytes.Add(
-                            driveItem.Name + "-" + Convert.ToDateTime(
-                                driveItemVersion.LastModifiedDateTime)
-                                .ToString("yyyyMMdd-HHmmss.fff"), bytes);
+                            driveItem.Name + "-" +
+                                driveItemVersion.LastModifiedDateTime
+                                .Value.DateTime
+                                .ToString("yyyyMMdd-HHmmss.fff"),
+                            file);
+                    }
+                }
+                else
+                {
+                    //Lock the aggregation container before aggregating results.
+                    lock (driveItemVersionsBytes)
+                    {
+                        //Aggregate to the dictionary using the name of the 
+                        //DriveItem as well as the modification date/time of
+                        //the DriveItemVersion in string format.
+                        driveItemVersionsBytes.Add(
+                            driveItem.Name + "-" +
+                                driveItemVersion.LastModifiedDateTime
+                                .Value.DateTime
+                                .ToString("yyyyMMdd-HHmmss.fff"),
+                            bytes);
                     }
                 }
             }

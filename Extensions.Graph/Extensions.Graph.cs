@@ -20,6 +20,7 @@ using Extensions.Identity;
 using static Extensions.Constants;
 using static Extensions.Identity.AuthMan;
 using static System.Logit;
+using Microsoft.Graph.Models.Security;
 
 namespace Extensions
 {
@@ -1486,6 +1487,29 @@ namespace Extensions
         }
 
         /// <summary>
+        /// A method to return the Microsoft.Graph.Models.Site object for a
+        /// target site given it's relative path e.g. "/sites/Research".
+        /// </summary>
+        /// <param name="sitePath">The relative site path e.g. "/sites/Research".</param>
+        /// <returns>The Site object if the site exists, else null.</returns>
+        /// <exception cref="Exception">An exception is thrown if the value of
+        /// sitePath is not a relative site path.</exception>
+        public static Site GetSite(string sitePath)
+        {
+            if ((string.IsNullOrEmpty(sitePath)) ||
+                (sitePath.ToLower().Substring(0, 7) != "/sites/"))
+            {
+                throw new Exception($"Parameter [sitePath] has value " +
+                    $"[{sitePath}] but it must start with \"/sites/\".");
+            }
+            return AuthMan.ActiveAuth.GraphClient.Sites[$"root:{sitePath}"]
+                .GetAsync((C) =>
+                {
+                    C.Headers.Add("ConsistencyLevel", "eventual");
+                }).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
         /// Get a list of all sites in SharePoint.
         /// </summary>
         /// <returns>A list of all sites in SharePoint.</returns>
@@ -1505,6 +1529,7 @@ namespace Extensions
                         sites.Add(site);
                         return true;
                     });
+            pageIterator.IterateAsync().GetAwaiter().GetResult();
             Inf(sites.Count.ToString());
             return sites;
         }
