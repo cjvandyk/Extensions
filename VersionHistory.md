@@ -444,3 +444,8 @@
 
 ### **6.11.802 (2024-03-05)**<br>
 	- Added `.GetDriveItemVersions()` and `.DownloadVersions()` to `Microsoft.Graph.Models.DriveItem`.<br>
+
+### **6.11.803 (2024-03-05)**<br>
+	- Added `.GetVersions()` to `Microsoft.Graph.Models.DriveItem`.<br>
+	- Added `Graph.GetSite()` method.<br>
+	- Fixed `Graph.GetSites()` method that never implemented the iterator.<br>
