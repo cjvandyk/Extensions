@@ -211,10 +211,14 @@ namespace Extensions
             this List<T> lst,
             int count)
         {
+            //Make a copy of the list.
             List<T> lstCopy = lst.ToList();
+            //If the list contains fewer items than requested.
             if (lst.Count < count)
             {
+                //Reset the current list object.
                 lst = new List<T>();
+                //Return the copy.
                 return lstCopy;
             }
             List<T> result = new List<T>();
