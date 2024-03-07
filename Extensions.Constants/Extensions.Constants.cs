@@ -364,6 +364,28 @@ namespace Extensions
         }
 
         /// <summary>
+        /// The types of parent containers that could hold 
+        /// Microsoft.Graph.Models.Drive child items.
+        /// </summary>
+        public enum GraphDriveParentType
+        {
+            /// <summary>
+            /// A Microsoft.Graph.Models.Group parent.
+            /// </summary>
+            Group,
+
+            /// <summary>
+            /// A Microsoft.Graph.Models.Site parent.
+            /// </summary>
+            Site,
+
+            /// <summary>
+            /// A Microsoft.Graph.Models.User parent.
+            /// </summary>
+            User
+        }
+
+        /// <summary>
         /// The types of Microsoft.Graph.Models objects that can be returned
         /// through the generic Extensions.Graph.Get() method.
         /// </summary>

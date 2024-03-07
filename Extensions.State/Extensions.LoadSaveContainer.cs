@@ -17,10 +17,11 @@ namespace Extensions
     /// .Save().
     /// </summary>
     [Serializable]
-    [DataContract]
     [KnownType(typeof(object))]
     [KnownType(typeof(List<DriveItem>))]
     [KnownType(typeof(System.Text.Json.JsonElement))]
+    [KnownType(typeof(LoadSaveContainer))]
+    [DataContract]
     public class LoadSaveContainer
     {
         /// <summary>

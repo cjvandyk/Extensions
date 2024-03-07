@@ -7,14 +7,7 @@
 
 using Microsoft.Graph;
 using Microsoft.Graph.Models;
-using static Microsoft.Graph.Drives.Item.Items.ItemsRequestBuilder;
 using static Microsoft.Graph.Drives.Item.Items.Item.Children.ChildrenRequestBuilder;
-using static Microsoft.Graph.Groups.GroupsRequestBuilder;
-using static Microsoft.Graph.Sites.Item.Lists.Item.ListItemRequestBuilder;
-using static Microsoft.Graph.Sites.Item.Lists.ListsRequestBuilder;
-using static Microsoft.Graph.Sites.SitesRequestBuilder;
-using static Microsoft.Graph.Teams.TeamsRequestBuilder;
-using static Microsoft.Graph.Users.UsersRequestBuilder;
 using static Microsoft.Graph.Users.Item.Drives.DrivesRequestBuilder;
 using System;
 using System.Collections.Generic;
@@ -66,6 +59,41 @@ namespace Extensions
         public static List<Drive> GetDrives()
         {
             return GetDrives("", "", null);
+        }
+
+        public static List<Drive> GetDrives(this Group group)
+        {
+            return ConvertObjToDrive((List<object>)Get(
+                GraphObjectType.Drive,
+                GraphDriveParentType.Group,
+                group)
+                .GetAwaiter().GetResult());
+        }
+
+        public static List<Drive> GetDrives(this Site site)
+        {
+            return ConvertObjToDrive((List<object>)Get(
+                GraphObjectType.Drive,
+                GraphDriveParentType.Site,
+                site).GetAwaiter().GetResult());
+        }
+
+        public static List<Drive> GetDrives(this User user)
+        {
+            return ConvertObjToDrive((List<object>)Get(
+                GraphObjectType.Drive,
+                GraphDriveParentType.User,
+                user).GetAwaiter().GetResult());
+        }
+
+        internal static List<Drive> ConvertObjToDrive(List<object> objs)
+        {
+            List<Drive> drives = new List<Drive>();
+            foreach (object obj in objs)
+            {
+                drives.Add((Drive)obj);
+            }
+            return drives;
         }
 
         public static List<Drive> GetDrives(string[] select = null)
@@ -583,7 +611,8 @@ namespace Extensions
         /// <returns>The Group object if found, else null.</returns>
         public static Group GetGroup(string name, string[] fields = null)
         {
-            var queryParameters = new GroupsRequestBuilderGetQueryParameters();
+            var queryParameters = new Microsoft.Graph.Groups.GroupsRequestBuilder
+                .GroupsRequestBuilderGetQueryParameters();
             queryParameters.Filter = $"displayName eq '{name}'";
             if (fields != null)
             {
@@ -660,18 +689,16 @@ namespace Extensions
         {
             while (groupsPage.Value != null)
             {
-                foreach (var group in groupsPage.Value)
-                {
-                    lock (groups)
-                    {
-                        groups.Add(group);
-                    }
-                }
+                groups.AddRange(groupsPage.Value);                
                 if (!string.IsNullOrEmpty(groupsPage.OdataNextLink))
                 {
                     groupsPage = AuthMan.ActiveAuth.GraphClient.Groups
                         .WithUrl(groupsPage.OdataNextLink)
                         .GetAsync().GetAwaiter().GetResult();
+                }
+                else
+                {
+                    break;
                 }
                 WriteCount(groups.Count);
             }
@@ -685,23 +712,36 @@ namespace Extensions
         public static List<Group> GetGroups()
         {
             var groups = new List<Group>();
-            List<string> starters = new List<string>()
+            List<string> starterStrings = new List<string>()
             {
                 "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o",
                 "p","q","r","s","t","u","v","w","x","y","z","1","2","3","4",
                 "5","6","7","8","9","0"
             };
-            foreach (var starter in starters)
+            int divisor = (int)((double)(Environment.ProcessorCount / 2.25));
+            if (divisor > 1)
             {
-                GetGroups(
-                    ref groups, 
-                    $"startswith(displayName, '{starter}')");
+                List<string> starters;
+                while (starterStrings.Count > 0)
+                {
+                    starters = starterStrings.TakeAndRemove(divisor);
+                    Parallel.ForEach(starters, starter =>
+                    {
+                        GetGroups(ref groups, $"startswith(displayName, '{starter}')");
+                    });
+                    Inf($"[{groups.Count}] Groups, " +
+                        $"[{starterStrings.Count}] starterStrings remain.");
+                }
             }
-            //Parallel.ForEach(starters, starter =>
-            //{
-            //    GetGroups(ref groups, $"startswith(displayName, '{starter}')");
-            //});
-            Inf(groups.Count.ToString());
+            else
+            {
+                foreach (var starter in starterStrings)
+                {
+                    GetGroups(ref groups,
+                              $"startswith(displayName, '{starter}')");
+                    Inf($"[{groups.Count}] Groups");
+                }
+            }
             return groups;
         }
 
@@ -714,7 +754,8 @@ namespace Extensions
         /// <returns>The User object if found, else null.</returns>
         public static User GetUser(string key, string[] fields = null)
         {            
-            var queryParameters = new UsersRequestBuilderGetQueryParameters();
+            var queryParameters = new Microsoft.Graph.Users.UsersRequestBuilder
+                .UsersRequestBuilderGetQueryParameters();
             if (System.Guid.TryParse(key, out var id))
             {
                 queryParameters.Filter = $"id eq '{key}'";
@@ -1478,11 +1519,22 @@ namespace Extensions
         /// </summary>
         /// <param name="graphObjectType">The type of Microsoft.Graph.Models
         /// objects to get.</param>
+        /// <param name="parentType">The type of parent container object.  This
+        /// values defaults to Site and is only relevant when the requested
+        /// GraphObjectType is Drive in which case the the value of the
+        /// optionalParentContainerItem is no longer optional i.e. if getting
+        /// drives and the parentType is Group, the value being passed in
+        /// optionalParentContainerItem must be a Group.</param>
         /// <param name="optionalParentContainerItem">An optional parameter
         /// in most cases except when child items are requested e.g. DriveItem
         /// or ListItem.  In these cases, the parent container object should be
         /// passed here e.g. a Drive object when DriveItem is targeted and a
-        /// List object when ListItem is targeted.</param>
+        /// List object when ListItem is targeted.  When the GraphObjectType
+        /// being targeted is Drive, this value is no longer optional i.e. if 
+        /// getting drives and the parentType is Group, the value being passed
+        /// in optionalParentContainerItem must be a Group.  Similarly when
+        /// parentType is Site, the parameter must be a Site and when the
+        /// parentType is User, this parameter must be a User.</param>
         /// <param name="graphClient">An optional authenticated 
         /// GraphServiceClient to use in the retrieval operation.  If not
         /// specified, the current active client is used.</param>
@@ -1501,6 +1553,7 @@ namespace Extensions
         /// }</returns>
         public static async Task<object> Get(
             GraphObjectType graphObjectType,
+            GraphDriveParentType parentType = GraphDriveParentType.Site,
             object optionalParentContainerItem = null,
             GraphServiceClient graphClient = null,
             string filter = null,
@@ -1519,19 +1572,58 @@ namespace Extensions
             switch (graphObjectType)
             {
                 case GraphObjectType.Drive:
-                    queryParameters = new DrivesRequestBuilderGetQueryParameters();
-                    //Add the filter and select values.
-                    AddFilterSelect(ref queryParameters, ref filter, ref select);
-                    //Get the first page of the collectionResponse.
-                    collectionResponse = graphClient.Drives
-                        .GetAsync((C) =>
-                        {
-                            C.QueryParameters = queryParameters;
-                            C.Headers.Add("ConsistencyLevel", "eventual");
-                        }).GetAwaiter().GetResult();
+                    switch (parentType)
+                    {
+                        case GraphDriveParentType.Group:
+                            queryParameters = new Microsoft.Graph.Groups.Item.Drives
+                                .DrivesRequestBuilder.DrivesRequestBuilderGetQueryParameters();
+                            //Add the filter and select values.
+                            AddFilterSelect(ref queryParameters, ref filter, ref select);
+                            //Get the first page of the collectionResponse.
+                            collectionResponse = graphClient.Groups[
+                                ((Group)optionalParentContainerItem).Id]
+                                .Drives
+                                .GetAsync((C) =>
+                                {
+                                    C.QueryParameters = queryParameters;
+                                    C.Headers.Add("ConsistencyLevel", "eventual");
+                                }).GetAwaiter().GetResult();
+                            break;
+                        case GraphDriveParentType.Site:
+                            queryParameters = new Microsoft.Graph.Sites.Item.Drives
+                                .DrivesRequestBuilder.DrivesRequestBuilderGetQueryParameters();
+                            //Add the filter and select values.
+                            AddFilterSelect(ref queryParameters, ref filter, ref select);
+                            //Get the first page of the collectionResponse.
+                            collectionResponse = graphClient.Sites[
+                                ((Site)optionalParentContainerItem).Id.Split(',')[1]]
+                                .Drives
+                                .GetAsync((C) =>
+                                {
+                                    C.QueryParameters = queryParameters;
+                                    C.Headers.Add("ConsistencyLevel", "eventual");
+                                }).GetAwaiter().GetResult();
+                            break;
+                        case GraphDriveParentType.User:
+                            queryParameters = new Microsoft.Graph.Users.Item.Drives
+                                .DrivesRequestBuilder.DrivesRequestBuilderGetQueryParameters();
+                            //Add the filter and select values.
+                            AddFilterSelect(ref queryParameters, ref filter, ref select);
+                            //Get the first page of the collectionResponse.
+                            collectionResponse = graphClient.Sites[
+                                ((User)optionalParentContainerItem).Id]
+                                .Drives
+                                .GetAsync((C) =>
+                                {
+                                    C.QueryParameters = queryParameters;
+                                    C.Headers.Add("ConsistencyLevel", "eventual");
+                                }).GetAwaiter().GetResult();
+                            break;
+                    }
                     break;
                 case GraphObjectType.DriveItem:
-                    queryParameters = new ItemsRequestBuilderGetQueryParameters();
+                    queryParameters = new Microsoft.Graph.Drives.Item.Items.ItemsRequestBuilder
+                        .ItemsRequestBuilderGetQueryParameters();
                     //Add the filter and select values.
                     AddFilterSelect(ref queryParameters, ref filter, ref select);
                     //Get the first page of the collectionResponse.
@@ -1544,7 +1636,8 @@ namespace Extensions
                         }).GetAwaiter().GetResult();
                     break;
                 case GraphObjectType.Group:
-                    queryParameters = new GroupsRequestBuilderGetQueryParameters();
+                    queryParameters = new Microsoft.Graph.Groups.GroupsRequestBuilder
+                        .GroupsRequestBuilderGetQueryParameters();
                     //Add the filter and select values.
                     AddFilterSelect(ref queryParameters, ref filter, ref select);
                     //Get the first page of the collectionResponse.
@@ -1556,7 +1649,8 @@ namespace Extensions
                         }).GetAwaiter().GetResult();
                     break;
                 case GraphObjectType.List:
-                    queryParameters = new ListsRequestBuilderGetQueryParameters();
+                    queryParameters = new Microsoft.Graph.Sites.Item.Lists.ListsRequestBuilder
+                        .ListsRequestBuilderGetQueryParameters();
                     //Add the filter and select values.
                     AddFilterSelect(ref queryParameters, ref filter, ref select);
                     //Get the first page of the collectionResponse.
@@ -1569,7 +1663,8 @@ namespace Extensions
                         }).GetAwaiter().GetResult();
                     break;
                 case GraphObjectType.ListItem:
-                    queryParameters = new ListItemRequestBuilderGetQueryParameters();
+                    queryParameters = new Microsoft.Graph.Sites.Item.Lists.Item.ListItemRequestBuilder
+                        .ListItemRequestBuilderGetQueryParameters();
                     //Add the filter and select values.
                     AddFilterSelect(ref queryParameters, ref filter, ref select);
                     //Get the first page of the collectionResponse.
@@ -1583,7 +1678,8 @@ namespace Extensions
                         }).GetAwaiter().GetResult();
                     break;
                 case GraphObjectType.Site:
-                    queryParameters = new SitesRequestBuilderGetQueryParameters();
+                    queryParameters = new Microsoft.Graph.Sites.SitesRequestBuilder
+                        .SitesRequestBuilderGetQueryParameters();
                     //Add the filter and select values.
                     AddFilterSelect(ref queryParameters, ref filter, ref select);
                     //Get the first page of the collectionResponse.
@@ -1595,7 +1691,8 @@ namespace Extensions
                         }).GetAwaiter().GetResult();
                     break;
                 case GraphObjectType.Team:
-                    queryParameters = new TeamsRequestBuilderGetQueryParameters();
+                    queryParameters = new Microsoft.Graph.Teams.TeamsRequestBuilder
+                        .TeamsRequestBuilderGetQueryParameters();
                     //Add the filter and select values.
                     AddFilterSelect(ref queryParameters, ref filter, ref select);
                     //Get the first page of the collectionResponse.
@@ -1607,7 +1704,8 @@ namespace Extensions
                         }).GetAwaiter().GetResult();
                     break;
                 case GraphObjectType.User:
-                    queryParameters = new UsersRequestBuilderGetQueryParameters();
+                    queryParameters = new Microsoft.Graph.Users.UsersRequestBuilder
+                        .UsersRequestBuilderGetQueryParameters();
                     //Add the filter and select values.
                     AddFilterSelect(ref queryParameters, ref filter, ref select);
                     //Get the first page of the collectionResponse.
@@ -1843,6 +1941,61 @@ namespace Extensions
             pageIterator.IterateAsync().GetAwaiter().GetResult();
             Inf(sites.Count.ToString());
             return sites;
+
+            //var groups = new List<Group>();
+            //List<string> starterStrings = new List<string>()
+            //{
+            //    "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o",
+            //    "p","q","r","s","t","u","v","w","x","y","z","1","2","3","4",
+            //    "5","6","7","8","9","0"
+            //};
+            //int divisor = (int)((double)(Environment.ProcessorCount / 2.25));
+            //List<string> starters;
+            //while (starterStrings.Count > 0)
+            //{
+            //    starters = starterStrings.TakeAndRemove(divisor);
+            //    Parallel.ForEach(starters, starter =>
+            //    {
+            //        GetGroups(ref groups, $"startswith(displayName, '{starter}')");
+            //    });
+            //    Inf($"[{groups.Count}] Groups, " +
+            //        $"[{starterStrings.Count}] starterStrings remain.");
+            //}
+        }
+
+        /// <summary>
+        /// A method to iterate all the result pages and aggregate the values
+        /// in the given reference list of Users.
+        /// </summary>
+        /// <param name="sites">The aggregation container to use.</param>
+        /// <param name="sitesPage">The first page of the response.</param>
+        internal static void GetSitesPages(
+            ref List<Site> sites,
+            ref SiteCollectionResponse sitesPage)
+        {
+            while (sitesPage.Value != null)
+            {
+                foreach (var site in sitesPage.Value)
+                {
+                    lock (sites)
+                    {
+                        sites.Add(site);
+                    }
+                }
+                if (!string.IsNullOrEmpty(sitesPage.OdataNextLink))
+                {
+                    sitesPage = AuthMan.ActiveAuth.GraphClient.Sites
+                        .WithUrl(sitesPage.OdataNextLink)
+                        .GetAsync((C) =>
+                        {
+                            C.Headers.Add("ConsistencyLevel", "eventual");
+                        }).GetAwaiter().GetResult();
+                }
+                else
+                {
+                    sitesPage.Value = null;
+                }
+            }
         }
 
         /// <summary>

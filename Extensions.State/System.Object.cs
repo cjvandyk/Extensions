@@ -61,7 +61,9 @@ namespace Extensions
                             filePath,
                             System.IO.FileMode.Open))
                     {
-                        serializer = new DataContractSerializer(typeof(object));
+                        serializer = new DataContractSerializer(
+                            obj.GetType(),
+                            new Type[] { typeof(LoadSaveContainer), obj.GetType() });
                         lsc = (LoadSaveContainer)serializer.ReadObject(fileStream);
                         return (T)lsc.Value;
                     }
@@ -110,10 +112,13 @@ namespace Extensions
                             filePath,
                             System.IO.FileMode.Create))
                     {
-                        var serializer = new DataContractSerializer(typeof(object));
-                            serializer.WriteObject(fileStream, loadSaveContainer);
-                            return true;
+                        var serializer = new DataContractSerializer(
+                            obj.GetType(),
+                            new Type[] { typeof(LoadSaveContainer), obj.GetType() });
+                        serializer.WriteObject(fileStream, loadSaveContainer);
+                        fileStream.Flush();
                     }
+                    return true;
                 }
             }
             catch (Exception ex)
