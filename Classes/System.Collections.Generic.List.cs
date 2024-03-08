@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static Extensions.Constants;
 
 namespace Extensions
 {
@@ -211,25 +210,27 @@ namespace Extensions
             this List<T> lst,
             int count)
         {
-            //Make a copy of the list.
-            List<T> lstCopy = lst.ToList();
             //If the list contains fewer items than requested.
             if (lst.Count < count)
             {
+                //Make a copy of the list.
+                List<T> lstCopy = lst.ToList();
                 //Reset the current list object.
-                lst = new List<T>();
+                lst.Clear();
                 //Return the copy.
                 return lstCopy;
             }
+            //Create the target list to contain the requested items.
             List<T> result = new List<T>();
-            //Use lst.Count() since the RemoveAt() method will cause the
-            //result of lstCopy.Count() to change during the loop.
+            //Get each item.
             for (int C = 0; C < count; C++)
             { 
-                result.Add(lstCopy[0]);
-                lstCopy.RemoveAt(0);
+                //Add the first item of the source list to the target list. 
+                result.Add(lst[0]);
+                //Remove that item from the source list.
+                lst.RemoveAt(0);
             }
-            lst = lstCopy;
+            //Return the target list.
             return result;
         }
         #endregion TakeAndRemove()
