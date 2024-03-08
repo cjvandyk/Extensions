@@ -16,6 +16,8 @@ using System.Text.Json.Nodes;
 using Extensions.Identity;
 using static Extensions.Constants;
 using Microsoft.Identity.Client;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace Extensions
 {
@@ -157,6 +159,71 @@ namespace Extensions
                 authStackReset);
         }
         #endregion Auth
+
+        #region ForEach
+        /// <summary>
+        /// A method to do parallel foreach processing in batches.  This is
+        /// especially useful when the Action specified in body executes
+        /// complex operations like making REST calls against big data sources
+        /// e.g. having to call the /_api/web/ensureuser REST method in 
+        /// SharePoint when validating 200,000 users will inevitably lead to
+        /// thread timeouts since the CPU just can't handle that many parallel
+        /// threads concurrently.
+        /// </summary>
+        /// <typeparam name="TSource">The type of objects contained in the
+        /// collection being iterated.</typeparam>
+        /// <param name="batchSize">The size of batches to process.  A safe
+        /// value is roughly half the number of logical CPU cores in the host
+        /// system.  If you're unsure, specify -1 and the method will
+        /// automatically calculate the value for you.</param>
+        /// <param name="source">The collection being iterated.</param>
+        /// <param name="body">The Action being taken on each item in the 
+        /// source.</param>
+        /// <param name="debugOutput">An optional boolean switch that controls
+        /// if debug output is produced.  This is useful for visual feedback
+        /// when processing large collections, like that 200,000 users noted
+        /// earlier.  Default is false i.e. no debug output is done.</param>
+        /// <param name="exceptionOnError">An optional boolean switch that
+        /// controls if execution is aborted when something goes wrong in the
+        /// Parallel.ForEach call.  This should theoretically never 
+        /// happen.  Defaults to false.</param>
+        /// <returns>The ParallelLoopResult from the last batch that was
+        /// processed.</returns>
+        /// <exception cref="Exception">An optional exception is thrown if
+        /// the exceptionOnError boolean switch is true and something goes 
+        /// wrong in the Parallel.ForEach call.</exception>
+        public static ParallelLoopResult ForEach<TSource>(
+            int batchSize,
+            IEnumerable<TSource> source,
+            Action<TSource> body,
+            bool debugOutput = false,
+            bool exceptionOnError = false)
+        {
+            ParallelLoopResult result = new ParallelLoopResult();
+            var clone = source.ToList();
+            while (clone.Count > 0)
+            {
+                var batch = clone.TakeAndRemove(batchSize);
+                result = Parallel.ForEach(batch, body);
+                if (!result.IsCompleted)
+                {
+                    if (debugOutput)
+                    {
+                        Err("Parallel.ForEach failed!");
+                        if (exceptionOnError)
+                        {
+                            throw new Exception("Parallel.ForEach failed!");
+                        }
+                    }
+                }
+                if (debugOutput)
+                {
+                    Inf($"[{clone.Count}] remain...");
+                }
+            }
+            return result;
+        }
+        #endregion ForEach
 
         #region InitializeTenant
         /// <summary>

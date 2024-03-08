@@ -540,3 +540,17 @@
 		and used full namespace instead.<br>
 	- Updated `System.Object.Load()` and `System.Object.Save()` extension<br>
 		methods in State to handle dynamic object types.<br>
+
+### **6.11.806 (2024-03-08)**<br>
+	- Optimized the `.TakeAndRemove()` extension method for<br>
+	    System.Collections.Generic.List.<br>
+	- Added `Core.ForEach()` method to do parallel foreach processing in<br>
+	    batches.  This is especially useful when the Action specified in<br>
+		body executes complex operations like making REST calls against big<br>
+		data sources e.g. having to call the /_api/web/ensureuser REST<br>
+		method in SharePoint when validating 200,000 users will inevitably<br>
+		lead to thread timeouts since the CPU just can't handle that many<br>
+		parallel threads concurrently.<br>
+	- Added `SharePoint.ValidUser()` method that validates if a given user<br>
+	    is a valid SharePoint user by calling SharePoint's<br>
+		/_api/web/ensureuser REST method.<br>
