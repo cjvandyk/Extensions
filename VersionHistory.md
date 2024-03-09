@@ -495,7 +495,7 @@
 ### **6.11.801 (2024-03-05)**<br>
 	- Added `Identity.Cert.NewSelfSigned()` method to cenerate on demand<br>
 		self signed certificates that are RSA/SHA512 based.<br>
-	- Added the `RUNNING_IN_AZURE` check to `Core.GetRunFolder()`.
+	- Added the `RUNNING_IN_AZURE` check to `Core.GetRunFolder()`.<br>
 	- Drop Microsoft.Extensions dependencies down from version 8 to 6 for<br>
 		Azure Function compatibility.<br>
 	- Made Logit.Instance.ILogger setter public.<br>
@@ -534,7 +534,7 @@
 		`List<object>` to `List<Drive>`.<br>
 	- Added multithreading logic to `Graph.GetGroups()` to boost<br>
 	    performance.  The number of threads employed is based on the number<br>
-		of logical CPU cores reported by the Environment.
+		of logical CPU cores reported by the Environment.<br>
 	- Fixed a breakout bug in `Graph.GetGroupsPages()`.<br>
 	- Removed `using static` references related to the `Graph.Get()` method<br>
 		and used full namespace instead.<br>
@@ -554,3 +554,6 @@
 	- Added `SharePoint.ValidUser()` method that validates if a given user<br>
 	    is a valid SharePoint user by calling SharePoint's<br>
 		/_api/web/ensureuser REST method.<br>
+
+### **6.12.800 (2024-03-09)**<br>
+	- Name shortening refactor.<br>

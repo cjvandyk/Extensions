@@ -9,7 +9,7 @@
     <PackageProjectUrl>https://github.com/cjvandyk/extensions</PackageProjectUrl>
     <PackageTags>GCCHigh;Extensions;C#;cjvandyk;Crayveon;GCCH;CSharp;429;Retry-After;ThrottlingHandler;TimeZone;CountWords;Trim;QueryString;MorseCode;Binary;LoremIpsum;ZipCode;Vowel;UrlRoot;Elevate;CompoundInterest;StrongPassword</PackageTags>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <PackageId>GCCHigh</PackageId>
+    <PackageId>GCCHigh.Extensions</PackageId>
     <Authors>cjvandyk</Authors>
     <RepositoryUrl>https://github.com/cjvandyk/Extensions</RepositoryUrl>
     <Title>GCCHigh</Title>
@@ -73,16 +73,11 @@
     <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Azure\bin\**" />
-    <Compile Remove="Azure\Images\**" />
-    <Compile Remove="Azure\obj\**" />
+    <Compile Remove="Azure\**" />
     <Compile Remove="BuildBump\**" />
-    <Compile Remove="Constants\bin\**" />
-    <Compile Remove="Constants\Images\**" />
-    <Compile Remove="Constants\obj\**" />
-    <Compile Remove="Core\bin\**" />
-    <Compile Remove="Core\Images\**" />
-    <Compile Remove="Core\obj\**" />
+    <Compile Remove="Classes\**" />
+    <Compile Remove="Constants\**" />
+    <Compile Remove="Core\**" />
     <Compile Remove="Extensions.Azure\bin\**" />
     <Compile Remove="Extensions.Azure\Images\**" />
     <Compile Remove="Extensions.Azure\obj\**" />
@@ -111,41 +106,24 @@
     <Compile Remove="Extensions.Telemetry\bin\**" />
     <Compile Remove="Extensions.Telemetry\Images\**" />
     <Compile Remove="Extensions.Telemetry\obj\**" />
-    <Compile Remove="Graph\bin\**" />
-    <Compile Remove="Graph\Images\**" />
-    <Compile Remove="Graph\obj\**" />
-    <Compile Remove="Identity\bin\**" />
-    <Compile Remove="Identity\Images\**" />
-    <Compile Remove="Identity\obj\**" />
-    <Compile Remove="List\Images\**" />
-    <Compile Remove="List\obj\**" />
-    <Compile Remove="Logit\bin\**" />
-    <Compile Remove="Logit\Images\**" />
-    <Compile Remove="Logit\obj\**" />
+    <Compile Remove="Graph\**" />
+    <Compile Remove="Identity\**" />
+    <Compile Remove="List\**" />
+    <Compile Remove="Logit\**" />
+    <Compile Remove="NuGet\**" />
     <Compile Remove="Properties\**" />
-    <Compile Remove="State\bin\**" />
-    <Compile Remove="State\Images\**" />
-    <Compile Remove="State\obj\**" />
-    <Compile Remove="String\bin\**" />
-    <Compile Remove="String\Images\**" />
-    <Compile Remove="String\obj\**" />
-    <Compile Remove="Telemetry\bin\**" />
-    <Compile Remove="Telemetry\Images\**" />
-    <Compile Remove="Telemetry\obj\**" />
+    <Compile Remove="State\**" />
+    <Compile Remove="String\**" />
+    <Compile Remove="Telemetry\**" />
     <Compile Remove="TESTING\**" />
     <Compile Remove="VSIX\**" />
     <Compile Remove="~CsVisualStudioExtensions\**" />
     <Compile Remove="~ExtensionsClass\**" />
-    <EmbeddedResource Remove="Azure\bin\**" />
-    <EmbeddedResource Remove="Azure\Images\**" />
-    <EmbeddedResource Remove="Azure\obj\**" />
+    <EmbeddedResource Remove="Azure\**" />
     <EmbeddedResource Remove="BuildBump\**" />
-    <EmbeddedResource Remove="Constants\bin\**" />
-    <EmbeddedResource Remove="Constants\Images\**" />
-    <EmbeddedResource Remove="Constants\obj\**" />
-    <EmbeddedResource Remove="Core\bin\**" />
-    <EmbeddedResource Remove="Core\Images\**" />
-    <EmbeddedResource Remove="Core\obj\**" />
+    <EmbeddedResource Remove="Classes\**" />
+    <EmbeddedResource Remove="Constants\**" />
+    <EmbeddedResource Remove="Core\**" />
     <EmbeddedResource Remove="Extensions.Azure\bin\**" />
     <EmbeddedResource Remove="Extensions.Azure\Images\**" />
     <EmbeddedResource Remove="Extensions.Azure\obj\**" />
@@ -174,41 +152,24 @@
     <EmbeddedResource Remove="Extensions.Telemetry\bin\**" />
     <EmbeddedResource Remove="Extensions.Telemetry\Images\**" />
     <EmbeddedResource Remove="Extensions.Telemetry\obj\**" />
-    <EmbeddedResource Remove="Graph\bin\**" />
-    <EmbeddedResource Remove="Graph\Images\**" />
-    <EmbeddedResource Remove="Graph\obj\**" />
-    <EmbeddedResource Remove="Identity\bin\**" />
-    <EmbeddedResource Remove="Identity\Images\**" />
-    <EmbeddedResource Remove="Identity\obj\**" />
-    <EmbeddedResource Remove="List\Images\**" />
-    <EmbeddedResource Remove="List\obj\**" />
-    <EmbeddedResource Remove="Logit\bin\**" />
-    <EmbeddedResource Remove="Logit\Images\**" />
-    <EmbeddedResource Remove="Logit\obj\**" />
+    <EmbeddedResource Remove="Graph\**" />
+    <EmbeddedResource Remove="Identity\**" />
+    <EmbeddedResource Remove="List\**" />
+    <EmbeddedResource Remove="Logit\**" />
+    <EmbeddedResource Remove="NuGet\**" />
     <EmbeddedResource Remove="Properties\**" />
-    <EmbeddedResource Remove="State\bin\**" />
-    <EmbeddedResource Remove="State\Images\**" />
-    <EmbeddedResource Remove="State\obj\**" />
-    <EmbeddedResource Remove="String\bin\**" />
-    <EmbeddedResource Remove="String\Images\**" />
-    <EmbeddedResource Remove="String\obj\**" />
-    <EmbeddedResource Remove="Telemetry\bin\**" />
-    <EmbeddedResource Remove="Telemetry\Images\**" />
-    <EmbeddedResource Remove="Telemetry\obj\**" />
+    <EmbeddedResource Remove="State\**" />
+    <EmbeddedResource Remove="String\**" />
+    <EmbeddedResource Remove="Telemetry\**" />
     <EmbeddedResource Remove="TESTING\**" />
     <EmbeddedResource Remove="VSIX\**" />
     <EmbeddedResource Remove="~CsVisualStudioExtensions\**" />
     <EmbeddedResource Remove="~ExtensionsClass\**" />
-    <None Remove="Azure\bin\**" />
-    <None Remove="Azure\Images\**" />
-    <None Remove="Azure\obj\**" />
+    <None Remove="Azure\**" />
     <None Remove="BuildBump\**" />
-    <None Remove="Constants\bin\**" />
-    <None Remove="Constants\Images\**" />
-    <None Remove="Constants\obj\**" />
-    <None Remove="Core\bin\**" />
-    <None Remove="Core\Images\**" />
-    <None Remove="Core\obj\**" />
+    <None Remove="Classes\**" />
+    <None Remove="Constants\**" />
+    <None Remove="Core\**" />
     <None Remove="Extensions.Azure\bin\**" />
     <None Remove="Extensions.Azure\Images\**" />
     <None Remove="Extensions.Azure\obj\**" />
@@ -237,37 +198,21 @@
     <None Remove="Extensions.Telemetry\bin\**" />
     <None Remove="Extensions.Telemetry\Images\**" />
     <None Remove="Extensions.Telemetry\obj\**" />
-    <None Remove="Graph\bin\**" />
-    <None Remove="Graph\Images\**" />
-    <None Remove="Graph\obj\**" />
-    <None Remove="Identity\bin\**" />
-    <None Remove="Identity\Images\**" />
-    <None Remove="Identity\obj\**" />
-    <None Remove="List\Images\**" />
-    <None Remove="List\obj\**" />
-    <None Remove="Logit\bin\**" />
-    <None Remove="Logit\Images\**" />
-    <None Remove="Logit\obj\**" />
+    <None Remove="Graph\**" />
+    <None Remove="Identity\**" />
+    <None Remove="List\**" />
+    <None Remove="Logit\**" />
+    <None Remove="NuGet\**" />
     <None Remove="Properties\**" />
-    <None Remove="State\bin\**" />
-    <None Remove="State\Images\**" />
-    <None Remove="State\obj\**" />
-    <None Remove="String\bin\**" />
-    <None Remove="String\Images\**" />
-    <None Remove="String\obj\**" />
-    <None Remove="Telemetry\bin\**" />
-    <None Remove="Telemetry\Images\**" />
-    <None Remove="Telemetry\obj\**" />
+    <None Remove="State\**" />
+    <None Remove="String\**" />
+    <None Remove="Telemetry\**" />
     <None Remove="TESTING\**" />
     <None Remove="VSIX\**" />
     <None Remove="~CsVisualStudioExtensions\**" />
     <None Remove="~ExtensionsClass\**" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="Azure\GlobalSuppressions.cs" />
-    <Compile Remove="Classes\System.Mersenne64.cs" />
-    <Compile Remove="Constants\GlobalSuppressions.cs" />
-    <Compile Remove="Core\GlobalSuppressions.cs" />
     <Compile Remove="Extensions.Azure\GlobalSuppressions.cs" />
     <Compile Remove="Extensions.Constants\GlobalSuppressions.cs" />
     <Compile Remove="Extensions.Core\GlobalSuppressions.cs" />
@@ -277,30 +222,8 @@
     <Compile Remove="Extensions.State\GlobalSuppressions.cs" />
     <Compile Remove="Extensions.String\GlobalSuppressions.cs" />
     <Compile Remove="Extensions.Telemetry\GlobalSuppressions.cs" />
-    <Compile Remove="Graph\GlobalSuppressions.cs" />
-    <Compile Remove="Identity\GlobalSuppressions.cs" />
-    <Compile Remove="List\GlobalSuppressions.cs" />
-    <Compile Remove="Logit\GlobalSuppressions.cs" />
-    <Compile Remove="State\GlobalSuppressions.cs" />
-    <Compile Remove="String\GlobalSuppressions.cs" />
-    <Compile Remove="Telemetry\GlobalSuppressions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Azure\Azure.nuspec" />
-    <None Remove="Azure\Directory.Build.props" />
-    <None Remove="Azure\LICENSE" />
-    <None Remove="Azure\README.md" />
-    <None Remove="Azure\VersionHistory.md" />
-    <None Remove="Constants\Contants.nuspec" />
-    <None Remove="Constants\Directory.Build.props" />
-    <None Remove="Constants\LICENSE" />
-    <None Remove="Constants\README.md" />
-    <None Remove="Constants\VersionHistory.md" />
-    <None Remove="Core\Core.nuspec" />
-    <None Remove="Core\Directory.Build.props" />
-    <None Remove="Core\LICENSE" />
-    <None Remove="Core\README.md" />
-    <None Remove="Core\VersionHistory.md" />
     <None Remove="Extensions.Azure\Directory.Build.props" />
     <None Remove="Extensions.Azure\Extensions.Azure.nuspec" />
     <None Remove="Extensions.Azure\LICENSE" />
@@ -346,52 +269,9 @@
     <None Remove="Extensions.Telemetry\LICENSE" />
     <None Remove="Extensions.Telemetry\README.md" />
     <None Remove="Extensions.Telemetry\VersionHistory.md" />
-    <None Remove="Graph\Directory.Build.props" />
-    <None Remove="Graph\Graph.nuspec" />
-    <None Remove="Graph\LICENSE" />
-    <None Remove="Graph\README.md" />
-    <None Remove="Graph\VersionHistory.md" />
-    <None Remove="Identity\Directory.Build.props" />
-    <None Remove="Identity\Identity.nuspec" />
-    <None Remove="Identity\LICENSE" />
-    <None Remove="Identity\README.md" />
-    <None Remove="Identity\VersionHistory.md" />
-    <None Remove="List\Directory.Build.props" />
-    <None Remove="List\LICENSE" />
-    <None Remove="List\List.nuspec" />
-    <None Remove="List\README.md" />
-    <None Remove="List\VersionHistory.md" />
-    <None Remove="Logit\Directory.Build.props" />
-    <None Remove="Logit\LICENSE" />
-    <None Remove="Logit\Logit.nuspec" />
-    <None Remove="Logit\README.md" />
-    <None Remove="Logit\VersionHistory.md" />
-    <None Remove="State\Directory.Build.props" />
-    <None Remove="State\LICENSE" />
-    <None Remove="State\README.md" />
-    <None Remove="State\State.nuspec" />
-    <None Remove="State\VersionHistory.md" />
-    <None Remove="String\Directory.Build.props" />
-    <None Remove="String\LICENSE" />
-    <None Remove="String\README.md" />
-    <None Remove="String\String.nuspec" />
-    <None Remove="String\VersionHistory.md" />
-    <None Remove="Telemetry\Directory.Build.props" />
-    <None Remove="Telemetry\LICENSE" />
-    <None Remove="Telemetry\README.md" />
-    <None Remove="Telemetry\Telemetry.nuspec" />
-    <None Remove="Telemetry\VersionHistory.md" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Images\Extensions-128x128.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="D:\SOURCE\Extensions\.editorconfig" />
-    <None Include="Images\Extensions-128x128.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
@@ -400,9 +280,12 @@
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.10.4" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.19.1" />
+    <PackageReference Include="GCCHigh.Extensions.Azure" Version="6.2.800" />
+    <PackageReference Include="GCCHigh.Extensions.String" Version="6.2.800" />
+    <PackageReference Include="GCCHigh.Extensions.Telemetry" Version="6.3.800" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Graph" Version="5.43.0" />
+    <PackageReference Include="Microsoft.Graph" Version="5.44.0" />
     <PackageReference Include="Microsoft.Identity.Client" Version="4.59.0" />
     <PackageReference Include="Microsoft.SharePointOnline.CSOM" Version="16.1.24614.12000" />
     <PackageReference Include="System.Diagnostics.EventLog" Version="6.0.0" />
@@ -411,6 +294,13 @@
   <ItemGroup>
     <None Update="TenantConfig.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\Extensions-128x128.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 </Project>

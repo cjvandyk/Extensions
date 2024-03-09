@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <!--<TargetFrameworks>net9.0;net8.0;net7.0;net6.0;net5.0;netcoreapp3.1;netcoreapp3.0;netcoreapp2.2;netcoreapp2.1;netcoreapp2.0;netcoreapp1.1;netcoreapp1.0;netstandard2.1;netstandard2.0;netstandard1.6;netstandard1.5;netstandard1.4;netstandard1.3;netstandard1.2;netstandard1.1;netstandard1.0;net481;net48;net472;net471;net47;net462;net461;net46;net452;net451;net45;net403;net40;net35;net20;net11</TargetFrameworks>-->
+	<TargetFrameworks>net8.0;net7.0;net6.0;netstandard2.1;netstandard2.0;net48;net472;net471;net47;net462</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <NoWarn>$(NoWarn);CS1587</NoWarn>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <GenerateTargetFrameworkAttribute>False</GenerateTargetFrameworkAttribute>
+    <PackageProjectUrl>https://github.com/cjvandyk/extensions</PackageProjectUrl>
+    <PackageTags>GCCHigh;Extensions;C#;cjvandyk;Crayveon;Instrumentation;Telemetry;GCCH;CSharp</PackageTags>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>GCCHigh.Extensions.Telemetry</PackageId>
+    <Authors>cjvandyk</Authors>
+    <RepositoryUrl>https://github.com/cjvandyk/Extensions</RepositoryUrl>
+    <Title>GCCHigh.Extensions.Telemetry</Title>
+    <Description>GCCHigh.Extensions.Telemetry contains instrumentation and telemetry extension methods for C# specifically targeted to the GCCHigh M365 environment.  GCCHigh.Extensions supports all versions of.NET from 4.6.2 through 8.0.</Description>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>Extensions-128x128.png</PackageIcon>
+    <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <RepositoryType>git</RepositoryType>
+    <PackageReleaseNotes>Rebranded Extensions.Telemetry as GCCHigh.Extensions.Telemetry.</PackageReleaseNotes>
+	<PackageOutputPath>..\NuGet</PackageOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="GCCHigh.Extensions.Logit" Version="6.3.800" />
+    <PackageReference Include="GCCHigh.Extensions.State" Version="6.3.800" />
+    <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="6.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\Extensions-128x128.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>
