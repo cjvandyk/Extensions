@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net7.0;net6.0;netstandard2.1;netstandard2.0;net48;net472;net471;net47;net462</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <NoWarn>$(NoWarn);CS1587</NoWarn>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <GenerateTargetFrameworkAttribute>False</GenerateTargetFrameworkAttribute>
+    <PackageProjectUrl>https://github.com/cjvandyk/extensions</PackageProjectUrl>
+    <PackageTags>GCCHigh;Extensions;C#;cjvandyk;Crayveon;Graph;GCCH;CSharp</PackageTags>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>GCCHigh.Extensions.Graph</PackageId>
+    <Authors>cjvandyk</Authors>
+    <RepositoryUrl>https://github.com/cjvandyk/Extensions</RepositoryUrl>
+    <Title>GCCHigh.Extensions.Graph</Title>
+    <Description>GCCHigh.Extensions.Graph contains Graph extension methods for C# specifically targeted to the GCCHigh M365 environment.  GCCHigh.Extensions supports all versions of.NET from 4.6.2 through 8.0.</Description>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>Extensions-128x128.png</PackageIcon>
+    <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <RepositoryType>git</RepositoryType>
+    <PackageReleaseNotes>Rebranded Extensions.Graph as GCCHigh.Extensions.Graph.</PackageReleaseNotes>
+	<PackageOutputPath>..\NuGet</PackageOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\Extensions-128x128.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="GCCHigh.Extensions.Identity" Version="6.8.800" />
+    <PackageReference Include="GCCHigh.Extensions.List" Version="6.1.800" />
+    <PackageReference Include="GCCHigh.Extensions.Logit" Version="6.3.800" />
+    <PackageReference Include="Microsoft.SharePointOnline.CSOM" Version="16.1.24614.12000" />
+  </ItemGroup>
+</Project>

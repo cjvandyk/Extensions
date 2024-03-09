@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>GCCHigh.Extensions.List</id>
+    <!--<version>6.0.800</version>-->
+    <title>$title$</title>
+    <authors>Cornelius J. van Dyk</authors>
+    <owners>$author$</owners>
+    <license type="expression">GPL-3.0-or-later</license>
+    <projectUrl>https://github.com/cjvandyk/Extensions</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/cjvandyk/Extensions/master/Images/Extensions-64x64.png</iconUrl>
+    <requireLicenseAcceptance>True</requireLicenseAcceptance>
+    <description>
+		GCCHigh.Extensions.List contains List extension methods for C# specifically targeted to the GCCHigh M365 environment.
+		GCCHigh.Extensions supports all versions of.NET from 4.6.2 through 8.0.
+	</description>
+    <summary>
+		GCCHigh.Extensions.List contains List extension methods for C# specifically targeted to the GCCHigh M365 environment.
+		GCCHigh.Extensions supports all versions of.NET from 4.6.2 through 8.0.
+	</summary>
+    <releaseNotes>
+		GCCHigh.Extensions.List contains List extension methods for C# specifically targeted to the GCCHigh M365 environment.
+		GCCHigh.Extensions supports all versions of.NET from 4.6.2 through 8.0.
+	</releaseNotes>
+    <copyright>$copyright$</copyright>
+    <tags>GCCHigh Extensions C# cjvandyk Crayveon GCCH CSharp List</tags>
+  </metadata>
+  <files>
+    <file src="**" target="lib" />
+  </files>
+</package>
