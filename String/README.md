@@ -48,4 +48,100 @@ with these methods:
         quote, greater than, less than and double quote characters into<br>
         their proper XML equivalent.<br>_
 
+- ### **ExceedsLength()**
+
+- ### **GetSiteUrl()**
+
+- ### **GetTenantUrl()**
+
+- ### **GetUrlRoot()**
+
+- ### **HasLower()**
+
+- ### **HasNumeric()**
+
+- ### **HasSymbol()**
+
+- ### **HasUpper()**
+
+- ### **HtmlDecode()**
+
+- ### **HtmlEncode()**
+
+- ### **IsAlpha()**
+
+- ### **IsAlphaNumeric()**
+
+- ### **IsChar()**
+
+- ### **IsDateTime()**
+
+- ### **IsEmail()**
+
+- ### **IsLower()**
+
+- ### **IsHex()**
+
+- ### **IsNumeric()**
+
+- ### **IsStrong()**
+
+- ### **IsUpper()**
+
+- ### **IsUrlRoot()**
+
+- ### **IsVowel()**
+
+- ### **IsZip()**
+
+- ### **Left()**
+
+- ### **Lines()**
+
+- ### **LoremIpsum()**
+
+- ### **Match()**
+
+- ### **MorseCodeBeep()**
+
+- ### **QueryStringToDictionary()**
+
+- ### **QueryStringToNameValueCollection()**
+
+- ### **Quote()**
+
+- ### **RemoveExtraSpace()**
+
+- ### **ReplaceTokens()**
+
+- ### **Right()**
+
+- ### **SingleQuote()**
+
+- ### **Singularize()**
+
+- ### **SubString()**
+
+- ### **TailString()**
+
+- ### **ToBinary()**
+
+- ### **ToEnglishAlphaChars()**
+
+- ### **ToEnum()**
+
+- ### **ToJson()**
+
+- ### **ToMorseCode()**
+
+- ### **TrimLength()**
+
+- ### **TrimStart()**
+
+- ### **Validate()**
+
+- ### **ValidateNoNulls()**
+
+- ### **Words()**
+
 ![Visitor Count](https://profile-counter.glitch.me/{cjvandyk}/count.svg)

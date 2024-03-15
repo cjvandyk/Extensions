@@ -351,18 +351,12 @@ namespace Extensions
         /// Checks if a referenced offset exceeds the length of the string.
         /// </summary>
         /// <param name="str">The current string to check against.</param>
-        /// <param name="offset">The referenced offset value.</param>
-        /// <param name="increment">Should the offset be incremented before
-        /// the length comparison takes place.</param>
-        /// <returns></returns>
+        /// <param name="offset">The length value to check against.</param>
+        /// <returns>True if the current string length is less than or equal
+        /// to the given offset, else false.</returns>
         public static bool ExceedsLength(this System.String str, 
-                                         ref int offset, 
-                                         bool increment = true)
+                                         int offset)
         {
-            if (increment)
-            {
-                offset++;
-            }
             if (offset >= str.Length)
             {
                 return true;
@@ -374,15 +368,13 @@ namespace Extensions
         /// Checks if a referenced offset exceeds the length of the string.
         /// </summary>
         /// <param name="str">The current string to check against.</param>
-        /// <param name="offset">The referenced offset value.</param>
-        /// <param name="increment">Should the offset be incremented before
-        /// the length comparison takes place.</param>
-        /// <returns></returns>
+        /// <param name="offset">The length value to check against.</param>
+        /// <returns>True if the current string length is less than or equal
+        /// to the given offset, else false.</returns>
         public static bool ExceedsLength(this System.Text.StringBuilder str, 
-                                         ref int offset, 
-                                         bool increment = true)
+                                         ref int offset)
         {
-            return ExceedsLength(str.ToString(), ref offset, increment);
+            return ExceedsLength(str.ToString(), offset);
         }
         #endregion ExceedsLength()
 
@@ -1585,7 +1577,7 @@ namespace Extensions
                         }
                         break;
                     case '?':
-                        if (str.ExceedsLength(ref strOffset))
+                        if (str.ExceedsLength(strOffset))
                         {
                             return true;
                         }

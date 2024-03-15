@@ -557,3 +557,6 @@
 
 ### **6.12.800 (2024-03-09)**<br>
 	- Name shortening refactor.<br>
+
+### **6.12.801 (2024-03-15)**<br>
+	- Documentation update.<br>
