@@ -12,3 +12,6 @@
 
 ### **6.2.800 (2024-02-10)**<br>
 	- Name shortening refactor.<br>
+
+### **6.3.800 (2024-xx-xx)**<br>
+	- Documentation.<br>
