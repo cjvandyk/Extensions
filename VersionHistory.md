@@ -560,3 +560,18 @@
 
 ### **6.12.801 (2024-03-15)**<br>
 	- Documentation update.<br>
+
+### **6.12.802 (2024-03-19)**<br>
+	- Added `.CheckMembership()` to `Microsoft.Graph.Models.Group`.<br>
+	- Added `.GetGroup()` to Core.<br>
+	- Added `.GetGroup()` to Graph.<br>
+	- Added `.GetSiteRelativeUrl()` to `System.String`.<br>
+	- Added `.GetSiteUserInformationList()` to<br>
+		`Microsoft.Graph.Models.ListItem`.<br>
+	- Added `.GetUserByEmail()` to Core.<br>
+	- Added `.GetUserByEmail()` to Graph.<br>
+	- Added `.HasMember()` to `Microsoft.Graph.Models.Group`.<br>
+	- Added `.HasOwner()` to `Microsoft.Graph.Models.Group`.<br>
+	- Added `.ToEntraUser()` to `Microsoft.Graph.Models.ListItem`.<br>
+	- Documentation update.<br>
+	- Updated `.GetSiteUrl()` in `System.String`.<br>

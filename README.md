@@ -261,7 +261,7 @@ with these methods:
     > _Write an Information message to active channels (console, event log, file)<br>
         using the System.Logging class._
 
-- ### **IsAlphabetic()**
+- ### **IsAlpha()**
     > _Validates that the given string object contains all alphabetic<br>
         characters (a-z and A-Z) returning True if it does and False if<br>
         it doesn't.<br>
@@ -296,6 +296,23 @@ with these methods:
             `"abc123".IsChar(new char[] {'a', 'c'})`<br>
         will return False._
          
+- ### **IsDateTime()**
+    > _Validates that the given string is a valid date/time given the format.<br>
+        It provides an easy way to validate date string input.<br>
+        For example these:<br>
+            `"20170704033333".IsDateTime("yyyMMddHHmmss")`<br>
+            `"07/27/2017 03:33:33".IsDateTime("MM/dd/yyyy HH:mm:ss")`<br>
+            `"27/07/2017 03:33:33".IsDateTime("dd/MM/yyyy HH:mm:ss")`<br>
+            `"27/07/2017".IsDateTime("dd/MM/yyyy")`<br>
+        will all return True whereas these:<br>
+            `"2017070403333".IsDateTime("yyyMMddHHmmss")`<br>
+                2017/07/04 03:33:3 is clearly missing another digit.<br>
+            `"07/27/2017".IsDateTime("dd/MM/yyyy HH:mm:ss")`<br>
+                07/27 fails because there isn't 27 months.<br>
+            `"27/07/2017".IsDateTime("MM/dd/yyyy")`<br>
+                27/07 fails for the same reason.<br>
+        will return False._
+
 - ### **IsEmail()**
     > _Validates that the given string object contains a valid email address.<br>
         For example:<br>
@@ -311,6 +328,14 @@ with these methods:
         will return True whereas<br>
             `339.IsEven()`<br>
         will return False._
+
+- ### **IsHex()**
+    > _Checks if the given string represents hex based numbers.<br>
+        For example:<br>
+            `"9723FDC".IsHex()`<br>
+        will return True whereas<br>
+            `"9723FDT.IsHex()`<br>
+        will return False because T is not a hex character._
 
 - ### **IsLower()**
     > _Validates that the given string object contains only lower case letters.<br>

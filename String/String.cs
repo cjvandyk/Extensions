@@ -380,19 +380,42 @@ namespace Extensions
 
         #region GetSiteUrl()
         /// <summary>
-        /// Get the tenant root for the given string object containing a URL.
+        /// Get the base string of the Site URL.
         /// For example:
-        ///   "https://blog.cjvandyk.com/sites/Approval".GetTenantUrl()
-        ///   will return "https://blog.cjvandyk.com".
+        ///   "https://blog.cjvandyk.com/sites/Approval/Lists/Request".GetTenantUrl()
+        ///   will return "Approval".
         /// </summary>
         /// <param name="url">The System.String object containing the URL
-        /// from which the tenant root is to be extracted.</param>
-        /// <returns>The tenant root of the URL given the URL string.</returns>
+        /// from which the Site root is to be extracted.</param>
+        /// <returns>The Site root of the URL given the URL string.</returns>
         public static string GetSiteUrl(this System.String url)
         {
+            string result = Right(url.ToLower(), "/sites/");
+            if (result.Contains("/"))
+            {
+                result = Left(result, "/");
+            }
+            return result;
             return url.Substring(-1, "/", SubstringType.LeftOfIndex, 5);
         }
         #endregion GetSiteUrl()
+
+        #region GetSiteRelativeUrl()
+        /// <summary>
+        /// Get the base URL string of the Site relative to the tenant.
+        /// For example:
+        ///   "https://blog.cjvandyk.com/sites/Approval/Lists/Request".GetTenantUrl()
+        ///   will return "/sites/Approval".
+        /// </summary>
+        /// <param name="url">The System.String object containing the URL
+        /// from which the Site relative root is to be extracted.</param>
+        /// <returns>The Site relative root of the URL given the URL 
+        /// string.</returns>
+        public static string GetSiteRelativeUrl(this System.String url)
+        {
+            return "/sites/" + GetSiteUrl(url);
+        }
+        #endregion GetSiteRelativeUrl()
 
         #region GetTenantUrl()
         /// <summary>
