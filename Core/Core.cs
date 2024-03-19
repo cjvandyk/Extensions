@@ -842,6 +842,17 @@ namespace Extensions
 
         #region Group
         /// <summary>
+        /// A method to get the Group given its GUID ID.
+        /// </summary>
+        /// <param name="groupId">The Entra GUID ID of the target Group.</param>
+        /// <returns>A Microsoft.Graph.Models.Group object if found, else
+        /// null.</returns>
+        public static Group GetGroup(string groupId)
+        {
+            return GroupExtensions.GetGroup(groupId);
+        }
+
+        /// <summary>
         /// A private method to get a group of list of groups where the 
         /// displayName matches the given group name.
         /// </summary>
@@ -1078,6 +1089,18 @@ namespace Extensions
             finally
             {
             }
+        }
+
+        /// <summary>
+        /// A method to get a Microsoft.Graph.Models.User object given its
+        /// email address.
+        /// </summary>
+        /// <param name="email">The email address of the target user.</param>
+        /// <returns>A Microsoft.Graph.Models.User object if found, else 
+        /// null.</returns>
+        public static User GetUserByEmail(string email)
+        {
+            return UserExtensions.GetUserByEmail(email);
         }
         #endregion GetUser
 
