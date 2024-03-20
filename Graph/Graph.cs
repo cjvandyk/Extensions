@@ -2185,7 +2185,7 @@ namespace Extensions
             filter = GetEnv("NewItemsStatusFilter").ToLower();
             for (int C = items.Count - 1; C >= 0; C--)
             {
-                if (items[C].GetJsonString("Status").ToLower() != "filter")
+                if (items[C].GetJsonString("Status").ToLower() != filter)
                 {
                     items.RemoveAt(C);
                 }

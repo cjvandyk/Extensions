@@ -46,7 +46,7 @@ namespace Extensions
         /// Group.
         /// </summary>
         /// <param name="group">The given Group to use for validation.</param>
-        /// <param name="userId">The Entra ID of the User to validate.</param>
+        /// <param name="user">The User to validate.</param>
         /// <returns>True if the given user is a member, else false.</returns>
         public static bool HasMember(this Group group,
                                      User user)
@@ -76,7 +76,7 @@ namespace Extensions
         /// Group.
         /// </summary>
         /// <param name="group">The given Group to use for validation.</param>
-        /// <param name="userId">The Entra ID of the User to validate.</param>
+        /// <param name="user">The User to validate.</param>
         /// <returns>True if the given user is an owner, else false.</returns>
         public static bool HasOwner(this Group group,
                                     User user)
