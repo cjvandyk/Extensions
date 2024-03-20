@@ -553,19 +553,24 @@ namespace Extensions
         public enum UserMembershipType
         {
             /// <summary>
-            /// Return both Members and Owners.
+            /// Both Members and Owners.
             /// </summary>
             All,
 
             /// <summary>
-            /// Return only Members.
+            /// Only Members.
             /// </summary>
             Members,
 
             /// <summary>
-            /// Return only Owners.
+            /// Only Owners.
             /// </summary>
-            Owners
+            Owners,
+
+            /// <summary>
+            /// Only Visitors.
+            /// </summary>
+            Visitors
         }
         #endregion Graph Constants
 

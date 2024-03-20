@@ -6,6 +6,7 @@
 /// </summary>
 
 using Microsoft.Graph;
+using Microsoft.Graph.Models;
 using Microsoft.Identity.Client;
 using Microsoft.SharePoint.Client;
 using System;
@@ -446,7 +447,7 @@ namespace Extensions.Identity
         /// of the GraphServiceClient.</param>
         /// <returns>A valid GraphServiceClient for the given 
         /// HttpClient.</returns>
-        internal static GraphServiceClient GetGraphServiceClient(
+        public static GraphServiceClient GetGraphServiceClient(
             HttpClient httpClient = null)
         {
             if (TargetTenantConfig == null)
@@ -492,6 +493,214 @@ namespace Extensions.Identity
             return ActiveAuth.GraphBetaClient;
         }
 
+        #region CSOM
+        /// <summary>
+        /// A method to add a given user as a Site Collection Administrator
+        /// for the Site at the given url.
+        /// </summary>
+        /// <param name="url">The target URL of the Site.</param>
+        /// <param name="email">The email of the target user.</param>
+        /// <returns>True if the user was successfully added, else false.</returns>
+        public static bool AddSCA(string url,
+                                  string email)
+        {
+            try
+            {
+                //Change context to SharePoint.
+                GetAuth(ScopeType.SharePoint);
+                ClientContext ctx = GetClientContext(url);
+                var site = ctx.Site;
+                var web = site.RootWeb;
+                ctx.Load(site, s => s.Usage);
+                ctx.Load(web);
+                ctx.ExecuteQuery();
+                if (web == null)
+                {
+                    return false;
+                }
+                var user = web.EnsureUser(email);
+                ctx.ExecuteQuery();
+                if (user == null)
+                {
+                    return false;
+                }
+                user.IsSiteAdmin = true;
+                user.Update();
+                ctx.ExecuteQuery();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            finally
+            {
+                //Change context back to Graph.
+                GetAuth(ScopeType.Graph);
+            }
+        }
+
+        /// <summary>
+        /// A method to add a given User to a given Site's given SharePoint
+        /// Group e.g. Owners, Members or Visitors.
+        /// </summary>
+        /// <param name="url">The URL of the target Site.</param>
+        /// <param name="email">The email of the target User.</param>
+        /// <param name="userMembershipType">The target type of membership
+        /// e.g. Owners, Members or Visitors.</param>
+        /// <returns>True if the User was successfully added, else false.</returns>
+        public static bool AddSiteUser(string url,
+                                       string email,
+                                       UserMembershipType userMembershipType)
+        {
+            try
+            {
+                //Change context to SharePoint.
+                GetAuth(ScopeType.SharePoint);
+                ClientContext ctx = GetClientContext(url);
+                var site = ctx.Site;
+                var web = site.RootWeb;
+                //Initialize the group variable to Owners.
+                var group = web.AssociatedOwnerGroup;
+                if (userMembershipType == UserMembershipType.Members)
+                {
+                    //Swith group to Members.
+                    group = web.AssociatedMemberGroup;
+                }
+                else if (userMembershipType == UserMembershipType.Visitors)
+                {
+                    //Switch group to Visitors.
+                    group = web.AssociatedVisitorGroup;
+                }
+                ctx.Load(site, s => s.Usage);
+                ctx.Load(web);
+                ctx.Load(group);
+                ctx.ExecuteQuery();
+                if (web == null)
+                {
+                    return false;
+                }
+                //Ensure the User is valid.
+                var user = web.EnsureUser(email);
+                ctx.Load(user, u => u.LoginName);
+                ctx.Load(user, u => u.Title);
+                ctx.Load(user, u => u.Email);
+                ctx.ExecuteQuery();
+                if (user == null)
+                {
+                    return false;
+                }
+                //Construct the User creation object.
+                UserCreationInformation userCreationInformation =
+                    new UserCreationInformation
+                    {
+                        LoginName = user.LoginName,
+                        Title = user.Title,
+                        Email = user.Email
+                    };
+                //Add the user to the target group.
+                group.Users.Add(userCreationInformation);
+                web.Update();
+                ctx.ExecuteQuery();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logit.Err(ex.ToString());
+                return false;
+            }
+            finally
+            {
+                //Change context back to Graph.
+                GetAuth(ScopeType.Graph);
+            }
+        }
+
+        /// <summary>
+        /// A method to add a given list of Users to a given Site's given 
+        /// SharePoint Group e.g. Owners, Members or Visitors.
+        /// </summary>
+        /// <param name="url">The URL of the target Site.</param>
+        /// <param name="emails">The list of emails of the target Users.</param>
+        /// <param name="userMembershipType">The target type of membership
+        /// e.g. Owners, Members or Visitors.</param>
+        /// <returns>True if the Users were all successfully added, else 
+        /// false.</returns>
+        public static bool AddSiteUsers(string url,
+                                        List<string> emails,
+                                        UserMembershipType userMembershipType)
+        {
+            try
+            {
+                //Change context to SharePoint.
+                GetAuth(ScopeType.SharePoint);
+                ClientContext ctx = GetClientContext(url);
+                var site = ctx.Site;
+                var web = site.RootWeb;
+                //Initialize the group variable to Owners.
+                var group = web.AssociatedOwnerGroup;
+                if (userMembershipType == UserMembershipType.Members)
+                {
+                    //Swith group to Members.
+                    group = web.AssociatedMemberGroup;
+                }
+                else if (userMembershipType == UserMembershipType.Visitors)
+                {
+                    //Switch group to Visitors.
+                    group = web.AssociatedVisitorGroup;
+                }
+                ctx.Load(site, s => s.Usage);
+                ctx.Load(web);
+                ctx.Load(group);
+                ctx.ExecuteQuery();
+                if (web == null)
+                {
+                    return false;
+                }
+                //Multi thread this.
+                var result = emails.MultiThread(email =>
+                {
+                    //Ensure the User is valid.
+                    var user = web.EnsureUser(email);
+                    ctx.Load(user, u => u.LoginName);
+                    ctx.Load(user, u => u.Title);
+                    ctx.Load(user, u => u.Email);
+                    ctx.ExecuteQuery();
+                    if (user == null)
+                    {
+                        throw new Exception($"User [{email}] not found!");
+                    }
+                    //Construct the User creation object.
+                    UserCreationInformation userCreationInformation =
+                        new UserCreationInformation
+                        {
+                            LoginName = user.LoginName,
+                            Title = user.Title,
+                            Email = user.Email
+                        };
+                    //Add the user to the target group.
+                    group.Users.Add(userCreationInformation);
+                    web.Update();
+                    ctx.ExecuteQuery();
+                });
+                if (result.Count > 0)
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logit.Err(ex.ToString());
+                return false;
+            }
+            finally
+            {
+                //Change context back to Graph.
+                GetAuth(ScopeType.Graph);
+            }
+        }
+
         /// <summary>
         /// Get a CSOM ClientContent for the given URL.
         /// </summary>
@@ -503,12 +712,16 @@ namespace Extensions.Identity
         /// occurred.</returns>
         public static ClientContext GetClientContext(
             string url,
-            string accessToken,
+            string accessToken = null,
             bool suppressErrors = false)
         {
             try
             {
                 var clientContext = new ClientContext(url);
+                if (accessToken == null)
+                {
+                    accessToken = ActiveAuth.AuthResult.AccessToken;
+                }
                 clientContext.ExecutingWebRequest += (sender, args) =>
                 {
                     args.WebRequestExecutor.RequestHeaders["Authorization"] =
@@ -528,6 +741,63 @@ namespace Extensions.Identity
                 return null;
             }
         }
+
+        /// <summary>
+        /// A method to update the Title of a Site.  When this method is called
+        /// directly after a Site was created the Async actions in Azure may
+        /// not yet have completed.  In such cases, the change of Title will
+        /// be lost unless the Async processes are allowed to complete.  The 
+        /// recommended default delay is 10 seconds.
+        /// </summary>
+        /// <param name="url">The URL of the target Site.</param>
+        /// <param name="title">The new title for the site.</param>
+        /// <param name="delay">A boolean switch to control if an Azure
+        /// Async delay is used.  Default is false.</param>
+        /// <param name="delayMilliSeconds">The number of milliseconds to sleep
+        /// the thread before proceeding.  This parameter is only effective if
+        /// the "delay" parameter is true.</param>
+        /// <returns>True if the Site title was successfully updated, else
+        /// false.</returns>
+        public static bool UpdateSiteTitle(string url, 
+                                           string title,
+                                           bool delay = false,
+                                           int delayMilliSeconds = 10000)
+        {
+            try
+            {
+                //When this method is called directly after a Site was created
+                //the Async actions in Azure may not yet have completed.  In
+                //such cases, the change of Title will be lost unless the Async
+                //processes are allowed to complete.  The recommended delay is
+                //10 seconds.
+                if (delay)
+                {
+                    System.Threading.Thread.Sleep(delayMilliSeconds);
+                }
+                //Change context to SharePoint.
+                GetAuth(ScopeType.SharePoint);
+                ClientContext ctx = GetClientContext(url);
+                var site = ctx.Site;
+                var web = site.RootWeb;
+                ctx.Load(site, s => s.Usage);
+                ctx.Load(web);
+                ctx.ExecuteQuery();
+                web.Title = title;
+                web.Update();
+                ctx.ExecuteQuery();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            finally
+            {
+                //Change context back to Graph.
+                GetAuth(ScopeType.Graph);
+            }
+        }
+        #endregion CSOM
 
         /// <summary>
         /// Method to get a valid AuthenticationResult for the current 

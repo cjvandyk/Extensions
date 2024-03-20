@@ -18,7 +18,6 @@ using static Extensions.Constants;
 using Microsoft.Identity.Client;
 using System.Threading.Tasks;
 using System.Linq;
-using System.Linq.Expressions;
 
 namespace Extensions
 {
@@ -947,7 +946,82 @@ namespace Extensions
         }
         #endregion GetHttpClient
 
-        #region GetUser
+        #region User
+        /// <summary>
+        /// A method for adding a given User to a given Site's Owners group.
+        /// </summary>
+        /// <param name="url">The URL of the target Site.</param>
+        /// <param name="email">The email of the target User.</param>
+        /// <returns>True if user was added, else false.</returns>
+        public static bool AddSiteOwner(string url,
+                                        string email)
+        {
+            return AuthMan.AddSiteUser(url, email, UserMembershipType.Owners);
+        }
+
+        /// <summary>
+        /// A method for adding a given User to a given Site's Members group.
+        /// </summary>
+        /// <param name="url">The URL of the target Site.</param>
+        /// <param name="email">The email of the target User.</param>
+        /// <returns>True if user was added, else false.</returns>
+        public static bool AddSiteMember(string url,
+                                         string email)
+        {
+            return AuthMan.AddSiteUser(url, email, UserMembershipType.Members);
+        }
+
+        /// <summary>
+        /// A method for adding a given User to a given Site's Visitors group.
+        /// </summary>
+        /// <param name="url">The URL of the target Site.</param>
+        /// <param name="email">The email of the target User.</param>
+        /// <returns>True if user was added, else false.</returns>
+        public static bool AddSiteVisitor(string url,
+                                          string email)
+        {
+            return AuthMan.AddSiteUser(url, email, UserMembershipType.Visitors);
+        }
+
+        /// <summary>
+        /// A method for adding a given list of Users to a given Site's Owners
+        /// group.
+        /// </summary>
+        /// <param name="url">The URL of the target Site.</param>
+        /// <param name="emails">The list of emails of the target Users.</param>
+        /// <returns>True if all users were added, else false.</returns>
+        public static bool AddSiteOwners(string url,
+                                         List<string> emails)
+        {
+            return AuthMan.AddSiteUsers(url, emails, UserMembershipType.Owners);
+        }
+
+        /// <summary>
+        /// A method for adding a given list of Users to a given Site's Members
+        /// group.
+        /// </summary>
+        /// <param name="url">The URL of the target Site.</param>
+        /// <param name="emails">The list of emails of the target Users.</param>
+        /// <returns>True if all users were added, else false.</returns>
+        public static bool AddSiteMembers(string url,
+                                          List<string> emails)
+        {
+            return AuthMan.AddSiteUsers(url, emails, UserMembershipType.Members);
+        }
+
+        /// <summary>
+        /// A method for adding a given list of Users to a given Site's Visitors
+        /// group.
+        /// </summary>
+        /// <param name="url">The URL of the target Site.</param>
+        /// <param name="emails">The list of emails of the target Users.</param>
+        /// <returns>True if all users were added, else false.</returns>
+        public static bool AddSiteVisitors(string url,
+                                           List<string> emails)
+        {
+            return AuthMan.AddSiteUsers(url, emails, UserMembershipType.Visitors);
+        }
+
         /// <summary>
         /// Method to get the user given a user lookup id from SharePoint.
         /// </summary>
@@ -1102,7 +1176,7 @@ namespace Extensions
         {
             return UserExtensions.GetUserByEmail(email);
         }
-        #endregion GetUser
+        #endregion User
 
         #region TryAdd
         /// <summary>

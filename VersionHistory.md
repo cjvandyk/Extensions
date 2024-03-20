@@ -575,3 +575,21 @@
 	- Added `.ToEntraUser()` to `Microsoft.Graph.Models.ListItem`.<br>
 	- Documentation update.<br>
 	- Updated `.GetSiteUrl()` in `System.String`.<br>
+
+### **6.12.803 (2024-03-20)**<br>
+	- Added ActiveAuth token default to `.GetClientContext()` in AuthMan.<br>
+	- Added `.AddSCA()` method to AuthMan.<br>
+	- Added `.AddSiteMember()` to Core.<br>
+	- Added `.AddSiteMembers()` to Core.<br>
+	- Added `.AddSiteOwner()` to Core.<br>
+	- Added `.AddSiteOwners()` to Core.<br>
+	- Added `.AddSiteUser()` method to AuthMan.<br>
+	- Added `.AddSiteUsers()` method to AuthMan.<br>
+	- Added `.AddSiteVisitor()` to Core.<br>
+	- Added `.AddSiteVisitors()` to Core.<br>
+	- Added `Visitors` type to `Constants.UserMembershipType`.<br>
+	- Changed `.GetGraphServiceClient()` method in AuthMan from internal to<br>
+		public.<br>
+	- Corrected a variable reference in `.GetPendingListItemsUpdatedSince()`<br>
+		method in Graph.<br>
+	- Documentation update.<br>
