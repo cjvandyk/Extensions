@@ -518,6 +518,25 @@ with these methods:
             `printf("Hello World!", ConsoleColor.Red, ConsoleColor.White);`<br>
         will output the string to console in red text on a white background._
 
+- ### **QueryStringToDictionary()**
+    > _Converts the current string (QueryString) to a dictionary of string<br>
+        objects for example:<br>
+            `"?id=123&url=blog.cjvandyk.com&rating=awesome".QueryStringToDictionary()`<br>
+        will return a dictionary with 3 entries thus:<br>
+            `["id"] = "123"`<br>
+            `["url"] = "blog.cjvandyk.com"`<br>
+            `["rating"] = "awesome"`<br>_
+
+- ### **QueryStringToNameValueCollection()**
+    > _Converts the current string (QueryString) to a NameValueCollection<br>
+        a List of KeyValue pairs.  The main difference from `.QueryStringToDictionary()`<br>
+        is that duplicates can be contained in the list for example:<br>
+            `"?id=123&url=blog.cjvandyk.com&id=789".QueryStringToNameValueCollection()`<br>
+        will return a dictionary with 3 entries thus:<br>
+            `["id"] = "123"`<br>
+            `["url"] = "blog.cjvandyk.com"`<br>
+            `["id"] = "789"`<br>_
+
 - ### **Quote()**
     > _Return the given string encased in requested quotes.<br>
         Default is Constants.QuoteType.Double.<br>
