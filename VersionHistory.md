@@ -593,3 +593,10 @@
 	- Corrected a variable reference in `.GetPendingListItemsUpdatedSince()`<br>
 		method in Graph.<br>
 	- Documentation update.<br>
+
+### **6.12.804 (2024-03-20)**<br>
+	- Added another `.ContainsAny()` overload to `System.String`.<br>
+		![.ContainsAny()](https://raw.githubusercontent.com/cjvandyk/Extensions/master/Images/Easy%20Date%20convertion%20GIF.gif)<br>
+	- Added `.GetItemVersions()` to Graph.<br>
+	- Added `.GetVersions()` to Graph.<br>
+	- Documentation update.<br>
