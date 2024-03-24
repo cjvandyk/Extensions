@@ -59,7 +59,8 @@ with these methods:
         strings provided.<br>
         For example:<br>
             `"abcdef1234567890".ContainsAny(Constants.HexChars)`<br>
-        will return True._
+        will return True._<br>
+	![GIF](https://raw.githubusercontent.com/cjvandyk/Extensions/master/Images/String.ContainsAny.gif)<br>
 
 - ### **ContainsOnly()**
     > _Checks if the given string contains only characters or strings<br>
