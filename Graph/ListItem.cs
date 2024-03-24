@@ -5,6 +5,7 @@
 /// https://github.com/cjvandyk/Extensions/blob/main/LICENSE
 /// </summary>
 
+using Microsoft.Graph;
 using Microsoft.Graph.Models;
 using System;
 using System.Collections.Generic;
@@ -17,12 +18,63 @@ namespace Extensions
     [Serializable]
     public static partial class ListItemExtensions
     {
-		/// <summary>
-		/// Method to get a boolean field from ListItem.
-		/// </summary>
-		/// <param name="item">The item in question.</param>
-		/// <param name="fieldName">The field name to get.</param>
-		/// <returns></returns>
+		public static System.Collections.Generic.List<ListItemVersion> GetItemVersions(
+			this ListItem listItem,
+			ref GraphServiceClient graphClient)
+		{
+			//Create the container.
+			System.Collections.Generic.List<ListItemVersion> listItemVersions =
+				new System.Collections.Generic.List<ListItemVersion>();
+			//Get the first page.
+			var listItemVersionsPage = graphClient
+				.Sites[listItem.ParentReference.SiteId]
+				.Lists[listItem.Fields.AdditionalData["ParentListId"].ToString()]
+				.Items[listItem.Id]
+				.Versions
+				.GetAsync(C =>
+				{
+					C.Headers.Add("ConsistencyLevel", "eventual");
+					C.QueryParameters.Expand = new string[] { "fields" };
+				}).GetAwaiter().GetResult();
+			//If there are results, aggregate them.
+			if (listItemVersionsPage.Value != null)
+			{
+				lock (listItemVersions)
+				{
+					listItemVersions.AddRange(listItemVersionsPage.Value);
+				}
+			}
+			//If there are more pages of results.
+			while ((listItemVersionsPage.Value != null) &&
+				   (!string.IsNullOrEmpty(listItemVersionsPage.OdataNextLink)))
+			{
+				//Get the next page of results.
+				listItemVersionsPage = graphClient
+					.Sites[listItem.ParentReference.SiteId]
+					.Lists[listItem.Fields.AdditionalData["ParentListId"].ToString()]
+					.Items[listItem.Id]
+					.Versions
+					.WithUrl(listItemVersionsPage.OdataNextLink)
+					.GetAsync(C =>
+					{
+						C.Headers.Add("ConsistencyLevel", "eventual");
+						C.QueryParameters.Expand = new string[] { "fields" };
+					}).GetAwaiter().GetResult();
+				//Aggregate the results.
+				lock (listItemVersions)
+				{
+					listItemVersions.AddRange(listItemVersionsPage.Value);
+				}
+			}
+			return listItemVersions;
+        }
+
+        /// <summary>
+        /// Method to get a boolean field from ListItem.
+        /// </summary>
+        /// <param name="item">The item in question.</param>
+        /// <param name="fieldName">The field name to get.</param>
+        /// <returns></returns>
         public static bool GetJsonBool(
 			this ListItem item, 
 			string fieldName)
@@ -94,6 +146,31 @@ namespace Extensions
 			return Graph.GetListItems("User Information List",
 									  item.WebUrl.GetSiteRelativeUrl());
 		}
+
+		public static System.Collections.Generic.Dictionary<string, byte[]> GetVersions(
+			this ListItem listItem,
+			GraphServiceClient graphClient)
+		{
+			//Create the aggregation container.
+			System.Collections.Generic.Dictionary<string, byte[]> listItemVersionsBytes =
+				new System.Collections.Generic.Dictionary<string, byte[]>();
+			//Get the list of DriveItemVersion objects.
+			var listItemVersions = listItem.GetItemVersions(ref graphClient);
+			//Iterate each version in the list and process.
+			bool currentVersion = true;
+			int versionNumber = listItemVersions.Count;
+			for (int C = listItemVersions.Count - 1; C >= 0; C--)
+			{
+				graphClient.Sites[listItem.ParentReference.SiteId]
+					.Lists[listItem.Fields.AdditionalData["ParentListId"].ToString()]
+					.Items[listItem.Id]
+					.Versions[listItemVersions[C].Id]
+					.RestoreVersion
+					.PostAsync()
+					.GetAwaiter().GetResult();
+			}
+			return listItemVersionsBytes;
+        }
 
         /// <summary>
         /// A method to return the Microsoft.Graph.Models.User object for the

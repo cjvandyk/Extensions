@@ -33,7 +33,7 @@ namespace Extensions
         /// <param name="target"></param>
         /// <param name="ignorecase"></param>
         /// <returns></returns>
-        public static bool BeginsWith(this System.String str,
+        public static bool BeginsWith(this string str,
                                         string target,
                                         bool ignorecase = true)
         {
@@ -60,6 +60,24 @@ namespace Extensions
         #endregion BeginsWith()
 
         #region ContainsAny()
+        /// <summary>
+        /// Checks if the given string contains any of the characters provided
+        /// in the secondary string after the secondary string is parsed into
+        /// a character array.
+        /// </summary>
+        /// <param name="str">The given string to check.</param>
+        /// <param name="chars">The string containing all the characters to 
+        /// validate against e.g. "@#$%" will validate if the target string
+        /// contains any at signs, hash signs, dollar signs or percentage
+        /// signs.</param>
+        /// <returns>True if the given string contains any characters provided
+        /// in the secondary string, otherwise False.</returns>
+        public static bool ContainsAny(this System.String str,
+                                       string chars)
+        {
+            return str.ContainsAny(chars.ToCharArray());
+        }
+
         /// <summary>
         /// Checks if the given string contains any of the strings provided in
         /// the IEnumerable.
@@ -103,6 +121,24 @@ namespace Extensions
                 }
             }
             return false;
+        }
+
+        /// <summary>
+        /// Checks if the given string contains any of the characters provided
+        /// in the secondary string after the secondary string is parsed into
+        /// a character array.
+        /// </summary>
+        /// <param name="str">The given string to check.</param>
+        /// <param name="chars">The string containing all the characters to 
+        /// validate against e.g. "@#$%" will validate if the target string
+        /// contains any at signs, hash signs, dollar signs or percentage
+        /// signs.</param>
+        /// <returns>True if the given string contains any characters provided
+        /// in the secondary string, otherwise False.</returns>
+        public static bool ContainsAny(this System.Text.StringBuilder str,
+                                       string chars)
+        {
+            return str.ToString().ContainsAny(chars.ToCharArray());
         }
 
         /// <summary>
