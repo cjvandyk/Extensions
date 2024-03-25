@@ -31,7 +31,8 @@ with these methods:
         provided in the IEnumerable.<br>
         This is useful for validating a given set of characters, like<br>
         special characters, or a given set of string, like bad words, is<br>
-        not present in the target string.<br>_
+        not present in the target string._<br>
+        ![GIF](https://raw.githubusercontent.com/cjvandyk/Extensions/master/Images/String.ContainsAny.gif)<br>
 
 - ### **ContainsOnly()**
     > _Checks if the given string contains only the characters or strings<br>
