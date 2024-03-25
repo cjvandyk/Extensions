@@ -35,7 +35,8 @@ with these methods:
         from this:<br>
             `(str.ToLower().Substring(0, target.Length) == target.ToLower())`<br>
         to this:<br>
-            `str.BeginsWith(target, true)`_
+            `str.BeginsWith(target, true)`_<br>
+        ![GIF](https://raw.githubusercontent.com/cjvandyk/Extensions/master/Images/String.BeginsWith.gif)<br>
 
 - ### **Bigest()**
     > _Return the bigest of two given values.<br>

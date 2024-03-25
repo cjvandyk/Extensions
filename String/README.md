@@ -25,6 +25,7 @@ with these methods:
             `"GCCHigh.Extensions rock!".BeginsWith("gcchigh", false)`<br>
         will return<br>
             `false`<br>_
+        ![GIF](https://raw.githubusercontent.com/cjvandyk/Extensions/master/Images/String.BeginsWith.gif)<br>
 
 - ### **ContainsAny()**
     > _Checks if the given string contains any of the characters or strings<br>
