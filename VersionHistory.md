@@ -594,9 +594,16 @@
 		method in Graph.<br>
 	- Documentation update.<br>
 
-### **6.12.804 (2024-03-20)**<br>
+### **6.12.804 (2024-03-xx)**<br>
 	- Added another `.ContainsAny()` overload to `System.String`.<br>
-		![GIF](https://raw.githubusercontent.com/cjvandyk/Extensions/master/Images/Easy%20Date%20convertion%20GIF.gif)<br>
 	- Added `.GetItemVersions()` to Graph.<br>
+	- Added `.GetParentListUrl()` to `Microsoft.Graph.Models.ListItem`.<br>
+	- Added `.GetParentSiteId()` to `Microsoft.Graph.Models.ListItem`.<br>
+	- Added `.GetParentSiteRelativeUrl()` to `Microsoft.Graph.Models.ListItem`.<br>
+	- Added `.GetParentSiteUrl()` to `Microsoft.Graph.Models.ListItem`.<br>
+	- Added `.GetParentWebId()` to `Microsoft.Graph.Models.ListItem`.<br>
+	- Added `.GetParentTenantHost()` to `Microsoft.Graph.Models.ListItem`.<br>
 	- Added `.GetVersions()` to Graph.<br>
+	- Added `.RestoreVersion()` to `Microsoft.Graph.Models.ListItem`.<br>
+	- Added the optional `expand` parameter to `.GetListItems()` in Graph.<br>
 	- Documentation update.<br>

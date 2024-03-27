@@ -2063,6 +2063,9 @@ namespace Extensions
         /// console feedback is only done every 1000 items.  Increase this
         /// value for less frequent console feedback or decreate it for more
         /// frequent and chatty console feedback.</param>
+        /// <param name="expand">An optional string containing a comma
+        /// separated list of field names to expand during the query e.g.
+        /// "fields,driveItem".  Defaults to "fields".</param>
         /// <returns>A list of ListItem containing the item(s).</returns>
         public static List<ListItem> GetListItems(
             string listName,
@@ -2070,7 +2073,8 @@ namespace Extensions
             string id = null,
             string filter = null,
             bool consoleFeedback = true,
-            int feedbackEvery = 1000)
+            int feedbackEvery = 1000,
+            string expand = "fields")
         {
             //Create the aggregation container.
             List<ListItem> listItems = new List<ListItem>();
@@ -2085,7 +2089,7 @@ namespace Extensions
                         .Items[id]
                         .GetAsync((C) =>
                         {
-                            C.QueryParameters.Expand = new string[] { "fields" };
+                            C.QueryParameters.Expand = expand.Split(',');
                             C.Headers.Add("ConsistencyLevel", "eventual");
                         }).GetAwaiter().GetResult();
                     //Check if the item was found.
@@ -2113,7 +2117,7 @@ namespace Extensions
                                 C.QueryParameters.Filter = filter;
                                 C.Headers.Add("ConsistencyLevel", "eventual");
                             }
-                            C.QueryParameters.Expand = new string[] { "fields" };
+                            C.QueryParameters.Expand = expand.Split(',');
                         }).GetAwaiter().GetResult();
                     if (listItemCollectionResponse == null)
                     {
