@@ -9,6 +9,7 @@ using Microsoft.Graph;
 using Microsoft.Graph.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Extensions
 {
@@ -27,8 +28,8 @@ namespace Extensions
 				new System.Collections.Generic.List<ListItemVersion>();
 			//Get the first page.
 			var listItemVersionsPage = graphClient
-				.Sites[listItem.ParentReference.SiteId]
-				.Lists[listItem.Fields.AdditionalData["ParentListId"].ToString()]
+				.Sites[listItem.GetParentSiteId()]
+				.Lists[listItem.GetParentListId()]
 				.Items[listItem.Id]
 				.Versions
 				.GetAsync(C =>
@@ -68,6 +69,102 @@ namespace Extensions
 			}
 			return listItemVersions;
         }
+
+        /// <summary>
+        /// A method to return the List Id GUID of the parent List for the 
+        /// current ListItem.
+        /// </summary>
+        /// <param name="item">The current ListItem target.</param>
+        /// <returns>The List Id GUID of the parent List.</returns>
+        public static string GetParentListId(this ListItem item)
+		{
+			return item.AdditionalData["fields@odata.context"]
+				.ToString()
+				.ToLower()
+				.Right("')/lists('")
+				.Left("')/items('");
+		}
+
+        /// <summary>
+        /// A method to return the part of the URL of the parent List that
+		/// represents the list itself, for the current ListItem e.g. if the
+		/// current ListItem's WebUrl value is "/sites/Research/Docs/a.docx"
+		/// the return value would be "Docs" since this is a Document Library
+		/// whereas if the value was "/sites/Research/lists/Questions/Q1.xml"
+		/// the return value would be "lists/Questions" since it would be a
+		/// SharePoint List.
+        /// </summary>
+        /// <param name="item">The current ListItem target.</param>
+        /// <returns>The part of the URL of the parent List that represents
+		/// the list iself e.g. "Docs" for Document Libraries or 
+		/// "lists/Questions" in the case of SharePoint Lists.</returns>
+		public static string GetParentListUrl(this ListItem item)
+		{
+			var uri = new Uri(item.WebUrl.ToLower());
+			return uri.AbsolutePath.Right("/", 3)
+								   .Left("/", -1);
+		}
+
+        /// <summary>
+        /// A method to return the Site Id GUID of the parent Site for the 
+        /// current ListItem.
+        /// </summary>
+        /// <param name="item">The current ListItem target.</param>
+        /// <returns>The Site Id GUID of the parent Site.</returns>
+		public static string GetParentSiteId(this ListItem item)
+		{
+			return item.ParentReference.SiteId.Split(',')[1];
+		}
+
+        /// <summary>
+        /// A method to return the relative Site path of the parent Site for
+		/// the current ListItem e.g. "/sites/research".
+        /// </summary>
+        /// <param name="item">The current ListItem target.</param>
+        /// <returns>The relative Site path of the parent Site for the current
+		/// ListItem.</returns>
+		public static string GetParentSiteRelativeUrl(this ListItem item)
+		{
+			return $"/sites/{item.WebUrl.ToLower().Right("/sites/")
+												  .Left("/")}";
+		}
+
+        /// <summary>
+        /// A method to return the Site path of the parent Site for
+		/// the current ListItem e.g. "research".
+        /// </summary>
+        /// <param name="item">The current ListItem target.</param>
+        /// <returns>The relative Site path of the parent Site for the current
+		/// ListItem.</returns>
+		public static string GetParentSiteUrl(this ListItem item)
+		{
+			return item.WebUrl.ToLower().Replace(
+				item.WebUrl.ToLower().Right(GetParentSiteRelativeUrl(item)),
+				"");
+		}
+
+        /// <summary>
+        /// A method to return the Tenant host value of the parent Tenant for
+		/// the current ListItem e.g. "crayveon.sharepoint.us".
+        /// </summary>
+        /// <param name="item">The current ListItem target.</param>
+        /// <returns>The Tenant host value of the parent Tenant.</returns>
+		public static string GetParentTenantHost(this ListItem item)
+		{
+			return item.ParentReference.SiteId.Split(',')[0];
+		}
+
+        /// <summary>
+        /// A method to return the Web Id GUID of the parent Web for the 
+        /// current ListItem.
+        /// </summary>
+        /// <param name="item">The current ListItem target.</param>
+        /// <returns>The Web Id GUID of the parent Web.</returns>
+		public static string GetParentWebId(this ListItem item)
+        {
+            return item.ParentReference.SiteId.Split(',')[2];
+        }
+
 
         /// <summary>
         /// Method to get a boolean field from ListItem.
@@ -149,27 +246,87 @@ namespace Extensions
 
 		public static System.Collections.Generic.Dictionary<string, byte[]> GetVersions(
 			this ListItem listItem,
-			GraphServiceClient graphClient)
+			GraphServiceClient graphClient,
+			string metaDataFieldName = null)
 		{
 			//Create the aggregation container.
 			System.Collections.Generic.Dictionary<string, byte[]> listItemVersionsBytes =
 				new System.Collections.Generic.Dictionary<string, byte[]>();
-			//Get the list of DriveItemVersion objects.
+			//Get the list of ListItemVersion objects.
 			var listItemVersions = listItem.GetItemVersions(ref graphClient);
+			listItemVersions.Reverse();
+			//Switch Auth context to SharePoint for CSOM.
+			Identity.AuthMan.GetAuth(Identity.ScopeType.SharePoint);
+            //Get the list of file versions.
+            var ctx = Identity.AuthMan.GetClientContext(listItem.GetParentSiteUrl());
+			var file = ctx.Web.GetFileByUrl(listItem.WebUrl);
+			ctx.Load(file);
+			ctx.Load(file.Versions);
+			ctx.ExecuteQuery();
 			//Iterate each version in the list and process.
-			bool currentVersion = true;
 			int versionNumber = listItemVersions.Count;
-			for (int C = listItemVersions.Count - 1; C >= 0; C--)
+			for (int C = 0; C < listItemVersions.Count - 1; C++)
 			{
-				graphClient.Sites[listItem.ParentReference.SiteId]
-					.Lists[listItem.Fields.AdditionalData["ParentListId"].ToString()]
-					.Items[listItem.Id]
-					.Versions[listItemVersions[C].Id]
-					.RestoreVersion
-					.PostAsync()
-					.GetAwaiter().GetResult();
+				var binaryStream = file.Versions[C].OpenBinaryStream();
+				ctx.ExecuteQuery();
+				MemoryStream memoryStream = new MemoryStream();
+				binaryStream.Value.CopyTo(memoryStream);
+				binaryStream.Value.Close();
+				listItemVersionsBytes.Add(
+					$"{listItem.WebUrl}---" +
+					$"{file.Versions[C].VersionLabel}" +
+					(metaDataFieldName == null ? "" :
+						$"---{listItemVersions[C].Fields.AdditionalData[metaDataFieldName]}") +
+					$".txt",
+					memoryStream.ToArray());
+				memoryStream.Close();
 			}
-			return listItemVersionsBytes;
+			//Switch Auth context back to Graph.
+			Identity.AuthMan.GetAuth();
+			byte[] bytes = new byte[(int)listItem.DriveItem.Size];
+			//Get the current version of the item using REST.
+			var response = Identity.AuthMan.ActiveAuth.HttpClient.GetAsync(
+				listItem.DriveItem.AdditionalData["@microsoft.graph.downloadUrl"].ToString())
+				.GetAwaiter().GetResult();
+			var stream = response.Content.ReadAsStreamAsync().GetAwaiter().GetResult();
+			stream.Read(bytes, 0, (int)stream.Length);
+			stream.Close();
+            listItemVersionsBytes.Add(
+                $"{listItem.WebUrl}---" +
+                $"{listItemVersions[listItemVersions.Count - 1].Id}" +
+                (metaDataFieldName == null ? "" :
+                    $"---{listItemVersions[listItemVersions.Count - 1]
+						.Fields.AdditionalData[metaDataFieldName]}") +
+                $".txt",
+                bytes);
+			//Return the aggregated results.
+            return listItemVersionsBytes;
+        }
+
+		/// <summary>
+		/// A method to restore a given Version of the current ListItem.
+		/// </summary>
+		/// <param name="item">The current ListItem.</param>
+		/// <param name="version">The version string of the target version that
+		/// needs to be restored e.g. "3.0".</param>
+		/// <param name="graphClient">An optional GraphServiceClient to use for
+		/// the action.  If not specified, it will use the 
+		/// ActiveAuth.GraphClient value.</param>
+		public static void RestoreVersion(this ListItem item,
+                                          string version,
+                                          GraphServiceClient graphClient = null)
+		{
+			if (graphClient == null)
+			{
+				graphClient = Identity.AuthMan.ActiveAuth.GraphClient;
+			}
+            graphClient.Sites[item.ParentReference.SiteId]
+				.Lists[item.Fields.AdditionalData["ParentListId"].ToString()]
+				.Items[item.Id]
+				.Versions[version]
+				.RestoreVersion
+				.PostAsync()
+				.GetAwaiter().GetResult();
         }
 
         /// <summary>
