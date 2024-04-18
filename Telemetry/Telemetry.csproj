@@ -32,8 +32,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="GCCHigh.Extensions.Logit" Version="6.3.800" />
-    <PackageReference Include="GCCHigh.Extensions.State" Version="6.3.800" />
+    <PackageReference Include="GCCHigh.Extensions.Logit" Version="6.4.800" />
+    <PackageReference Include="GCCHigh.Extensions.State" Version="6.4.800" />
     <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="6.0.1" />
   </ItemGroup>
   <ItemGroup>
