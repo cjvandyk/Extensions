@@ -41,3 +41,16 @@
 		lead to thread timeouts since the CPU just can't handle that many<br>
 		parallel threads concurrently.<br>
 	- Name shortening refactor.<br>
+		
+### **6.10.800 (2024-04-18)**<br>
+	- Added `.GetGroup()` to Core.<br>
+	- Added `.GetUserByEmail()` to Core.<br>
+	- Added `.AddSiteMember()` to Core.<br>
+	- Added `.AddSiteMembers()` to Core.<br>
+	- Added `.AddSiteOwner()` to Core.<br>
+	- Added `.AddSiteOwners()` to Core.<br>
+	- Added `.AddSiteVisitor()` to Core.<br>
+	- Added `.AddSiteVisitors()` to Core.<br>
+	- Replaced `Core.GetEnv()` with a stub to `TenantConfig.GetEnv()`<br>
+	- Replaced `Core.GetSetting()` with a stub to `TenantConfig.GetSetting()`<br>
+    - Dependency security updates.<br>
