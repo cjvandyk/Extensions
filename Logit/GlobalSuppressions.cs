@@ -16,6 +16,7 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("CodeQuality", "IDE0052:Remove unread private members", Justification = "CvD")]
 [assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "CvD")]
 [assembly: SuppressMessage("Maintainability", "CA1507:Use nameof to express symbol names", Justification = "CvD")]
+[assembly: SuppressMessage("Maintainability", "CA1510:Use ArgumentNullException throw helper", Justification = "CvD")]
 [assembly: SuppressMessage("Performance", "CA1845:Use span-based 'string.Concat'", Justification = "CvD")]
 [assembly: SuppressMessage("Performance", "SYSLIB1045:Convert to 'GeneratedRegexAttribute'.", Justification = "CvD")]
 [assembly: SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "CvD")]
