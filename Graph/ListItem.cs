@@ -244,6 +244,28 @@ namespace Extensions
 									  item.WebUrl.GetSiteRelativeUrl());
 		}
 
+		/// <summary>
+		/// A method to take the given field from the current ListItem and
+		/// convert it to the LookupId field in the parent list, then take
+		/// the value from that field and cross correlate it with the related
+		/// user from the parent Site's User Information List which yields the
+		/// actual user's Email that is then returned.
+		/// </summary>
+		/// <param name="item">The current ListItem.</param>
+		/// <param name="userFieldName">The name of the Field in the current
+		/// ListItem that is to be used in finding the user's Email e.g. for
+		/// the User who created a given ListItem in SharePoint, the Field is
+		/// named "Author" in SharePoint, which translates to the Field name
+		/// "AuthorLookupId" in Graph.</param>
+		/// <returns>The target User's Email address.</returns>
+		public static string GetSiteUserEmail(this ListItem item,
+											  string userFieldName)
+		{
+			return Graph.GetUserEmailUpn(
+				item.Fields.AdditionalData[userFieldName + "LookupId"].ToString(),
+				Identity.AuthMan.ActiveAuth.GraphClient);
+		}
+
 		public static System.Collections.Generic.Dictionary<string, byte[]> GetVersions(
 			this ListItem listItem,
 			GraphServiceClient graphClient,
@@ -264,7 +286,6 @@ namespace Extensions
 			ctx.Load(file.Versions);
 			ctx.ExecuteQuery();
 			//Iterate each version in the list and process.
-			int versionNumber = listItemVersions.Count;
 			for (int C = 0; C < listItemVersions.Count - 1; C++)
 			{
 				var binaryStream = file.Versions[C].OpenBinaryStream();
@@ -350,12 +371,8 @@ namespace Extensions
 		{
 			try
 			{
-				var userList = item.GetSiteUserInformationList();
-				return Core.GetUserByEmail(
-					Core.GetUserEmailUpn(
-						item.Fields.AdditionalData[
-							userFieldName + "LookupId"].ToString(),
-						ref userList));
+				var emailUpn = item.GetSiteUserEmail(userFieldName);
+                return Graph.GetUserByEmail(emailUpn);
 			}
 			catch (Exception ex)
 			{

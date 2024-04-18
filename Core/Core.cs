@@ -267,17 +267,7 @@ namespace Extensions
         /// returned else a blank string is returned.</returns>
         public static string GetSetting(string key)
         {
-            if (AuthMan.TargetTenantConfig == null)
-            {
-                TenantConfig tenantConfig = new TenantConfig();
-                tenantConfig.LoadConfig();
-                AuthMan.TargetTenantConfig = tenantConfig;
-            }
-            if (AuthMan.TargetTenantConfig.Settings.TryGetValue(key, out string result))
-            {
-                return result;
-            }
-            return "";
+            return TenantConfig.GetSetting(key);
         }
         #endregion InitializeTenant
 
@@ -783,17 +773,15 @@ namespace Extensions
 
         #region EnvironmentVariables
         /// <summary>
-        /// A method to get an EnvironmentVariable value.
+        /// A method to get an EnvironmentVariable value.  If not found, the
+        /// variable is sought in Settings instead.
         /// </summary>
         /// <param name="key">The target variable name.</param>
-        /// <returns>The value of the EnvironmentVariable or.</returns>
+        /// <returns>The value of the EnvironmentVariable or if not found, the
+        /// return value of the GetSetting() method.</returns>
         public static string GetEnv(string key)
         {
-            if (Environment.GetEnvironmentVariable(key) != null)
-            {
-                return Environment.GetEnvironmentVariable(key);
-            }
-            return GetSetting(key);
+            return TenantConfig.GetEnv(key);
         }
 
         /// <summary>
@@ -906,7 +894,7 @@ namespace Extensions
         /// <param name="groupName">The displayName of the target Group.</param>
         /// <returns>A List of DirectoryObject values that represens all the 
         /// owners of the Group.</returns>
-        private static List<DirectoryObject> GetGroupOwners(string groupName)
+        public static List<DirectoryObject> GetGroupOwners(string groupName)
         {
             List<DirectoryObject> owners = new List<DirectoryObject>();
             var groups = GetGroupByName(groupName);
@@ -1020,161 +1008,6 @@ namespace Extensions
                                            List<string> emails)
         {
             return AuthMan.AddSiteUsers(url, emails, UserMembershipType.Visitors);
-        }
-
-        /// <summary>
-        /// Method to get the user given a user lookup id from SharePoint.
-        /// </summary>
-        /// <param name="id">The SharePoint list id of the user.</param>
-        /// <param name="siteUsers">A reference to the list of users.</param>
-        /// <returns>The user associated with the id or null.</returns>
-        public static Microsoft.Graph.Models.ListItem GetUserFromLookupId(
-            string id,
-            ref List<Microsoft.Graph.Models.ListItem> siteUsers)
-        {
-            foreach (var item in siteUsers)
-            {
-                if (item.Id == id)
-                {
-                    return item;
-                }
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// Method to get a user's EMail or UserName.  Particulary useful for
-        /// translating SharePoint UserLookupIds like LastModified or Author
-        /// from a numeric value to the UPN string.
-        /// </summary>
-        /// <param name="listItem">A ListItem instance from the site's 
-        /// UserInformation list.</param>
-        /// <returns>The EMail or UserName value from a ListItem instance 
-        /// from the UserInformation list.
-        /// </returns>
-        public static string GetUserEmailUpn(
-            Microsoft.Graph.Models.ListItem listItem)
-        {
-            if (listItem.Fields.AdditionalData.TryGetValue("EMail", out object result))
-            {
-                return result.ToString();
-            }
-            if (listItem.Fields.AdditionalData.TryGetValue("UserName", out result))
-            {
-                return result.ToString();
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// Method to get the user's UPN given a SharePoint lookup id.  
-        /// Particulary useful for translating SharePoint UserLookupIds like 
-        /// LastModified or Author from a numeric value to the UPN string.
-        /// </summary>
-        /// <param name="id">The lookup id of the user.</param>
-        /// <param name="client">An authenticated GraphServiceClient object.</param>
-        /// <returns>The EMail or UserName value from a ListItem instance 
-        /// from the UserInformation list.</returns>
-        public static string GetUserEmailUpn(
-            string id,
-            GraphServiceClient client)
-        {
-            try
-            {
-                if ((id == null) ||
-                    (id == ""))
-                {
-                    return null;
-                }
-                var userListItems = GetListItems("User Information List",
-                                                 GetEnv("HomeSiteBaseUrl"),
-                                                 id);
-                if ((userListItems != null) &&
-                    (userListItems.Count > 0) &&
-                    (userListItems[0].Fields.AdditionalData.TryGetValue("EMail", out object result)))
-                {
-                    return result.ToString();
-                }
-                if (userListItems[0].Fields.AdditionalData.TryGetValue("UserName", out result))
-                {
-                    return result.ToString();
-                }
-                return null;
-            }
-            catch (Exception ex)
-            {
-                Err(ex.ToString());
-                return null;
-            }
-            finally
-            {
-            }
-        }
-
-        /// <summary>
-        /// Method to get the user's UPN given a SharePoint lookup id.  
-        /// Particulary useful for translating SharePoint UserLookupIds like 
-        /// LastModified or Author from a numeric value to the UPN string.
-        /// </summary>
-        /// <param name="id">The lookup id of the user.</param>
-        /// <param name="siteUsers">A reference to the list of users.</param>
-        /// <returns>The EMail or UserName value from a ListItem instance 
-        /// from the UserInformation list.</returns>
-        public static string GetUserEmailUpn(
-            string id,
-            ref List<Microsoft.Graph.Models.ListItem> siteUsers)
-        {
-            var item = GetUserFromLookupId(id, ref siteUsers);
-            if (item == null)
-            {
-                return null;
-            }
-            try
-            {
-                if (item.Fields.AdditionalData.TryGetValue("EMail", out object result))
-                {
-                    return result.ToString();
-                }
-                try
-                {
-                    Wrn("Cannot get EMail field, trying UserName instead.");
-                    if (item.Fields.AdditionalData.TryGetValue("UserName", out result))
-                    {
-                        return result.ToString();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    //Both fields don't exist so just drop through.
-                }
-                Err("Cannot get UserName field either.");
-                return null;
-            }
-            catch (Exception ex)
-            {
-                Wrn("Cannot get EMail field, trying UserName instead.");
-                if (item.Fields.AdditionalData.TryGetValue("UserName", out object result))
-                {
-                    return result.ToString();
-                }
-                Err("Cannot get UserName field either.\n" + ex.ToString());
-                return null;
-            }
-            finally
-            {
-            }
-        }
-
-        /// <summary>
-        /// A method to get a Microsoft.Graph.Models.User object given its
-        /// email address.
-        /// </summary>
-        /// <param name="email">The email address of the target user.</param>
-        /// <returns>A Microsoft.Graph.Models.User object if found, else 
-        /// null.</returns>
-        public static User GetUserByEmail(string email)
-        {
-            return UserExtensions.GetUserByEmail(email);
         }
         #endregion User
 

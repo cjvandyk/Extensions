@@ -594,7 +594,7 @@
 		method in Graph.<br>
 	- Documentation update.<br>
 
-### **6.12.804 (2024-03-xx)**<br>
+### **6.12.804 (2024-03-27)**<br>
 	- Added another `.ContainsAny()` overload to `System.String`.<br>
 	- Added `.GetItemVersions()` to Graph.<br>
 	- Added `.GetParentListUrl()` to `Microsoft.Graph.Models.ListItem`.<br>
@@ -607,3 +607,16 @@
 	- Added `.RestoreVersion()` to `Microsoft.Graph.Models.ListItem`.<br>
 	- Added the optional `expand` parameter to `.GetListItems()` in Graph.<br>
 	- Documentation update.<br>
+
+### **6.12.805 (2024-04-11)**<br>
+	- Added `DebugEnabled` to `TenantConfig.json`<br>
+	- Added `.GetSiteUserEmail()` to `ListItemExtensions`.<br>
+	- Added `MultiThreaded` to `TenantConfig.json`<br>
+	- Added `.TryAdd()` for generic types to `System.Collections.Generic.List`<br>
+	- Documentation update.<br>
+	- Replaced `Core.GetEnv()` with a stub to `TenantConfig.GetEnv()`<br>
+	- Replaced `Core.GetSetting()` with a stub to `TenantConfig.GetSetting()`<br>
+	- Replaced `Graph.GetEnv()` with a stub to `TenantConfig.GetEnv()`<br>
+	- Replaced `Graph.GetSetting()` with a stub to `TenantConfig.GetSetting()`<br>
+	- Updated `TenantConfig.GetEnv()` to be the master method.<br>
+	- Updated `TenantConfig.GetSetting()` to be the master method.<br>

@@ -175,7 +175,6 @@ namespace Extensions
             LoadConfig();
             TenantDirectoryId = Settings["TenantDirectoryId"];
             ApplicationClientId = Settings["ApplicationClientId"];
-            CertStoreLocation = Settings["CertStoreLocation"];
             CertThumbprint = Settings["CertThumbprint"];
             DebugEnabled = Convert.ToBoolean(Settings["DebugEnabled"]);
             MultiThreaded = Convert.ToBoolean(Settings["MultiThreaded"]);
@@ -196,7 +195,6 @@ namespace Extensions
             LoadConfig();
             TenantDirectoryId = Settings["TenantDirectoryId"];
             ApplicationClientId = Settings["ApplicationClientId"];
-            CertStoreLocation = Settings["CertStoreLocation"];
             CertThumbprint = Settings["CertThumbprint"];
             DebugEnabled = Convert.ToBoolean(Settings["DebugEnabled"]);
             MultiThreaded = Convert.ToBoolean(Settings["MultiThreaded"]);
@@ -215,42 +213,46 @@ namespace Extensions
         /// for this instance.</param>
         /// <param name="applicationClientId">The Application or Client ID to 
         /// use for this instance.</param>
+        /// <param name="certThumbprint">The thumbprint of the certificate 
+        /// associated with the ApplicationClientId of this instance.</param>
+        /// <param name="logitSiteId">The ID of the site that Extensions.Logit
+        /// should use for debug logging.</param>
+        /// <param name="logitDefaultListGuid">The ID of the list that 
+        /// Extensions.Logit should use for debug logging.</param>
+        /// <param name="logitSiteBaseUrl">Optional string of the base URL of 
+        /// the site to be used by System.Logit.  Defaults to "Logit".</param>
         /// <param name="certStoreLocation">The certificate store location to 
         /// use where the certificate associated with the instance's 
         /// CertThumbprint is installed.  Default value is "CurrentUser" with 
         /// "LocalMachine" as the other alternative.</param>
-        /// <param name="certThumbprint">The thumbprint of the certificate 
-        /// associated with the ApplicationClientId of this instance.</param>
         /// <param name="debugEnabled">Switch to enable or disable debuging 
         /// for this instance.</param>
         /// <param name="multiThreaded">The ID of the site that 
-        /// Extensions.Logit should use for debug logging.</param>
-        /// <param name="logitSiteId">The ID of the site that Extensions.Logit
-        /// should use for debug logging.</param>
-        /// <param name="logitDefaultListGuid">The ID of the list that 
         /// Extensions.Logit should use for debug logging.</param>
         public TenantConfig(string tenantString,
                             AzureEnvironmentName azureEnvironment,
                             string tenantDirectoryId,
                             string applicationClientId,
-                            string certStoreLocation,
                             string certThumbprint,
-                            bool debugEnabled,
-                            bool multiThreaded,
                             string logitSiteId,
-                            string logitDefaultListGuid)
+                            string logitDefaultListGuid,
+                            string logitSiteBaseUrl = "Logit",
+                            string certStoreLocation = "CurrentUser",
+                            bool debugEnabled = true,
+                            bool multiThreaded = true)
         {
             TenantString = tenantString;
             AzureEnvironment = azureEnvironment;
             TenantString = tenantString.Trim();
             TenantDirectoryId = tenantDirectoryId;
             ApplicationClientId = applicationClientId;
-            CertStoreLocation = certStoreLocation;
             CertThumbprint = certThumbprint;
-            DebugEnabled = debugEnabled;
-            MultiThreaded = multiThreaded;
             LogitSiteId = logitSiteId;
             LogitDefaultListGuid = logitDefaultListGuid;
+            LogitSiteBaseUrl = logitSiteBaseUrl;
+            CertStoreLocation = certStoreLocation;
+            DebugEnabled = debugEnabled;
+            MultiThreaded = multiThreaded;
             LoadConfig();
         }
 
@@ -282,12 +284,69 @@ namespace Extensions
             {
                 Settings = new Dictionary<string, string>();
                 Settings.Add("TenantString", TenantString);
-                Settings = LoadJSON($"{GetRunFolder()}" +
-                    $"\\{$"UniversalConfig.{TenantString}.json"}");
-                Labels = LoadJSON($"{GetRunFolder()}" +
-                    $"\\{$"Labels.{TenantString}.json"}");
+                if (Environment.UserInteractive)
+                {
+                    Logit.Inf($"Loading config from [" +
+                        $"{GetRunFolder()}\\{GetConfigFileName()}].");
+                    Settings = LoadJSON($"{GetRunFolder()}" + 
+                        $"\\{GetConfigFileName()}");
+                    Logit.Inf($"Config loaded.\nLoading labels from [" +
+                        $"{GetRunFolder()}\\{GetLabelsFileName()}].");
+                    Labels = LoadJSON($"{GetRunFolder()}" +
+                        $"\\{GetLabelsFileName()}");
+                    Logit.Inf("Labels loaded.");
+                }
+                else
+                {
+                    Settings.Add("TenantDirectoryId", GetEnv("TenantDirectoryId"));
+                    Settings.Add("ApplicationClientId", GetEnv("ApplicationClientId"));
+                    Settings.Add("CertThumbprint", GetEnv("CertThumbprint"));
+                    Settings.Add("LogitSiteId", GetEnv("LogitSiteId"));
+                    Settings.Add("LogitDefaultListGuid", GetEnv("LogitDefaultListGuid"));
+                    Settings.Add("LogitSiteBaseUrl", GetEnv("LogitSiteBaseUrl"));
+                    Settings.Add("CertStoreLocation", GetEnv("CertStoreLocation"));
+                    Settings.Add("DebugEnabled", GetEnv("DebugEnabled"));
+                    Settings.Add("MultiThreaded", GetEnv("MultiThreaded"));
+
+                }
                 AuthMan.TargetTenantConfig = this;
             }
+        }
+
+        /// <summary>
+        /// A method to return the file name of the active tenant config file.
+        /// </summary>
+        /// <param name="tenantString">An optional parameter that specifies
+        /// the TenantString e.g. for the "https://crayveon.sharepoint.us"
+        /// Tenant, the string would be "crayveon".  If not supplied, the
+        /// TenantString of the active Tenant is used.</param>
+        /// <returns>The file name of the active tenant config file.</returns>
+        public static string GetConfigFileName(string tenantString = null)
+        {
+            if (tenantString != null)
+            {
+                return $"UniversalConfig.{tenantString}.json";
+            }
+            return $"UniversalConfig.{GetEnv("TenantString")}.json";
+        }
+
+        /// <summary>
+        /// A method to return the file name of the active tenant sensitivity
+        /// labels file.
+        /// </summary>
+        /// <param name="tenantString">An optional parameter that specifies
+        /// the TenantString e.g. for the "https://crayveon.sharepoint.us"
+        /// Tenant, the string would be "crayveon".  If not supplied, the
+        /// TenantString of the active Tenant is used.</param>
+        /// <returns>The file name of the active tenant sensitivity labels
+        /// file.</returns>
+        public static string GetLabelsFileName(string tenantString = null)
+        {
+            if (tenantString != null)
+            {
+                return $"Labels.{tenantString}.json";
+            }
+            return $"Labels.{GetEnv("TenantString")}.json";
         }
 
         /// <summary>
@@ -329,17 +388,40 @@ namespace Extensions
         }
 
         /// <summary>
-        /// A method to get an EnvironmentVariable value.
+        /// A method to get an EnvironmentVariable value.  If not found, the
+        /// variable is sought in Settings instead.
         /// </summary>
         /// <param name="key">The target variable name.</param>
-        /// <returns>The value of the EnvironmentVariable or.</returns>
-        internal static string GetEnv(string key)
+        /// <returns>The value of the EnvironmentVariable or if not found, the
+        /// return value of the GetSetting() method.</returns>
+        public static string GetEnv(string key)
         {
             if (Environment.GetEnvironmentVariable(key) != null)
             {
                 return Environment.GetEnvironmentVariable(key);
             }
-            return null;
+            return GetSetting(key);
+        }
+
+        /// <summary>
+        /// A public method to allow settings values to be retrieved.
+        /// </summary>
+        /// <param name="key">The name of the setting value to retrieve.</param>
+        /// <returns>If the requested setting exist in the config, its value is
+        /// returned else a blank string is returned.</returns>
+        public static string GetSetting(string key)
+        {
+            if (AuthMan.TargetTenantConfig == null)
+            {
+                TenantConfig tenantConfig = new TenantConfig();
+                tenantConfig.LoadConfig();
+                AuthMan.TargetTenantConfig = tenantConfig;
+            }
+            if (AuthMan.TargetTenantConfig.Settings.TryGetValue(key, out string result))
+            {
+                return result;
+            }
+            return "";
         }
     }
 }
