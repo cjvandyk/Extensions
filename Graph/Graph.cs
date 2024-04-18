@@ -2519,32 +2519,26 @@ namespace Extensions
         }
 
         /// <summary>
-        /// A method to get an EnvironmentVariable value.
+        /// A method to get an EnvironmentVariable value.  If not found, the
+        /// variable is sought in Settings instead.
         /// </summary>
         /// <param name="key">The target variable name.</param>
-        /// <returns>The value of the EnvironmentVariable or.</returns>
-        internal static string GetEnv(string key)
+        /// <returns>The value of the EnvironmentVariable or if not found, the
+        /// return value of the GetSetting() method.</returns>
+        public static string GetEnv(string key)
         {
-            if (Environment.GetEnvironmentVariable(key) != null)
-            {
-                return Environment.GetEnvironmentVariable(key);
-            }
-            return GetSetting(key);
+            return TenantConfig.GetEnv(key);
         }
 
         /// <summary>
-        /// An method to allow settings values to be retrieved.
+        /// A public method to allow settings values to be retrieved.
         /// </summary>
         /// <param name="key">The name of the setting value to retrieve.</param>
         /// <returns>If the requested setting exist in the config, its value is
         /// returned else a blank string is returned.</returns>
-        internal static string GetSetting(string key)
+        public static string GetSetting(string key)
         {
-            if (AuthMan.ActiveAuth.TenantCfg.Settings.TryGetValue(key, out string result))
-            {
-                return result;
-            }
-            return null;
+            return TenantConfig.GetSetting(key);
         }
     }
 }

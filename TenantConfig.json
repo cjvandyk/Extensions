@@ -1,6 +1,8 @@
 {
+  "TenantString": "",
   "TenantId": "",
   "AppClientId": "",
   "CertThumbPrint": "",
-  "TenantString": ""
+  "DebugEnabled": "True",
+  "MultiThreaded": "True"
 }
