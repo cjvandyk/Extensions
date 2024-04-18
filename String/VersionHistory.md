@@ -13,5 +13,8 @@
 ### **6.2.800 (2024-02-10)**<br>
 	- Name shortening refactor.<br>
 
-### **6.3.800 (2024-xx-xx)**<br>
-	- Documentation.<br>
+### **6.3.800 (2024-04-18)**<br>
+	- Added another `.ContainsAny()` overload to `System.String`.<br>
+	- Added `.GetSiteRelativeUrl()` to `System.String`.<br>
+	- Documentation update.<br>
+	- Updated `.GetSiteUrl()` in `System.String`.<br>
