@@ -12,3 +12,6 @@
 	- Added `Constants.GraphObjectType`.<br>
 	- Added `Constants.GraphDriveParentType`.<br>
 	- Name shortening refactor.<br>
+
+### **6.3.800 (2024-04-18)**<br>
+	- Added `Visitors` type to `Constants.UserMembershipType`.<br>
