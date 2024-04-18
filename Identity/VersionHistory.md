@@ -35,3 +35,16 @@
 	- Added `Identity.Cert.NewSelfSigned()` method to cenerate on demand<br>
 	  self signed certificates that are RSA/SHA512 based.<br>
 	- Name shortening refactor.<br>
+
+### **6.9.800 (2024-04-18)**<br>
+	- Added ActiveAuth token default to `.GetClientContext()` in AuthMan.<br>
+	- Added `.AddSCA()` method to AuthMan.<br>
+	- Added `.AddSiteUser()` method to AuthMan.<br>
+	- Added `.AddSiteUsers()` method to AuthMan.<br>
+	- Added `DebugEnabled` to `TenantConfig.json`<br>
+	- Added `MultiThreaded` to `TenantConfig.json`<br>
+	- Changed `.GetGraphServiceClient()` method in AuthMan from internal to<br>
+		public.<br>
+	- Updated `TenantConfig.GetEnv()` to be the master method.<br>
+	- Updated `TenantConfig.GetSetting()` to be the master method.<br>
+	- Dependency security updates.<br>
