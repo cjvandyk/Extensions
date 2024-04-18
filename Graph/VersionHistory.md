@@ -40,3 +40,28 @@
 	- Removed `using static` references related to the `Graph.Get()` method<br>
 	    and used full namespace instead.<br>
 	- Name shortening refactor.<br>
+
+### **6.5.800 (2024-04-18)**<br>
+	- Added `.CheckMembership()` to `Microsoft.Graph.Models.Group`.<br>
+	- Added `.GetGroup()` to Graph.<br>
+	- Added `.GetItemVersions()` to Graph.<br>
+	- Added `.GetSiteUserInformationList()` to<br>
+		`Microsoft.Graph.Models.ListItem`.<br>
+	- Added `.GetUserByEmail()` to Graph.<br>
+	- Added `.GetVersions()` to Graph.<br>
+	- Added `.HasMember()` to `Microsoft.Graph.Models.Group`.<br>
+	- Added `.HasOwner()` to `Microsoft.Graph.Models.Group`.<br>
+	- Added `.ToEntraUser()` to `Microsoft.Graph.Models.ListItem`.<br>
+	- Added `.GetParentListId()` to `Microsoft.Graph.Models.ListItem`.<br>
+	- Added `.GetParentListUrl()` to `Microsoft.Graph.Models.ListItem`.<br>
+	- Added `.GetParentSiteId()` to `Microsoft.Graph.Models.ListItem`.<br>
+	- Added `.GetParentSiteRelativeUrl()` to `Microsoft.Graph.Models.ListItem`.<br>
+	- Added `.GetParentSiteUrl()` to `Microsoft.Graph.Models.ListItem`.<br>
+	- Added `.GetParentWebId()` to `Microsoft.Graph.Models.ListItem`.<br>
+	- Added `.GetParentTenantHost()` to `Microsoft.Graph.Models.ListItem`.<br>
+	- Added `.GetSiteUserEmail()` to `ListItemExtensions`.<br>
+	- Added `.RestoreVersion()` to `Microsoft.Graph.Models.ListItem`.<br>
+	- Added the optional `expand` parameter to `.GetListItems()` in Graph.<br>
+	- Replaced `Graph.GetEnv()` with a stub to `TenantConfig.GetEnv()`<br>
+	- Replaced `Graph.GetSetting()` with a stub to `TenantConfig.GetSetting()`<br>
+	- Dependency security updates.<br>

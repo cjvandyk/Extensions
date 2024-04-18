@@ -22,6 +22,7 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "CvD")]
 [assembly: SuppressMessage("Style", "IDE0031:Use null propagation", Justification = "CvD")]
 [assembly: SuppressMessage("Style", "IDE0035:Unreachable code detected", Justification = "CvD")]
+[assembly: SuppressMessage("Style", "IDE0056:Use index operator", Justification = "CvD")]
 [assembly: SuppressMessage("Style", "IDE0057:Use range operator", Justification = "CvD")]
 [assembly: SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "CvD")]
 [assembly: SuppressMessage("Style", "IDE0071:Simplify interpolation", Justification = "CvD")]
