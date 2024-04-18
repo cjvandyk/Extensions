@@ -398,13 +398,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Azure.Identity" Version="1.10.4" />
+    <PackageReference Include="Azure.Identity" Version="1.11.1" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.19.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Graph" Version="5.43.0" />
-    <PackageReference Include="Microsoft.Identity.Client" Version="4.59.0" />
-    <PackageReference Include="Microsoft.SharePointOnline.CSOM" Version="16.1.24614.12000" />
+    <PackageReference Include="Microsoft.Graph" Version="5.49.0" />
+    <PackageReference Include="Microsoft.Identity.Client" Version="4.60.3" />
+    <PackageReference Include="Microsoft.SharePointOnline.CSOM" Version="16.1.24713.12007" />
     <PackageReference Include="System.Diagnostics.EventLog" Version="6.0.0" />
     <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="6.0.1" />
   </ItemGroup>
