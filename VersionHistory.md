@@ -620,3 +620,6 @@
 	- Replaced `Graph.GetSetting()` with a stub to `TenantConfig.GetSetting()`<br>
 	- Updated `TenantConfig.GetEnv()` to be the master method.<br>
 	- Updated `TenantConfig.GetSetting()` to be the master method.<br>
+
+### **6.13.800 (2024-04-18)**<br>
+	- Dependency security updates.<br>

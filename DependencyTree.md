@@ -12,9 +12,9 @@ The following is the dependency tree for this solution:
              -> Graph
                  -> Identity
                      -> Constants
-                 -> List
-                 -> Logit
-     -> String
+                     -> Logit
+                     -> List
+             -> String
      -> Telemetry
          -> State
 
