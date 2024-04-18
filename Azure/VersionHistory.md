@@ -12,3 +12,6 @@
 
 ### **6.2.800 (2024-03-10)**<br>
 	- Name shortening refactor.<br>
+
+### **6.3.800 (2024-04-18)**<br>
+	- Dependency security updates.<br>
