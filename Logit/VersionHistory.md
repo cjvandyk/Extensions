@@ -19,3 +19,6 @@
 ### **6.3.800 (2024-03-10)**<br>
 	- Made Logit.Instance.ILogger setter public.<br>
 	- Name shortening refactor.<br>
+
+### **6.4.800 (2024-04-18)**<br>
+	- Graph dependency update.<br>
