@@ -17,3 +17,6 @@
 	- Updated `State.LoadSaveContainer` `KnownType` properties.<br>
 	- Updated `System.Object.Load()` and `System.Object.Save()` extension methods to handle dynamic object types.<br>
 	- Name shortening refactor.<br>
+
+### **6.4.800 (2024-04-18)**<br>
+	- Graph dependency update.<br>
