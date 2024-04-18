@@ -31,7 +31,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="GCCHigh.Extensions.Constants" Version="6.2.800" />
+    <PackageReference Include="GCCHigh.Extensions.Constants" Version="6.3.800" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
     <PackageReference Include="Microsoft.Graph" Version="5.49.0" />
     <PackageReference Include="System.Diagnostics.EventLog" Version="6.0.0" />
