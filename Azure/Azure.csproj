@@ -31,9 +31,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Azure.Identity" Version="1.11.1" />
+    <PackageReference Include="Azure.Identity" Version="1.11.2" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.19.1" />
-    <PackageReference Include="GCCHigh.Extensions.Core" Version="6.10.800" />
+    <PackageReference Include="GCCHigh.Extensions.Core" Version="6.11.800" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Images\Extensions-128x128.png">
