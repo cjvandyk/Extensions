@@ -22,3 +22,6 @@
 
 ### **6.4.800 (2024-04-18)**<br>
 	- Graph dependency update.<br>
+
+### **6.5.800 (2024-04-19)**<br>
+	- Dependency updates.<br>

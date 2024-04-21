@@ -51,7 +51,7 @@ namespace System
             /// <summary>
             /// A Graph client for logging to SharePoint.
             /// </summary>
-            public GraphServiceClient GraphClient { get; private set; } = null;
+            public GraphServiceClient GraphClient { get; set; } = null;
 
             /// <summary>
             /// The base URL of the SharePoint site housing the target list.
