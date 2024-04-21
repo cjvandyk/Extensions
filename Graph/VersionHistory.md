@@ -65,3 +65,11 @@
 	- Replaced `Graph.GetEnv()` with a stub to `TenantConfig.GetEnv()`<br>
 	- Replaced `Graph.GetSetting()` with a stub to `TenantConfig.GetSetting()`<br>
 	- Dependency security updates.<br>
+
+### **6.6.800 (2024-04-19)**<br>
+	- Added `.AddGroupMember()` to `Group`.<br>
+	- Added `.AddGroupOwner()` to `Group`.<br>
+	- Added `.RemoveGroupMember()` to `Group`.<br>
+	- Added `.RemoveGroupOwner()` to `Group`.<br>
+	- Added `.SetGroupUser()` to `Group`.<br>
+	- Dependency updates.<br>

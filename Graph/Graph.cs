@@ -44,6 +44,154 @@ namespace Extensions
     [Serializable]
     public static partial class Graph
     {
+        #region GroupOwnersMembers
+        /// <summary>
+        /// A method to add or remove a given User as an Owner or Member of 
+        /// the current Group.
+        /// </summary>
+        /// <param name="group">The current target Group.</param>
+        /// <param name="user">The target User to add or remove as Owner or 
+        /// Member.</param>
+        /// <param name="membershipType">The type of membership to target i.e.
+        /// Owner or Member.  Defaults to Owners.</param>
+        /// <param name="add">A boolean parameter to control if the target user
+        /// is added or removed.  Defaults to true i.e. add.</param>
+        /// <param name="client">Optional GraphServiceClient object to use
+        /// during processing.  If none is supplied, the ActiveAuth's version
+        /// is used.  Defaults to null i.e. use the ActiveAuth version.</param>
+        /// <returns>True if the User was added or removed, else false.</returns>
+        public static bool SetGroupUser(
+            this Group group,
+            User user,
+            UserMembershipType membershipType = UserMembershipType.Owners,
+            bool add = true,
+            GraphServiceClient client = null)
+        { 
+            if (client == null)
+            {
+                client = ActiveAuth.GraphClient;
+            }
+            var requestBody = new ReferenceCreate
+            {
+                OdataId = $"https://graph.microsoft" +
+                    $"{ActiveAuth.TenantCfg.AuthorityDomain}/v1.0" +
+                    $"/users/{user.Id}"
+            };
+            try
+            {
+                if (membershipType == UserMembershipType.Owners)
+                {
+                    if (add)
+                    {
+                        client.Groups[group.Id].Owners.Ref.PostAsync(requestBody)
+                            .GetAwaiter().GetResult();
+                        return true;
+                    }
+                    else
+                    {
+                        client.Groups[group.Id].Owners[user.Id].Ref.DeleteAsync()
+                            .GetAwaiter().GetResult();
+                        return true;
+                    }
+                }
+                if (membershipType == UserMembershipType.Members)
+                {
+                    if (add)
+                    {
+                        client.Groups[group.Id].Members.Ref.PostAsync(requestBody)
+                            .GetAwaiter().GetResult();
+                        return true;
+                    }
+                    else
+                    {
+                        client.Groups[group.Id].Members[user.Id].Ref.DeleteAsync()
+                            .GetAwaiter().GetResult();
+                        return true;
+                    }
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.Contains("One or more added object references " +
+                    "already exist for the following modified properties"))
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// A method to add a given User as an Owner of the current Group.
+        /// </summary>
+        /// <param name="group">The current target Group.</param>
+        /// <param name="user">The target User to add as Owner.</param>
+        /// <param name="client">Optional GraphServiceClient object to use
+        /// during processing.  If none is supplied, the ActiveAuth's version
+        /// is used.  Defaults to null i.e. use the ActiveAuth version.</param>
+        /// <returns>True if the User was added, else false.</returns>
+        public static bool AddGroupOwner(this Group group,
+                                         User user,
+                                         GraphServiceClient client = null)
+        {
+            return SetGroupUser(group, user, UserMembershipType.Owners, true, client);
+        }
+
+        /// <summary>
+        /// A method to remove a given User as an Owner of the current Group.
+        /// </summary>
+        /// <param name="group">The current target Group.</param>
+        /// <param name="user">The target User to add as Owner.</param>
+        /// <param name="client">Optional GraphServiceClient object to use
+        /// during processing.  If none is supplied, the ActiveAuth's version
+        /// is used.  Defaults to null i.e. use the ActiveAuth version.</param>
+        /// <returns>True if the User was removed, else false.</returns>
+        public static bool RemoveGroupOwner(this Group group,
+                                            User user,
+                                            GraphServiceClient client = null)
+        {
+            return SetGroupUser(group, user, UserMembershipType.Owners, false, client);
+        }
+
+        /// <summary>
+        /// A method to add a given User as a Member of the current Group.
+        /// </summary>
+        /// <param name="group">The current target Group.</param>
+        /// <param name="user">The target User to add as Member.</param>
+        /// <param name="client">Optional GraphServiceClient object to use
+        /// during processing.  If none is supplied, the ActiveAuth's version
+        /// is used.  Defaults to null i.e. use the ActiveAuth version.</param>
+        /// <returns>True if the User was added, else false.</returns>
+        public static bool AddGroupMember(this Group group,
+                                          User user,
+                                          GraphServiceClient client = null)
+        {
+            return SetGroupUser(group, user, UserMembershipType.Members, true, client);
+        }
+
+        /// <summary>
+        /// A method to remove a given User as a Member of the current Group.
+        /// </summary>
+        /// <param name="group">The current target Group.</param>
+        /// <param name="user">The target User to add as Member.</param>
+        /// <param name="client">Optional GraphServiceClient object to use
+        /// during processing.  If none is supplied, the ActiveAuth's version
+        /// is used.  Defaults to null i.e. use the ActiveAuth version.</param>
+        /// <returns>True if the User was removed, else false.</returns>
+        public static bool RemoveGroupMember(this Group group,
+                                             User user,
+                                             GraphServiceClient client = null)
+        {
+            return SetGroupUser(group, user, UserMembershipType.Members, false, client);
+        }
+        #endregion GroupOwnersMembers
+
+        /// <summary>
+        /// A method to get the OneDrive of the target User.
+        /// </summary>
+        /// <param name="user">The target User.</param>
+        /// <returns>The Drive object of the target User.</returns>
         public static Drive GetDrive(User user)
         {
             var drives = GetDrives($"id eq '{user.Id}'", "");
