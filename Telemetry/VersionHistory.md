@@ -18,3 +18,6 @@
 
 ### **6.4.800 (2024-04-18)**<br>
 	- Dependency updates.<br>
+
+### **6.5.800 (2024-04-19)**<br>
+	- Dependency updates.<br>
