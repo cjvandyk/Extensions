@@ -249,6 +249,7 @@ namespace Extensions
                                     GetEnv("CertThumbprint"),
                                     tenantString,
                                     ScopeType.Graph);
+                    Logit.ActiveLogitInstance.GraphClient = AuthMan.GetGraphServiceClient();
                 }
                 Inf($"Initializing Tenant [{tenantString}] complete.");
             }
@@ -1008,6 +1009,42 @@ namespace Extensions
                                            List<string> emails)
         {
             return AuthMan.AddSiteUsers(url, emails, UserMembershipType.Visitors);
+        }
+
+        /// <summary>
+        /// A method for removing a given User from a given Site's Owners group.
+        /// </summary>
+        /// <param name="url">The URL of the target Site.</param>
+        /// <param name="email">The email of the target User.</param>
+        /// <returns>True if user was removed, else false.</returns>
+        public static bool RemoveSiteOwner(string url,
+                                           string email)
+        {
+            return AuthMan.RemoveSiteUser(url, email, UserMembershipType.Owners);
+        }
+
+        /// <summary>
+        /// A method for removing a given User from a given Site's Members group.
+        /// </summary>
+        /// <param name="url">The URL of the target Site.</param>
+        /// <param name="email">The email of the target User.</param>
+        /// <returns>True if user was removed, else false.</returns>
+        public static bool RemoveSiteMember(string url,
+                                            string email)
+        {
+            return AuthMan.RemoveSiteUser(url, email, UserMembershipType.Members);
+        }
+
+        /// <summary>
+        /// A method for removing a given User from a given Site's Visitors group.
+        /// </summary>
+        /// <param name="url">The URL of the target Site.</param>
+        /// <param name="email">The email of the target User.</param>
+        /// <returns>True if user was removed, else false.</returns>
+        public static bool RemoveSiteVisitor(string url,
+                                             string email)
+        {
+            return AuthMan.RemoveSiteUser(url, email, UserMembershipType.Visitors);
         }
         #endregion User
 

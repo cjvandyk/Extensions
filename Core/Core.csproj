@@ -31,7 +31,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="GCCHigh.Extensions.Graph" Version="6.5.800" />
+    <PackageReference Include="GCCHigh.Extensions.Graph" Version="6.6.800" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
   </ItemGroup>
   <ItemGroup>
