@@ -189,7 +189,7 @@ namespace Extensions
         {
             if (tenantString == null)
             {
-                throw new ArgumentNullException("tenantString cannot be null.");
+                throw new ArgumentNullException("tenantString");
             }
             TenantString = tenantString.Trim();
             LoadConfig();
@@ -307,7 +307,29 @@ namespace Extensions
                     Settings.Add("CertStoreLocation", GetEnv("CertStoreLocation"));
                     Settings.Add("DebugEnabled", GetEnv("DebugEnabled"));
                     Settings.Add("MultiThreaded", GetEnv("MultiThreaded"));
-
+                    //The value of the Environment Variable "Settings" is a
+                    //comma separated string containing the names of the 
+                    //settings to be added for the current tenant e.g.
+                    //"AzureEnvironment,ConnectionString" etc.
+                    var settings = GetEnv("Settings").Split(',');
+                    foreach (string setting in settings)
+                    {
+                        Settings.Add(setting, GetEnv(setting));
+                    }
+                    //The value of the Environment Variable "Labels" is a 
+                    //comma separated string containing the compound strings
+                    //for each label pair.  Each pair is in turn colon 
+                    //separated e.g.
+                    //"Secret:SecretGUID","TopSecret:TopSecretGUID" etc. where
+                    //the Secret label will be added to the dictionary with a
+                    //key of "Secret" and a value of whatever is stored in the
+                    //Environment Variable called "SecretGUID".
+                    Labels = new Dictionary<string, string>();
+                    var labels = GetEnv("Labels").Split(',');
+                    foreach (string label in labels)
+                    {
+                        Labels.Add(label.Left(":").Trim(), label.Right(":").Trim());
+                    }
                 }
                 AuthMan.TargetTenantConfig = this;
             }

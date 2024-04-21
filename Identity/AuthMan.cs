@@ -153,10 +153,10 @@ namespace Extensions.Identity
             //Generate the key from the parms.
             string key = GetKey(tenantId, appId, thumbPrint, scopeType.ToString());
             //Check if the key is on the stack.
-            if (AuthStack.ContainsKey(key))
+            if (AuthStack.TryGetValue(key, out Auth value))
             {
                 //If it is, set the current ActiveAuth to that stack instance.
-                ActiveAuth = AuthStack[key];
+                ActiveAuth = value;
             }
             else
             {
@@ -250,10 +250,10 @@ namespace Extensions.Identity
             //Generate the key from the parms.
             string key = GetKey(tenantId, appId, "PublicClientApplication", "");
             //Check if the key is on the stack.
-            if (AuthStack.ContainsKey(key))
+            if (AuthStack.TryGetValue(key, out Auth value))
             {
                 //If it is, set the current ActiveAuth to that stack instance.
-                ActiveAuth = AuthStack[key];
+                ActiveAuth = value;
             }
             else
             {
@@ -494,15 +494,50 @@ namespace Extensions.Identity
         }
 
         #region CSOM
+
         /// <summary>
-        /// A method to add a given user as a Site Collection Administrator
-        /// for the Site at the given url.
+        /// A method to add a given user as a Site Collection 
+        /// Administrator for the Site at the given url.
         /// </summary>
         /// <param name="url">The target URL of the Site.</param>
         /// <param name="email">The email of the target user.</param>
-        /// <returns>True if the user was successfully added, else false.</returns>
+        /// <returns>True if the user was successfully added else 
+        /// false.</returns>
         public static bool AddSCA(string url,
                                   string email)
+        {
+            return SetSCA(url, email);
+        }
+
+        /// <summary>
+        /// A method to remove a given user as a Site Collection 
+        /// Administrator from the Site at the given url.
+        /// </summary>
+        /// <param name="url">The target URL of the Site.</param>
+        /// <param name="email">The email of the target user.</param>
+        /// <returns>True if the user was successfully removed else 
+        /// false.</returns>
+        public static bool RemoveSCA(string url,
+                                     string email)
+        {
+            return SetSCA(url, email, false);
+        }
+
+        /// <summary>
+        /// A method to add or remove a given user as a Site Collection 
+        /// Administrator for the Site at the given url.
+        /// </summary>
+        /// <param name="url">The target URL of the Site.</param>
+        /// <param name="email">The email of the target user.</param>
+        /// <param name="admin">A boolean switch determining if the target
+        /// user is added as Admin or removed as Admin.  If true, the target
+        /// user is added as Admin.  If false, the target user is removed as
+        /// Admin.  Defaults to true i.e. add as admin.</param>
+        /// <returns>True if the user was successfully added or removed, else 
+        /// false.</returns>
+        public static bool SetSCA(string url,
+                                  string email,
+                                  bool admin = true)
         {
             try
             {
@@ -541,17 +576,22 @@ namespace Extensions.Identity
         }
 
         /// <summary>
-        /// A method to add a given User to a given Site's given SharePoint
-        /// Group e.g. Owners, Members or Visitors.
+        /// A method to add or remove a given User to a given Site's given 
+        /// SharePoint Group e.g. Owners, Members or Visitors.
         /// </summary>
         /// <param name="url">The URL of the target Site.</param>
         /// <param name="email">The email of the target User.</param>
         /// <param name="userMembershipType">The target type of membership
         /// e.g. Owners, Members or Visitors.</param>
-        /// <returns>True if the User was successfully added, else false.</returns>
-        public static bool AddSiteUser(string url,
+        /// <param name="add">Boolean parameter that determines if the user is
+        /// being added or removed.  If true, the user is added.  If false, the
+        /// user is removed.  Default is true i.e. add user.</param>
+        /// <returns>True if the User was successfully added or removed, else 
+        /// false.</returns>
+        public static bool SetSiteUser(string url,
                                        string email,
-                                       UserMembershipType userMembershipType)
+                                       UserMembershipType userMembershipType,
+                                       bool add = true)
         {
             try
             {
@@ -590,16 +630,24 @@ namespace Extensions.Identity
                 {
                     return false;
                 }
-                //Construct the User creation object.
-                UserCreationInformation userCreationInformation =
-                    new UserCreationInformation
-                    {
-                        LoginName = user.LoginName,
-                        Title = user.Title,
-                        Email = user.Email
-                    };
-                //Add the user to the target group.
-                group.Users.Add(userCreationInformation);
+                if (add)
+                {
+                    //Construct the User creation object.
+                    UserCreationInformation userCreationInformation =
+                        new UserCreationInformation
+                        {
+                            LoginName = user.LoginName,
+                            Title = user.Title,
+                            Email = user.Email
+                        };
+                    //Add the user to the target group.
+                    group.Users.Add(userCreationInformation);
+                }
+                else
+                {
+                    //Remove the user from the target group.
+                    group.Users.Remove(user);
+                }
                 web.Update();
                 ctx.ExecuteQuery();
                 return true;
@@ -614,6 +662,40 @@ namespace Extensions.Identity
                 //Change context back to Graph.
                 GetAuth(ScopeType.Graph);
             }
+        }
+
+        /// <summary>
+        /// A method to add a given User to a given Site's given 
+        /// SharePoint Group e.g. Owners, Members or Visitors.
+        /// </summary>
+        /// <param name="url">The URL of the target Site.</param>
+        /// <param name="email">The email of the target User.</param>
+        /// <param name="userMembershipType">The target type of membership
+        /// e.g. Owners, Members or Visitors.</param>
+        /// <returns>True if the User was successfully added, else 
+        /// false.</returns>
+        public static bool AddSiteUser(string url,
+                                       string email,
+                                       UserMembershipType userMembershipType)
+        {
+            return SetSiteUser(url, email, userMembershipType);
+        }
+
+        /// <summary>
+        /// A method to add a given User to a given Site's given 
+        /// SharePoint Group e.g. Owners, Members or Visitors.
+        /// </summary>
+        /// <param name="url">The URL of the target Site.</param>
+        /// <param name="email">The email of the target User.</param>
+        /// <param name="userMembershipType">The target type of membership
+        /// e.g. Owners, Members or Visitors.</param>
+        /// <returns>True if the User was successfully added, else 
+        /// false.</returns>
+        public static bool RemoveSiteUser(string url,
+                                          string email,
+                                          UserMembershipType userMembershipType)
+        {
+            return SetSiteUser(url, email, userMembershipType, false);
         }
 
         /// <summary>
@@ -658,7 +740,7 @@ namespace Extensions.Identity
                     return false;
                 }
                 //Multi thread this.
-                var result = emails.MultiThread(email =>
+                List<InstanceExceptionInfo> result = emails.MultiThread(email =>
                 {
                     //Ensure the User is valid.
                     var user = web.EnsureUser(email);
@@ -727,6 +809,7 @@ namespace Extensions.Identity
                     args.WebRequestExecutor.RequestHeaders["Authorization"] =
                         "Bearer " + accessToken;
                 };
+                ActiveAuth.CsomContext = clientContext;
                 return clientContext;
             }
             catch (Exception ex)

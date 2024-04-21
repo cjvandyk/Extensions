@@ -8,6 +8,7 @@
 using Microsoft.Graph;
 using Microsoft.Identity.Client;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
@@ -79,6 +80,23 @@ namespace Extensions.Identity
         /// The current authenticated HttpClient of the current Auth object.
         /// </summary>
         public HttpClient HttpClient { get; set; }
+
+        /// <summary>
+        /// The current authenticated CSOM ClientContext of the current Auth object.
+        /// </summary>
+        public Microsoft.SharePoint.Client.ClientContext CsomContext { get; set; }
+
+        /// <summary>
+        /// The active stack of Site objects.
+        /// </summary>
+        public Dictionary<string, Microsoft.Graph.Models.Site> ActiveSiteStack { get; set; }
+            = new Dictionary<string, Microsoft.Graph.Models.Site>();
+
+        /// <summary>
+        /// The active stack of List objects.
+        /// </summary>
+        public Dictionary<string, Microsoft.Graph.Models.List> ActiveListStack { get; set; }
+            = new Dictionary<string, Microsoft.Graph.Models.List>();
 
         /// <summary>
         /// The authentication refresh timer of the current Auth object.

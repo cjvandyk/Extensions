@@ -48,3 +48,10 @@
 	- Updated `TenantConfig.GetEnv()` to be the master method.<br>
 	- Updated `TenantConfig.GetSetting()` to be the master method.<br>
 	- Dependency security updates.<br>
+
+### **6.10.800 (2024-04-19)**<br>
+	- Added `.RemoveSCA()` to `AuthMan`.<br>
+	- Added `.RemoveSiteUser()` to `AuthMan`.<br>
+	- Added `.SetSCA()` to `AuthMan`.<br>
+	- Added `.SetSiteUser()` to `AuthMan`.<br>
+	- Dependency updates.<br>
