@@ -10,6 +10,7 @@ using Microsoft.Graph.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Extensions
 {
@@ -274,6 +275,22 @@ namespace Extensions
 			//Create the aggregation container.
 			System.Collections.Generic.Dictionary<string, byte[]> listItemVersionsBytes =
 				new System.Collections.Generic.Dictionary<string, byte[]>();
+			//Push the parent List and Site to their stacks.
+			if (!Identity.AuthMan.ActiveAuth.ActiveSiteStack.ContainsKey(listItem.WebUrl))
+			{
+				Identity.AuthMan.ActiveAuth.ActiveSiteStack.Add(
+					listItem.WebUrl,
+					graphClient.Sites[listItem.GetParentSiteId()]
+					.GetAsync().GetAwaiter().GetResult());
+			}
+			if (!Identity.AuthMan.ActiveAuth.ActiveListStack.ContainsKey(listItem.WebUrl))
+			{
+				Identity.AuthMan.ActiveAuth.ActiveListStack.Add(
+					listItem.WebUrl,
+					graphClient.Sites[listItem.GetParentSiteId()]
+					.Lists[listItem.GetParentListId()]
+					.GetAsync().GetAwaiter().GetResult());
+			}
 			//Get the list of ListItemVersion objects.
 			var listItemVersions = listItem.GetItemVersions(ref graphClient);
 			listItemVersions.Reverse();
