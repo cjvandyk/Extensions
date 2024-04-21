@@ -54,3 +54,9 @@
 	- Replaced `Core.GetEnv()` with a stub to `TenantConfig.GetEnv()`<br>
 	- Replaced `Core.GetSetting()` with a stub to `TenantConfig.GetSetting()`<br>
     - Dependency security updates.<br>
+		
+### **6.11.800 (2024-04-19)**<br>
+	- Added `.RemoveSiteMember()` to `Core`.<br>
+	- Added `.RemoveSiteOwner()` to `Core`.<br>
+	- Added `.RemoveSiteVisitor()` to `Core`.<br>
+	- Dependency updates.<br>
