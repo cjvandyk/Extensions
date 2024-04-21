@@ -618,7 +618,8 @@ namespace System
                                 }
                             };
                             var result = client.Sites[GetSiteId(
-                                $"/sites/{instance.LogSiteUrl}", client)]
+                                    instance.LogSiteUrl, 
+                                    client)]
                                 .Lists[GetListId(
                                     instance.LogListName,
                                     instance.LogSiteUrl,
