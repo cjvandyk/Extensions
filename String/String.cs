@@ -257,6 +257,18 @@ namespace Extensions
         }
         #endregion ContainsOnly()
 
+        #region Contains()
+#if NETFRAMEWORK
+        public static bool Contains(
+            this string str,
+            string index,
+            StringComparison stringComparison = StringComparison.InvariantCulture)
+        {
+            return str.IndexOf(index, stringComparison) != -1;
+        }
+#endif
+        #endregion Contains()
+
         #region DoubleQuote()
         /// <summary>
         /// Return the given string encased in double quotes.
@@ -427,7 +439,7 @@ namespace Extensions
         public static string GetSiteUrl(this System.String url)
         {
             string result = Right(url.ToLower(), "/sites/");
-            if (result.Contains("/"))
+            if (result.Contains('/'))
             {
                 result = Left(result, "/");
             }

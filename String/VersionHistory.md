@@ -18,3 +18,7 @@
 	- Added `.GetSiteRelativeUrl()` to `System.String`.<br>
 	- Documentation update.<br>
 	- Updated `.GetSiteUrl()` in `System.String`.<br>
+
+### **6.4.800 (2024-04-19)**<br>
+	- Added `.Contains()` overload to `System.String` for all .NET Framework versions.<br>
+	- Dependency updates.<br>
