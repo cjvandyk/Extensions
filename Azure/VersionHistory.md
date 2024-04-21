@@ -15,3 +15,6 @@
 
 ### **6.3.800 (2024-04-18)**<br>
 	- Dependency security updates.<br>
+
+### **6.4.800 (2024-04-19)**<br>
+	- Dependency updates.<br>
