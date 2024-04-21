@@ -278,9 +278,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Azure.Identity" Version="1.11.1" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.19.1" />
-    <PackageReference Include="GCCHigh.Extensions.Azure" Version="6.3.800" />
+    <PackageReference Include="GCCHigh.Extensions.Azure" Version="6.4.800" />
+    <PackageReference Include="GCCHigh.Extensions.Telemetry" Version="6.5.800" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
     <PackageReference Include="Microsoft.Graph" Version="5.49.0" />

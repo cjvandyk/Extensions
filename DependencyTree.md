@@ -11,15 +11,19 @@ The following is the dependency tree for this solution:
          -> Core
              -> Graph
                  -> Identity
-                     -> Constants
                      -> Logit
+                         -> Constants
                      -> List
-             -> String
+                         -> Constants
+                     -> String
+                         -> Constants
      -> Telemetry
+         -> Logit
+             -> Constants
          -> State
 
 Build sequence:
 
-    Constants -> String -> List -> State -> Logit -> Telemetry -> Identity -> Graph -> Core -> Azure
+    State -> Constants -> List -> Logit -> String -> Telemetry -> Identity -> Graph -> Core -> Azure
 
 ![Visitor Count](https://profile-counter.glitch.me/{cjvandyk}/count.svg)

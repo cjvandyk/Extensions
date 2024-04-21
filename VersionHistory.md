@@ -623,3 +623,19 @@
 
 ### **6.13.800 (2024-04-18)**<br>
 	- Dependency security updates.<br>
+
+### **6.14.800 (2024-04-21)**<br>
+	- Added `.AddGroupMember()` to `Group`.<br>
+	- Added `.AddGroupOwner()` to `Group`.<br>
+	- Added `.Contains()` overload to `System.String` for all .NET Framework versions.<br>
+	- Added `.RemoveGroupMember()` to `Group`.<br>
+	- Added `.RemoveGroupOwner()` to `Group`.<br>
+	- Added `.RemoveSCA()` to `AuthMan`.<br>
+	- Added `.RemoveSiteMember()` to `Core`.<br>
+	- Added `.RemoveSiteOwner()` to `Core`.<br>
+	- Added `.RemoveSiteUser()` to `AuthMan`.<br>
+	- Added `.RemoveSiteVisitor()` to `Core`.<br>
+	- Added `.SetGroupUser()` to `Group`.<br>
+	- Added `.SetSCA()` to `AuthMan`.<br>
+	- Added `.SetSiteUser()` to `AuthMan`.<br>
+	- Added `CacheType` type to `Constants`.<br>
