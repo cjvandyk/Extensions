@@ -31,9 +31,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="GCCHigh.Extensions.Constants" Version="6.3.800" />
-    <PackageReference Include="GCCHigh.Extensions.List" Version="6.1.800" />
-    <PackageReference Include="GCCHigh.Extensions.Logit" Version="6.4.800" />
+    <PackageReference Include="GCCHigh.Extensions.List" Version="6.2.800" />
+    <PackageReference Include="GCCHigh.Extensions.Logit" Version="6.5.800" />
+    <PackageReference Include="GCCHigh.Extensions.String" Version="6.4.800" />
     <PackageReference Include="Microsoft.Graph" Version="5.49.0" />
     <PackageReference Include="Microsoft.Identity.Client" Version="4.60.3" />
     <PackageReference Include="Microsoft.SharePointOnline.CSOM" Version="16.1.24713.12007" />
