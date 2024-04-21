@@ -38,6 +38,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="GCCHigh.Extensions.Constants" Version="6.3.800" />
+    <PackageReference Include="GCCHigh.Extensions.Constants" Version="6.4.800" />
   </ItemGroup>
 </Project>
