@@ -270,6 +270,17 @@ namespace Extensions
         public const string CornelionByte = "1 x 10 ^ 100,000,000";
         #endregion Binary Constants
 
+        #region CacheType
+        /// <summary>
+        /// The types of cache that can be used.
+        /// </summary>
+        public enum CacheType
+        {
+            Azure,
+            LocalDisk
+        }
+        #endregion CacheType
+
         #region CompoundFrequency
         /// <summary>
         /// Enum of possible frequency in which interest compounding is done.

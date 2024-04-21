@@ -15,3 +15,6 @@
 
 ### **6.3.800 (2024-04-18)**<br>
 	- Added `Visitors` type to `Constants.UserMembershipType`.<br>
+
+### **6.4.800 (2024-04-19)**<br>
+	- Added `CacheType` type to `Constants`.<br>
