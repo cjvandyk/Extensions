@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using System.Text.Json;
 
 namespace Extensions
 {
@@ -53,7 +54,6 @@ namespace Extensions
                 }
 #endif
                 DataContractSerializer serializer = null;
-                LoadSaveContainer lsc = null;
                 lock (lockManager)
                 {
                     using (System.IO.Stream fileStream =
@@ -63,9 +63,9 @@ namespace Extensions
                     {
                         serializer = new DataContractSerializer(
                             obj.GetType(),
-                            new Type[] { typeof(LoadSaveContainer), obj.GetType() });
-                        lsc = (LoadSaveContainer)serializer.ReadObject(fileStream);
-                        return (T)lsc.Value;
+                            new Type[] { obj.GetType() });
+                        string str = (string)serializer.ReadObject(fileStream);
+                        return JsonSerializer.Deserialize<T>(str);
                     }
                 }
             }
@@ -103,8 +103,6 @@ namespace Extensions
                     return BlackCheetah.ObjectExtensions.Save(obj, filePath);
                 }
 #endif
-                LoadSaveContainer loadSaveContainer = new LoadSaveContainer();
-                loadSaveContainer.Value = obj;
                 lock (lockManager)
                 {
                     using (System.IO.Stream fileStream =
@@ -114,8 +112,9 @@ namespace Extensions
                     {
                         var serializer = new DataContractSerializer(
                             obj.GetType(),
-                            new Type[] { typeof(LoadSaveContainer), obj.GetType() });
-                        serializer.WriteObject(fileStream, loadSaveContainer);
+                            new Type[] { obj.GetType() });
+                        string str = JsonSerializer.Serialize(obj);
+                        serializer.WriteObject(fileStream, str);
                         fileStream.Flush();
                     }
                     return true;

@@ -938,7 +938,29 @@ namespace Extensions
         public static List<User> GetUsers(string filter = "")
         {
             var users = new List<User>();
-            GetUsers(ref users, filter);
+            var userCollectionResponse = ActiveAuth.GraphClient.Users
+                .GetAsync((C) =>
+                {
+                    C.Headers.Add("ConsistencyLevel", "eventual");
+                }).GetAwaiter().GetResult();
+            if (userCollectionResponse != null)
+            {
+                var pageIterator = PageIterator<User, UserCollectionResponse>
+                    .CreatePageIterator(
+                        ActiveAuth.GraphClient,
+                        userCollectionResponse,
+                        (user) =>
+                        {
+                            users.Add(user);
+                            if (users.Count % 5000 == 0)
+                            {
+                                Inf($"[{DateTime.Now}] [{users.Count}] users and counting...");
+                            }
+                            return true;
+                        });
+                pageIterator.IterateAsync().GetAwaiter().GetResult();
+            }
+            //GetUsers(ref users, filter);
             return users;
         }
 
@@ -948,6 +970,7 @@ namespace Extensions
         /// </summary>
         /// <param name="users">The aggregation container to use.</param>
         /// <param name="filter">The OData filter to apply to the request.</param>
+        [Obsolete("Use Graph's new built in PageIterator instead.")]
         internal static void GetUsers(ref List<User> users, 
                                       string filter = "")
         {
@@ -991,18 +1014,16 @@ namespace Extensions
         /// </summary>
         /// <param name="users">The aggregation container to use.</param>
         /// <param name="usersPage">The first page of the response.</param>
+        [Obsolete("Use Graph's new built in PageIterator instead.")]
         internal static void GetUsersPages(
             ref List<User> users,
             ref UserCollectionResponse usersPage)
         {
             while (usersPage.Value != null)
             {
-                foreach (var user in usersPage.Value)
+                lock (users)
                 {
-                    lock (users)
-                    {
-                        users.Add(user);
-                    }
+                    users.AddRange(usersPage.Value);
                 }
                 if (!string.IsNullOrEmpty(usersPage.OdataNextLink))
                 {
