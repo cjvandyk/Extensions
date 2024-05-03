@@ -286,15 +286,25 @@ namespace Extensions
                 Settings.Add("TenantString", TenantString);
                 if (Environment.UserInteractive)
                 {
-                    Logit.Inf($"Loading config from [" +
-                        $"{GetRunFolder()}\\{GetConfigFileName()}].");
+                    Core.SetEnv("RUNNING_IN_AZURE", "False");
+                    if (AuthMan.TargetTenantConfig != null)
+                    {
+                        Logit.Inf($"Loading config from [" +
+                            $"{GetRunFolder()}\\{GetConfigFileName()}].");
+                    }
                     Settings = LoadJSON($"{GetRunFolder()}" + 
                         $"\\{GetConfigFileName()}");
-                    Logit.Inf($"Config loaded.\nLoading labels from [" +
-                        $"{GetRunFolder()}\\{GetLabelsFileName()}].");
+                    if (AuthMan.TargetTenantConfig != null)
+                    {
+                        Logit.Inf($"Config loaded.\nLoading labels from [" +
+                            $"{GetRunFolder()}\\{GetLabelsFileName()}].");
+                    }
                     Labels = LoadJSON($"{GetRunFolder()}" +
                         $"\\{GetLabelsFileName()}");
-                    Logit.Inf("Labels loaded.");
+                    if (AuthMan.TargetTenantConfig != null)
+                    {
+                        Logit.Inf("Labels loaded.");
+                    }
                 }
                 else
                 {

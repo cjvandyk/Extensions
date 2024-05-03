@@ -380,6 +380,10 @@ namespace System
             ConsoleColor foreground,
             ConsoleColor background = ConsoleColor.Black)
         {
+            if (Extensions.Identity.AuthMan.TargetTenantConfig != null)
+            {
+                return;
+            }
             Log(message,
                 0,
                 MessageType.Information,
@@ -418,6 +422,10 @@ namespace System
             //Logging code may NEVER terminate its parent through exceptions.
             try
             {
+                if (Extensions.Identity.AuthMan.TargetTenantConfig != null)
+                {
+                    return;
+                }
                 //Append the caller method to the back of the message.
                 var stackTrace = new System.Diagnostics.StackTrace();
                 //Iterate the stack trace frames.
@@ -703,6 +711,10 @@ namespace System
             int eventId = 0,
             Instance instance = null)
         {
+            if (Extensions.Identity.AuthMan.TargetTenantConfig != null)
+            {
+                return;
+            }
             if (instance == null)
             {
                 instance = ActiveLogitInstance;
@@ -721,6 +733,10 @@ namespace System
             int eventId = 0,
             Instance instance = null)
         {
+            if (Extensions.Identity.AuthMan.TargetTenantConfig != null)
+            {
+                return;
+            }
             if (instance == null)
             {
                 instance = ActiveLogitInstance;
@@ -739,6 +755,10 @@ namespace System
             int eventId = 0,
             Instance instance = null)
         {
+            if (Extensions.Identity.AuthMan.TargetTenantConfig != null)
+            {
+                return;
+            }
             if (instance == null)
             {
                 instance = ActiveLogitInstance;
@@ -757,6 +777,10 @@ namespace System
             int eventId = 0,
             Instance instance = null)
         {
+            if (Extensions.Identity.AuthMan.TargetTenantConfig == null)
+            {
+                return;
+            }
             if (instance == null)
             {
                 instance = ActiveLogitInstance;
