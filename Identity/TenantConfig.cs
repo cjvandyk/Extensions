@@ -321,10 +321,13 @@ namespace Extensions
                     //comma separated string containing the names of the 
                     //settings to be added for the current tenant e.g.
                     //"AzureEnvironment,ConnectionString" etc.
-                    var settings = GetEnv("Settings").Split(',');
-                    foreach (string setting in settings)
+                    var settings = GetEnv("Settings");
+                    if (settings != "")
                     {
-                        Settings.Add(setting, GetEnv(setting));
+                        foreach (string setting in settings.Split(','))
+                        {
+                            Settings.Add(setting, GetEnv(setting));
+                        }
                     }
                     //The value of the Environment Variable "Labels" is a 
                     //comma separated string containing the compound strings
@@ -335,10 +338,13 @@ namespace Extensions
                     //key of "Secret" and a value of whatever is stored in the
                     //Environment Variable called "SecretGUID".
                     Labels = new Dictionary<string, string>();
-                    var labels = GetEnv("Labels").Split(',');
-                    foreach (string label in labels)
+                    var labels = GetEnv("Labels");
+                    if (labels != "")
                     {
-                        Labels.Add(label.Left(":").Trim(), label.Right(":").Trim());
+                        foreach (string label in labels.Split(','))
+                        {
+                            Labels.Add(label.Left(":").Trim(), label.Right(":").Trim());
+                        }
                     }
                 }
                 AuthMan.TargetTenantConfig = this;
@@ -443,15 +449,12 @@ namespace Extensions
         /// returned else a blank string is returned.</returns>
         public static string GetSetting(string key)
         {
-            if (AuthMan.TargetTenantConfig == null)
+            if (AuthMan.TargetTenantConfig != null)
             {
-                TenantConfig tenantConfig = new TenantConfig();
-                tenantConfig.LoadConfig();
-                AuthMan.TargetTenantConfig = tenantConfig;
-            }
-            if (AuthMan.TargetTenantConfig.Settings.TryGetValue(key, out string result))
-            {
-                return result;
+                if (AuthMan.TargetTenantConfig.Settings.TryGetValue(key, out string result))
+                {
+                    return result;
+                }
             }
             return "";
         }

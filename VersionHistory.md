@@ -640,7 +640,7 @@
 	- Added `.SetSiteUser()` to `AuthMan`.<br>
 	- Added `CacheType` type to `Constants`.<br>
 
-### **6.15.800 (2024-05-02)**<br>
+### **6.14.801 (2024-05-03)**<br>
 	- Added validation that `TargetTenantConfig` is valid to avoid endless initialization loop.<br>
 	- Flagged internal `.GetUsers()` and `.GetUsersPages()` methods as `Obsolete`.<br>
 	- Optimized `.Save()` and `.Load()` methods to eliminate `LoadSaveContainer`.<br>
