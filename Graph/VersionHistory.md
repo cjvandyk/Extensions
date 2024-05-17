@@ -73,3 +73,16 @@
 	- Added `.RemoveGroupOwner()` to `Group`.<br>
 	- Added `.SetGroupUser()` to `Group`.<br>
 	- Dependency updates.<br>
+
+### **6.7.800 (2024-05-xx)**<br>
+	- Added `.GetGroupById()` to -`Graph`.<br>
+	- Added `.GetGroupByName()` to -`Graph`.<br>
+	- Added `.GetGroups()` to -`Graph`.<br>
+	- Flagged internal `.GetUsers()` and `.GetUsersPages()` methods as `Obsolete`.<br>
+	- Made the `GraphClient` paramenter for `.GetVersions()` nullable.<br>
+	  This allows for making the call to get versions without having to reference<br>
+	  a Graph client.<br>
+	- Moved `.GetGroup()` from `Graph.cs` to `Group.cs`.<br>
+	- Updated the naming of output from `.GetVersions()` to end with the object name.<br>
+	  This allows objects returned to be serialized to disk in the same file format<br>
+	  as the parent object.<br>

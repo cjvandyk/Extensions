@@ -8,6 +8,7 @@
 using Extensions.Identity;
 using Microsoft.Graph.Models;
 using System;
+using System.Collections.Generic;
 
 namespace Extensions
 {
@@ -21,24 +22,87 @@ namespace Extensions
         /// A method to get the Group given its GUID ID.
         /// </summary>
         /// <param name="groupId">The Entra GUID ID of the target Group.</param>
+        /// for the target Group.</param>
         /// <returns>A Microsoft.Graph.Models.Group object if found, else
         /// null.</returns>
         public static Group GetGroup(string groupId)
         {
+            return GetGroupById(groupId, null);
+        }
+
+        /// <summary>
+        /// A method to get the Group given its GUID ID.
+        /// </summary>
+        /// <param name="groupId">The Entra GUID ID of the target Group.</param>
+        /// <param name="fields">An optional string array of fields to retrieve
+        /// for the target Group.</param>
+        /// <returns>A Microsoft.Graph.Models.Group object if found, else
+        /// null.</returns>
+        public static Group GetGroupById(string groupId, string[] fields = null)
+        {
+            var groups = GetGroups($"id eq '{groupId}'", fields);
+            if ((groups != null) &&
+                (groups.Count == 1))
+            {
+                //There should be only 1 Group.
+                return groups[0];
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// A method to get the Group given its GUID ID.
+        /// </summary>
+        /// <param name="groupName">The Entra GUID ID of the target Group.</param>
+        /// <param name="fields">An optional string array of fields to retrieve
+        /// for the target Group.</param>
+        /// <returns>A Microsoft.Graph.Models.Group object if found, else
+        /// null.</returns>
+        public static Group GetGroupByName(string groupName, string[] fields = null)
+        {
+            var groups = GetGroups($"displayName eq '{groupName}'", fields);
+            if ((groups != null) &&
+                (groups.Count == 1))
+            {
+                //There should be only 1 Group.
+                return groups[0];
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// A method to get a Group by name.
+        /// </summary>
+        /// <param name="filter">The filter to use for search for the Group.</param>
+        /// <param name="fields">An optional string array of fields to retrieve
+        /// for the target Group.</param>
+        /// <returns>The Group object if found, else null.</returns>
+        public static List<Group> GetGroups(string filter, string[] fields = null)
+        {
             try
             {
-                return AuthMan.ActiveAuth.GraphClient
-                    .Groups[groupId]
-                    .GetAsync(C =>
-                    {
-                        C.Headers.Add("ConsistencyLevel", "eventual");
-                    }).GetAwaiter().GetResult();
+                var queryParameters = new Microsoft.Graph.Groups.GroupsRequestBuilder
+                    .GroupsRequestBuilderGetQueryParameters();
+                queryParameters.Filter = filter;
+                if (fields != null)
+                {
+                    queryParameters.Select = fields;
+                }
+                var groups = AuthMan.ActiveAuth.GraphClient.Groups.GetAsync((C) =>
+                {
+                    C.QueryParameters = queryParameters;
+                    C.Headers.Add("ConsistencyLevel", "eventual");
+                }).GetAwaiter().GetResult().Value;
+                if (groups != null)
+                {
+                    return groups;
+                }
             }
             catch (Exception ex)
-            {
+            { 
                 Logit.Err(ex.ToString());
-                return null;
             }
+            return null;
         }
 
         /// <summary>

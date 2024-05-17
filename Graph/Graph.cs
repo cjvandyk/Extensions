@@ -750,34 +750,7 @@ namespace Extensions
             }
         }
 
-        /// <summary>
-        /// A method to get a Group by name.
-        /// </summary>
-        /// <param name="name">The name of the Group to get.</param>
-        /// <param name="fields">An optional string array of fields to retrieve
-        /// for the target Group.</param>
-        /// <returns>The Group object if found, else null.</returns>
-        public static Group GetGroup(string name, string[] fields = null)
-        {
-            var queryParameters = new Microsoft.Graph.Groups.GroupsRequestBuilder
-                .GroupsRequestBuilderGetQueryParameters();
-            queryParameters.Filter = $"displayName eq '{name}'";
-            if (fields != null)
-            {
-                queryParameters.Select = fields;
-            }
-            var groups = AuthMan.ActiveAuth.GraphClient.Groups.GetAsync((C) =>
-            {
-                C.QueryParameters = queryParameters;
-                C.Headers.Add("ConsistencyLevel", "eventual");
-            }).GetAwaiter().GetResult().Value;
-            //There should only be 1 group.  If so, return it.
-            if ((groups != null) && (groups.Count == 1))
-            {
-                return groups[0];
-            }
-            return null;
-        }
+
 
         /// <summary>
         /// A method to retrieve a list containing all the Microsoft.Graph.Group
