@@ -22,7 +22,6 @@ namespace Extensions
         /// A method to get the Group given its GUID ID.
         /// </summary>
         /// <param name="groupId">The Entra GUID ID of the target Group.</param>
-        /// for the target Group.</param>
         /// <returns>A Microsoft.Graph.Models.Group object if found, else
         /// null.</returns>
         public static Group GetGroup(string groupId)
