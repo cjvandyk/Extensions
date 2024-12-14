@@ -1,0 +1,8 @@
+<Project>
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
+    <Company>Cornelius J. van Dyk</Company>
+    <Copyright>Copyright © 2009-2024</Copyright>
+  </PropertyGroup>
+</Project>

@@ -22,7 +22,7 @@ namespace Extensions
         /// <summary>
         /// The lock object to manage file update concurrency.
         /// </summary>
-        private static readonly object _lock = new object();
+        private static readonly Lock _lock = LockFactory.Create();
 
         #region Helper Methods
         /// <summary>

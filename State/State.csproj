@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net8.0;net7.0;net6.0;netstandard2.1;netstandard2.0;net48;net472;net471;net47;net462</TargetFrameworks>
-    <LangVersion>latest</LangVersion>
+    <TargetFrameworks>net9.0;net8.0;net7.0;net6.0;netstandard2.1;netstandard2.0;net48;net472;net471;net47;net462</TargetFrameworks>
     <ImplicitUsings>disable</ImplicitUsings>
     <NoWarn>$(NoWarn);CS1587</NoWarn>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
@@ -32,6 +31,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Graph" Version="5.49.0" />
+    <PackageReference Include="Backport.System.Threading.Lock" Version="3.1.0" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Images\Extensions-128x128.png">

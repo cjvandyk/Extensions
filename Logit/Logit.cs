@@ -30,7 +30,7 @@ namespace System
         /// <summary>
         /// Lock object for marshalling static console location output.
         /// </summary>
-        private static readonly object _lockStaticConsoleLocation = new object();
+        private static readonly Lock _lockStaticConsoleLocation = LockFactory.Create();
 
         /// <summary>
         /// The currently active Logit engine instance that will handle
