@@ -18,6 +18,33 @@ namespace Extensions
     [Serializable]
     public static partial class DictionaryExtensions
     {
+        #region Find()
+        /// <summary>
+        /// Find the key, given a value from the Dictionary.
+        /// </summary>
+        /// <typeparam name="T">Generic Type</typeparam>
+        /// <param name="dic">The dictionary to search.</param>
+        /// <param name="value">The value fo which to search.</param>
+        /// <returns>The key of the KVP if the value exists, else null.</returns>
+        public static T Find<T>(this Dictionary<T, T> dic, T value) where T : class 
+        { 
+            //Ensure our trigger dictionary is not null.
+            if (dic != null)
+            {
+                //Scan all values in the dictionary for the given value.
+                foreach (var item in dic)
+                {
+                    //If found, return the key.
+                    if (item.Value == value)
+                    {
+                        return item.Key;
+                    }
+                }
+            }
+            return null;
+        }
+        #endregion
+
         #region ToQueryString()
         /// <summary>
         /// Convert given Dictionary into a querystring.

@@ -70,11 +70,16 @@ namespace Extensions
         /// information is corrupted.</exception>
         public static System.Collections.Generic.Dictionary<string, byte[]> GetVersions(
             this DriveItem driveItem,
-            GraphServiceClient graphClient)
+            GraphServiceClient graphClient = null)
         {
             //Create the aggregation container.
             System.Collections.Generic.Dictionary<string, byte[]> driveItemVersionsBytes =
                 new System.Collections.Generic.Dictionary<string, byte[]>();
+            //If no Graph client is supplied, use the active one.
+            if (graphClient == null)
+            {
+                graphClient = Identity.AuthMan.ActiveAuth.GraphClient;
+            }
             //Get the list of DriveItemVersion objects.
             var driveItemVersions = driveItem.GetDriveItemVersions(ref graphClient);
             //Iterate each version in the list and process.
@@ -135,10 +140,11 @@ namespace Extensions
                         //DriveItem as well as the modification date/time of
                         //the DriveItemVersion in string format.
                         driveItemVersionsBytes.Add(
-                            driveItem.Name + "-" +
+                            driveItem.Id + "-" +
                                 driveItemVersion.LastModifiedDateTime
                                 .Value.DateTime
-                                .ToString("yyyyMMdd-HHmmss.fff"),
+                                .ToString("yyyyMMdd-HHmmss") + "-" +
+                                driveItem.Name,
                             file);
                     }
                 }
@@ -151,10 +157,11 @@ namespace Extensions
                         //DriveItem as well as the modification date/time of
                         //the DriveItemVersion in string format.
                         driveItemVersionsBytes.Add(
-                            driveItem.Name + "-" +
+                            driveItem.Id + "-" +
                                 driveItemVersion.LastModifiedDateTime
                                 .Value.DateTime
-                                .ToString("yyyyMMdd-HHmmss.fff"),
+                                .ToString("yyyyMMdd-HHmmss") + "-" +
+                                driveItem.Name,
                             bytes);
                     }
                 }

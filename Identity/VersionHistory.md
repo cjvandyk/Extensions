@@ -55,3 +55,8 @@
 	- Added `.SetSCA()` to `AuthMan`.<br>
 	- Added `.SetSiteUser()` to `AuthMan`.<br>
 	- Dependency updates.<br>
+
+### **6.11.800 (2024-05-xx)**<br>
+	- Added code to `.LoadConfig()` in order to set `RUNNING_IN_AZURE` to `False` when interactively debugging.<br>
+	- Added validation that `TargetTenantConfig` is valid to avoid endless initialization loop.<br>
+	- Optimized `TenantConfig`.<br>

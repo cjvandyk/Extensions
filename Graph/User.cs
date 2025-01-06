@@ -29,13 +29,20 @@ namespace Extensions
         {
             try
             {
-                return AuthMan.ActiveAuth.GraphClient
+                var users = AuthMan.ActiveAuth.GraphClient
                     .Users
                     .GetAsync(C =>
                     {
                         C.QueryParameters.Filter = $"mail eq '{email}'";
                         C.Headers.Add("ConsistencyLevel", "eventual");
-                    }).GetAwaiter().GetResult().Value[0];
+                    }).GetAwaiter().GetResult().Value;
+                if ((users == null) ||
+                    (users.Count ==0))
+                {
+                    Logit.Wrn($"User [{email}] not found.");
+                    return null;
+                }
+                return users[0];
             }
             catch (Exception ex)
             {

@@ -25,3 +25,6 @@
 
 ### **6.5.800 (2024-04-19)**<br>
 	- Dependency updates.<br>
+
+### **6.6.800 (2024-05-xx)**<br>
+	- Added validation that `TargetTenantConfig` is valid to avoid endless initialization loop.<br>
