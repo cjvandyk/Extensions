@@ -311,15 +311,21 @@ namespace Extensions
         public enum EncryptionProvider
         {
             AES,
+            AESCMM,
             DES,
             DSA,
+            KeyedHashAlgorithm,
             MD5,
+            RIPEMD160,
             RNG,
             RSA,
             SHA1,
             SHA256,
+            SHA3_256,
             SHA384,
+            SHA3_384,
             SHA512,
+            SHA3_512,
             TrippleDES
         }
         #endregion Cryptography

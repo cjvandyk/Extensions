@@ -1394,10 +1394,16 @@ namespace Extensions
                         users.Add(spUser.Id);
                         break;
                     case UserInfoType.mail:
-                        users.Add(spUser.Email.ToLower());
+                        if (spUser.Email.Trim() != "")
+                        {
+                            users.Add(spUser.Email.ToLower());
+                        }
                         break;
                     case UserInfoType.userProfileName:
-                        users.Add(spUser.UserPrincipalName);
+                        if (spUser.UserPrincipalName.Trim() != "")
+                        {
+                            users.Add(spUser.UserPrincipalName);
+                        }
                         break;
                     case UserInfoType.All:
                         users.Add(spUser);

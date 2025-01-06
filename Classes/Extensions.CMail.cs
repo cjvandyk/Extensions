@@ -105,7 +105,7 @@ namespace Extensions
             {
                 Message = msg
             };
-            GetAuth(Identity.ScopeType.Graph, true);
+            GetAuth();
             ActiveAuth.GraphClient.Users[from]
                 .SendMail
                 .PostAsync(sendMailPostRequestBody)
